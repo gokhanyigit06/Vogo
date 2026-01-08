@@ -1,12 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false)
+    const [settings, setSettings] = useState<any>(null)
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(err => console.error('Settings fetch error:', err))
+    }, [])
 
     const navItems = [
         { name: "HOME", href: "/" },
@@ -34,9 +42,9 @@ export default function Header() {
                     {/* Center: Logo */}
                     <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                            Vogo
+                            {settings?.site_title?.split(' ')[0] || 'Vogo'}
                         </span>
-                        <span className="text-white"> Agency</span>
+                        <span className="text-white"> {settings?.site_title?.split(' ').slice(1).join(' ') || 'Agency'}</span>
                     </Link>
 
                     {/* Right: Empty space for balance */}

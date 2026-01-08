@@ -2,13 +2,29 @@
 
 import { motion } from "framer-motion"
 import { Github, Twitter, Linkedin, Instagram, ArrowUp } from "lucide-react"
+import { useState, useEffect } from "react"
 
 export default function ModernFooter() {
+    const [settings, setSettings] = useState<any>(null)
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(err => console.error('Settings fetch error:', err))
+    }, [])
+
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" })
     }
 
     const currentYear = new Date().getFullYear()
+
+    const socialLinks = [
+        { icon: Twitter, href: settings?.social_twitter || "#", key: "twitter" },
+        { icon: Linkedin, href: settings?.social_linkedin || "#", key: "linkedin" },
+        { icon: Instagram, href: settings?.social_instagram || "#", key: "instagram" },
+    ].filter(social => social.href && social.href !== "#")
 
     return (
         <footer className="relative bg-slate-950 border-t border-slate-800">
@@ -16,31 +32,30 @@ export default function ModernFooter() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}
                     <div className="space-y-4">
-                        < div className="text-2xl font-bold">
+                        <div className="text-2xl font-bold">
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                                Vogo
+                                {settings?.site_title?.split(' ')[0] || 'Vogo'}
                             </span>
-                            <span className="text-white"> Agency</span>
+                            <span className="text-white"> {settings?.site_title?.split(' ').slice(1).join(' ') || 'Agency'}</span>
                         </div>
                         <p className="text-slate-400 leading-relaxed">
-                            Dijital dünyada fark yaratan, sonuç odaklı çözümler üreten yaratıcı ajans.
+                            {settings?.site_description || 'Dijital dünyada fark yaratan, sonuç odaklı çözümler üreten yaratıcı ajans.'}
                         </p>
-                        <div className="flex gap-3">
-                            {[
-                                { icon: Github, href: "#" },
-                                { icon: Twitter, href: "#" },
-                                { icon: Linkedin, href: "#" },
-                                { icon: Instagram, href: "#" },
-                            ].map((social, index) => (
-                                <a
-                                    key={index}
-                                    href={social.href}
-                                    className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center hover:bg-gradient-to-br hover:from-emerald-500 hover:to-teal-500 hover:border-transparent transition-all duration-300 group"
-                                >
-                                    <social.icon className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
-                                </a>
-                            ))}
-                        </div>
+                        {socialLinks.length > 0 && (
+                            <div className="flex gap-3">
+                                {socialLinks.map((social) => (
+                                    <a
+                                        key={social.key}
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center hover:bg-gradient-to-br hover:from-emerald-500 hover:to-teal-500 hover:border-transparent transition-all duration-300 group"
+                                    >
+                                        <social.icon className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
+                                    </a>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Hizmetler */}

@@ -17,8 +17,40 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vogo Agency | Dijital Çözümler ve Web Tasarım",
+  title: {
+    default: "Vogo Agency | Dijital Çözümler ve Web Tasarım",
+    template: "%s | Vogo Agency"
+  },
   description: "Vogo Agency, yüksek performanslı web siteleri, SEO, reklam yönetimi ve özel yazılım çözümleri sunan modern bir dijital ajanstır.",
+  keywords: ["web tasarım", "SEO", "dijital pazarlama", "reklam yönetimi", "yazılım geliştirme", "QR menü", "e-ticaret"],
+  authors: [{ name: "Vogo Agency" }],
+  creator: "Vogo Agency",
+  publisher: "Vogo Agency",
+  metadataBase: new URL('https://vogo-agency.vercel.app'),
+  openGraph: {
+    type: 'website',
+    locale: 'tr_TR',
+    url: 'https://vogo-agency.vercel.app',
+    title: 'Vogo Agency | Dijital Çözümler ve Web Tasarım',
+    description: 'Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.',
+    siteName: 'Vogo Agency',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vogo Agency | Dijital Çözümler',
+    description: 'Yüksek performanslı web siteleri ve dijital pazarlama.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
