@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { ArrowLeft, Save, Trash2, FileText, Image as ImageIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useParams } from "next/navigation"
+import ImageUploader from "@/components/admin/ImageUploader"
 
 export default function EditBlogPostPage() {
     const router = useRouter()
@@ -112,8 +113,10 @@ export default function EditBlogPostPage() {
                 <div className="space-y-6">
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                         <label className="text-slate-400 text-sm font-bold">Görsel URL</label>
-                        <input type="text" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white" value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
-                        {formData.image && <img src={formData.image} className="w-full h-48 object-cover rounded-xl mt-2" />}
+                        <ImageUploader
+                            value={formData.image}
+                            onChange={(url) => setFormData({ ...formData, image: url })}
+                        />
                     </div>
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                         <label className="text-slate-400 text-sm font-bold">İçerik</label>

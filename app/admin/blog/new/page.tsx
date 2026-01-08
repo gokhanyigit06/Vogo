@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ArrowLeft, Save, Send, Image as ImageIcon, FileText, Tag, AlignLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import ImageUploader from "@/components/admin/ImageUploader"
 
 export default function NewBlogPostPage() {
     const router = useRouter()
@@ -162,24 +163,9 @@ export default function NewBlogPostPage() {
                             <ImageIcon className="w-4 h-4 text-emerald-500" />
                             Kapak Görseli
                         </h3>
-
-                        <div className="aspect-video bg-slate-950 border-2 border-dashed border-slate-800 rounded-xl flex flex-col items-center justify-center text-slate-500 hover:border-emerald-500/50 hover:bg-slate-900/50 transition-all cursor-pointer group relative overflow-hidden">
-                            {formData.image ? (
-                                <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
-                            ) : (
-                                <>
-                                    <ImageIcon className="w-8 h-8 mb-2 group-hover:text-emerald-500 transition-colors" />
-                                    <span className="text-xs font-medium">Görsel Seç veya Sürükle</span>
-                                </>
-                            )}
-                        </div>
-
-                        <input
-                            type="text"
-                            placeholder="veya Görsel URL'i yapıştır..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                        <ImageUploader
                             value={formData.image}
-                            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                            onChange={(url) => setFormData({ ...formData, image: url })}
                         />
                     </div>
 
