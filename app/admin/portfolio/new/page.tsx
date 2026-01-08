@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { ArrowLeft, Save, Send, Image as ImageIcon, Briefcase, Tag, AlignLeft } from "lucide-react"
 import Link from "next/link"
