@@ -1,8 +1,6 @@
-"use client"
-
 import { useState } from 'react'
-import { createBrowserClient } from '@supabase/ssr'
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react'
+import { createClient } from '@/lib/supabase-client'
 
 interface ImageUploaderProps {
     value?: string
@@ -14,10 +12,7 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
     const [uploading, setUploading] = useState(false)
     const [preview, setPreview] = useState<string | undefined>(value)
 
-    const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
-    )
+    const supabase = createClient()
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         try {
