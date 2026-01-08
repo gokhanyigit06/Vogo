@@ -4,6 +4,7 @@ import "./globals.css";
 
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-100 selection:bg-emerald-500/30 selection:text-emerald-200`}
       >
         <CustomCursor />
+        <SmoothScroll />
         <ParticleBackground />
         <div className="relative z-10">
           {children}
