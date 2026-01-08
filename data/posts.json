@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1678234567895,
+    "title": "2026 Web Tasarım Trendleri: Minimalizm ve Yapay Zeka",
+    "excerpt": "Web tasarım dünyası hızla değişiyor. Yapay zeka destekli arayüzler ve neo-brutalism akımının yükselişi hakkında bilmeniz gerekenler.",
+    "category": "Tasarım",
+    "date": "10 Ocak 2026",
+    "readTime": "5,dk",
+    "image": "https://images.unsplash.com/photo-1547658719-da2b51169166?w=1200&q=80",
+    "status": "published",
+    "content": "Detaylı içerik buraya gelecek..."
+  },
+  {
+    "id": 1678234567894,
+    "title": "Next.js 15 ve Sunucu Bileşenlerinin Gücü",
+    "excerpt": "React ekosisteminin amiral gemisi Next.js'in yeni sürümüyle gelen performans iyileştirmeleri ve Server Actions kullanımı.",
+    "category": "Yazılım",
+    "date": "8 Ocak 2026",
+    "readTime": "8 dk",
+    "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
+    "status": "published",
+    "content": "Detaylı içerik buraya gelecek..."
+  },
+  {
+    "id": 1678234567893,
+    "title": "SEO 2.0: Yapay Zeka Çağında Arama Motoru Optimizasyonu",
+    "excerpt": "Google'ın SGE güncellemesi sonrası değişen SEO stratejileri ve içerik üretiminde dikkat edilmesi gerekenler.",
+    "category": "SEO",
+    "date": "5 Ocak 2026",
+    "readTime": "6 dk",
+    "image": "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&q=80",
+    "status": "published",
+    "content": "Detaylı içerik buraya gelecek..."
+  },
+  {
+    "id": 1678234567892,
+    "title": "E-Ticarette Dönüşüm Oranlarını Artırma Taktikleri",
+    "excerpt": "Ziyaretçilerinizi müşteriye dönüştürmek için kullanabileceğiniz 10 etkili UX/UI stratejisi.",
+    "category": "E-Ticaret",
+    "date": "2 Ocak 2026",
+    "readTime": "4 dk",
+    "image": "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=800&q=80",
+    "status": "published",
+    "content": "Detaylı içerik..."
+  }
+]

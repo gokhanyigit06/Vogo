@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "title": "A City AVM Web Sitesi",
+        "client": "A City AVM",
+        "category": "Web Tasarım",
+        "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+        "desc": "Modern kurumsal web sitesi dizaynı ve kullanıcı deneyimi (UX) optimizasyonu."
+    },
+    {
+        "id": 2,
+        "title": "Hakber Çelik Kurumsal",
+        "client": "Hakber Çelik",
+        "category": "Web Tasarım",
+        "image": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&q=80",
+        "desc": "Endüstriyel odaklı, yüksek performanslı kurumsal web sitesi çözümü."
+    },
+    {
+        "id": 3,
+        "title": "SM Motors E-Ticaret",
+        "client": "SM Motors",
+        "category": "E-Ticaret",
+        "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
+        "desc": "Uçtan uca e-ticaret altyapısı kurulumu ve satış odaklı performans reklamları."
+    },
+    {
+        "id": 4,
+        "title": "Mickey’s QR Menü",
+        "client": "Mickey’s",
+        "category": "AI Çözümleri",
+        "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80",
+        "desc": "Restoran işletmeciliği için web sitesi ve yapay zeka destekli interaktif QR Menü entegrasyonu."
+    },
+    {
+        "id": 5,
+        "title": "Norre Wear Global",
+        "client": "Norre Wear",
+        "category": "E-Ticaret",
+        "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80",
+        "desc": "Moda/tekstil sektöründe e-ticaret web sitesi çözümü ve global reklam yönetimi."
+    },
+    {
+        "id": 6,
+        "title": "Minister Pub Dijital",
+        "client": "Minister Pub",
+        "category": "Reklam Yönetimi",
+        "image": "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800&q=80",
+        "desc": "Yerel işletme görünürlüğü ve müşteri trafiği odaklı dijital reklam yönetimi."
+    }
+]

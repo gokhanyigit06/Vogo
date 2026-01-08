@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Blog Yazıları Modeli
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String?
+  content   String   @db.Text
+  image     String?
+  category  String
+  featured  Boolean  @default(false)
+  published Boolean  @default(false)
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// İletişim Formu Başvuruları (Leads)
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  service   String
+  message   String   @db.Text
+  status    String   @default("NEW") // NEW, READ, REPLIED
+  createdAt DateTime @default(now())
+}
+
+// Portfolyo Projeleri
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String
+  image       String
+  featured    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+// Admin Kullanıcıları (Gelecekte Auth eklendiğinde kullanılabilir)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "slug": "web-cozumleri",
+        "title": "Web Çözümleri",
+        "desc": "Modern, hızlı ve SEO uyumlu web siteleri.",
+        "status": "Aktif",
+        "views": 3420,
+        "projects": 12,
+        "icon": "Monitor"
+    },
+    {
+        "id": 2,
+        "slug": "dijital-reklam",
+        "title": "Dijital Reklam",
+        "desc": "Google Ads ve sosyal medya reklam yönetimi.",
+        "status": "Aktif",
+        "views": 2150,
+        "projects": 8,
+        "icon": "Megaphone"
+    },
+    {
+        "id": 3,
+        "slug": "sosyal-medya",
+        "title": "Sosyal Medya Yönetimi",
+        "desc": "Markanızın sesini sosyal medyada duyurun.",
+        "status": "Aktif",
+        "views": 5600,
+        "projects": 24,
+        "icon": "Instagram"
+    },
+    {
+        "id": 4,
+        "slug": "seo-optimizasyonu",
+        "title": "SEO Optimizasyonu",
+        "desc": "Arama motorlarında üst sıralara çıkın.",
+        "status": "Aktif",
+        "views": 1800,
+        "projects": 5,
+        "icon": "Search"
+    },
+    {
+        "id": 5,
+        "slug": "qr-menu",
+        "title": "QR Menü Sistemleri",
+        "desc": "Restoranlar için temassız dijital menü.",
+        "status": "Beta",
+        "views": 900,
+        "projects": 3,
+        "icon": "QrCode"
+    },
+    {
+        "id": 6,
+        "slug": "ozel-yazilim",
+        "title": "Özel Yazılım",
+        "desc": "İhtiyacınıza özel web ve mobil uygulamalar.",
+        "status": "Pasif",
+        "views": 450,
+        "projects": 0,
+        "icon": "Code"
+    }
+]
