@@ -137,7 +137,7 @@ export default function TasksPage() {
     const [team, setTeam] = useState<any[]>([])
     const [activeId, setActiveId] = useState<string | null>(null)
     const [showModal, setShowModal] = useState(false)
-    const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+    const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
     const [mounted, setMounted] = useState(false)
 
     const sensors = useSensors(
@@ -188,7 +188,7 @@ export default function TasksPage() {
         try {
             const res = await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' })
             if (res.ok) {
-                setSelectedTask(null)
+                setSelectedTaskId(null) // ID'yi sıfırla
                 fetchTasks()
             } else {
                 alert('Silinemedi. Lütfen tekrar deneyin.')
@@ -266,6 +266,9 @@ export default function TasksPage() {
 
     const activeTask = activeId ? tasks.find(t => t.id.toString() === activeId) : null
 
+    // Derived state: Seçili ID'ye göre güncel task'ı bul
+    const selectedTask = selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null
+
     if (!mounted) return <div className="p-8 text-slate-400">Yükleniyor...</div>
 
     return (
@@ -301,7 +304,7 @@ export default function TasksPage() {
                                 title={col.title}
                                 color={col.color}
                                 tasks={tasks.filter(t => t.status === col.id)}
-                                onTaskClick={setSelectedTask}
+                                onTaskClick={(t) => setSelectedTaskId(t.id)} // Objeyi değil ID'yi set et
                             />
                         ))}
                     </div>
@@ -317,7 +320,7 @@ export default function TasksPage() {
             {selectedTask && (
                 <TaskDetailModal
                     task={selectedTask}
-                    onClose={() => setSelectedTask(null)}
+                    onClose={() => setSelectedTaskId(null)}
                     onUpdate={() => fetchTasks()}
                     onDelete={() => handleDelete(selectedTask.id)}
                 />

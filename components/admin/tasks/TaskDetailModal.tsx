@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X, Paperclip, MessageSquare, CheckSquare, Tag, Clock, Plus, Trash2, Send, Loader2 } from "lucide-react"
 import { createBrowserClient } from '@supabase/ssr'
 
@@ -8,6 +8,11 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
     const [newChecklistItem, setNewChecklistItem] = useState('')
     const [uploading, setUploading] = useState(false)
     const [attachments, setAttachments] = useState<any[]>(task.task_attachments || [])
+
+    // Sync state with props when task updates (e.g. after upload)
+    useEffect(() => {
+        setAttachments(task.task_attachments || [])
+    }, [task])
 
     // Client-side Supabase Client
     const supabase = createBrowserClient(
