@@ -51,6 +51,16 @@ Bu:
 
 **Not:** Public bucket yapmayı unutma, yoksa yüklenen resimler gözükmez!
 
+### Adım 5: Storage RLS Politikalarını Ekle
+Supabase SQL Editor'da `supabase/storage-policies.sql` dosyasının içeriğini çalıştır.
+
+Bu sayede:
+- ✅ Herkes resim yükleyebilir
+- ✅ Herkes resimleri görüntüleyebilir
+- ✅ Yöneticiler resim silebilir
+
+**Önemli:** Bu adımı yapmazsan "row-level security policy" hatası alırsın!
+
 ---
 
 ## 🌐 Environment Variables
