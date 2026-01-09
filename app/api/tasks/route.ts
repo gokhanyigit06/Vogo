@@ -8,7 +8,17 @@ export async function GET(request: NextRequest) {
     try {
         const { data, error } = await supabase
             .from('tasks')
-            .select('*') // Debugging: Relations removed temporarily
+            .select(`
+                *,
+                team_members (
+                    id,
+                    name
+                ),
+                projects (
+                    id,
+                    name
+                )
+            `)
             .order('created_at', { ascending: false })
 
         if (error) throw error
