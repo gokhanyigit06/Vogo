@@ -2,18 +2,39 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
 // GET - Tüm projeleri getir
+// GET - Tüm projeleri veya tek projeyi getir (ID varsa)
 export async function GET(request: NextRequest) {
     try {
+        const { searchParams } = new URL(request.url)
+        const id = searchParams.get('id')
+
+        if (id) {
+            // Tekil proje detayı (Görevler ile birlikte)
+            const { data, error } = await supabase
+                .from('projects')
+                .select(`
+                    *,
+                    clients (id, name, company),
+                    tasks (*)
+                `)
+                .eq('id', id)
+                .single()
+
+            if (error) throw error
+            return NextResponse.json(data)
+        }
+
+        // Liste
         const { data, error } = await supabase
             .from('projects')
             .select(`
-        *,
-        clients (
-          id,
-          name,
-          company
-        )
-      `)
+                *,
+                clients (
+                  id,
+                  name,
+                  company
+                )
+            `)
             .order('created_at', { ascending: false })
 
         if (error) throw error
