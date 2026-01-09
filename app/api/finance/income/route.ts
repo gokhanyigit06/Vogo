@@ -12,10 +12,6 @@ export async function GET(request: NextRequest) {
           id,
           name,
           company
-        ),
-        projects (
-          id,
-          name
         )
       `)
             .order('date', { ascending: false })
