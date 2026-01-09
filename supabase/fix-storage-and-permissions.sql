@@ -19,11 +19,10 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('task-attachments', 'task-attachments', true)
 ON CONFLICT (id) DO UPDATE SET public = true;
 
--- Storage İzinleri (RLS)
--- Giriş yapmış herkes dosya YÜKLEYEBİLİR
-CREATE POLICY "Authenticated can upload"
+-- Storage İzinleri (RLS) - PUBLIC UPLOAD (Debug için gevşetildi)
+CREATE POLICY "Public can upload"
 ON storage.objects FOR INSERT
-TO authenticated
+TO public
 WITH CHECK ( bucket_id = 'task-attachments' );
 
 -- Herkes dosyaları GÖREBİLİR (Public URL çalışması için)
