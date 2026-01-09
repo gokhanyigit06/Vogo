@@ -19,3 +19,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(url, key)
+
+// Admin Client (Service Role) - RLS Bypass
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+export const supabaseAdmin = serviceRoleKey
+    ? createClient(url, serviceRoleKey, {
+        auth: {
+            autoRefreshToken: false,
+            persistSession: false
+        }
+    })
+    : supabase
