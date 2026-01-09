@@ -6,6 +6,26 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import ImageUploader from "@/components/admin/ImageUploader"
 
+// Türkçe karakter slug dönüştürme
+function generateSlug(text: string): string {
+    const turkishMap: { [key: string]: string } = {
+        'ş': 's', 'Ş': 's',
+        'ğ': 'g', 'Ğ': 'g',
+        'ü': 'u', 'Ü': 'u',
+        'ı': 'i', 'İ': 'i',
+        'ö': 'o', 'Ö': 'o',
+        'ç': 'c', 'Ç': 'c'
+    }
+
+    return text
+        .split('')
+        .map(char => turkishMap[char] || char)
+        .join('')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+}
+
 export default function NewBlogPostPage() {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -89,12 +109,27 @@ export default function NewBlogPostPage() {
                             placeholder="Müşterileri Etkileyecek 10 Web Tasarım İpucu..."
                             className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 text-white text-lg font-bold placeholder:font-normal focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-slate-600"
                             value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            onChange={(e) => {
+                                const newTitle = e.target.value
+                                setFormData({
+                                    ...formData,
+                                    title: newTitle,
+                                    slug: generateSlug(newTitle)
+                                })
+                            }}
                         />
                         <p className="mt-2 text-xs text-slate-500 flex justify-between">
                             <span>Önerilen uzunluk: 40-60 karakter</span>
                             <span>{formData.title.length} karakter</span>
                         </p>
+                        {formData.slug && (
+                            <div className="mt-3 p-2 bg-slate-950 rounded-lg border border-slate-800">
+                                <span className="text-xs text-slate-500">URL: </span>
+                                <span className="text-xs text-emerald-400 font-mono">
+                                    vogo.com/blog/{formData.slug}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Content Editor (Simple Textarea for now) */}
