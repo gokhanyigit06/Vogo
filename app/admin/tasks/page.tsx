@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic"
 
 import { useEffect, useState } from "react"
 import { DndContext, DragOverlay, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core'
-import { Plus, Calendar, User, Clock, CheckCircle2, AlertCircle, X, Search } from "lucide-react"
+import { Plus, Clock, CheckCircle2, AlertCircle, X } from "lucide-react"
 import { createPortal } from "react-dom"
 
 // --- Types ---
@@ -114,9 +114,10 @@ function KanbanColumn({ id, title, tasks, color }: { id: string, title: string, 
 export default function TasksPage() {
     const [tasks, setTasks] = useState<Task[]>([])
     const [team, setTeam] = useState<any[]>([])
-    const [projects, setProjects] = useState<any[]>([])
+    // const [projects, setProjects] = useState<any[]>([]) 
     const [activeId, setActiveId] = useState<number | null>(null)
     const [showModal, setShowModal] = useState(false)
+    const [mounted, setMounted] = useState(false) // Mounted state
     const [formData, setFormData] = useState<any>({
         title: '',
         description: '',
@@ -128,28 +129,17 @@ export default function TasksPage() {
     })
 
     useEffect(() => {
+        setMounted(true)
         fetchTasks()
         fetchTeam()
-        fetchProjects() // Projects API eklenecek, şimdilik client/projeden çekebiliriz veya yeni endpoint.
-        // /api/finance/receivables içinde proje çekmiştik, oradan alıntı gibi /api/projects lazım. 
-        // Şimdilik /api/clients/[id] var. Tek tek uğraşmayalım, basit bir proje listesi lazım. 
-        // Aşağıda basit fetch ile çözeriz.
+        // fetchProjects() 
     }, [])
 
     const fetchTasks = () => fetch('/api/tasks').then(r => r.json()).then(setTasks)
     const fetchTeam = () => fetch('/api/team').then(r => r.json()).then(data => setTeam(data.filter((m: any) => m.active)))
 
-    // Basit bir proje listesi çekme (Buranın endpointi yoksa hata verebilir, kontrol edelim)
-    // Varsayım: /api/projects diye genel bir endpoint yok. /api/clients vardı. 
-    // Hızlıca bir endpoint yazsak iyi olurdu ama şimdilik SQL query ile çekilmiş tasks içinden de proje isimleri geliyor. 
-    // Yeni görev eklerken proje seçmek istiyorsak endpoint lazım. 
-    // Şimdilik tasks API'sını kullanıp uniq projeleri mi alsak? Hayır.
-    // /api/projects endpointi olmalı.
-    // Dur, /api/finance/receivables da projeleri çekmişti.
-    // Ben şimdilik projeleri boş geçiyorum, sonra ekleriz.
-    const fetchProjects = async () => {
-        // Eğer proje endpointi yoksa burası boş kalsın şimdilik
-    }
+    // Projeler şimdilik kapalı
+    const fetchProjects = async () => { }
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id)
@@ -202,6 +192,9 @@ export default function TasksPage() {
 
     const activeTask = activeId ? tasks.find(t => t.id === activeId) : null
 
+    // Server-side rendering issue fix
+    if (!mounted) return <div className="p-8 text-slate-400">Yükleniyor...</div>
+
     return (
         <div className="p-8 max-w-7xl mx-auto space-y-8 h-screen flex flex-col">
 
@@ -237,6 +230,7 @@ export default function TasksPage() {
                             />
                         ))}
                     </div>
+                    {/* Portal ile render edildiği için document hatası vermemeli, çünkü mounted check var */}
                     {createPortal(
                         <DragOverlay>
                             {activeTask ? <TaskCard task={activeTask} isOverlay /> : null}
