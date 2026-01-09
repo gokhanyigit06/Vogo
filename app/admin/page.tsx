@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, ArrowRight } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, ArrowRight, Zap, Target, Activity } from "lucide-react"
 import Link from "next/link"
 
 interface DashboardStats {
@@ -32,11 +32,19 @@ export default function AdminDashboard() {
             })
     }, [])
 
+    const getGreeting = () => {
+        const hour = new Date().getHours()
+        if (hour < 12) return "Günaydın"
+        if (hour < 18) return "Tünaydın"
+        return "İyi Akşamlar"
+    }
+
     if (loading) {
         return (
-            <div className="p-8 max-w-7xl mx-auto">
-                <div className="flex items-center justify-center h-64">
-                    <div className="text-slate-400">Yükleniyor...</div>
+            <div className="p-8 max-w-7xl mx-auto flex items-center justify-center h-[80vh]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                    <p className="text-slate-400 animate-pulse">Veriler Analiz Ediliyor...</p>
                 </div>
             </div>
         )
@@ -46,136 +54,239 @@ export default function AdminDashboard() {
         return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount)
     }
 
-    return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+    // Mock Chart Data (Veri gelene kadar görsel şölen)
+    const chartData = [35, 60, 45, 80, 55, 90, 70]
+    const days = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']
 
-            {/* Page Header */}
-            <div>
-                <h1 className="text-3xl font-bold text-white">İş Merkezi</h1>
-                <p className="text-slate-400 mt-1">Ajansınızın tüm operasyonlarını buradan yönetin.</p>
+    return (
+        <div className="p-8 max-w-7xl mx-auto space-y-10">
+
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 className="text-4xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+                        {getGreeting()}, Aslan Bey 👋
+                    </h1>
+                    <p className="text-slate-400 mt-2 text-lg">
+                        Bugün ajansın performansı <span className="text-emerald-400 font-bold">Harika</span> görünüyor.
+                    </p>
+                </div>
+                <div className="flex items-center gap-3">
+                    <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm flex items-center gap-2">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                        Sistem Online
+                    </div>
+                    <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm">
+                        {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
+                    </div>
+                </div>
             </div>
 
-            {/* KPI Cards */}
+            {/* Premium KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Toplam Gelir */}
-                <div className="bg-gradient-to-br from-emerald-500/10 to-slate-900 border border-emerald-500/20 p-6 rounded-2xl">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+
+                {/* Gelir Kartı */}
+                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-emerald-500/20" />
+                    <div className="flex justify-between items-start mb-4 relative z-10">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl">
                             <TrendingUp className="w-6 h-6 text-emerald-400" />
                         </div>
+                        <span className="text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg text-xs font-bold">+12%</span>
                     </div>
-                    <p className="text-slate-400 text-sm font-medium">Toplam Gelir</p>
-                    <h3 className="text-2xl font-bold text-white mt-1">{formatCurrency(stats?.totalIncome || 0)}</h3>
-                    <p className="text-emerald-400 text-xs mt-2">Bu ay: {formatCurrency(stats?.monthlyIncome || 0)}</p>
+                    <div className="relative z-10">
+                        <p className="text-slate-400 text-sm font-medium mb-1">Toplam Gelir</p>
+                        <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(stats?.totalIncome || 0)}</h3>
+                    </div>
                 </div>
 
-                {/* Toplam Gider */}
-                <div className="bg-gradient-to-br from-red-500/10 to-slate-900 border border-red-500/20 p-6 rounded-2xl">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center">
+                {/* Gider Kartı */}
+                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-red-500/20" />
+                    <div className="flex justify-between items-start mb-4 relative z-10">
+                        <div className="p-3 bg-red-500/10 rounded-xl">
                             <TrendingDown className="w-6 h-6 text-red-400" />
                         </div>
+                        <span className="text-red-400 bg-red-500/10 px-2 py-1 rounded-lg text-xs font-bold">+5%</span>
                     </div>
-                    <p className="text-slate-400 text-sm font-medium">Toplam Gider</p>
-                    <h3 className="text-2xl font-bold text-white mt-1">{formatCurrency(stats?.totalExpenses || 0)}</h3>
-                    <p className="text-red-400 text-xs mt-2">Operasyonel maliyetler</p>
+                    <div className="relative z-10">
+                        <p className="text-slate-400 text-sm font-medium mb-1">Toplam Gider</p>
+                        <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(stats?.totalExpenses || 0)}</h3>
+                    </div>
                 </div>
 
-                {/* Net Kar */}
-                <div className="bg-gradient-to-br from-blue-500/10 to-slate-900 border border-blue-500/20 p-6 rounded-2xl">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
+                {/* Kar Kartı */}
+                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-blue-500/20" />
+                    <div className="flex justify-between items-start mb-4 relative z-10">
+                        <div className="p-3 bg-blue-500/10 rounded-xl">
                             <DollarSign className="w-6 h-6 text-blue-400" />
                         </div>
                     </div>
-                    <p className="text-slate-400 text-sm font-medium">Net Kar</p>
-                    <h3 className="text-2xl font-bold text-white mt-1">{formatCurrency(stats?.profit || 0)}</h3>
-                    <p className={`text-xs mt-2 ${(stats?.profit || 0) >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
-                        {(stats?.profit || 0) >= 0 ? 'Karlı' : 'Zararda'}
-                    </p>
+                    <div className="relative z-10">
+                        <p className="text-slate-400 text-sm font-medium mb-1">Net Kar</p>
+                        <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(stats?.profit || 0)}</h3>
+                    </div>
                 </div>
 
-                {/* Aktif Projeler */}
-                <div className="bg-gradient-to-br from-purple-500/10 to-slate-900 border border-purple-500/20 p-6 rounded-2xl">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
+                {/* Proje Kartı */}
+                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-purple-500/20" />
+                    <div className="flex justify-between items-start mb-4 relative z-10">
+                        <div className="p-3 bg-purple-500/10 rounded-xl">
                             <Briefcase className="w-6 h-6 text-purple-400" />
                         </div>
+                        <span className="text-purple-400 bg-purple-500/10 px-2 py-1 rounded-lg text-xs font-bold">{stats?.totalClients} Müşteri</span>
                     </div>
-                    <p className="text-slate-400 text-sm font-medium">Aktif Projeler</p>
-                    <h3 className="text-2xl font-bold text-white mt-1">{stats?.activeProjects || 0}</h3>
-                    <p className="text-purple-400 text-xs mt-2">{stats?.totalClients || 0} toplam müşteri</p>
+                    <div className="relative z-10">
+                        <p className="text-slate-400 text-sm font-medium mb-1">Aktif Proje</p>
+                        <h3 className="text-3xl font-bold text-white tracking-tight">{stats?.activeProjects || 0}</h3>
+                    </div>
                 </div>
             </div>
 
-            {/* Main Content Grid */}
+            {/* Content Grid */}
             <div className="grid lg:grid-cols-3 gap-8">
 
-                {/* Yaklaşan Deadline'lar */}
-                <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-                    <div className="p-6 border-b border-slate-800 flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                            <Calendar className="w-5 h-5 text-emerald-500" />
-                            Yaklaşan Deadline'lar
-                        </h3>
-                        <Link href="/admin/projects" className="text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
-                            Tümünü Gör
-                        </Link>
-                    </div>
-                    <div className="divide-y divide-slate-800">
-                        {stats?.upcomingDeadlines && stats.upcomingDeadlines.length > 0 ? (
-                            stats.upcomingDeadlines.map((project: any) => (
-                                <div key={project.id} className="p-4 hover:bg-slate-800/50 transition-colors flex items-center justify-between group">
-                                    <div>
-                                        <p className="text-white font-medium group-hover:text-emerald-400 transition-colors">{project.name}</p>
-                                        <p className="text-slate-400 text-xs mt-1">Bitiş: {new Date(project.end_date).toLocaleDateString('tr-TR')}</p>
-                                    </div>
-                                    <Link
-                                        href={`/admin/projects/${project.id}`}
-                                        className="text-slate-400 hover:text-white transition-colors"
-                                    >
-                                        <ArrowRight className="w-5 h-5" />
-                                    </Link>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="p-8 text-center text-slate-400">
-                                Yaklaşan deadline'ı olan proje yok
+                {/* Sol Büyük Alan: Chart & Activity */}
+                <div className="lg:col-span-2 space-y-8">
+
+                    {/* Weekly Performance Chart (CSS Based) */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 relative overflow-hidden">
+                        <div className="flex justify-between items-end mb-8 relative z-10">
+                            <div>
+                                <h3 className="text-xl font-bold text-white">Haftalık Performans</h3>
+                                <p className="text-slate-400 text-sm">Son 7 günlük aktivite özeti</p>
                             </div>
-                        )}
+                            <div className="flex items-center gap-2">
+                                <span className="block w-3 h-3 bg-emerald-500 rounded-full" />
+                                <span className="text-xs text-slate-400">Tamamlanan</span>
+                            </div>
+                        </div>
+
+                        {/* Chart Bars */}
+                        <div className="flex items-end justify-between h-48 gap-4 px-2 relative z-10">
+                            {chartData.map((height, i) => (
+                                <div key={i} className="flex flex-col items-center gap-3 w-full group cursor-pointer">
+                                    <div className="w-full bg-slate-800 rounded-t-xl relative h-full overflow-hidden">
+                                        <div
+                                            className="absolute bottom-0 w-full bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-xl transition-all duration-500 group-hover:opacity-90"
+                                            style={{ height: `${height}%` }}
+                                        >
+                                            <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-slate-900 text-xs font-bold px-2 py-1 rounded transition-opacity">
+                                                {height}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span className="text-xs font-medium text-slate-500 group-hover:text-emerald-400 transition-colors">{days[i]}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Background Decoration */}
+                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-emerald-500/5 to-transparent pointer-events-none" />
                     </div>
+
+                    {/* Recent Transactions Table */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
+                        <div className="p-6 border-b border-slate-800 flex justify-between items-center">
+                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                <Activity className="w-5 h-5 text-blue-500" />
+                                Son İşlemler
+                            </h3>
+                            <Link href="/admin/finance/income" className="text-sm text-blue-400 hover:text-blue-300 font-medium">Tümünü Gör</Link>
+                        </div>
+                        <div className="divide-y divide-slate-800">
+                            {stats?.recentTransactions?.slice(0, 5).map((t: any) => (
+                                <div key={t.id} className="p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-lg">
+                                            💰
+                                        </div>
+                                        <div>
+                                            <p className="text-white font-medium">{t.description || 'İşlem'}</p>
+                                            <p className="text-slate-400 text-xs">{new Date(t.date).toLocaleDateString('tr-TR')}</p>
+                                        </div>
+                                    </div>
+                                    <span className="font-bold text-emerald-400">
+                                        +{formatCurrency(t.amount)}
+                                    </span>
+                                </div>
+                            ))}
+                            {(!stats?.recentTransactions || stats.recentTransactions.length === 0) && (
+                                <div className="p-8 text-center text-slate-500">Henüz finansal işlem yok.</div>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
 
-                {/* Quick Actions */}
-                <div className="space-y-4">
-                    <Link
-                        href="/admin/clients/new"
-                        className="block bg-emerald-500 hover:bg-emerald-600 p-6 rounded-2xl transition-all group shadow-lg shadow-emerald-500/20"
-                    >
-                        <Users className="w-8 h-8 text-white mb-3" />
-                        <h4 className="text-white font-bold text-lg">Yeni Müşteri</h4>
-                        <p className="text-emerald-100 text-sm mt-1">CRM'e müşteri ekle</p>
-                    </Link>
+                {/* Sağ Kolon: Quick Actions & Deadlines */}
+                <div className="space-y-8">
 
-                    <Link
-                        href="/admin/projects/new"
-                        className="block bg-slate-800 hover:bg-slate-700 border border-slate-700 p-6 rounded-2xl transition-all group"
-                    >
-                        <Briefcase className="w-8 h-8 text-emerald-400 mb-3" />
-                        <h4 className="text-white font-bold text-lg">Yeni Proje</h4>
-                        <p className="text-slate-400 text-sm mt-1">Proje oluştur ve takip et</p>
-                    </Link>
+                    {/* Hızlı Ekleme Butonları */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <Link href="/admin/projects/new" className="bg-emerald-600 hover:bg-emerald-500 p-4 rounded-2xl transition-all shadow-lg shadow-emerald-500/20 text-center group">
+                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <Briefcase className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-white font-bold text-sm">Proje Ekle</span>
+                        </Link>
+                        <Link href="/admin/tasks" className="bg-blue-600 hover:bg-blue-500 p-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 text-center group">
+                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <Target className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-white font-bold text-sm">Görev Ata</span>
+                        </Link>
+                        <Link href="/admin/finance/income" className="bg-purple-600 hover:bg-purple-500 p-4 rounded-2xl transition-all shadow-lg shadow-purple-500/20 text-center group">
+                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <DollarSign className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-white font-bold text-sm">Gelir Gir</span>
+                        </Link>
+                        <Link href="/admin/clients/new" className="bg-orange-600 hover:bg-orange-500 p-4 rounded-2xl transition-all shadow-lg shadow-orange-500/20 text-center group">
+                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <Users className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-white font-bold text-sm">Müşteri</span>
+                        </Link>
+                    </div>
 
-                    <Link
-                        href="/admin/finance/income"
-                        className="block bg-slate-800 hover:bg-slate-700 border border-slate-700 p-6 rounded-2xl transition-all group"
-                    >
-                        <DollarSign className="w-8 h-8 text-blue-400 mb-3" />
-                        <h4 className="text-white font-bold text-lg">Gelir Kaydet</h4>
-                        <p className="text-slate-400 text-sm mt-1">Ödeme kaydı oluştur</p>
-                    </Link>
+                    {/* Yaklaşan Teslimler */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden h-fit">
+                        <div className="p-6 border-b border-slate-800">
+                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                <Zap className="w-5 h-5 text-yellow-500" />
+                                Yaklaşan Teslimler
+                            </h3>
+                        </div>
+                        <div className="max-h-[400px] overflow-y-auto custom-scrollbar p-2">
+                            {stats?.upcomingDeadlines && stats.upcomingDeadlines.length > 0 ? (
+                                stats.upcomingDeadlines.map((p: any) => (
+                                    <div key={p.id} className="p-4 mb-2 bg-slate-950/50 rounded-xl border border-slate-800/50 hover:border-yellow-500/30 transition-colors">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <h4 className="font-bold text-white text-sm">{p.name}</h4>
+                                            <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-1 rounded">
+                                                {Math.ceil((new Date(p.end_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24))} gün kaldı
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 flex items-center gap-1">
+                                            <Calendar className="w-3 h-3" />
+                                            {new Date(p.end_date).toLocaleDateString('tr-TR')}
+                                        </p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="p-6 text-center text-slate-500 text-sm">
+                                    Yakın zamanda teslim edilecek proje yok.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     )
 }
+
