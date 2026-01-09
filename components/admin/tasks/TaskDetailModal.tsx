@@ -1,19 +1,65 @@
 "use client"
-import { useState, useEffect } from "react"
-import { X, Paperclip, MessageSquare, CheckSquare, Tag, Clock, User, Plus, Trash2, Send } from "lucide-react"
+import { useState } from "react"
+import { X, Paperclip, MessageSquare, CheckSquare, Tag, Clock, Plus, Trash2, Send, Loader2 } from "lucide-react"
+import { createBrowserClient } from '@supabase/ssr'
 
-export default function TaskDetailModal({ task, onClose, onUpdate }: any) {
-    const [activeTab, setActiveTab] = useState('details') // details, comments, files
-    const [comment, setComment] = useState('')
+export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: any) {
     const [checklists, setChecklists] = useState<any[]>(task.checklists || [])
-    const [labels, setLabels] = useState<any[]>(task.labels || [])
     const [newChecklistItem, setNewChecklistItem] = useState('')
+    const [uploading, setUploading] = useState(false)
+    const [attachments, setAttachments] = useState<any[]>(task.attachments || []) // Eğer DB'den geliyorsa
 
-    // Mock data for UI development
-    const comments = [
-        { id: 1, user: 'Volkan K.', text: 'Tasarımı bitirdim, kontrole hazır.', time: '2s önce' }
-    ]
+    // Client-side Supabase Client
+    const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
 
+    // --- Dosya Yükleme ---
+    const handleFileUpload = async (e: any) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        try {
+            setUploading(true)
+            const fileExt = file.name.split('.').pop()
+            const fileName = `${task.id}/${Math.random()}.${fileExt}`
+            const filePath = `${fileName}`
+
+            // 1. Storage'a Yükle
+            const { error: uploadError } = await supabase.storage
+                .from('task-attachments') // Bucket adı
+                .upload(filePath, file)
+
+            if (uploadError) {
+                if (uploadError.message.includes("Bucket not found")) {
+                    alert("Lütfen Supabase panelinden 'task-attachments' adında bir Public Bucket oluşturun.")
+                } else {
+                    alert(`Yükleme hatası: ${uploadError.message}`)
+                }
+                throw uploadError
+            }
+
+            // 2. Public URL al
+            const { data: { publicUrl } } = supabase.storage
+                .from('task-attachments')
+                .getPublicUrl(filePath)
+
+            // 3. UI güncelle (Gerçek uygulamada burası tasks tablosundaki bir JSON alanına veya task_attachments tablosuna yazılmalı)
+            // Şimdilik sadece UI'da gösteriyoruz, DB kayıt işlemi backend API üzerinden yapılmalı.
+            const newFile = { name: file.name, url: publicUrl, size: (file.size / 1024).toFixed(1) + ' KB' }
+            setAttachments([...attachments, newFile])
+
+            // TODO: API call to save attachment metadata to DB
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setUploading(false)
+        }
+    }
+
+    // --- Checklist ---
     const handleAddChecklistItem = (e: any) => {
         e.preventDefault()
         if (!newChecklistItem.trim()) return
@@ -43,20 +89,26 @@ export default function TaskDetailModal({ task, onClose, onUpdate }: any) {
                             <span className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/20">
                                 {task.status === 'todo' ? 'Yapılacak' : task.status === 'in_progress' ? 'Sürüyor' : 'Tamamlandı'}
                             </span>
-                            {labels.map((label: any, i: number) => (
-                                <span key={i} className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-xs font-medium border border-blue-500/20">
-                                    {label.text}
-                                </span>
-                            ))}
                             <button className="text-slate-500 hover:text-white transition-colors">
                                 <Plus className="w-4 h-4" />
                             </button>
                         </div>
                         <h2 className="text-2xl font-bold text-white">{task.title}</h2>
                     </div>
-                    <button onClick={onClose} className="text-slate-400 hover:text-white p-2 hover:bg-slate-800 rounded-lg transition-colors">
-                        <X className="w-6 h-6" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        {onDelete && (
+                            <button
+                                onClick={onDelete}
+                                title="Görevi Sil"
+                                className="text-slate-400 hover:text-red-500 p-2 hover:bg-red-500/10 rounded-lg transition-colors"
+                            >
+                                <Trash2 className="w-6 h-6" />
+                            </button>
+                        )}
+                        <button onClick={onClose} className="text-slate-400 hover:text-white p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Body Content */}
@@ -84,7 +136,6 @@ export default function TaskDetailModal({ task, onClose, onUpdate }: any) {
                                 </h3>
                             </div>
 
-                            {/* Progress Bar */}
                             <div className="h-2 bg-slate-800 rounded-full mb-4 overflow-hidden">
                                 <div
                                     className="h-full bg-emerald-500 transition-all duration-300"
@@ -130,27 +181,40 @@ export default function TaskDetailModal({ task, onClose, onUpdate }: any) {
                                 Dosyalar & Ekler
                             </h3>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="border border-dashed border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center text-slate-500 hover:text-emerald-500 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all cursor-pointer h-24">
-                                    <Plus className="w-6 h-6 mb-2" />
-                                    <span className="text-xs">Dosya Yükle</span>
-                                </div>
-                                {/* Mock File */}
-                                <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center gap-3 group hover:border-slate-700 transition-colors">
-                                    <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-blue-400">
-                                        FIL
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm text-white truncate">brief_revize_v2.pdf</p>
-                                        <p className="text-xs text-slate-500">2.4 MB • Dün</p>
-                                    </div>
-                                </div>
+                                <label className="border border-dashed border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center text-slate-500 hover:text-emerald-500 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all cursor-pointer h-24 relative overflow-hidden">
+                                    {uploading ? (
+                                        <Loader2 className="w-6 h-6 animate-spin text-emerald-500" />
+                                    ) : (
+                                        <>
+                                            <Plus className="w-6 h-6 mb-2" />
+                                            <span className="text-xs">Dosya Yükle</span>
+                                        </>
+                                    )}
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        onChange={handleFileUpload}
+                                        disabled={uploading}
+                                    />
+                                </label>
+
+                                {attachments.map((file: any, i: number) => (
+                                    <a key={i} href={file.url} target="_blank" rel="noopener noreferrer" className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center gap-3 group hover:border-slate-700 transition-colors">
+                                        <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-blue-400 font-bold text-sm">
+                                            {file.name.split('.').pop()?.toUpperCase()}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm text-white truncate">{file.name}</p>
+                                            <p className="text-xs text-slate-500">{file.size || 'Unknown'}</p>
+                                        </div>
+                                    </a>
+                                ))}
                             </div>
                         </div>
                     </div>
 
-                    {/* Right Column (Activity & Details) */}
-                    <div className="w-80 bg-slate-950 p-6 space-y-6 overflow-y-auto">
-
+                    {/* Right Column (Meta) */}
+                    <div className="w-80 bg-slate-950 p-6 space-y-6 overflow-y-auto border-l border-slate-900">
                         {/* Meta Info */}
                         <div className="space-y-4">
                             <div>
@@ -172,47 +236,14 @@ export default function TaskDetailModal({ task, onClose, onUpdate }: any) {
                             </div>
                         </div>
 
-                        <hr className="border-slate-800" />
-
-                        {/* Comments System */}
-                        <div className="space-y-4">
-                            <h3 className="text-sm font-bold text-slate-400">Yorumlar</h3>
-
-                            <div className="space-y-4">
-                                {comments.map((c) => (
-                                    <div key={c.id} className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs font-bold shrink-0">
-                                            {c.user[0]}
-                                        </div>
-                                        <div>
-                                            <div className="flex items-baseline gap-2 mb-1">
-                                                <span className="text-sm font-bold text-white">{c.user}</span>
-                                                <span className="text-[10px] text-slate-500">{c.time}</span>
-                                            </div>
-                                            <p className="text-sm text-slate-300 bg-slate-900 p-3 rounded-lg rounded-tl-none border border-slate-800">
-                                                {c.text}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="relative">
-                                <textarea
-                                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-slate-700 min-h-[80px] resize-none"
-                                    placeholder="Yorum yaz..."
-                                    value={comment}
-                                    onChange={(e) => setComment(e.target.value)}
-                                ></textarea>
-                                <button className="absolute bottom-3 right-3 p-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors">
-                                    <Send className="w-4 h-4" />
-                                </button>
-                            </div>
+                        <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-800/50">
+                            <p className="text-xs text-slate-500">
+                                * Dosya yüklemek için Supabase'de <strong>task-attachments</strong> adında <strong>Public</strong> bir bucket gereklidir.
+                            </p>
                         </div>
 
                     </div>
                 </div>
-
             </div>
         </div>
     )

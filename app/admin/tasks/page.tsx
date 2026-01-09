@@ -81,7 +81,7 @@ function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOver
 // --- Draggable Wrapper ---
 function DraggableTaskCard({ task, onClick }: { task: Task, onClick: () => void }) {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-        id: task.id.toString(), // ID string olmalı
+        id: task.id.toString(),
         data: task
     })
 
@@ -135,16 +135,15 @@ function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, ti
 export default function TasksPage() {
     const [tasks, setTasks] = useState<Task[]>([])
     const [team, setTeam] = useState<any[]>([])
-    const [activeId, setActiveId] = useState<string | null>(null) // ID string
+    const [activeId, setActiveId] = useState<string | null>(null)
     const [showModal, setShowModal] = useState(false)
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
     const [mounted, setMounted] = useState(false)
 
-    // Sensörleri tanımla (Touch/Mouse uyumu için)
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 8, // 8px hareket ettirmeden drag başlama (yanlışlıkla tıklamayı önler)
+                distance: 8,
             },
         })
     )
@@ -165,6 +164,7 @@ export default function TasksPage() {
         fetchTeam()
     }, [])
 
+    // Güvenli Fetch (Hata fırlatmaz)
     const fetchTasks = () => fetch('/api/tasks')
         .then(r => r.json())
         .then(data => {
@@ -179,7 +179,25 @@ export default function TasksPage() {
             console.error("Fetch error:", err)
             setTasks([])
         })
+
     const fetchTeam = () => fetch('/api/team').then(r => r.json()).then(data => setTeam(data.filter((m: any) => m.active)))
+
+    const handleDelete = async (id: number) => {
+        if (!confirm('Bu görevi silmek istediğinize emin misiniz?')) return
+
+        try {
+            const res = await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' })
+            if (res.ok) {
+                setSelectedTask(null)
+                fetchTasks()
+            } else {
+                alert('Silinemedi. Lütfen tekrar deneyin.')
+            }
+        } catch (error) {
+            console.error(error)
+            alert('Hata oluştu.')
+        }
+    }
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id)
@@ -210,7 +228,6 @@ export default function TasksPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        // Data Sanitization
         const payload = {
             ...formData,
             assigned_to: formData.assigned_to ? Number(formData.assigned_to) : null,
@@ -247,7 +264,6 @@ export default function TasksPage() {
         }
     }
 
-    // activeId string olduğu için number'a çevirip buluyoruz (veya data prop'undan alıyoruz)
     const activeTask = activeId ? tasks.find(t => t.id.toString() === activeId) : null
 
     if (!mounted) return <div className="p-8 text-slate-400">Yükleniyor...</div>
@@ -303,6 +319,7 @@ export default function TasksPage() {
                     task={selectedTask}
                     onClose={() => setSelectedTask(null)}
                     onUpdate={() => fetchTasks()}
+                    onDelete={() => handleDelete(selectedTask.id)}
                 />
             )}
 
