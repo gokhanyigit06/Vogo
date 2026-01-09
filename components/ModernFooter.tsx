@@ -21,9 +21,9 @@ export default function ModernFooter() {
     const currentYear = new Date().getFullYear()
 
     const socialLinks = [
-        { icon: Twitter, href: settings?.social_twitter || "#", key: "twitter" },
-        { icon: Linkedin, href: settings?.social_linkedin || "#", key: "linkedin" },
-        { icon: Instagram, href: settings?.social_instagram || "#", key: "instagram" },
+        { icon: Twitter, href: settings?.twitter || "#", key: "twitter" },
+        { icon: Linkedin, href: settings?.linkedin || "#", key: "linkedin" },
+        { icon: Instagram, href: settings?.instagram || "#", key: "instagram" },
     ].filter(social => social.href && social.href !== "#")
 
     return (
@@ -34,12 +34,12 @@ export default function ModernFooter() {
                     <div className="space-y-4">
                         <div className="text-2xl font-bold">
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                                {settings?.site_title?.split(' ')[0] || 'Vogo'}
+                                {settings?.siteTitle?.split(' ')[0] || 'Vogo'}
                             </span>
-                            <span className="text-white"> {settings?.site_title?.split(' ').slice(1).join(' ') || 'Agency'}</span>
+                            <span className="text-white"> {settings?.siteTitle?.split(' ').slice(1).join(' ') || 'Agency'}</span>
                         </div>
                         <p className="text-slate-400 leading-relaxed">
-                            {settings?.site_description || 'Dijital dünyada fark yaratan, sonuç odaklı çözümler üreten yaratıcı ajans.'}
+                            {settings?.siteDescription || 'Dijital dünyada fark yaratan, sonuç odaklı çözümler üreten yaratıcı ajans.'}
                         </p>
                         {socialLinks.length > 0 && (
                             <div className="flex gap-3">

@@ -42,9 +42,9 @@ export default function Header() {
                     {/* Center: Logo */}
                     <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                            {settings?.site_title?.split(' ')[0] || 'Vogo'}
+                            {settings?.siteTitle?.split(' ')[0] || 'Vogo'}
                         </span>
-                        <span className="text-white"> {settings?.site_title?.split(' ').slice(1).join(' ') || 'Agency'}</span>
+                        <span className="text-white"> {settings?.siteTitle?.split(' ').slice(1).join(' ') || 'Agency'}</span>
                     </Link>
 
                     {/* Right: Empty space for balance */}
