@@ -5,6 +5,8 @@ export const dynamic = "force-dynamic"
 import { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus } from "lucide-react"
 import Link from "next/link"
+import IncomeTrendChart from "@/components/admin/charts/IncomeTrendChart"
+import ExpensePieChart from "@/components/admin/charts/ExpensePieChart"
 
 export default function FinancePage() {
     const [income, setIncome] = useState<any[]>([])
@@ -82,6 +84,16 @@ export default function FinancePage() {
                 </div>
             </div>
 
+            {/* Charts Section */}
+            <div className="grid lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                    <IncomeTrendChart income={income} expenses={expenses} />
+                </div>
+                <div>
+                    <ExpensePieChart expenses={expenses} />
+                </div>
+            </div>
+
             {/* Quick Actions */}
             <div className="grid md:grid-cols-2 gap-6">
                 <Link
@@ -131,6 +143,25 @@ export default function FinancePage() {
                             </div>
                         </div>
                         <Plus className="w-12 h-12 text-red-400 group-hover:scale-110 transition-transform" />
+                    </div>
+                </Link>
+
+                <Link
+                    href="/admin/finance/receivables"
+                    className="bg-slate-900 border border-slate-800 hover:border-blue-500/50 p-6 rounded-2xl transition-all group md:col-span-2 lg:col-span-1"
+                >
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-xl font-bold text-white mb-2">Alacak Takibi</h3>
+                            <p className="text-slate-400 text-sm">
+                                Müşterilerden beklenen ödemeler
+                            </p>
+                            <div className="mt-4 flex items-center gap-2 text-sm">
+                                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                <span className="text-slate-300">Borçlu müşterileri listele</span>
+                            </div>
+                        </div>
+                        <DollarSign className="w-12 h-12 text-blue-400 group-hover:scale-110 transition-transform" />
                     </div>
                 </Link>
             </div>
