@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban } from "lucide-react"
+import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -13,7 +13,9 @@ export default function AdminSidebar() {
         { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
         { icon: Users, label: "Müşteriler", href: "/admin/clients" },
         { icon: FolderKanban, label: "Projeler", href: "/admin/projects" },
+        { icon: CheckCircle2, label: "Görevler", href: "/admin/tasks" },
         { icon: DollarSign, label: "Finans", href: "/admin/finance" },
+        { icon: Users, label: "Ekip", href: "/admin/team" },
         { icon: FileText, label: "Blog", href: "/admin/blog" },
         { icon: Briefcase, label: "Portfolio", href: "/admin/portfolio" },
         { icon: MessageSquare, label: "Mesajlar", href: "/admin/messages" },
@@ -49,8 +51,8 @@ export default function AdminSidebar() {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
                                 }`}
                         >
                             <item.icon className="w-5 h-5" />
@@ -106,8 +108,8 @@ export default function AdminSidebar() {
                                     href={item.href}
                                     onClick={() => setSidebarOpen(false)}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                            : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
                                         }`}
                                 >
                                     <item.icon className="w-5 h-5" />
