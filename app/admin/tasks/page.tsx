@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { DndContext, DragOverlay, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core'
 import { Plus, Clock, CheckCircle2, AlertCircle, X } from "lucide-react"
 import { createPortal } from "react-dom"
+import TaskDetailModal from "@/components/admin/tasks/TaskDetailModal"
 
 // --- Types ---
 interface Task {
@@ -19,6 +20,8 @@ interface Task {
     project_id: number
     team_members?: { name: string }
     projects?: { name: string }
+    checklists?: any[]
+    labels?: any[]
 }
 
 const COLUMNS = [
@@ -29,7 +32,7 @@ const COLUMNS = [
 
 // --- Components ---
 
-function TaskCard({ task, isOverlay = false }: { task: Task, isOverlay?: boolean }) {
+function TaskCard({ task, isOverlay = false, onClick }: { task: Task, isOverlay?: boolean, onClick?: () => void }) {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: task.id,
         data: task
@@ -49,13 +52,17 @@ function TaskCard({ task, isOverlay = false }: { task: Task, isOverlay?: boolean
         return <div ref={setNodeRef} style={style} className="opacity-0 h-24 bg-slate-800 rounded-xl" />
     }
 
+    const checklistCount = task.checklists?.length || 0
+    const completedChecklist = task.checklists?.filter((i: any) => i.checked).length || 0
+
     return (
         <div
             ref={setNodeRef}
             style={style}
             {...listeners}
             {...attributes}
-            className={`bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-slate-600 transition-colors shadow-sm ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50' : ''}`}
+            onClick={onClick}
+            className={`bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-slate-600 transition-colors shadow-sm group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50' : ''}`}
         >
             <div className="flex justify-between items-start mb-2">
                 <span className={`text-xs px-2 py-0.5 rounded font-medium ${priorityColor}`}>
@@ -68,23 +75,30 @@ function TaskCard({ task, isOverlay = false }: { task: Task, isOverlay?: boolean
                     </span>
                 )}
             </div>
-            <h4 className="font-bold text-white mb-1">{task.title}</h4>
-            {task.projects && (
-                <p className="text-xs text-blue-400 mb-2">{task.projects.name}</p>
-            )}
-            <div className="flex items-center justify-between mt-3">
+
+            <h4 className="font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">{task.title}</h4>
+
+            {/* Card Footer: Metadata */}
+            <div className="flex items-center gap-4 text-slate-500 text-xs mt-3">
+                {/* Assigned User */}
                 <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400">
+                    <div className="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">
                         {task.team_members?.name?.[0] || '?'}
                     </div>
-                    <span className="text-xs text-slate-400">{task.team_members?.name?.split(' ')[0]}</span>
                 </div>
+
+                {checklistCount > 0 && (
+                    <div className={`flex items-center gap-1 ${completedChecklist === checklistCount ? 'text-emerald-500' : ''}`}>
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>{completedChecklist}/{checklistCount}</span>
+                    </div>
+                )}
             </div>
         </div>
     )
 }
 
-function KanbanColumn({ id, title, tasks, color }: { id: string, title: string, tasks: Task[], color: string }) {
+function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, title: string, tasks: Task[], color: string, onTaskClick: (t: Task) => void }) {
     const { setNodeRef } = useDroppable({ id })
 
     return (
@@ -102,7 +116,7 @@ function KanbanColumn({ id, title, tasks, color }: { id: string, title: string, 
             </div>
             <div className="space-y-3 flex-1">
                 {tasks.map(task => (
-                    <TaskCard key={task.id} task={task} />
+                    <TaskCard key={task.id} task={task} onClick={() => onTaskClick(task)} />
                 ))}
             </div>
         </div>
@@ -117,6 +131,7 @@ export default function TasksPage() {
     // const [projects, setProjects] = useState<any[]>([]) 
     const [activeId, setActiveId] = useState<number | null>(null)
     const [showModal, setShowModal] = useState(false)
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null)
     const [mounted, setMounted] = useState(false) // Mounted state
     const [formData, setFormData] = useState<any>({
         title: '',
@@ -227,6 +242,7 @@ export default function TasksPage() {
                                 title={col.title}
                                 color={col.color}
                                 tasks={tasks.filter(t => t.status === col.id)}
+                                onTaskClick={setSelectedTask}
                             />
                         ))}
                     </div>
@@ -239,6 +255,18 @@ export default function TasksPage() {
                     )}
                 </DndContext>
             </div>
+
+            {/* Task Detail Modal */}
+            {selectedTask && (
+                <TaskDetailModal
+                    task={selectedTask}
+                    onClose={() => setSelectedTask(null)}
+                    onUpdate={() => {
+                        fetchTasks()
+                        // Keep open or close? For now keep open until explicit close.
+                    }}
+                />
+            )}
 
             {/* New Task Modal */}
             {showModal && (
