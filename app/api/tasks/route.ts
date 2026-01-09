@@ -37,11 +37,10 @@ export async function GET(request: NextRequest) {
         const supabase = await createClient()
 
         // Basit sorgu (İlişkisiz) - Güvenli mod
-        // Eğer ilişkili veri istenirse (User/Project) JOIN'leri açabiliriz
+        // İlişkileri kontrollü açalım: Önce dosyaları görelim.
         const { data, error } = await supabase
             .from('tasks')
-            .select('*') // Debugging: Revert to simple fetch
-            // .select('*, team_members(id, name), projects(id, name), task_attachments(*)')
+            .select('*, task_attachments(*)')
             .order('created_at', { ascending: false })
 
         if (error) throw error
