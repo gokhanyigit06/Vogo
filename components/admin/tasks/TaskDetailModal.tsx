@@ -7,7 +7,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
     const [checklists, setChecklists] = useState<any[]>(task.checklists || [])
     const [newChecklistItem, setNewChecklistItem] = useState('')
     const [uploading, setUploading] = useState(false)
-    const [attachments, setAttachments] = useState<any[]>(task.attachments || []) // Eğer DB'den geliyorsa
+    const [attachments, setAttachments] = useState<any[]>(task.task_attachments || [])
 
     // Client-side Supabase Client
     const supabase = createBrowserClient(
@@ -45,15 +45,34 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                 .from('task-attachments')
                 .getPublicUrl(filePath)
 
-            // 3. UI güncelle (Gerçek uygulamada burası tasks tablosundaki bir JSON alanına veya task_attachments tablosuna yazılmalı)
-            // Şimdilik sadece UI'da gösteriyoruz, DB kayıt işlemi backend API üzerinden yapılmalı.
-            const newFile = { name: file.name, url: publicUrl, size: (file.size / 1024).toFixed(1) + ' KB' }
-            setAttachments([...attachments, newFile])
+            // 3. DB Kayıt
+            const newAttachment = {
+                task_id: task.id,
+                file_name: file.name,
+                file_url: publicUrl
+            }
 
-            // TODO: API call to save attachment metadata to DB
+            const res = await fetch('/api/tasks/attachments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newAttachment)
+            })
+
+            if (!res.ok) throw new Error('DB Save Failed')
+
+            const savedData = await res.json()
+
+            // 4. UI Güncelle
+            // API'den dönen veriyi (id vs. içerir) veya local veriyi koyabiliriz.
+            // API dizi döndürür (select() yüzünden), ilk elemanı alalım.
+            const dataToAdd = Array.isArray(savedData) ? savedData[0] : savedData
+
+            setAttachments(prev => [...prev, dataToAdd])
+            onUpdate() // Ana listeyi yenile
 
         } catch (error) {
             console.error(error)
+            alert("Dosya yüklenirken bir hata oluştu.")
         } finally {
             setUploading(false)
         }
@@ -67,7 +86,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
         const newList = [...checklists, newItem]
         setChecklists(newList)
         setNewChecklistItem('')
-        // TODO: API update call
+        // TODO: API update call for checklist
     }
 
     const toggleChecklist = (id: number) => {
@@ -75,7 +94,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
             item.id === id ? { ...item, checked: !item.checked } : item
         )
         setChecklists(newList)
-        // TODO: API update call
+        // TODO: API update call for checklist
     }
 
     return (
@@ -89,9 +108,6 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                             <span className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/20">
                                 {task.status === 'todo' ? 'Yapılacak' : task.status === 'in_progress' ? 'Sürüyor' : 'Tamamlandı'}
                             </span>
-                            <button className="text-slate-500 hover:text-white transition-colors">
-                                <Plus className="w-4 h-4" />
-                            </button>
                         </div>
                         <h2 className="text-2xl font-bold text-white">{task.title}</h2>
                     </div>
@@ -155,9 +171,6 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                         <span className={`flex-1 text-sm ${item.checked ? 'text-slate-500 line-through' : 'text-slate-300'}`}>
                                             {item.text}
                                         </span>
-                                        <button className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-opacity">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
                                     </div>
                                 ))}
 
@@ -199,13 +212,12 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                 </label>
 
                                 {attachments.map((file: any, i: number) => (
-                                    <a key={i} href={file.url} target="_blank" rel="noopener noreferrer" className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center gap-3 group hover:border-slate-700 transition-colors">
+                                    <a key={file.id || i} href={file.file_url} target="_blank" rel="noopener noreferrer" className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center gap-3 group hover:border-slate-700 transition-colors">
                                         <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-blue-400 font-bold text-sm">
-                                            {file.name.split('.').pop()?.toUpperCase()}
+                                            {file.file_name?.split('.').pop()?.toUpperCase() || 'FILE'}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm text-white truncate">{file.name}</p>
-                                            <p className="text-xs text-slate-500">{file.size || 'Unknown'}</p>
+                                            <p className="text-sm text-white truncate">{file.file_name}</p>
                                         </div>
                                     </a>
                                 ))}
