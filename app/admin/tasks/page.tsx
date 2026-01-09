@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic"
 
 import { useEffect, useState } from "react"
-import { DndContext, DragOverlay, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core'
+import { DndContext, DragOverlay, useDraggable, useDroppable, DragEndEvent, useSensors, useSensor, PointerSensor } from '@dnd-kit/core'
 import { Plus, Clock, CheckCircle2, AlertCircle, X } from "lucide-react"
 import { createPortal } from "react-dom"
 import TaskDetailModal from "@/components/admin/tasks/TaskDetailModal"
@@ -30,39 +30,21 @@ const COLUMNS = [
     { id: 'done', title: 'Tamamlandı', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' }
 ]
 
-// --- Components ---
-
-function TaskCard({ task, isOverlay = false, onClick }: { task: Task, isOverlay?: boolean, onClick?: () => void }) {
-    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-        id: task.id,
-        data: task
-    })
-
-    const style = transform ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-    } : undefined
-
+// --- Visual Component (Pure UI) ---
+function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOverlay?: boolean, onClick?: () => void }) {
     const priorityColor = {
         low: 'bg-slate-700 text-slate-300',
         medium: 'bg-yellow-500/10 text-yellow-500',
         high: 'bg-red-500/10 text-red-500'
     }[task.priority || 'medium']
 
-    if (isDragging && !isOverlay) {
-        return <div ref={setNodeRef} style={style} className="opacity-0 h-24 bg-slate-800 rounded-xl" />
-    }
-
     const checklistCount = task.checklists?.length || 0
     const completedChecklist = task.checklists?.filter((i: any) => i.checked).length || 0
 
     return (
         <div
-            ref={setNodeRef}
-            style={style}
-            {...listeners}
-            {...attributes}
             onClick={onClick}
-            className={`bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-slate-600 transition-colors shadow-sm group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50' : ''}`}
+            className={`bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-slate-600 transition-colors shadow-sm group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50 cursor-grabbing' : ''}`}
         >
             <div className="flex justify-between items-start mb-2">
                 <span className={`text-xs px-2 py-0.5 rounded font-medium ${priorityColor}`}>
@@ -78,9 +60,7 @@ function TaskCard({ task, isOverlay = false, onClick }: { task: Task, isOverlay?
 
             <h4 className="font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">{task.title}</h4>
 
-            {/* Card Footer: Metadata */}
             <div className="flex items-center gap-4 text-slate-500 text-xs mt-3">
-                {/* Assigned User */}
                 <div className="flex items-center gap-1.5">
                     <div className="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">
                         {task.team_members?.name?.[0] || '?'}
@@ -98,6 +78,33 @@ function TaskCard({ task, isOverlay = false, onClick }: { task: Task, isOverlay?
     )
 }
 
+// --- Draggable Wrapper ---
+function DraggableTaskCard({ task, onClick }: { task: Task, onClick: () => void }) {
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+        id: task.id.toString(), // ID string olmalı
+        data: task
+    })
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    } : undefined
+
+    if (isDragging) {
+        return (
+            <div ref={setNodeRef} style={style} className="opacity-50">
+                <TaskCardView task={task} />
+            </div>
+        )
+    }
+
+    return (
+        <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+            <TaskCardView task={task} onClick={onClick} />
+        </div>
+    )
+}
+
+// --- Column Component ---
 function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, title: string, tasks: Task[], color: string, onTaskClick: (t: Task) => void }) {
     const { setNodeRef } = useDroppable({ id })
 
@@ -116,7 +123,7 @@ function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, ti
             </div>
             <div className="space-y-3 flex-1">
                 {tasks.map(task => (
-                    <TaskCard key={task.id} task={task} onClick={() => onTaskClick(task)} />
+                    <DraggableTaskCard key={task.id} task={task} onClick={() => onTaskClick(task)} />
                 ))}
             </div>
         </div>
@@ -128,11 +135,20 @@ function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, ti
 export default function TasksPage() {
     const [tasks, setTasks] = useState<Task[]>([])
     const [team, setTeam] = useState<any[]>([])
-    // const [projects, setProjects] = useState<any[]>([]) 
-    const [activeId, setActiveId] = useState<number | null>(null)
+    const [activeId, setActiveId] = useState<string | null>(null) // ID string
     const [showModal, setShowModal] = useState(false)
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
-    const [mounted, setMounted] = useState(false) // Mounted state
+    const [mounted, setMounted] = useState(false)
+
+    // Sensörleri tanımla (Touch/Mouse uyumu için)
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8, // 8px hareket ettirmeden drag başlama (yanlışlıkla tıklamayı önler)
+            },
+        })
+    )
+
     const [formData, setFormData] = useState<any>({
         title: '',
         description: '',
@@ -147,14 +163,10 @@ export default function TasksPage() {
         setMounted(true)
         fetchTasks()
         fetchTeam()
-        // fetchProjects() 
     }, [])
 
     const fetchTasks = () => fetch('/api/tasks').then(r => r.json()).then(setTasks)
     const fetchTeam = () => fetch('/api/team').then(r => r.json()).then(data => setTeam(data.filter((m: any) => m.active)))
-
-    // Projeler şimdilik kapalı
-    const fetchProjects = async () => { }
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id)
@@ -166,17 +178,15 @@ export default function TasksPage() {
 
         if (!over) return
 
-        const taskId = active.id as number
+        const taskId = parseInt(active.id as string)
         const newStatus = over.id as Task['status']
         const currentTask = tasks.find(t => t.id === taskId)
 
         if (currentTask && currentTask.status !== newStatus) {
-            // Optimistic update
             setTasks(tasks.map(t =>
                 t.id === taskId ? { ...t, status: newStatus } : t
             ))
 
-            // API update
             await fetch('/api/tasks', {
                 method: 'PUT',
                 body: JSON.stringify({ id: taskId, status: newStatus })
@@ -205,15 +215,13 @@ export default function TasksPage() {
         }
     }
 
-    const activeTask = activeId ? tasks.find(t => t.id === activeId) : null
+    // activeId string olduğu için number'a çevirip buluyoruz (veya data prop'undan alıyoruz)
+    const activeTask = activeId ? tasks.find(t => t.id.toString() === activeId) : null
 
-    // Server-side rendering issue fix
     if (!mounted) return <div className="p-8 text-slate-400">Yükleniyor...</div>
 
     return (
         <div className="p-8 max-w-7xl mx-auto space-y-8 h-screen flex flex-col">
-
-            {/* Header */}
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold text-white flex items-center gap-3">
@@ -231,9 +239,12 @@ export default function TasksPage() {
                 </button>
             </div>
 
-            {/* Kanban Board */}
             <div className="flex-1 overflow-x-auto overflow-y-hidden pb-4">
-                <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+                <DndContext
+                    sensors={sensors}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                >
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-w-[1000px] md:min-w-0">
                         {COLUMNS.map(col => (
                             <KanbanColumn
@@ -246,29 +257,23 @@ export default function TasksPage() {
                             />
                         ))}
                     </div>
-                    {/* Portal ile render edildiği için document hatası vermemeli, çünkü mounted check var */}
                     {createPortal(
                         <DragOverlay>
-                            {activeTask ? <TaskCard task={activeTask} isOverlay /> : null}
+                            {activeTask ? <TaskCardView task={activeTask} isOverlay /> : null}
                         </DragOverlay>,
                         document.body
                     )}
                 </DndContext>
             </div>
 
-            {/* Task Detail Modal */}
             {selectedTask && (
                 <TaskDetailModal
                     task={selectedTask}
                     onClose={() => setSelectedTask(null)}
-                    onUpdate={() => {
-                        fetchTasks()
-                        // Keep open or close? For now keep open until explicit close.
-                    }}
+                    onUpdate={() => fetchTasks()}
                 />
             )}
 
-            {/* New Task Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-md">
