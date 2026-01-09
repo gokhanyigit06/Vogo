@@ -39,64 +39,36 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
-    // --- Dosya Yükleme ---
+    // --- Dosya Yükleme (Server-Side Proxy) ---
     const handleFileUpload = async (e: any) => {
         const file = e.target.files[0]
         if (!file) return
 
         try {
             setUploading(true)
-            const fileExt = file.name.split('.').pop()
-            const fileName = `${task.id}/${Math.random()}.${fileExt}`
-            const filePath = `${fileName}`
-
-            // 1. Storage'a Yükle
-            const { error: uploadError } = await supabase.storage
-                .from('task-attachments') // Bucket adı
-                .upload(filePath, file)
-
-            if (uploadError) {
-                if (uploadError.message.includes("Bucket not found")) {
-                    alert("Lütfen Supabase panelinden 'task-attachments' adında bir Public Bucket oluşturun.")
-                } else {
-                    alert(`Yükleme hatası: ${uploadError.message}`)
-                }
-                throw uploadError
-            }
-
-            // 2. Public URL al
-            const { data: { publicUrl } } = supabase.storage
-                .from('task-attachments')
-                .getPublicUrl(filePath)
-
-            // 3. DB Kayıt
-            const newAttachment = {
-                task_id: task.id,
-                file_name: file.name,
-                file_url: publicUrl
-            }
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('task_id', task.id)
 
             const res = await fetch('/api/tasks/attachments', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newAttachment)
+                body: formData
             })
 
-            if (!res.ok) throw new Error('DB Save Failed')
+            if (!res.ok) {
+                const err = await res.json()
+                throw new Error(err.error || 'Upload failed')
+            }
 
             const savedData = await res.json()
-
-            // 4. UI Güncelle
-            // API'den dönen veriyi (id vs. içerir) veya local veriyi koyabiliriz.
-            // API dizi döndürür (select() yüzünden), ilk elemanı alalım.
             const dataToAdd = Array.isArray(savedData) ? savedData[0] : savedData
 
             setAttachments(prev => [...prev, dataToAdd])
             onUpdate() // Ana listeyi yenile
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error)
-            alert("Dosya yüklenirken bir hata oluştu.")
+            alert(`Yükleme hatası: ${error.message}`)
         } finally {
             setUploading(false)
         }
