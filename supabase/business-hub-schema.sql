@@ -1,11 +1,11 @@
--- Business Hub Database Schema
+-- Business Hub Database Schema (Updated - Compatible with existing tables)
 -- Run this in Supabase SQL Editor
 
 -- ============================================
--- 1. CLIENTS (Müşteriler)
+-- 1. CLIENTS (Müşteriler) - NEW TABLE
 -- ============================================
 CREATE TABLE IF NOT EXISTS clients (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   company TEXT,
   email TEXT,
@@ -21,32 +21,52 @@ CREATE TABLE IF NOT EXISTS clients (
 );
 
 -- ============================================
--- 2. PROJECTS (Projeler)
+-- 2. PROJECTS - UPDATE EXISTING OR CREATE
 -- ============================================
-CREATE TABLE IF NOT EXISTS projects (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  client_id UUID REFERENCES clients(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  description TEXT,
-  status TEXT DEFAULT 'in_progress', -- quote, in_progress, completed, cancelled
-  budget DECIMAL(10,2),
-  actual_cost DECIMAL(10,2) DEFAULT 0,
-  start_date DATE,
-  end_date DATE,
-  priority TEXT DEFAULT 'medium', -- low, medium, high
-  progress INTEGER DEFAULT 0, -- 0-100
-  files JSONB DEFAULT '[]'::jsonb,
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
-);
+-- Projects tablosu zaten var, sadece eksik kolonları ekle
+DO $$ 
+BEGIN
+  -- Eğer tablo yoksa oluştur
+  IF NOT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'projects') THEN
+    CREATE TABLE projects (
+      id BIGSERIAL PRIMARY KEY,
+      client_id BIGINT REFERENCES clients(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      description TEXT,
+      status TEXT DEFAULT 'in_progress',
+      category TEXT,
+      budget DECIMAL(10,2),
+      actual_cost DECIMAL(10,2) DEFAULT 0,
+      start_date DATE,
+      end_date DATE,
+      priority TEXT DEFAULT 'medium',
+      progress INTEGER DEFAULT 0,
+      image TEXT,
+      files JSONB DEFAULT '[]'::jsonb,
+      created_at TIMESTAMP DEFAULT now(),
+      updated_at TIMESTAMP DEFAULT now()
+    );
+  ELSE
+    -- Tablo varsa, eksik kolonları ekle
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS client_id BIGINT REFERENCES clients(id) ON DELETE SET NULL;
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS budget DECIMAL(10,2);
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS actual_cost DECIMAL(10,2) DEFAULT 0;
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS start_date DATE;
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS end_date DATE;
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS priority TEXT DEFAULT 'medium';
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS progress INTEGER DEFAULT 0;
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS files JSONB DEFAULT '[]'::jsonb;
+    ALTER TABLE projects ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'in_progress';
+  END IF;
+END $$;
 
 -- ============================================
--- 3. INCOME (Gelirler)
+-- 3. INCOME (Gelirler) - NEW TABLE
 -- ============================================
 CREATE TABLE IF NOT EXISTS income (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  client_id UUID REFERENCES clients(id) ON DELETE SET NULL,
-  project_id UUID REFERENCES projects(id) ON DELETE SET NULL,
+  id BIGSERIAL PRIMARY KEY,
+  client_id BIGINT REFERENCES clients(id) ON DELETE SET NULL,
+  project_id BIGINT REFERENCES projects(id) ON DELETE SET NULL,
   amount DECIMAL(10,2) NOT NULL,
   date DATE NOT NULL,
   category TEXT DEFAULT 'payment', -- payment, deposit, refund
@@ -58,10 +78,10 @@ CREATE TABLE IF NOT EXISTS income (
 );
 
 -- ============================================
--- 4. EXPENSES (Giderler)
+-- 4. EXPENSES (Giderler) - NEW TABLE
 -- ============================================
 CREATE TABLE IF NOT EXISTS expenses (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   amount DECIMAL(10,2) NOT NULL,
   date DATE NOT NULL,
   category TEXT NOT NULL, -- rent, salary, software, ads, office, other
@@ -73,10 +93,10 @@ CREATE TABLE IF NOT EXISTS expenses (
 );
 
 -- ============================================
--- 5. TEAM MEMBERS (Takım Üyeleri)
+-- 5. TEAM MEMBERS (Takım Üyeleri) - NEW TABLE
 -- ============================================
 CREATE TABLE IF NOT EXISTS team_members (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   role TEXT DEFAULT 'member', -- admin, manager, member
@@ -89,12 +109,12 @@ CREATE TABLE IF NOT EXISTS team_members (
 );
 
 -- ============================================
--- 6. TASKS (Görevler)
+-- 6. TASKS (Görevler) - NEW TABLE
 -- ============================================
 CREATE TABLE IF NOT EXISTS tasks (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
-  assigned_to UUID REFERENCES team_members(id) ON DELETE SET NULL,
+  id BIGSERIAL PRIMARY KEY,
+  project_id BIGINT REFERENCES projects(id) ON DELETE CASCADE,
+  assigned_to BIGINT REFERENCES team_members(id) ON DELETE SET NULL,
   title TEXT NOT NULL,
   description TEXT,
   status TEXT DEFAULT 'todo', -- todo, in_progress, done
@@ -111,17 +131,15 @@ CREATE TABLE IF NOT EXISTS tasks (
 
 -- Clients RLS
 ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow authenticated users to read clients" ON clients;
+DROP POLICY IF EXISTS "Allow authenticated users to insert clients" ON clients;
+DROP POLICY IF EXISTS "Allow authenticated users to update clients" ON clients;
+DROP POLICY IF EXISTS "Allow authenticated users to delete clients" ON clients;
+
 CREATE POLICY "Allow authenticated users to read clients" ON clients FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Allow authenticated users to insert clients" ON clients FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Allow authenticated users to update clients" ON clients FOR UPDATE USING (auth.role() = 'authenticated');
 CREATE POLICY "Allow authenticated users to delete clients" ON clients FOR DELETE USING (auth.role() = 'authenticated');
-
--- Projects RLS
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow authenticated users to read projects" ON projects FOR SELECT USING (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated users to insert projects" ON projects FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated users to update projects" ON projects FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated users to delete projects" ON projects FOR DELETE USING (auth.role() = 'authenticated');
 
 -- Income RLS
 ALTER TABLE income ENABLE ROW LEVEL SECURITY;
@@ -178,8 +196,13 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+DROP TRIGGER IF EXISTS update_clients_updated_at ON clients;
+DROP TRIGGER IF EXISTS update_income_updated_at ON income;
+DROP TRIGGER IF EXISTS update_expenses_updated_at ON expenses;
+DROP TRIGGER IF EXISTS update_team_members_updated_at ON team_members;
+DROP TRIGGER IF EXISTS update_tasks_updated_at ON tasks;
+
 CREATE TRIGGER update_clients_updated_at BEFORE UPDATE ON clients FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_projects_updated_at BEFORE UPDATE ON projects FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_income_updated_at BEFORE UPDATE ON income FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_expenses_updated_at BEFORE UPDATE ON expenses FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_team_members_updated_at BEFORE UPDATE ON team_members FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
