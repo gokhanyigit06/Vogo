@@ -209,22 +209,41 @@ export default function TasksPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const res = await fetch('/api/tasks', {
-            method: 'POST',
-            body: JSON.stringify(formData)
-        })
-        if (res.ok) {
-            setShowModal(false)
-            fetchTasks()
-            setFormData({
-                title: '',
-                description: '',
-                status: 'todo',
-                priority: 'medium',
-                assigned_to: '',
-                project_id: '',
-                due_date: ''
+
+        // Data Sanitization
+        const payload = {
+            ...formData,
+            assigned_to: formData.assigned_to ? Number(formData.assigned_to) : null,
+            project_id: formData.project_id ? Number(formData.project_id) : null,
+            due_date: formData.due_date || null
+        }
+
+        try {
+            const res = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             })
+
+            if (res.ok) {
+                setShowModal(false)
+                fetchTasks()
+                setFormData({
+                    title: '',
+                    description: '',
+                    status: 'todo',
+                    priority: 'medium',
+                    assigned_to: '',
+                    project_id: '',
+                    due_date: ''
+                })
+            } else {
+                const err = await res.json()
+                alert(`Görev oluşturulamadı: ${err.error || 'Bilinmeyen hata'}`)
+            }
+        } catch (error) {
+            console.error("Submit Error:", error)
+            alert('Sunucu ile iletişim kurulamadı.')
         }
     }
 
