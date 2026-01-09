@@ -1,8 +1,5 @@
 "use client"
 
-export const dynamic = "force-dynamic"
-export const revalidate = 0
-
 import { useState, useEffect } from "react"
 import { Search, Plus, Eye, Edit, Trash2, FileText, Filter, Loader2 } from "lucide-react"
 import Link from "next/link"
