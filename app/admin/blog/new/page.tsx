@@ -42,7 +42,6 @@ export default function NewBlogPostPage() {
 
             alert("Yazı başarıyla yayınlandı!")
             router.push('/admin/blog')
-            router.refresh() // Verilerin güncellenmesi için
         } catch (error) {
             console.error(error)
             alert("Bir hata oluştu!")
