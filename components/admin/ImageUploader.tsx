@@ -23,6 +23,14 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
             }
 
             const file = e.target.files[0]
+
+            // Supabase Storage yapılandırılmamışsa Unsplash placeholder kullan
+            if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co') {
+                alert('⚠️ Supabase Storage yapılandırılmamış. Lütfen harici bir URL kullanın veya Unsplash.com\'dan bir görsel linki yapıştırın.')
+                setUploading(false)
+                return
+            }
+
             const fileExt = file.name.split('.').pop()
             const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
             const filePath = `${fileName}`
@@ -45,7 +53,7 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
             onChange(data.publicUrl)
 
         } catch (error: any) {
-            alert('Yükleme hatası: ' + error.message)
+            alert('Yükleme hatası: ' + error.message + '\n\nAlternatif: Manuel olarak bir resim URL\'si girebilirsiniz.')
         } finally {
             setUploading(false)
         }

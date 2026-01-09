@@ -46,14 +46,18 @@ export async function POST(request: Request) {
                         excerpt: body.excerpt,
                         category: body.category,
                         image: body.image,
-                        status: 'published',
-                        read_time: body.readTime || '5 dk',
-                        date: new Date().toLocaleDateString('tr-TR')
+                        status: body.status || 'published',
+                        read_time: body.readTime || '5 dk'
                     }
                 ])
                 .select()
 
-            if (!error) return NextResponse.json(data[0])
+            if (error) {
+                console.error('Supabase insert error:', error)
+                return NextResponse.json({ error: error.message }, { status: 500 })
+            }
+
+            if (data && data[0]) return NextResponse.json(data[0])
         }
 
         // Local Fallback
