@@ -11,8 +11,27 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
 
     // Sync state with props when task updates (e.g. after upload)
     useEffect(() => {
-        setAttachments(task.task_attachments || [])
-    }, [task])
+        const fetchAttachments = async () => {
+            try {
+                // Task ID yoksa boş getir
+                if (!task.id) {
+                    setAttachments([])
+                    return
+                }
+
+                // API'den taze veriyi çek
+                const res = await fetch(`/api/tasks/attachments?task_id=${task.id}`)
+                if (res.ok) {
+                    const data = await res.json()
+                    setAttachments(data)
+                }
+            } catch (e) {
+                console.error("Attachment fetch error:", e)
+            }
+        }
+
+        fetchAttachments()
+    }, [task.id])
 
     // Client-side Supabase Client
     const supabase = createBrowserClient(

@@ -37,11 +37,11 @@ export async function GET(request: NextRequest) {
         const supabase = await createClient()
 
         // Basit sorgu (İlişkisiz) - Güvenli mod
-        // İlişkileri kontrollü açalım: Önce dosyaları görelim.
+        // Sorun Join'de. Sadeleştiriyorum.
         const { data, error } = await supabase
             .from('tasks')
-            .select('*, task_attachments(*)')
-            .order('created_at', { ascending: false })
+            .select('*')
+            .order('id', { ascending: false })
 
         if (error) throw error
 
