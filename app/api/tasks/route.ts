@@ -40,7 +40,8 @@ export async function GET(request: NextRequest) {
         // Eğer ilişkili veri istenirse (User/Project) JOIN'leri açabiliriz
         const { data, error } = await supabase
             .from('tasks')
-            .select('*, team_members(id, name), projects(id, name), task_attachments(*)')
+            .select('*') // Debugging: Revert to simple fetch
+            // .select('*, team_members(id, name), projects(id, name), task_attachments(*)')
             .order('created_at', { ascending: false })
 
         if (error) throw error
