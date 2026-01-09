@@ -1,88 +1,131 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin as supabase } from '@/lib/supabase'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
-// GET - Tüm görevleri getir
+// Helper to create authenticated client
+async function createClient() {
+    const cookieStore = await cookies()
+
+    return createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                getAll() {
+                    return cookieStore.getAll()
+                },
+                setAll(cookiesToSet) {
+                    try {
+                        cookiesToSet.forEach(({ name, value, options }) =>
+                            cookieStore.set(name, value, options)
+                        )
+                    } catch {
+                        // The `setAll` method was called from a Server Component.
+                        // This can be ignored if you have middleware refreshing
+                        // user sessions.
+                    }
+                },
+            },
+        }
+    )
+}
+
 export async function GET(request: NextRequest) {
     try {
+        const supabase = await createClient()
+
+        // Basit sorgu (İlişkisiz) - Güvenli mod
+        // Eğer ilişkili veri istenirse (User/Project) JOIN'leri açabiliriz
         const { data, error } = await supabase
             .from('tasks')
-            .select('*') // Relations temporarily disabled for stability
+            .select('*')
             .order('created_at', { ascending: false })
 
         if (error) throw error
 
         return NextResponse.json(data)
     } catch (error: any) {
+        console.error('Error fetching tasks:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
 
-// POST - Yeni görev ekle
 export async function POST(request: NextRequest) {
     try {
+        const supabase = await createClient()
         const body = await request.json()
 
-        // Boş tarihleri null yap
-        if (body.due_date === '') body.due_date = null
-        if (body.assigned_to === '') body.assigned_to = null
-        if (body.project_id === '') body.project_id = null
-
-        const { data, error } = await supabase
-            .from('tasks')
-            .insert([body])
-            .select()
-            .single()
-
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
-    }
-}
-
-// PUT - Görev güncelle (Draging sırasında status değişimi için)
-export async function PUT(request: NextRequest) {
-    try {
-        const body = await request.json()
-        const { id, ...updates } = body
-
-        // Boş tarihleri null yap
-        if (updates.due_date === '') updates.due_date = null
-        if (updates.assigned_to === '') updates.assigned_to = null
-        if (updates.project_id === '') updates.project_id = null
-
-        // Eğer status 'done' yapıldıysa completed_at ekle
-        if (updates.status === 'done') {
-            updates.completed_at = new Date().toISOString()
-        } else if (updates.status && updates.status !== 'done') {
-            updates.completed_at = null
+        // Veri doğrulama
+        if (!body.title) {
+            return NextResponse.json({ error: 'Title is required' }, { status: 400 })
         }
 
         const { data, error } = await supabase
             .from('tasks')
-            .update(updates)
-            .eq('id', id)
+            .insert([{
+                title: body.title,
+                description: body.description,
+                status: body.status || 'todo',
+                priority: body.priority || 'medium',
+                assigned_to: body.assigned_to,
+                project_id: body.project_id,
+                due_date: body.due_date,
+            }])
             .select()
-            .single()
 
         if (error) throw error
 
         return NextResponse.json(data)
     } catch (error: any) {
+        console.error('Error creating task:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
 
-// DELETE - Görev sil
+export async function PUT(request: NextRequest) {
+    try {
+        const supabase = await createClient()
+        const body = await request.json()
+
+        if (!body.id) {
+            return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        }
+
+        const { data, error } = await supabase
+            .from('tasks')
+            .update({
+                title: body.title,
+                description: body.description,
+                status: body.status,
+                priority: body.priority,
+                assigned_to: body.assigned_to,
+                project_id: body.project_id,
+                due_date: body.due_date,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', body.id)
+            .select()
+
+        if (error) throw error
+
+        return NextResponse.json(data)
+    } catch (error: any) {
+        console.error('Error updating task:', error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+}
+
 export async function DELETE(request: NextRequest) {
     try {
+        const supabase = await createClient()
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
 
-        if (!id) return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
+        if (!id) {
+            return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        }
 
         const { error } = await supabase
             .from('tasks')
@@ -93,6 +136,7 @@ export async function DELETE(request: NextRequest) {
 
         return NextResponse.json({ success: true })
     } catch (error: any) {
+        console.error('Error deleting task:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
