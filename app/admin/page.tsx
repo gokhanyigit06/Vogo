@@ -19,7 +19,10 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null)
     const [loading, setLoading] = useState(true)
 
+    const [userName, setUserName] = useState("Volkan Bey")
+
     useEffect(() => {
+        // 1. Dashboard verilerini çek
         fetch('/api/dashboard')
             .then(res => res.json())
             .then(data => {
@@ -30,6 +33,11 @@ export default function AdminDashboard() {
                 console.error('Dashboard fetch error:', err)
                 setLoading(false)
             })
+
+        // 2. Kullanıcı adını çek (Local Storage veya Supabase'den)
+        // Şimdilik statik Volkan Bey kalabilir veya auth'dan çekebiliriz.
+        // const { data: { user } } = await supabase.auth.getUser()
+        // if (user?.user_metadata?.full_name) setUserName(user.user_metadata.full_name)
     }, [])
 
     const getGreeting = () => {
@@ -65,7 +73,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-4xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-                        {getGreeting()}, Aslan Bey 👋
+                        {getGreeting()}, {userName} 👋
                     </h1>
                     <p className="text-slate-400 mt-2 text-lg">
                         Bugün ajansın performansı <span className="text-emerald-400 font-bold">Harika</span> görünüyor.
