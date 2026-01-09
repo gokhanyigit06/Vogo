@@ -165,7 +165,20 @@ export default function TasksPage() {
         fetchTeam()
     }, [])
 
-    const fetchTasks = () => fetch('/api/tasks').then(r => r.json()).then(setTasks)
+    const fetchTasks = () => fetch('/api/tasks')
+        .then(r => r.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                setTasks(data)
+            } else {
+                console.error("Tasks API returned non-array:", data)
+                setTasks([])
+            }
+        })
+        .catch(err => {
+            console.error("Fetch error:", err)
+            setTasks([])
+        })
     const fetchTeam = () => fetch('/api/team').then(r => r.json()).then(data => setTeam(data.filter((m: any) => m.active)))
 
     const handleDragStart = (event: any) => {
