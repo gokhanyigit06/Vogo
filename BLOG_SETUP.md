@@ -42,6 +42,15 @@ Bu:
 - ✅ `posts` tablosuna `updated_at` kolonu ekler
 - ✅ Otomatik güncelleme trigger'ı oluşturur
 
+### Adım 4: Storage Bucket Oluştur (Resim Yükleme İçin)
+1. Supabase Dashboard > **Storage** bölümüne git
+2. **New Bucket** butonuna tıkla
+3. Bucket adı: `images`
+4. **Public bucket** seçeneğini işaretle ✅
+5. **Create bucket**
+
+**Not:** Public bucket yapmayı unutma, yoksa yüklenen resimler gözükmez!
+
 ---
 
 ## 🌐 Environment Variables

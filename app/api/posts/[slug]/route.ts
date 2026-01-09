@@ -9,13 +9,26 @@ export async function GET(
         // Next.js 16: params is now a Promise
         const { slug } = await params
 
-        // 1. Supabase'den slug ile ara
+        // 1. Supabase'den slug veya ID ile ara
         if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            const { data, error } = await supabase
+            // Önce slug ile dene
+            let { data, error } = await supabase
                 .from('posts')
                 .select('*')
                 .eq('slug', slug)
                 .single()
+
+            // Slug bulunamazsa ID ile dene (backward compatibility)
+            if (error && !isNaN(Number(slug))) {
+                const result = await supabase
+                    .from('posts')
+                    .select('*')
+                    .eq('id', Number(slug))
+                    .single()
+
+                data = result.data
+                error = result.error
+            }
 
             if (!error && data) {
                 return NextResponse.json(data)
@@ -26,12 +39,12 @@ export async function GET(
         const fs = await import('fs/promises')
         const path = await import('path')
         const localDataPath = path.resolve('./data/posts.json')
-        
+
         try {
             const fileContents = await fs.readFile(localDataPath, 'utf8')
             const posts = JSON.parse(fileContents.replace(/^\uFEFF/, ''))
             const post = posts.find((p: any) => p.slug === slug || p.id.toString() === slug)
-            
+
             if (post) {
                 return NextResponse.json(post)
             }
