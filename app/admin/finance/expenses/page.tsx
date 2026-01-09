@@ -9,6 +9,7 @@ import Link from "next/link"
 export default function ExpensesPage() {
     const [loading, setLoading] = useState(false)
     const [expenses, setExpenses] = useState<any[]>([])
+    const [members, setMembers] = useState<any[]>([])
     const [showForm, setShowForm] = useState(false)
     const [formData, setFormData] = useState({
         amount: "",
@@ -17,6 +18,7 @@ export default function ExpensesPage() {
         description: "",
         invoice_number: "",
         vendor: "",
+        paid_by: "", // Yeni: Ödeyen kişi ID'si (boş = Kasa)
         is_recurring: false,
         recurrence_frequency: "monthly",
         recurrence_day: new Date().getDate(),
@@ -24,7 +26,18 @@ export default function ExpensesPage() {
 
     useEffect(() => {
         fetchExpenses()
+        fetchMembers()
     }, [])
+
+    const fetchMembers = async () => {
+        try {
+            const res = await fetch('/api/team')
+            const data = await res.json()
+            setMembers(data || [])
+        } catch (error) {
+            console.error('Members fetch error:', error)
+        }
+    }
 
     const fetchExpenses = async () => {
         try {
@@ -44,6 +57,7 @@ export default function ExpensesPage() {
             const payload = {
                 ...formData,
                 amount: parseFloat(formData.amount),
+                paid_by: formData.paid_by || null // Boşsa Kasa (null)
             }
 
             const res = await fetch('/api/finance/expenses', {
@@ -63,6 +77,7 @@ export default function ExpensesPage() {
                 description: "",
                 invoice_number: "",
                 vendor: "",
+                paid_by: "",
                 is_recurring: false,
                 recurrence_frequency: "monthly",
                 recurrence_day: new Date().getDate(),
@@ -196,6 +211,23 @@ export default function ExpensesPage() {
                         </div>
 
                         <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Ödeme Yapan (Kim Ödedi?)</label>
+                            <select
+                                value={formData.paid_by}
+                                onChange={(e) => setFormData({ ...formData, paid_by: e.target.value })}
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                            >
+                                <option value="">Şirket Kasası / Banka</option>
+                                {members.map(member => (
+                                    <option key={member.id} value={member.id}>
+                                        {member.name} (Ortak/Personel)
+                                    </option>
+                                ))}
+                            </select>
+                            <p className="text-xs text-slate-500 mt-1">Seçilmezse şirket kasasından düşer.</p>
+                        </div>
+
+                        <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Firma/Tedarikçi</label>
                             <input
                                 type="text"
@@ -310,6 +342,11 @@ export default function ExpensesPage() {
                                         <span className="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded-md">
                                             {categoryLabels[item.category]}
                                         </span>
+                                        {item.team_members && (
+                                            <span className="text-xs px-2 py-1 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">
+                                                Ödeyen: {item.team_members.name}
+                                            </span>
+                                        )}
                                         {item.is_recurring && (
                                             <span className="text-xs px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md border border-purple-500/20 flex items-center gap-1">
                                                 <Calendar className="w-3 h-3" />

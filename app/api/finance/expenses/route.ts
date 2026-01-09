@@ -6,7 +6,13 @@ export async function GET(request: NextRequest) {
     try {
         const { data, error } = await supabase
             .from('expenses')
-            .select('*')
+            .select(`
+                *,
+                team_members (
+                    id,
+                    name
+                )
+            `)
             .order('date', { ascending: false })
 
         if (error) throw error

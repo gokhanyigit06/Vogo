@@ -154,6 +154,42 @@ export default function FinancePage() {
                     </div>
                 </div>
             )}
+
+            {/* Partner Balances (Cari Hesaplar) */}
+            {expenses.some(e => e.paid_by) && (
+                <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-blue-400" />
+                        Ortak Cari Hesapları
+                    </h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Gruplama ve Hesaplama */}
+                        {Object.values(expenses.reduce((acc: any, item) => {
+                            if (item.paid_by && item.team_members) {
+                                if (!acc[item.paid_by]) {
+                                    acc[item.paid_by] = {
+                                        id: item.paid_by,
+                                        name: item.team_members.name,
+                                        amount: 0
+                                    }
+                                }
+                                acc[item.paid_by].amount += parseFloat(item.amount || 0)
+                            }
+                            return acc
+                        }, {})).map((partner: any) => (
+                            <div key={partner.id} className="bg-slate-950 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <p className="text-slate-400 text-sm">Şirketin {partner.name}'a Borcu</p>
+                                    <p className="text-xl font-bold text-white mt-1">{formatCurrency(partner.amount)}</p>
+                                </div>
+                                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                    <span className="text-blue-400 font-bold">{partner.name[0]}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
