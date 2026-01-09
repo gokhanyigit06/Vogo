@@ -58,7 +58,7 @@ export default function ExpensePieChart({ expenses }: PieChartProps) {
                             <Tooltip
                                 contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#fff' }}
                                 itemStyle={{ color: '#fff' }}
-                                formatter={(value: number) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(value || 0)}
+                                formatter={(value: any) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(value || 0)}
                             />
                             <Legend />
                         </PieChart>

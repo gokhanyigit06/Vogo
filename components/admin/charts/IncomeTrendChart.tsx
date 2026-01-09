@@ -77,7 +77,7 @@ export default function IncomeTrendChart({ income, expenses }: TrendChartProps) 
                         <Tooltip
                             contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#fff' }}
                             itemStyle={{ color: '#fff' }}
-                            formatter={(value: number) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(value || 0)}
+                            formatter={(value: any) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(value || 0)}
                         />
                         <Legend />
                         <Bar dataKey="Gelir" fill="#10b981" radius={[4, 4, 0, 0]} />
