@@ -33,7 +33,20 @@ export async function GET() {
     if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
         try {
             const { data, error } = await supabase.from('settings').select('*').single()
-            if (!error && data) return NextResponse.json(data)
+            if (!error && data) {
+                // Convert snake_case to camelCase for frontend
+                return NextResponse.json({
+                    siteTitle: data.site_title,
+                    siteDescription: data.site_description,
+                    email: data.email,
+                    phone: data.phone,
+                    address: data.address,
+                    instagram: data.instagram,
+                    twitter: data.twitter,
+                    linkedin: data.linkedin,
+                    maintenanceMode: data.maintenance_mode
+                })
+            }
             // Eğer tablo var ama veri yoksa, varsayılanı döndürmeye çalışmayalım, local fallback'e geçelim
         } catch (err) { }
     }
@@ -50,17 +63,34 @@ export async function POST(request: Request) {
 
         // 1. Supabase (Upsert mantığı: Varsa güncelle, yoksa ekle)
         if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            // Tek satır kuralı: Genelde ID=1 sabitlenir veya tek satır tutulur.
-            // Biz burada ID'si 1 olan satırı güncelleyelim/ekleyelim.
+            // Map to snake_case for Supabase
+            const dbPayload = {
+                id: 1,
+                site_title: newSettings.siteTitle,
+                site_description: newSettings.siteDescription,
+                email: newSettings.email,
+                phone: newSettings.phone,
+                address: newSettings.address,
+                instagram: newSettings.instagram,
+                twitter: newSettings.twitter,
+                linkedin: newSettings.linkedin,
+                maintenance_mode: newSettings.maintenanceMode,
+                updated_at: new Date().toISOString()
+            }
+
             const { error } = await supabase
                 .from('settings')
-                .upsert({ id: 1, ...newSettings })
+                .upsert(dbPayload)
 
             if (error) console.error("Supabase Settings Error:", error.message)
         }
 
-        // 2. Local Fallback
-        await fs.writeFile(localDataPath, JSON.stringify(newSettings, null, 2), 'utf8')
+        // 2. Local Fallback (Vercel'de readonly olabilir ama dev ortamında çalışsın)
+        try {
+            await fs.writeFile(localDataPath, JSON.stringify(newSettings, null, 2), 'utf8')
+        } catch (e) {
+            // Local write failed (expected in production Vercel)
+        }
 
         return NextResponse.json(newSettings)
     } catch (error) {
