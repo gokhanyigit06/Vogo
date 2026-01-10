@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -27,7 +28,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-lg transition-colors duration-300">
+            <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg transition-colors duration-300">
                 <nav className="container mx-auto px-4 md:px-8 max-w-7xl h-20 flex items-center justify-between">
                     {/* Left: Hamburger Menu Button */}
                     <button
@@ -47,8 +48,10 @@ export default function Header() {
                         <span className="text-foreground"> {settings?.siteTitle?.split(' ').slice(1).join(' ') || 'Agency'}</span>
                     </Link>
 
-                    {/* Right: Empty space for balance */}
-                    <div className="w-6 h-6" />
+                    {/* Right: Theme Toggle (Visible on Desktop) and Mobile Spacer */}
+                    <div className="flex items-center gap-4">
+                        <ThemeToggle />
+                    </div>
                 </nav>
             </header>
 

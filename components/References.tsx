@@ -42,7 +42,7 @@ const testimonials = [
 
 export default function References() {
     return (
-        <section className="py-24 md:py-32 bg-slate-950 relative overflow-hidden">
+        <section className="py-24 md:py-32 bg-background relative overflow-hidden transition-colors duration-300">
             {/* Background Gradients */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[100px]" />
@@ -59,12 +59,12 @@ export default function References() {
                     className="text-center max-w-3xl mx-auto mb-20"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                        <span className="text-white">Bize Güvenen </span>
+                        <span className="text-foreground">Bize Güvenen </span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
                             Markalar
                         </span>
                     </h2>
-                    <p className="text-xl text-slate-400">
+                    <p className="text-xl text-muted-foreground">
                         Sektör liderleri ile çalışarak başarı hikayeleri yazıyoruz.
                     </p>
                 </motion.div>
@@ -79,12 +79,12 @@ export default function References() {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                             whileHover={{ y: -5 }}
-                            className="h-24 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/30 flex flex-col items-center justify-center p-4 transition-all group cursor-pointer"
+                            className="h-24 rounded-2xl bg-card/50 border border-border hover:border-primary/30 flex flex-col items-center justify-center p-4 transition-all group cursor-pointer shadow-sm"
                         >
-                            <span className="text-lg font-bold text-slate-400 group-hover:text-white transition-colors">
+                            <span className="text-lg font-bold text-muted-foreground group-hover:text-foreground transition-colors">
                                 {client.name}
                             </span>
-                            <span className="text-xs text-slate-600 group-hover:text-emerald-400/80 transition-colors">
+                            <span className="text-xs text-muted-foreground/80 group-hover:text-primary transition-colors">
                                 {client.sector}
                             </span>
                         </motion.div>
@@ -100,12 +100,12 @@ export default function References() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 + index * 0.2 }}
-                            className="bg-slate-900/40 backdrop-blur-sm border border-slate-800 p-8 rounded-3xl relative hover:bg-slate-900/60 transition-colors"
+                            className="bg-card/40 backdrop-blur-sm border border-border p-8 rounded-3xl relative hover:bg-card/60 transition-colors shadow-sm"
                         >
                             {/* Quote Icon */}
                             <div className="mb-6">
-                                <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                                    <Quote className="w-5 h-5 text-emerald-400" />
+                                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                                    <Quote className="w-5 h-5 text-primary" />
                                 </div>
                             </div>
 
@@ -117,7 +117,7 @@ export default function References() {
                             </div>
 
                             {/* Content */}
-                            <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+                            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
                                 "{testimonial.content}"
                             </p>
 
@@ -126,13 +126,13 @@ export default function References() {
                                 <img
                                     src={testimonial.avatar}
                                     alt={testimonial.author}
-                                    className="w-12 h-12 rounded-full object-cover border-2 border-slate-800"
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-border"
                                 />
                                 <div>
-                                    <h4 className="text-white font-semibold">
+                                    <h4 className="text-foreground font-semibold">
                                         {testimonial.author}
                                     </h4>
-                                    <p className="text-sm text-emerald-400">
+                                    <p className="text-sm text-primary">
                                         {testimonial.role}
                                     </p>
                                 </div>

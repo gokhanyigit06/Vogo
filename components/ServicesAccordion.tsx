@@ -133,10 +133,10 @@ export default function ServicesAccordion() {
     const currentService = services[activeService]
 
     return (
-        <section id="services" className="py-32 md:py-40 bg-slate-950 relative overflow-hidden">
+        <section id="services" className="py-32 md:py-40 bg-background relative overflow-hidden transition-colors duration-300">
             {/* Animated Background */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-background via-background to-background" />
                 <motion.div
                     className={`absolute inset-0 bg-gradient-to-br ${currentService.gradient} opacity-5`}
                     key={activeService}
@@ -147,9 +147,9 @@ export default function ServicesAccordion() {
             </div>
 
             {/* Grid Pattern */}
-            <div className="absolute inset-0 opacity-[0.02]">
+            <div className="absolute inset-0 opacity-[0.05]">
                 <div className="absolute inset-0" style={{
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                    backgroundImage: 'linear-gradient(var(--muted-foreground) 1px, transparent 1px), linear-gradient(90deg, var(--muted-foreground) 1px, transparent 1px)',
                     backgroundSize: '50px 50px'
                 }} />
             </div>
@@ -173,15 +173,15 @@ export default function ServicesAccordion() {
                     </motion.div>
 
                     <h2 className="text-5xl md:text-7xl font-bold mb-6">
-                        <span className="text-white">Dijital </span>
+                        <span className="text-foreground">Dijital </span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400">
                             Çözümlerimiz
                         </span>
                     </h2>
 
-                    <p className="text-xl text-slate-400">
+                    <p className="text-xl text-muted-foreground">
                         İşletmenizi dijital dünyada büyütmek için
-                        <span className="text-emerald-400 font-semibold"> tam entegre çözümler</span>
+                        <span className="text-primary font-semibold"> tam entegre çözümler</span>
                     </p>
                 </motion.div>
 
@@ -199,8 +199,8 @@ export default function ServicesAccordion() {
                                 onClick={() => setActiveService(index)}
                                 onMouseEnter={() => setActiveService(index)}
                                 className={`w-full text-left group relative overflow-hidden rounded-2xl transition-all duration-500 ${activeService === index
-                                    ? 'bg-slate-900/80 border-2 border-emerald-500/50'
-                                    : 'bg-slate-900/40 border-2 border-slate-800 hover:border-slate-700'
+                                    ? 'bg-card border-2 border-primary/50'
+                                    : 'bg-card/50 border-2 border-border hover:border-primary/30'
                                     }`}
                             >
                                 {/* Active Indicator */}
@@ -227,8 +227,8 @@ export default function ServicesAccordion() {
                                         transition={{ duration: 0.5 }}
                                         className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.gradient} p-0.5 shrink-0`}
                                     >
-                                        <div className="w-full h-full bg-slate-950 rounded-xl flex items-center justify-center">
-                                            <service.icon className="w-7 h-7 text-white" />
+                                        <div className="w-full h-full bg-card rounded-xl flex items-center justify-center">
+                                            <service.icon className="w-7 h-7 text-foreground" />
                                         </div>
                                     </motion.div>
 
@@ -236,11 +236,11 @@ export default function ServicesAccordion() {
                                     <div className="flex-1 min-w-0">
                                         <h3 className={`text-lg font-bold mb-1 transition-all duration-300 ${activeService === index
                                             ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400'
-                                            : 'text-white group-hover:text-emerald-400'
+                                            : 'text-foreground group-hover:text-primary'
                                             }`}>
                                             {service.title}
                                         </h3>
-                                        <p className="text-sm text-slate-500 truncate">
+                                        <p className="text-sm text-muted-foreground truncate">
                                             {service.stats.value} {service.stats.label}
                                         </p>
                                     </div>
@@ -253,7 +253,7 @@ export default function ServicesAccordion() {
                                         }}
                                         className="shrink-0"
                                     >
-                                        <ArrowRight className="w-5 h-5 text-emerald-400" />
+                                        <ArrowRight className="w-5 h-5 text-primary" />
                                     </motion.div>
                                 </div>
 
@@ -285,7 +285,7 @@ export default function ServicesAccordion() {
                                 <motion.div
                                     onMouseMove={handleMouseMove}
                                     onMouseLeave={() => setMousePosition({ x: 0, y: 0 })}
-                                    className="relative rounded-3xl overflow-hidden aspect-[16/10] bg-slate-900"
+                                    className="relative rounded-3xl overflow-hidden aspect-[16/10] bg-card"
                                     style={{
                                         transform: `perspective(1000px) rotateY(${mousePosition.x}deg) rotateX(${-mousePosition.y}deg)`,
                                         transition: 'transform 0.1s ease-out'
@@ -300,7 +300,7 @@ export default function ServicesAccordion() {
 
                                     {/* Gradient Overlays */}
                                     <div className={`absolute inset-0 bg-gradient-to-br ${currentService.gradient} opacity-30`} />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
 
                                     {/* Floating Stats Badge */}
                                     <motion.div
@@ -326,10 +326,10 @@ export default function ServicesAccordion() {
                                             animate={{ y: 0, opacity: 1 }}
                                             transition={{ delay: 0.2 }}
                                         >
-                                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                                            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
                                                 {currentService.title}
                                             </h3>
-                                            <p className="text-slate-300 text-lg">
+                                            <p className="text-muted-foreground text-lg">
                                                 {currentService.description}
                                             </p>
                                         </motion.div>
@@ -344,12 +344,12 @@ export default function ServicesAccordion() {
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: 0.3 + index * 0.1 }}
-                                            className="flex items-start gap-3 p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/30 transition-colors group"
+                                            className="flex items-start gap-3 p-4 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-colors group"
                                         >
                                             <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentService.gradient} flex items-center justify-center shrink-0 mt-0.5`}>
                                                 <Check className="w-4 h-4 text-white" />
                                             </div>
-                                            <p className="text-slate-300 text-sm group-hover:text-white transition-colors">
+                                            <p className="text-muted-foreground text-sm group-hover:text-foreground transition-colors">
                                                 {highlight}
                                             </p>
                                         </motion.div>
@@ -364,7 +364,7 @@ export default function ServicesAccordion() {
                                         transition={{ delay: 0.6 }}
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className={`w-full py-5 rounded-2xl bg-gradient-to-r ${currentService.gradient} text-white font-semibold text-lg flex items-center justify-center gap-2 hover:shadow-2xl hover:shadow-emerald-500/30 transition-shadow`}
+                                        className={`w-full py-5 rounded-2xl bg-gradient-to-r ${currentService.gradient} text-white font-semibold text-lg flex items-center justify-center gap-2 hover:shadow-2xl hover:shadow-primary/30 transition-shadow`}
                                     >
                                         <span>Detaylı Bilgi Al</span>
                                         <ArrowRight className="w-5 h-5" />
