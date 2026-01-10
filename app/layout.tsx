@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Caveat, Quicksand } from "next/font/google";
 import "./globals.css";
 
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
 import SmoothScroll from "@/components/SmoothScroll";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +14,16 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+});
+
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
   subsets: ["latin"],
 });
 
@@ -59,16 +70,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className="dark scroll-smooth">
+    <html lang="tr" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-100 selection:bg-emerald-500/30 selection:text-emerald-200`}
+        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${quicksand.variable} antialiased bg-background text-foreground transition-colors duration-300`}
       >
-        <CustomCursor />
-        <SmoothScroll />
-        <ParticleBackground />
-        <div className="relative z-10">
-          {children}
-        </div>
+        <Providers>
+          <CustomCursor />
+          <SmoothScroll />
+
+          {/* Particle Background: Sadece Dark modda veya her ikisinde farklı ayarlarla kullanılabilir. Şimdilik her ikisinde kalsın, CSS ile kontrol ederiz */}
+          <div className="fixed inset-0 pointer-events-none z-0 opacity-20 dark:opacity-100 transition-opacity">
+            <ParticleBackground />
+          </div>
+
+          <div className="relative z-10">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, ArrowRight, Zap, Target, Activity, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
+import { ThemeToggle } from "@/components/ThemeToggle"
+import { createClient } from "@/lib/supabase-client"
 
 interface DashboardStats {
     totalIncome: number
@@ -14,7 +16,6 @@ interface DashboardStats {
     upcomingDeadlines: any[]
     recentTransactions: any[]
 }
-import { createClient } from "@/lib/supabase-client"
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null)
@@ -60,8 +61,8 @@ export default function AdminDashboard() {
         return (
             <div className="p-8 max-w-7xl mx-auto flex items-center justify-center h-[80vh]">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
-                    <p className="text-slate-400 animate-pulse">Veriler Analiz Ediliyor...</p>
+                    <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+                    <p className="text-muted-foreground animate-pulse">Veriler Analiz Ediliyor...</p>
                 </div>
             </div>
         )
@@ -82,29 +83,31 @@ export default function AdminDashboard() {
             {/* Header Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-4xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+                    <h1 className="text-4xl font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground">
                         {getGreeting()}, {userName} 👋
                     </h1>
-                    <p className="text-slate-400 mt-2 text-lg">
-                        Bugün ajansın performansı <span className="text-emerald-400 font-bold">Harika</span> görünüyor.
+                    <p className="text-muted-foreground mt-2 text-lg">
+                        Bugün ajansın performansı <span className="text-primary font-bold">Harika</span> görünüyor.
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
+                    <ThemeToggle />
+
                     {/* Privacy Toggle Button */}
                     <button
                         onClick={() => setHideSensitiveData(!hideSensitiveData)}
-                        className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 hover:text-white hover:border-slate-700 transition-all flex items-center gap-2"
+                        className="px-4 py-2 bg-card border border-border rounded-full text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all flex items-center gap-2 shadow-sm"
                         title={hideSensitiveData ? "Verileri Göster" : "Verileri Gizle"}
                     >
                         {hideSensitiveData ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         <span className="text-xs font-bold">{hideSensitiveData ? "Gizli" : "Açık"}</span>
                     </button>
 
-                    <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm flex items-center gap-2">
+                    <div className="px-4 py-2 bg-card border border-border rounded-full text-muted-foreground text-sm flex items-center gap-2 shadow-sm">
                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                         Sistem Online
                     </div>
-                    <div className="hidden md:block px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm">
+                    <div className="hidden md:block px-4 py-2 bg-card border border-border rounded-full text-muted-foreground text-sm shadow-sm">
                         {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
                     </div>
                 </div>
@@ -114,61 +117,61 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {/* Gelir Kartı */}
-                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-emerald-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-emerald-500/10 rounded-xl">
-                            <TrendingUp className="w-6 h-6 text-emerald-400" />
+                            <TrendingUp className="w-6 h-6 text-emerald-500" />
                         </div>
-                        <span className="text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg text-xs font-bold">+12%</span>
+                        <span className="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg text-xs font-bold">+12%</span>
                     </div>
                     <div className="relative z-10">
-                        <p className="text-slate-400 text-sm font-medium mb-1">Toplam Gelir</p>
-                        <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(stats?.totalIncome || 0)}</h3>
+                        <p className="text-muted-foreground text-sm font-medium mb-1">Toplam Gelir</p>
+                        <h3 className="text-3xl font-bold text-foreground tracking-tight">{formatCurrency(stats?.totalIncome || 0)}</h3>
                     </div>
                 </div>
 
                 {/* Gider Kartı */}
-                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10 dark:hover:shadow-red-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-red-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-red-500/10 rounded-xl">
-                            <TrendingDown className="w-6 h-6 text-red-400" />
+                            <TrendingDown className="w-6 h-6 text-red-500" />
                         </div>
-                        <span className="text-red-400 bg-red-500/10 px-2 py-1 rounded-lg text-xs font-bold">+5%</span>
+                        <span className="text-red-500 bg-red-500/10 px-2 py-1 rounded-lg text-xs font-bold">+5%</span>
                     </div>
                     <div className="relative z-10">
-                        <p className="text-slate-400 text-sm font-medium mb-1">Toplam Gider</p>
-                        <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(stats?.totalExpenses || 0)}</h3>
+                        <p className="text-muted-foreground text-sm font-medium mb-1">Toplam Gider</p>
+                        <h3 className="text-3xl font-bold text-foreground tracking-tight">{formatCurrency(stats?.totalExpenses || 0)}</h3>
                     </div>
                 </div>
 
                 {/* Kar Kartı */}
-                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-blue-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-blue-500/10 rounded-xl">
-                            <DollarSign className="w-6 h-6 text-blue-400" />
+                            <DollarSign className="w-6 h-6 text-blue-500" />
                         </div>
                     </div>
                     <div className="relative z-10">
-                        <p className="text-slate-400 text-sm font-medium mb-1">Net Kar</p>
-                        <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(stats?.profit || 0)}</h3>
+                        <p className="text-muted-foreground text-sm font-medium mb-1">Net Kar</p>
+                        <h3 className="text-3xl font-bold text-foreground tracking-tight">{formatCurrency(stats?.profit || 0)}</h3>
                     </div>
                 </div>
 
                 {/* Proje Kartı */}
-                <div className="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 dark:hover:shadow-purple-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-purple-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-purple-500/10 rounded-xl">
-                            <Briefcase className="w-6 h-6 text-purple-400" />
+                            <Briefcase className="w-6 h-6 text-purple-500" />
                         </div>
-                        <span className="text-purple-400 bg-purple-500/10 px-2 py-1 rounded-lg text-xs font-bold">{stats?.totalClients} Müşteri</span>
+                        <span className="text-purple-500 bg-purple-500/10 px-2 py-1 rounded-lg text-xs font-bold">{stats?.totalClients} Müşteri</span>
                     </div>
                     <div className="relative z-10">
-                        <p className="text-slate-400 text-sm font-medium mb-1">Aktif Proje</p>
-                        <h3 className="text-3xl font-bold text-white tracking-tight">{stats?.activeProjects || 0}</h3>
+                        <p className="text-muted-foreground text-sm font-medium mb-1">Aktif Proje</p>
+                        <h3 className="text-3xl font-bold text-foreground tracking-tight">{stats?.activeProjects || 0}</h3>
                     </div>
                 </div>
             </div>
@@ -180,15 +183,15 @@ export default function AdminDashboard() {
                 <div className="lg:col-span-2 space-y-8">
 
                     {/* Weekly Performance Chart (CSS Based) */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 relative overflow-hidden">
+                    <div className="bg-card border border-border rounded-3xl p-8 relative overflow-hidden shadow-sm">
                         <div className="flex justify-between items-end mb-8 relative z-10">
                             <div>
-                                <h3 className="text-xl font-bold text-white">Haftalık Performans</h3>
-                                <p className="text-slate-400 text-sm">Son 7 günlük aktivite özeti</p>
+                                <h3 className="text-xl font-bold text-foreground">Haftalık Performans</h3>
+                                <p className="text-muted-foreground text-sm">Son 7 günlük aktivite özeti</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="block w-3 h-3 bg-emerald-500 rounded-full" />
-                                <span className="text-xs text-slate-400">Tamamlanan</span>
+                                <span className="block w-3 h-3 bg-primary rounded-full" />
+                                <span className="text-xs text-muted-foreground">Tamamlanan</span>
                             </div>
                         </div>
 
@@ -196,53 +199,53 @@ export default function AdminDashboard() {
                         <div className="flex items-end justify-between h-48 gap-4 px-2 relative z-10">
                             {chartData.map((height, i) => (
                                 <div key={i} className="flex flex-col items-center gap-3 w-full group cursor-pointer">
-                                    <div className="w-full bg-slate-800 rounded-t-xl relative h-full overflow-hidden">
+                                    <div className="w-full bg-secondary/50 rounded-t-xl relative h-full overflow-hidden">
                                         <div
                                             className="absolute bottom-0 w-full bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-xl transition-all duration-500 group-hover:opacity-90"
                                             style={{ height: `${height}%` }}
                                         >
-                                            <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-slate-900 text-xs font-bold px-2 py-1 rounded transition-opacity">
+                                            <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-popover text-popover-foreground text-xs font-bold px-2 py-1 rounded transition-opacity shadow-md">
                                                 {height}
                                             </div>
                                         </div>
                                     </div>
-                                    <span className="text-xs font-medium text-slate-500 group-hover:text-emerald-400 transition-colors">{days[i]}</span>
+                                    <span className="text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors">{days[i]}</span>
                                 </div>
                             ))}
                         </div>
 
                         {/* Background Decoration */}
-                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-emerald-500/5 to-transparent pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
                     </div>
 
                     {/* Recent Transactions Table */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
-                        <div className="p-6 border-b border-slate-800 flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
+                        <div className="p-6 border-b border-border flex justify-between items-center">
+                            <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                                 <Activity className="w-5 h-5 text-blue-500" />
                                 Son İşlemler
                             </h3>
-                            <Link href="/admin/finance/income" className="text-sm text-blue-400 hover:text-blue-300 font-medium">Tümünü Gör</Link>
+                            <Link href="/admin/finance/income" className="text-sm text-blue-500 hover:text-blue-400 font-medium">Tümünü Gör</Link>
                         </div>
-                        <div className="divide-y divide-slate-800">
+                        <div className="divide-y divide-border">
                             {stats?.recentTransactions?.slice(0, 5).map((t: any) => (
-                                <div key={t.id} className="p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                <div key={t.id} className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-lg">
+                                        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-lg">
                                             💰
                                         </div>
                                         <div>
-                                            <p className="text-white font-medium">{t.description || 'İşlem'}</p>
-                                            <p className="text-slate-400 text-xs">{new Date(t.date).toLocaleDateString('tr-TR')}</p>
+                                            <p className="text-foreground font-medium">{t.description || 'İşlem'}</p>
+                                            <p className="text-muted-foreground text-xs">{new Date(t.date).toLocaleDateString('tr-TR')}</p>
                                         </div>
                                     </div>
-                                    <span className="font-bold text-emerald-400">
+                                    <span className="font-bold text-emerald-500">
                                         +{formatCurrency(t.amount)}
                                     </span>
                                 </div>
                             ))}
                             {(!stats?.recentTransactions || stats.recentTransactions.length === 0) && (
-                                <div className="p-8 text-center text-slate-500">Henüz finansal işlem yok.</div>
+                                <div className="p-8 text-center text-muted-foreground">Henüz finansal işlem yok.</div>
                             )}
                         </div>
                     </div>
@@ -281,9 +284,9 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Yaklaşan Teslimler */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden h-fit">
-                        <div className="p-6 border-b border-slate-800">
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <div className="bg-card border border-border rounded-3xl overflow-hidden h-fit shadow-sm">
+                        <div className="p-6 border-b border-border">
+                            <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                                 <Zap className="w-5 h-5 text-yellow-500" />
                                 Yaklaşan Teslimler
                             </h3>
@@ -291,21 +294,21 @@ export default function AdminDashboard() {
                         <div className="max-h-[400px] overflow-y-auto custom-scrollbar p-2">
                             {stats?.upcomingDeadlines && stats.upcomingDeadlines.length > 0 ? (
                                 stats.upcomingDeadlines.map((p: any) => (
-                                    <div key={p.id} className="p-4 mb-2 bg-slate-950/50 rounded-xl border border-slate-800/50 hover:border-yellow-500/30 transition-colors">
+                                    <div key={p.id} className="p-4 mb-2 bg-secondary/30 rounded-xl border border-border hover:border-yellow-500/30 transition-colors">
                                         <div className="flex justify-between items-start mb-2">
-                                            <h4 className="font-bold text-white text-sm">{p.name}</h4>
+                                            <h4 className="font-bold text-foreground text-sm">{p.name}</h4>
                                             <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-1 rounded">
                                                 {Math.ceil((new Date(p.end_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24))} gün kaldı
                                             </span>
                                         </div>
-                                        <p className="text-xs text-slate-500 flex items-center gap-1">
+                                        <p className="text-xs text-muted-foreground flex items-center gap-1">
                                             <Calendar className="w-3 h-3" />
                                             {new Date(p.end_date).toLocaleDateString('tr-TR')}
                                         </p>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-6 text-center text-slate-500 text-sm">
+                                <div className="p-6 text-center text-muted-foreground text-sm">
                                     Yakın zamanda teslim edilecek proje yok.
                                 </div>
                             )}
