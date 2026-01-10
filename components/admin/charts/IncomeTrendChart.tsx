@@ -46,8 +46,8 @@ export default function IncomeTrendChart({ income, expenses }: TrendChartProps) 
     const data = processData()
 
     return (
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl h-[400px]">
-            <h3 className="text-lg font-bold text-white mb-6">Finansal Trend (Son 6 Ay)</h3>
+        <div className="bg-card border border-border p-6 rounded-notebook h-[400px]">
+            <h3 className="text-lg font-bold text-foreground mb-6">Finansal Trend (Son 6 Ay)</h3>
             <div className="w-full h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
