@@ -7,11 +7,11 @@ import ModernFooter from "@/components/ModernFooter"
 import Link from "next/link"
 import Image from "next/image"
 import {
-    Search, QrCode, ArrowRight, Zap, smartphone, Globe, ChevronDown, Rocket, Layers,
+    Search, QrCode, ArrowRight, Zap, Smartphone, Globe, ChevronDown, Rocket, Layers,
     AppWindow, TrendingUp, Activity, SplitSquareHorizontal, Maximize2, Repeat, Share2,
     Video, MessageCircle, Film, Camera, AlertTriangle, BarChart, Radio, Eye, Settings,
     Clock, Database, BrainCircuit, ShieldCheck, Cloud, Webhook, GitGraph, LayoutDashboard,
-    PieChart, Bell, CreditCard, Users, Smartphone, MapPin, Code, Languages, Palette, RefreshCw, Bot
+    PieChart, Bell, CreditCard, Users, MapPin, Code, Languages, Palette, RefreshCw, Bot
 } from "lucide-react"
 
 // Mock Service Data
