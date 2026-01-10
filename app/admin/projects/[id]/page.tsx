@@ -500,7 +500,7 @@ export default function ProjectDetailPage() {
                         if (process.env.NODE_ENV === 'development') {
                             const localTasks = JSON.parse(localStorage.getItem('mock_tasks') || '[]')
                             const updatedProjectTasks = localTasks.filter((t: any) => t.project_id == project.id)
-                            setProject(prev => ({ ...prev, tasks: updatedProjectTasks }))
+                            setProject((prev: any) => ({ ...prev, tasks: updatedProjectTasks }))
                         } else {
                             fetch(`/api/projects?id=${project.id}`)
                                 .then(r => r.json())
