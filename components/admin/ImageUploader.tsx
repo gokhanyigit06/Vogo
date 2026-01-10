@@ -113,7 +113,7 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
                         onChange(e.target.value)
                     }}
                     placeholder="Veya harici bir URL yapıştırın..."
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-400 focus:text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-emerald-500"
                 />
             </div>
         </div>
