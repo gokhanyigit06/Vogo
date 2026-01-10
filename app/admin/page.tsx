@@ -262,27 +262,27 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/admin/projects/new" className="bg-emerald-600 hover:bg-emerald-500 p-4 rounded-notebook transition-all shadow-lg shadow-emerald-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <Briefcase className="w-5 h-5 text-foreground" />
+                                <Briefcase className="w-5 h-5 text-white" />
                             </div>
-                            <span className="text-foreground font-bold text-sm">Proje Ekle</span>
+                            <span className="text-white font-bold text-sm">Proje Ekle</span>
                         </Link>
                         <Link href="/admin/tasks" className="bg-blue-600 hover:bg-blue-500 p-4 rounded-notebook transition-all shadow-lg shadow-blue-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <Target className="w-5 h-5 text-foreground" />
+                                <Target className="w-5 h-5 text-white" />
                             </div>
-                            <span className="text-foreground font-bold text-sm">Görev Ata</span>
+                            <span className="text-white font-bold text-sm">Görev Ata</span>
                         </Link>
                         <Link href="/admin/finance/income" className="bg-purple-600 hover:bg-purple-500 p-4 rounded-notebook transition-all shadow-lg shadow-purple-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <DollarSign className="w-5 h-5 text-foreground" />
+                                <DollarSign className="w-5 h-5 text-white" />
                             </div>
-                            <span className="text-foreground font-bold text-sm">Gelir Gir</span>
+                            <span className="text-white font-bold text-sm">Gelir Gir</span>
                         </Link>
                         <Link href="/admin/clients/new" className="bg-orange-600 hover:bg-orange-500 p-4 rounded-notebook transition-all shadow-lg shadow-orange-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <Users className="w-5 h-5 text-foreground" />
+                                <Users className="w-5 h-5 text-white" />
                             </div>
-                            <span className="text-foreground font-bold text-sm">Müşteri</span>
+                            <span className="text-white font-bold text-sm">Müşteri</span>
                         </Link>
                     </div>
 
