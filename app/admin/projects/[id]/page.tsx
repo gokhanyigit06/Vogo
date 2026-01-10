@@ -509,7 +509,7 @@ export default function ProjectDetailPage() {
                     }}
                     onDelete={() => {
                         // Remove from UI
-                        setProject(prev => ({
+                        setProject((prev: any) => ({
                             ...prev,
                             tasks: prev.tasks.filter((t: any) => t.id !== selectedTask.id)
                         }))
