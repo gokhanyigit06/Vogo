@@ -9,6 +9,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-base);
   --font-heading: var(--font-title);
+  --font-hand: var(--font-hand);
+  /* Gochi Hand */
   --font-mono: var(--font-geist-mono);
 
   --color-sidebar-ring: var(--sidebar-ring);
@@ -53,37 +55,39 @@
 }
 
 :root {
-  /* LIGHT MODE (Soft / Notebook) */
+  /* LIGHT MODE (Notebook / Ponçik Theme) */
   --font-base: var(--font-quicksand);
-  --font-title: var(--font-caveat);
-  --radius: 1rem;
-  /* Daha yuvarlak köşeler */
+  --font-title: var(--font-quicksand);
+  --font-hand: var(--font-gochi);
+  /* El yazısı notlar için */
+  --radius: 2rem;
+  /* Süper yuvarlak köşeler (32px) */
 
-  --background: #fafaf9;
-  /* Stone 50 - Sıcak beyaz */
-  --foreground: #44403c;
-  /* Stone 700 - Yumuşak siyah */
+  --background: #FFFEF9;
+  /* Krem/Kağıt rengi */
+  --foreground: #2D3436;
+  /* Yumuşak füme metin */
 
-  --card: #ffffff;
-  --card-foreground: #44403c;
+  --card: #FFFFFF;
+  /* Beyaz kartlar */
+  --card-foreground: #2D3436;
 
-  --popover: #ffffff;
-  --popover-foreground: #44403c;
+  --popover: #FFFFFF;
+  --popover-foreground: #2D3436;
 
   --primary: #10b981;
-  /* Emerald 500 */
+  /* Emerald 500 - Vogo yeşili */
   --primary-foreground: #ffffff;
 
-  --secondary: #f5f5f4;
+  --secondary: #F5F5F4;
   /* Stone 100 */
   --secondary-foreground: #57534e;
-  /* Stone 600 */
 
-  --muted: #f5f5f4;
-  --muted-foreground: #a8a29e;
+  --muted: #F5F5F4;
+  --muted-foreground: #A8A29E;
   /* Stone 400 */
 
-  --accent: #f0fdf4;
+  --accent: #F0FDF4;
   /* Emerald 50 - Hafif yeşil vurgu */
   --accent-foreground: #15803d;
   /* Emerald 700 */
@@ -91,8 +95,8 @@
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: #e7e5e4;
-  /* Stone 200 */
+  --border: #E2E8F0;
+  /* Açık gri border */
   --input: #ffffff;
   --ring: #10b981;
 
@@ -104,12 +108,12 @@
 
   /* Sidebar Light */
   --sidebar: #ffffff;
-  --sidebar-foreground: #44403c;
+  --sidebar-foreground: #2D3436;
   --sidebar-primary: #10b981;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f5f5f4;
+  --sidebar-accent: #F5F5F4;
   --sidebar-accent-foreground: #10b981;
-  --sidebar-border: #e7e5e4;
+  --sidebar-border: #E2E8F0;
   --sidebar-ring: #10b981;
 }
 
@@ -259,4 +263,56 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* ===================== */
+/* NOTEBOOK THEME UTILITIES (Light Mode) */
+/* ===================== */
+
+/* Not Defteri Doku - Noktalı Kağıt */
+.notebook-grid {
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* El Yazısı Font (Gochi Hand) */
+.font-hand {
+  font-family: var(--font-gochi), cursive;
+}
+
+/* Süper Yuvarlak Kartlar (Light Mode) */
+.rounded-notebook {
+  border-radius: 2rem;
+  /* 32px */
+}
+
+/* Light Mode Kart Shadow */
+.card-light-shadow {
+  box-shadow: 0 20px 25px -5px rgb(16 185 129 / 0.05),
+    0 8px 10px -6px rgb(16 185 129 / 0.05);
+}
+
+/* Handwritten Note Annotation */
+.note-annotation {
+  position: relative;
+  display: inline-block;
+}
+
+.note-annotation::after {
+  content: attr(data-note);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  font-family: var(--font-gochi), cursive;
+  font-size: 0.875rem;
+  color: #10b981;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.note-annotation:hover::after {
+  opacity: 1;
 }

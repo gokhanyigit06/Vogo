@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat, Quicksand } from "next/font/google";
+import { Geist, Geist_Mono, Quicksand, Gochi_Hand } from "next/font/google";
 import "./globals.css";
 
 import CustomCursor from "@/components/CustomCursor";
@@ -17,14 +17,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-});
-
 const quicksand = Quicksand({
   variable: "--font-quicksand",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const gochiHand = Gochi_Hand({
+  variable: "--font-gochi",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -72,7 +74,7 @@ export default function RootLayout({
   return (
     <html lang="tr" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${quicksand.variable} antialiased bg-background text-foreground transition-colors duration-300`}
+        className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} ${gochiHand.variable} antialiased bg-background text-foreground transition-colors duration-300`}
       >
         <Providers>
           <CustomCursor />
