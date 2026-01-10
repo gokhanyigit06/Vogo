@@ -25,7 +25,7 @@ interface Task {
 }
 
 const COLUMNS = [
-    { id: 'todo', title: 'Yapılacaklar', color: 'bg-slate-500/10 border-slate-500/20 text-slate-400' },
+    { id: 'todo', title: 'Yapılacaklar', color: 'bg-slate-500/10 border-slate-500/20 text-muted-foreground' },
     { id: 'in_progress', title: 'Sürüyor', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
     { id: 'done', title: 'Tamamlandı', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' }
 ]
@@ -33,7 +33,7 @@ const COLUMNS = [
 // --- Visual Component (Pure UI) ---
 function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOverlay?: boolean, onClick?: () => void }) {
     const priorityColor = {
-        low: 'bg-muted text-slate-300',
+        low: 'bg-muted text-foreground',
         medium: 'bg-yellow-500/10 text-yellow-500',
         high: 'bg-red-500/10 text-red-500'
     }[task.priority || 'medium']
@@ -62,7 +62,7 @@ function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOver
 
             <div className="flex items-center gap-4 text-slate-500 text-xs mt-3">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-slate-400">
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground">
                         {task.team_members?.name?.[0] || '?'}
                     </div>
                 </div>
@@ -269,7 +269,7 @@ export default function TasksPage() {
     // Derived state: Seçili ID'ye göre güncel task'ı bul
     const selectedTask = selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null
 
-    if (!mounted) return <div className="p-8 text-slate-400">Yükleniyor...</div>
+    if (!mounted) return <div className="p-8 text-muted-foreground">Yükleniyor...</div>
 
     return (
         <div className="p-8 max-w-7xl mx-auto space-y-8 h-screen flex flex-col">
@@ -279,7 +279,7 @@ export default function TasksPage() {
                         <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         Görev Yönetimi
                     </h1>
-                    <p className="text-slate-400 mt-1">Ekip iş takibi ve süreç yönetimi</p>
+                    <p className="text-muted-foreground mt-1">Ekip iş takibi ve süreç yönetimi</p>
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
@@ -331,13 +331,13 @@ export default function TasksPage() {
                     <div className="bg-card border border-border rounded-notebook p-6 w-full max-w-md">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-xl font-bold text-foreground">Yeni Görev Ekle</h2>
-                            <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-foreground">
+                            <button onClick={() => setShowModal(false)} className="text-muted-foreground hover:text-foreground">
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Başlık</label>
+                                <label className="block text-sm font-medium text-muted-foreground mb-1">Başlık</label>
                                 <input
                                     type="text"
                                     required
@@ -348,7 +348,7 @@ export default function TasksPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-400 mb-1">Atanan Kişi</label>
+                                    <label className="block text-sm font-medium text-muted-foreground mb-1">Atanan Kişi</label>
                                     <select
                                         className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
                                         value={formData.assigned_to}
@@ -361,7 +361,7 @@ export default function TasksPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-400 mb-1">Öncelik</label>
+                                    <label className="block text-sm font-medium text-muted-foreground mb-1">Öncelik</label>
                                     <select
                                         className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
                                         value={formData.priority}
@@ -374,7 +374,7 @@ export default function TasksPage() {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Bitiş Tarihi</label>
+                                <label className="block text-sm font-medium text-muted-foreground mb-1">Bitiş Tarihi</label>
                                 <input
                                     type="date"
                                     className="w-full bg-background border border-border rounded-lg p-3 text-foreground"

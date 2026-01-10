@@ -95,10 +95,10 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
 
     return (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div className="bg-card border border-border rounded-2xl w-full max-w-4xl h-[80vh] flex flex-col shadow-2xl overflow-hidden">
 
                 {/* Header */}
-                <div className="p-6 border-b border-slate-800 flex justify-between items-start bg-slate-950">
+                <div className="p-6 border-b border-border flex justify-between items-start bg-background">
                     <div className="flex-1 mr-8">
                         <div className="flex items-center gap-3 mb-3">
                             <span className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/20">
@@ -117,7 +117,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                 <Trash2 className="w-6 h-6" />
                             </button>
                         )}
-                        <button onClick={onClose} className="text-slate-400 hover:text-white p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                        <button onClick={onClose} className="text-slate-400 hover:text-foreground p-2 hover:bg-muted rounded-lg transition-colors">
                             <X className="w-6 h-6" />
                         </button>
                     </div>
@@ -127,14 +127,14 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                 <div className="flex-1 flex overflow-hidden">
 
                     {/* Left Column (Main Info) */}
-                    <div className="flex-1 overflow-y-auto p-8 space-y-8 border-r border-slate-800">
+                    <div className="flex-1 overflow-y-auto p-8 space-y-8 border-r border-border">
                         {/* Description */}
                         <div>
                             <h3 className="text-sm font-bold text-slate-400 mb-3 flex items-center gap-2">
                                 <MessageSquare className="w-4 h-4" />
                                 Açıklama
                             </h3>
-                            <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 min-h-[100px] text-slate-300">
+                            <div className="bg-background border border-border rounded-xl p-4 min-h-[100px] text-slate-300">
                                 {task.description || 'Açıklama yok.'}
                             </div>
                         </div>
@@ -148,7 +148,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                 </h3>
                             </div>
 
-                            <div className="h-2 bg-slate-800 rounded-full mb-4 overflow-hidden">
+                            <div className="h-2 bg-muted rounded-full mb-4 overflow-hidden">
                                 <div
                                     className="h-full bg-emerald-500 transition-all duration-300"
                                     style={{ width: `${Math.round((checklists.filter((i: any) => i.checked).length / (checklists.length || 1)) * 100)}%` }}
@@ -162,7 +162,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                             type="checkbox"
                                             checked={item.checked}
                                             onChange={() => toggleChecklist(item.id)}
-                                            className="w-5 h-5 rounded border-slate-700 bg-slate-900 checked:bg-emerald-500 text-emerald-500 focus:ring-0 focus:ring-offset-0"
+                                            className="w-5 h-5 rounded border-slate-700 bg-card checked:bg-emerald-500 text-emerald-500 focus:ring-0 focus:ring-offset-0"
                                         />
                                         <span className={`flex-1 text-sm ${item.checked ? 'text-slate-500 line-through' : 'text-slate-300'}`}>
                                             {item.text}
@@ -176,7 +176,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                         value={newChecklistItem}
                                         onChange={(e) => setNewChecklistItem(e.target.value)}
                                         placeholder="Yeni madde ekle..."
-                                        className="flex-1 bg-transparent border-b border-slate-800 focus:border-emerald-500 outline-none text-sm py-2 text-white placeholder:text-slate-600"
+                                        className="flex-1 bg-transparent border-b border-border focus:border-emerald-500 outline-none text-sm py-2 text-foreground placeholder:text-slate-600"
                                     />
                                     <button type="submit" className="text-emerald-500 hover:text-emerald-400 text-sm font-medium">Ekle</button>
                                 </form>
@@ -208,12 +208,12 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                                 </label>
 
                                 {attachments.map((file: any, i: number) => (
-                                    <a key={file.id || i} href={file.file_url} target="_blank" rel="noopener noreferrer" className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center gap-3 group hover:border-slate-700 transition-colors">
-                                        <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-blue-400 font-bold text-sm">
+                                    <a key={file.id || i} href={file.file_url} target="_blank" rel="noopener noreferrer" className="bg-background border border-border rounded-xl p-3 flex items-center gap-3 group hover:border-slate-700 transition-colors">
+                                        <div className="w-10 h-10 bg-card rounded-lg flex items-center justify-center text-blue-400 font-bold text-sm">
                                             {file.file_name?.split('.').pop()?.toUpperCase() || 'FILE'}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm text-white truncate">{file.file_name}</p>
+                                            <p className="text-sm text-foreground truncate">{file.file_name}</p>
                                         </div>
                                     </a>
                                 ))}
@@ -222,16 +222,16 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                     </div>
 
                     {/* Right Column (Meta) */}
-                    <div className="w-80 bg-slate-950 p-6 space-y-6 overflow-y-auto border-l border-slate-900">
+                    <div className="w-80 bg-background p-6 space-y-6 overflow-y-auto border-l border-slate-900">
                         {/* Meta Info */}
                         <div className="space-y-4">
                             <div>
                                 <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Atanan</label>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm font-bold text-slate-400">
+                                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-bold text-slate-400">
                                         {task.team_members?.name?.[0]}
                                     </div>
-                                    <span className="text-sm text-white font-medium">{task.team_members?.name || 'Atanmamış'}</span>
+                                    <span className="text-sm text-foreground font-medium">{task.team_members?.name || 'Atanmamış'}</span>
                                 </div>
                             </div>
 
@@ -244,7 +244,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete }: a
                             </div>
                         </div>
 
-                        <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-800/50">
+                        <div className="p-4 bg-card/50 rounded-lg border border-border/50">
                             <p className="text-xs text-slate-500">
                                 * Dosya yüklemek için Supabase'de <strong>task-attachments</strong> adında <strong>Public</strong> bir bucket gereklidir.
                             </p>

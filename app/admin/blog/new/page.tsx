@@ -89,7 +89,7 @@ export default function NewBlogPostPage() {
                     <button
                         onClick={handlePublish}
                         disabled={isSubmitting}
-                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
                     >
                         <Send className="w-4 h-4" /> {isSubmitting ? 'Yayınlanıyor...' : 'Yayınla'}
                     </button>
