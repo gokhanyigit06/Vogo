@@ -1,0 +1,15 @@
+{
+  "services": {
+    "hero": {
+      "title": "Hizmetlerimiz",
+      "subtitle": "Size nasıl yardımcı olabiliriz?"
+    },
+    "servicesList": [
+      {
+        "title": "Yeni Hizmet",
+        "description": "Hizmet açıklaması...",
+        "icon": "Code"
+      }
+    ]
+  }
+}

@@ -1,15 +1,48 @@
 "use client"
 
-import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2 } from "lucide-react"
+import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, Layers, LogOut } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { supabase } from "@/lib/supabase"
 
 export default function AdminSidebar() {
     const pathname = usePathname()
+    const router = useRouter()
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [userProfile, setUserProfile] = useState<any>(null)
+
+    useEffect(() => {
+        const getUser = async () => {
+            // Get Auth User
+            const { data: { user } } = await supabase.auth.getUser()
+
+            if (user) {
+                // Fetch Team Profile matching email
+                const { data: teamMember } = await supabase
+                    .from('team')
+                    .select('*')
+                    .eq('email', user.email)
+                    .single()
+
+                setUserProfile({
+                    email: user.email,
+                    name: teamMember?.name || user.email?.split('@')[0], // Fallback to email username
+                    role: teamMember?.role || 'user',
+                    avatar_url: teamMember?.avatar_url
+                })
+            }
+        }
+        getUser()
+    }, [])
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut()
+        router.push('/login')
+    }
 
     const menuItems = [
+        // ... (menu items remain same)
         { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
         { icon: Users, label: "Müşteriler", href: "/admin/clients" },
         { icon: FolderKanban, label: "Projeler", href: "/admin/projects" },
@@ -32,7 +65,7 @@ export default function AdminSidebar() {
     return (
         <>
             {/* Sidebar - Desktop */}
-            <aside className="hidden lg:block w-64 bg-sidebar border-r border-sidebar-border fixed h-screen transition-colors duration-300">
+            <aside className="hidden lg:flex flex-col w-64 bg-sidebar border-r border-sidebar-border fixed h-screen transition-colors duration-300">
                 <div className="p-6 border-b border-sidebar-border">
                     <Link href="/admin" className="text-xl font-bold flex items-center gap-2">
                         <div className="w-8 h-8 bg-gradient-to-br from-primary to-teal-500 rounded-lg flex items-center justify-center">
@@ -45,7 +78,7 @@ export default function AdminSidebar() {
                     </Link>
                 </div>
 
-                <nav className="p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
                     {menuItems.map((item) => (
                         <Link
                             key={item.href}
@@ -61,15 +94,33 @@ export default function AdminSidebar() {
                     ))}
                 </nav>
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-sidebar-border">
-                    <Link
-                        href="/"
-                        className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
-                    >
-                        ← Siteye Dön
-                    </Link>
+                {/* User Profile Section */}
+                <div className="p-4 border-t border-sidebar-border">
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-sidebar-accent/30 border border-sidebar-border/50">
+                        <div className="w-10 h-10 rounded-full bg-sidebar-accent border border-sidebar-border flex items-center justify-center overflow-hidden shrink-0">
+                            {userProfile?.avatar_url ? (
+                                <img src={userProfile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-lg font-bold text-sidebar-primary">
+                                    {userProfile?.name?.charAt(0).toUpperCase() || '?'}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-foreground truncate">{userProfile?.name || 'Yükleniyor...'}</p>
+                            <p className="text-xs text-muted-foreground truncate">{userProfile?.role === 'admin' ? 'Yönetici' : 'Üye'}</p>
+                        </div>
+                        <button
+                            onClick={handleSignOut}
+                            className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                            title="Çıkış Yap"
+                        >
+                            <LogOut className="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
             </aside>
+
 
             {/* Mobile Menu Button */}
             <button

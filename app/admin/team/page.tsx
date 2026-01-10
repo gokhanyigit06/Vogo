@@ -3,7 +3,8 @@
 export const dynamic = "force-dynamic"
 
 import { useState, useEffect } from "react"
-import { UsersRound, UserPlus, Trash2 } from "lucide-react"
+import { UsersRound, UserPlus, Trash2, Mail, Shield } from "lucide-react"
+import ImageUpload from "@/components/ImageUpload"
 
 export default function TeamPage() {
     const [team, setTeam] = useState<any[]>([])
@@ -13,6 +14,7 @@ export default function TeamPage() {
         name: "",
         email: "",
         role: "member",
+        avatar_url: ""
     })
 
     useEffect(() => {
@@ -45,7 +47,7 @@ export default function TeamPage() {
 
             alert('Takım üyesi eklendi!')
             setShowForm(false)
-            setFormData({ name: "", email: "", role: "member" })
+            setFormData({ name: "", email: "", role: "member", avatar_url: "" })
             fetchTeam()
         } catch (error) {
             alert('Bir hata oluştu!')
@@ -107,10 +109,19 @@ export default function TeamPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Takım Üyesi</h2>
 
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="md:col-span-2">
+                            <ImageUpload
+                                label="Profil Fotoğrafı"
+                                value={formData.avatar_url}
+                                onChange={(url) => setFormData({ ...formData, avatar_url: url })}
+                                className="w-full md:w-1/3"
+                            />
+                        </div>
+
                         <div>
                             <label className="block text-muted-foreground text-sm font-medium mb-2">İsim Soyisim *</label>
                             <input
@@ -168,25 +179,42 @@ export default function TeamPage() {
                     </div>
                 ) : (
                     team.map((member) => (
-                        <div key={member.id} className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all">
-                            <div className="flex items-start justify-between mb-4">
-                                <div className="flex-1">
-                                    <h3 className="text-lg font-bold text-foreground mb-1">{member.name}</h3>
-                                    <p className="text-muted-foreground text-sm">{member.email}</p>
-                                </div>
-                                <span className={`text-xs px-2.5 py-1 rounded-md font-medium border ${getRoleBadge(member.role)}`}>
-                                    {getRoleText(member.role)}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 pt-4 border-t border-border">
+                        <div key={member.id} className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all group relative">
+                            {/* Actions */}
+                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
                                     onClick={() => handleDelete(member.id)}
-                                    className="flex-1 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-400 transition-colors flex items-center justify-center gap-2 text-sm"
+                                    className="p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-400 transition-colors"
+                                    title="Sil"
                                 >
                                     <Trash2 className="w-4 h-4" />
-                                    Sil
                                 </button>
+                            </div>
+
+                            <div className="flex flex-col items-center text-center">
+                                {/* Avatar */}
+                                <div className="w-20 h-20 rounded-full border-2 border-border mb-4 overflow-hidden bg-muted flex items-center justify-center relative">
+                                    {member.avatar_url ? (
+                                        <img src={member.avatar_url} alt={member.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-2xl font-bold text-muted-foreground">
+                                            {member.name?.charAt(0).toUpperCase() || '?'}
+                                        </span>
+                                    )}
+                                </div>
+
+                                <h3 className="text-lg font-bold text-foreground mb-1">{member.name}</h3>
+
+                                <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border mb-3 ${getRoleBadge(member.role)}`}>
+                                    {getRoleText(member.role)}
+                                </span>
+
+                                <div className="w-full pt-4 border-t border-border mt-2 space-y-2">
+                                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                                        <Mail className="w-3.5 h-3.5" />
+                                        {member.email}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))

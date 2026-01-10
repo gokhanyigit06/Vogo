@@ -51,18 +51,24 @@ function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOver
                     {task.priority === 'high' ? 'Yüksek' : task.priority === 'medium' ? 'Orta' : 'Düşük'}
                 </span>
                 {task.due_date && (
-                    <span className="text-xs text-slate-500 flex items-center gap-1">
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {new Date(task.due_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                     </span>
                 )}
             </div>
 
+            {task.projects?.name && (
+                <div className="text-[10px] text-muted-foreground bg-muted rounded px-2 py-1 mb-2 inline-block max-w-full truncate border border-border/50">
+                    📁 {task.projects.name}
+                </div>
+            )}
+
             <h4 className="font-bold text-foreground mb-2 group-hover:text-emerald-400 transition-colors">{task.title}</h4>
 
-            <div className="flex items-center gap-4 text-slate-500 text-xs mt-3">
+            <div className="flex items-center gap-4 text-muted-foreground text-xs mt-3">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground">
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-foreground border border-border">
                         {task.team_members?.name?.[0] || '?'}
                     </div>
                 </div>
@@ -109,7 +115,7 @@ function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, ti
     const { setNodeRef } = useDroppable({ id })
 
     return (
-        <div ref={setNodeRef} className="flex flex-col h-full bg-slate-950/50 rounded-notebook p-4 border border-border min-h-[500px]">
+        <div ref={setNodeRef} className="flex flex-col h-full bg-slate-50 dark:bg-slate-900 rounded-notebook p-5 border border-border min-h-[500px] shadow-sm">
             <div className={`flex items-center justify-between border-b border-border pb-3 mb-4 ${color.replace('bg-', 'text-')}`}>
                 <h3 className="font-bold flex items-center gap-2">
                     {id === 'todo' && <AlertCircle className="w-5 h-5" />}
@@ -135,6 +141,8 @@ function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, ti
 export default function TasksPage() {
     const [tasks, setTasks] = useState<Task[]>([])
     const [team, setTeam] = useState<any[]>([])
+    const [projects, setProjects] = useState<any[]>([])
+    const [selectedProjectId, setSelectedProjectId] = useState<string>("")
     const [activeId, setActiveId] = useState<string | null>(null)
     const [showModal, setShowModal] = useState(false)
     const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
@@ -162,25 +170,52 @@ export default function TasksPage() {
         setMounted(true)
         fetchTasks()
         fetchTeam()
+        fetchProjects()
     }, [])
 
-    // Güvenli Fetch (Hata fırlatmaz)
     const fetchTasks = () => fetch('/api/tasks')
         .then(r => r.json())
         .then(data => {
-            if (Array.isArray(data)) {
-                setTasks(Array.isArray(data) ? data : [])
+            if (Array.isArray(data) && data.length > 0) {
+                setTasks(data)
+            } else if (process.env.NODE_ENV === 'development') {
+                console.log("⚠️ Dev Mode: Using Mock Tasks")
+                // LocalStorage varsa oradan al, yoksa sabit mock data
+                try {
+                    const localTasks = localStorage.getItem('mock_tasks')
+                    if (localTasks) setTasks(JSON.parse(localTasks))
+                    else setTasks(require('@/lib/mock-data').MOCK_TASKS)
+                } catch (e) {
+                    setTasks(require('@/lib/mock-data').MOCK_TASKS)
+                }
             } else {
-                console.error("Tasks API returned non-array:", data)
                 setTasks([])
             }
         })
         .catch(err => {
             console.error("Fetch error:", err)
-            setTasks([])
+            if (process.env.NODE_ENV === 'development') {
+                setTasks(require('@/lib/mock-data').MOCK_TASKS)
+            } else {
+                setTasks([])
+            }
         })
 
-    const fetchTeam = () => fetch('/api/team').then(r => r.json()).then(data => setTeam(data.filter((m: any) => m.active)))
+    const fetchTeam = () => fetch('/api/team')
+        .then(r => r.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) setTeam(data.filter((m: any) => m.active))
+            else if (process.env.NODE_ENV === 'development') setTeam(require('@/lib/mock-data').MOCK_TEAM)
+            else setTeam([])
+        })
+
+    const fetchProjects = () => fetch('/api/projects')
+        .then(r => r.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) setProjects(data)
+            else if (process.env.NODE_ENV === 'development') setProjects(require('@/lib/mock-data').MOCK_PROJECTS)
+            else setProjects([])
+        })
 
     const handleDelete = async (id: number) => {
         if (!confirm('Bu görevi silmek istediğinize emin misiniz?')) return
@@ -188,7 +223,7 @@ export default function TasksPage() {
         try {
             const res = await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' })
             if (res.ok) {
-                setSelectedTaskId(null) // ID'yi sıfırla
+                setSelectedTaskId(null)
                 fetchTasks()
             } else {
                 alert('Silinemedi. Lütfen tekrar deneyin.')
@@ -265,57 +300,72 @@ export default function TasksPage() {
     }
 
     const activeTask = activeId ? tasks.find(t => t.id.toString() === activeId) : null
-
-    // Derived state: Seçili ID'ye göre güncel task'ı bul
     const selectedTask = selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null
+
+    const filteredTasks = selectedProjectId
+        ? tasks.filter(t => t.project_id === Number(selectedProjectId))
+        : tasks
 
     if (!mounted) return <div className="p-8 text-muted-foreground">Yükleniyor...</div>
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8 h-screen flex flex-col">
-            <div className="flex justify-between items-center">
+        <div className="p-8 max-w-7xl mx-auto h-[calc(100vh-2rem)] flex flex-col">
+            <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         Görev Yönetimi
                     </h1>
-                    <p className="text-muted-foreground mt-1">Ekip iş takibi ve süreç yönetimi</p>
+                    <p className="text-muted-foreground mt-1">Ekip iş takibi ve süreç yönetimi.</p>
                 </div>
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
-                >
-                    <Plus className="w-5 h-5" />
-                    Yeni Görev
-                </button>
+
+                <div className="flex gap-3">
+                    <select
+                        className="bg-card border border-border text-foreground text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 shadow-sm"
+                        value={selectedProjectId}
+                        onChange={(e) => setSelectedProjectId(e.target.value)}
+                    >
+                        <option value="">Tüm Projeler</option>
+                        {projects.map(p => (
+                            <option key={p.id} value={p.id}>{p.title || p.name}</option>
+                        ))}
+                    </select>
+
+                    <button
+                        onClick={() => {
+                            setFormData({ title: '', description: '', status: 'todo', priority: 'medium', assigned_to: '', project_id: '', due_date: '' })
+                            setShowModal(true)
+                        }}
+                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Yeni Görev
+                    </button>
+                </div>
             </div>
 
-            <div className="flex-1 overflow-x-auto overflow-y-hidden pb-4">
-                <DndContext
-                    sensors={sensors}
-                    onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}
-                >
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-w-[1000px] md:min-w-0">
-                        {COLUMNS.map(col => (
-                            <KanbanColumn
-                                key={col.id}
-                                id={col.id}
-                                title={col.title}
-                                color={col.color}
-                                tasks={tasks.filter(t => t.status === col.id)}
-                                onTaskClick={(t) => setSelectedTaskId(t.id)} // Objeyi değil ID'yi set et
-                            />
-                        ))}
-                    </div>
-                    {createPortal(
-                        <DragOverlay>
-                            {activeTask ? <TaskCardView task={activeTask} isOverlay /> : null}
-                        </DragOverlay>,
-                        document.body
-                    )}
-                </DndContext>
-            </div>
+            <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 overflow-hidden">
+                    {COLUMNS.map(col => (
+                        <KanbanColumn
+                            key={col.id}
+                            id={col.id}
+                            title={col.title}
+                            color={col.color}
+                            tasks={filteredTasks.filter(t => t.status === col.id)}
+                            onTaskClick={(task) => {
+                                setSelectedTaskId(task.id)
+                            }}
+                        />
+                    ))}
+                </div>
+                {createPortal(
+                    <DragOverlay>
+                        {activeTask ? <TaskCardView task={activeTask} isOverlay /> : null}
+                    </DragOverlay>,
+                    document.body
+                )}
+            </DndContext>
 
             {selectedTask && (
                 <TaskDetailModal
@@ -323,34 +373,52 @@ export default function TasksPage() {
                     onClose={() => setSelectedTaskId(null)}
                     onUpdate={() => fetchTasks()}
                     onDelete={() => handleDelete(selectedTask.id)}
+                    projects={projects}
+                    team={team}
                 />
             )}
 
             {showModal && (
-                <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-                    <div className="bg-card border border-border rounded-notebook p-6 w-full max-w-md">
-                        <div className="flex justify-between items-center mb-6">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+                    <div className="bg-card border border-border rounded-notebook p-6 w-full max-w-md shadow-2xl">
+                        <div className="flex justify-between items-center mb-6 border-b border-border pb-4">
                             <h2 className="text-xl font-bold text-foreground">Yeni Görev Ekle</h2>
-                            <button onClick={() => setShowModal(false)} className="text-muted-foreground hover:text-foreground">
+                            <button onClick={() => setShowModal(false)} className="text-muted-foreground hover:text-foreground transition-colors">
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-muted-foreground mb-1">Başlık</label>
+                                <label className="block text-sm font-bold text-foreground mb-1.5">Başlık</label>
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-background border border-border rounded-lg p-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all font-medium"
+                                    placeholder="Görev başlığı..."
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
                                 />
                             </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-foreground mb-1.5">Proje</label>
+                                <select
+                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all cursor-pointer"
+                                    value={formData.project_id}
+                                    onChange={e => setFormData({ ...formData, project_id: e.target.value })}
+                                >
+                                    <option value="">Proje Yok (Genel)</option>
+                                    {projects.map(p => (
+                                        <option key={p.id} value={p.id}>{p.title}</option>
+                                    ))}
+                                </select>
+                            </div>
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-muted-foreground mb-1">Atanan Kişi</label>
+                                    <label className="block text-sm font-bold text-foreground mb-1.5">Atanan Kişi</label>
                                     <select
-                                        className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
+                                        className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all cursor-pointer"
                                         value={formData.assigned_to}
                                         onChange={e => setFormData({ ...formData, assigned_to: e.target.value })}
                                     >
@@ -361,9 +429,9 @@ export default function TasksPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-muted-foreground mb-1">Öncelik</label>
+                                    <label className="block text-sm font-bold text-foreground mb-1.5">Öncelik</label>
                                     <select
-                                        className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
+                                        className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all cursor-pointer"
                                         value={formData.priority}
                                         onChange={e => setFormData({ ...formData, priority: e.target.value })}
                                     >
@@ -374,20 +442,21 @@ export default function TasksPage() {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-muted-foreground mb-1">Bitiş Tarihi</label>
+                                <label className="block text-sm font-bold text-foreground mb-1.5">Bitiş Tarihi</label>
                                 <input
                                     type="date"
-                                    className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
+                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all"
                                     value={formData.due_date}
                                     onChange={e => setFormData({ ...formData, due_date: e.target.value })}
                                 />
                             </div>
-                            <div className="pt-4">
+                            <div className="pt-4 border-t border-border mt-4">
                                 <button
                                     type="submit"
-                                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-colors"
+                                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex items-center justify-center gap-2"
                                 >
-                                    Oluştur
+                                    <Plus className="w-5 h-5" />
+                                    Görevi Oluştur
                                 </button>
                             </div>
                         </form>

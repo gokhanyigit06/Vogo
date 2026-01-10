@@ -1,16 +1,18 @@
 "use client"
 
-export const dynamic = "force-dynamic"
-
-import { useState } from "react"
-import { ArrowLeft, Save, UserPlus } from "lucide-react"
+import { useState, useEffect, use } from "react"
+import { ArrowLeft, Save, UserCheck, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import ImageUpload from "@/components/ImageUpload"
 
-export default function NewClientPage() {
+export default function EditClientPage({ params }: { params: Promise<{ id: string }> }) {
+    // Next.js 15+ Params Handling
+    const { id } = use(params)
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
+
+    const [loading, setLoading] = useState(true)
+    const [saving, setSaving] = useState(false)
     const [formData, setFormData] = useState({
         name: "",
         company: "",
@@ -24,45 +26,84 @@ export default function NewClientPage() {
         notes: ""
     })
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
+    useEffect(() => {
+        fetchClient()
+    }, [])
 
+    const fetchClient = async () => {
         try {
-            const res = await fetch('/api/clients', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+            const res = await fetch(`/api/clients/${id}`)
+            const data = await res.json()
+            if (data.error) throw new Error(data.error)
+
+            // Populate form
+            setFormData({
+                name: data.name || "",
+                company: data.company || "",
+                email: data.email || "",
+                phone: data.phone || "",
+                address: data.address || "",
+                website: data.website || "",
+                status: data.status || "potential",
+                logo_url: data.logo_url || "",
+                tags: data.tags || [],
+                notes: data.notes || ""
             })
-
-            if (!res.ok) throw new Error('Eklenemedi')
-
-            alert('Müşteri başarıyla eklendi!')
-            router.push('/admin/clients')
-            router.refresh()
         } catch (error) {
-            alert('Bir hata oluştu!')
+            console.error('Fetch error:', error)
+            alert('Müşteri bilgileri alınamadı!')
+            router.push('/admin/clients')
         } finally {
             setLoading(false)
         }
     }
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setSaving(true)
+
+        try {
+            const res = await fetch('/api/clients', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, ...formData })
+            })
+
+            if (!res.ok) throw new Error('Güncellenemedi')
+
+            alert('Müşteri başarıyla güncellendi!')
+            router.push(`/admin/clients/${id}`)
+            router.refresh()
+        } catch (error) {
+            alert('Bir hata oluştu!')
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    if (loading) {
+        return <div className="p-8 text-center text-slate-500">Yükleniyor...</div>
+    }
+
     return (
         <div className="p-8 max-w-4xl mx-auto">
-            {/* ... (Header remains same) */}
             <div className="mb-8">
                 <Link
-                    href="/admin/clients"
+                    href={`/admin/clients/${id}`}
                     className="inline-flex items-center gap-2 text-slate-400 hover:text-foreground transition-colors mb-4"
                 >
                     <ArrowLeft className="w-4 h-4" />
-                    Müşterilere Dön
+                    Profile Dön
                 </Link>
-                <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                    <UserPlus className="w-8 h-8 text-emerald-500" />
-                    Yeni Müşteri Ekle
-                </h1>
-                <p className="text-slate-400 mt-1">CRM'e yeni müşteri kaydedin</p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                            <UserCheck className="w-8 h-8 text-emerald-500" />
+                            Müşteriyi Düzenle
+                        </h1>
+                        <p className="text-slate-400 mt-1">{formData.name || 'Müşteri'} bilgilerini güncelleyin</p>
+                    </div>
+                </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -91,7 +132,6 @@ export default function NewClientPage() {
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                                placeholder="Ahmet Yılmaz"
                             />
                         </div>
 
@@ -104,7 +144,6 @@ export default function NewClientPage() {
                                 value={formData.company}
                                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                                placeholder="Örnek Ltd. Şti."
                             />
                         </div>
                     </div>
@@ -119,7 +158,6 @@ export default function NewClientPage() {
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                                placeholder="ahmet@firma.com"
                             />
                         </div>
 
@@ -132,7 +170,6 @@ export default function NewClientPage() {
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                                placeholder="+90 555 123 4567"
                             />
                         </div>
                     </div>
@@ -146,7 +183,6 @@ export default function NewClientPage() {
                             value={formData.website}
                             onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                             className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                            placeholder="https://firma.com"
                         />
                     </div>
 
@@ -158,7 +194,6 @@ export default function NewClientPage() {
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                             className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-20 resize-none"
-                            placeholder="Tam adres..."
                         />
                     </div>
                 </div>
@@ -192,7 +227,6 @@ export default function NewClientPage() {
                             value={formData.notes}
                             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                             className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
-                            placeholder="Müşteri hakkında notlar..."
                         />
                     </div>
                 </div>
@@ -201,14 +235,14 @@ export default function NewClientPage() {
                 <div className="flex gap-4">
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={saving}
                         className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
                     >
                         <Save className="w-5 h-5" />
-                        {loading ? 'Kaydediliyor...' : 'Müşteriyi Kaydet'}
+                        {saving ? 'Güncelleniyor...' : 'Değişiklikleri Kaydet'}
                     </button>
                     <Link
-                        href="/admin/clients"
+                        href={`/admin/clients/${id}`}
                         className="px-6 py-3 bg-muted hover:bg-muted text-foreground rounded-xl font-bold transition-all border border-border"
                     >
                         İptal

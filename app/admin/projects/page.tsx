@@ -35,10 +35,32 @@ export default function ProjectsPage() {
         try {
             const res = await fetch('/api/projects')
             const data = await res.json()
-            setProjects(Array.isArray(data) ? data : [])
+
+            if (Array.isArray(data) && data.length > 0) {
+                setProjects(data)
+            } else if (process.env.NODE_ENV === 'development') {
+                console.log("⚠️ Dev Mode: Using Mock Projects")
+                // Mock data 'title' kullanırken interface 'name' kullanıyor, mapliyoruz
+                const mocks = require('@/lib/mock-data').MOCK_PROJECTS.map((p: any) => ({
+                    ...p,
+                    name: p.title
+                }))
+                setProjects(mocks)
+            } else {
+                setProjects([])
+            }
+
         } catch (error) {
             console.error('Fetch error:', error)
-            setProjects([])
+            if (process.env.NODE_ENV === 'development') {
+                const mocks = require('@/lib/mock-data').MOCK_PROJECTS.map((p: any) => ({
+                    ...p,
+                    name: p.title
+                }))
+                setProjects(mocks)
+            } else {
+                setProjects([])
+            }
         } finally {
             setLoading(false)
         }

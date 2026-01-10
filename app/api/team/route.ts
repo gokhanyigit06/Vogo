@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 export async function GET(request: NextRequest) {
     try {
         const { data, error } = await supabase
-            .from('team_members')
+            .from('team')  // Tablo adı 'team' olarak standardize edildi
             .select('*')
             .order('created_at', { ascending: false })
 
@@ -22,10 +22,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
+        const { name, email, role, avatar_url } = body
 
         const { data, error } = await supabase
-            .from('team_members')
-            .insert([body])
+            .from('team')
+            .insert([{ name, email, role, avatar_url }])
             .select()
             .single()
 
@@ -49,7 +50,7 @@ export async function DELETE(request: NextRequest) {
         }
 
         const { error } = await supabase
-            .from('team_members')
+            .from('team')
             .delete()
             .eq('id', id)
 

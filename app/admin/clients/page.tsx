@@ -30,10 +30,23 @@ export default function ClientsPage() {
         try {
             const res = await fetch('/api/clients')
             const data = await res.json()
-            setClients(Array.isArray(data) ? data : [])
+
+            if (Array.isArray(data) && data.length > 0) {
+                setClients(data)
+            } else if (process.env.NODE_ENV === 'development') {
+                console.log("⚠️ Dev Mode: Using Mock Clients")
+                const mocks = require('@/lib/mock-data').MOCK_CLIENTS
+                setClients(mocks)
+            } else {
+                setClients([])
+            }
         } catch (error) {
             console.error('Fetch error:', error)
-            setClients([])
+            if (process.env.NODE_ENV === 'development') {
+                setClients(require('@/lib/mock-data').MOCK_CLIENTS)
+            } else {
+                setClients([])
+            }
         } finally {
             setLoading(false)
         }

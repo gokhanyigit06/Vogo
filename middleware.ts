@@ -70,14 +70,14 @@ export async function middleware(request: NextRequest) {
         const { data: { user } } = await supabase.auth.getUser()
 
         // 3. Admin Rotası Kontrolü (Login sayfası hariç)
-        if (request.nextUrl.pathname.startsWith('/admin') && request.nextUrl.pathname !== '/admin/login') {
+        if (request.nextUrl.pathname.startsWith('/admin')) {
             if (!user) {
-                return NextResponse.redirect(new URL('/admin/login', request.url))
+                return NextResponse.redirect(new URL('/login', request.url))
             }
         }
 
         // 4. Zaten giriş yapmışsa ve Login sayfasına gitmeye çalışıyorsa
-        if (request.nextUrl.pathname === '/admin/login' && user) {
+        if (request.nextUrl.pathname === '/login' && user) {
             return NextResponse.redirect(new URL('/admin', request.url))
         }
 
@@ -92,5 +92,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/admin/:path*',
+        '/login'
     ],
 }

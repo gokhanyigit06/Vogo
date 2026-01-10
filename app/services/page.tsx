@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import Header from "@/components/Header"
 import ModernFooter from "@/components/ModernFooter"
@@ -22,29 +22,65 @@ const iconMap: any = {
 }
 
 export default function ServicesIndexPage() {
-    const [services, setServices] = useState<any[]>([])
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        fetch('/api/services')
-            .then(res => res.json())
-            .then(data => {
-                setServices(data)
-                setLoading(false)
-            })
-            .catch(err => {
-                console.error(err)
-                setLoading(false)
-            })
-    }, [])
-
-    if (loading) {
-        return (
-            <div className="bg-background min-h-screen flex items-center justify-center">
-                <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-            </div>
-        )
-    }
+    // Statik Hizmet Listesi
+    const services = [
+        {
+            id: 1,
+            title: "Web Tasarım & Geliştirme",
+            slug: "web-tasarim",
+            icon: "Monitor",
+            desc: "Modern, hızlı ve SEO uyumlu web siteleri tasarlıyoruz. Kurumsal kimliğinizi dijital dünyaya en iyi şekilde yansıtın.",
+            link: "/services/web-tasarim"
+        },
+        {
+            id: 2,
+            title: "E-Ticaret Çözümleri",
+            slug: "e-ticaret",
+            icon: "Globe",
+            desc: "Satışlarınızı artıracak kullanıcı dostu e-ticaret siteleri. Güvenli ödeme altyapısı ve kolay yönetim paneli.",
+            link: "/services/e-ticaret"
+        },
+        {
+            id: 3,
+            title: "SEO & Performans",
+            slug: "seo",
+            icon: "Search",
+            desc: "Google'da üst sıralara çıkın. Teknik SEO, içerik optimizasyonu ve hız iyileştirmeleri ile organik trafiğinizi artırın.",
+            link: "/services/seo"
+        },
+        {
+            id: 4,
+            title: "Sosyal Medya Yönetimi",
+            slug: "sosyal-medya",
+            icon: "Share2",
+            desc: "Markanızın sosyal medyadaki sesi oluyoruz. İçerik üretimi, topluluk yönetimi ve etkileşim artırıcı stratejiler.",
+            link: "/services/sosyal-medya"
+        },
+        {
+            id: 5,
+            title: "Dijital Reklam (Ads)",
+            slug: "reklam-yonetimi",
+            icon: "Megaphone",
+            desc: "Google Ads, Meta (Facebook/Instagram) reklamları ile hedef kitlenize nokta atışı ulaşın. ROI odaklı kampanyalar.",
+            link: "/services/reklam-yonetimi"
+        },
+        {
+            id: 6,
+            title: "QR Menü Sistemleri",
+            slug: "qr-menu",
+            icon: "QrCode",
+            desc: "Restoran ve kafeler için temassız, hızlı ve yönetilebilir dijital menü çözümleri.",
+            link: "/services/qr-menu"
+        },
+        {
+            id: 7,
+            title: "Özel Yazılım Çözümleri",
+            slug: "ozel-yazilim",
+            icon: "Code",
+            desc: "İş süreçlerinizi optimize edecek, size özel web tabanlı yazılımlar, CRM ve ERP entegrasyonları.",
+            link: "/services/ozel-yazilim"
+        }
+    ]
 
     return (
         <>
@@ -73,19 +109,12 @@ export default function ServicesIndexPage() {
                 <section className="container mx-auto px-4 md:px-8 max-w-7xl mb-24">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {services.map((service, idx) => {
-                            const IconComponent = iconMap[service.icon] || Layers // Fallback icon
+                            const IconComponent = iconMap[service.icon] || Layers
 
                             // Light mode için el yazısı notlar
                             const handwrittenNotes = [
-                                "Dönüşüm Odaklı!",
-                                "Hızlı Başla!",
-                                "Profesyonel!",
-                                "Güvenilir!",
-                                "Harika Sonuç!",
-                                "Modern!",
-                                "SEO Dostu!",
-                                "Optimize!",
-                                "Etkili!"
+                                "Dönüşüm Odaklı!", "Hızlı Başla!", "Profesyonel!", "Güvenilir!",
+                                "Harika Sonuç!", "Modern!", "SEO Dostu!", "Optimize!", "Etkili!"
                             ]
 
                             return (
@@ -96,7 +125,7 @@ export default function ServicesIndexPage() {
                                     viewport={{ once: true }}
                                     transition={{ delay: idx * 0.1 }}
                                 >
-                                    <Link href={`/services/${service.slug || service.id}`} className="block h-full">
+                                    <Link href={service.link} className="block h-full">
                                         <div className="bg-card border border-border p-8 rounded-notebook card-light-shadow h-full hover:border-emerald-500/50 hover:bg-card/80 dark:hover:bg-slate-800/50 transition-all duration-300 group relative overflow-hidden">
                                             <div className="w-14 h-14 rounded-2xl bg-muted border border-border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform text-emerald-500">
                                                 <IconComponent className="w-7 h-7" />
@@ -109,7 +138,7 @@ export default function ServicesIndexPage() {
                                                 {service.desc}
                                             </p>
 
-                                            {/* El yazısı not (sadece light mode'da görünür) */}
+                                            {/* El yazısı not */}
                                             <span className="hidden dark:hidden absolute top-4 right-4 font-hand text-emerald-600 text-sm rotate-[-5deg] opacity-70">
                                                 {handwrittenNotes[idx % handwrittenNotes.length]}
                                             </span>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Quicksand, Gochi_Hand } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -29,58 +30,109 @@ const gochiHand = Gochi_Hand({
   weight: ["400"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Vogo Agency | Dijital Çözümler ve Web Tasarım",
-    template: "%s | Vogo Agency"
-  },
-  description: "Vogo Agency, yüksek performanslı web siteleri, SEO, reklam yönetimi ve özel yazılım çözümleri sunan modern bir dijital ajanstır.",
-  keywords: ["web tasarım", "SEO", "dijital pazarlama", "reklam yönetimi", "yazılım geliştirme", "QR menü", "e-ticaret"],
-  authors: [{ name: "Vogo Agency" }],
-  creator: "Vogo Agency",
-  publisher: "Vogo Agency",
-  metadataBase: new URL('https://vogo-agency.vercel.app'),
-  openGraph: {
-    type: 'website',
-    locale: 'tr_TR',
-    url: 'https://vogo-agency.vercel.app',
-    title: 'Vogo Agency | Dijital Çözümler ve Web Tasarım',
-    description: 'Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.',
-    siteName: 'Vogo Agency',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Vogo Agency | Dijital Çözümler',
-    description: 'Yüksek performanslı web siteleri ve dijital pazarlama.',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
+// Settings verisini çekme fonksiyonu
+async function getSettings() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/settings`, {
+      next: { revalidate: 60 } // 1 dakikada bir güncelle
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    console.error("Settings fetch failed in layout:", error);
+    return null;
+  }
+}
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+
+  const title = settings?.siteTitle || "Vogo Agency | Dijital Çözümler";
+  const description = settings?.siteDescription || "Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.";
+  const favicon = settings?.favicon || "/favicon.ico";
+
+  return {
+    title: {
+      default: title,
+      template: `%s | ${title}`
+    },
+    description: description,
+    icons: {
+      icon: favicon
+    },
+    openGraph: {
+      type: 'website',
+      title: title,
+      description: description,
+      siteName: title,
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
+
   return (
     <html lang="tr" suppressHydrationWarning className="scroll-smooth">
+      <head>
+        {/* Google Analytics */}
+        {settings?.googleAnalytics && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${settings.googleAnalytics}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${settings.googleAnalytics}');
+              `}
+            </Script>
+          </>
+        )}
+
+        {/* Google Tag Manager - HEAD */}
+        {settings?.googleTagManager && (
+          <Script id="gtm-head" strategy="afterInteractive">
+            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${settings.googleTagManager}');`}
+          </Script>
+        )}
+
+        {/* Custom Head Scripts */}
+        {settings?.customHeadScripts && (
+          <div dangerouslySetInnerHTML={{ __html: settings.customHeadScripts }} />
+        )}
+      </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} ${gochiHand.variable} antialiased bg-background text-foreground transition-colors duration-300`}
       >
+        {/* Google Tag Manager - BODY (NoScript) */}
+        {settings?.googleTagManager && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${settings.googleTagManager}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
+
         <Providers>
           <CustomCursor />
           <SmoothScroll />
 
-          {/* Particle Background: Sadece Dark modda veya her ikisinde farklı ayarlarla kullanılabilir. Şimdilik her ikisinde kalsın, CSS ile kontrol ederiz */}
           <div className="fixed inset-0 pointer-events-none z-0 opacity-20 dark:opacity-100 transition-opacity">
             <ParticleBackground />
           </div>
@@ -88,6 +140,12 @@ export default function RootLayout({
           <div className="relative z-10">
             {children}
           </div>
+
+          {/* Custom Body Scripts */}
+          {settings?.customBodyScripts && (
+            <div dangerouslySetInnerHTML={{ __html: settings.customBodyScripts }} />
+          )}
+
         </Providers>
       </body>
     </html>

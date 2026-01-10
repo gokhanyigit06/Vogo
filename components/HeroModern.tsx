@@ -1,8 +1,9 @@
 "use client"
 
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
-import { ArrowRight, Code, Sparkles, Zap, Layers, MousePointer2 } from "lucide-react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ArrowRight, Code, Zap, Layers, MousePointer2 } from "lucide-react"
 import { useRef } from "react"
+import Link from "next/link"
 
 function FloatingBadge({ children, className, delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
     return (
@@ -42,7 +43,7 @@ export default function HeroModern() {
     return (
         <section ref={containerRef} className="relative min-h-[110vh] bg-background flex flex-col items-center pt-32 overflow-hidden transition-colors duration-300">
             {/* Background Grid - Daha subtle */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--muted-foreground)_1px,transparent_1px),linear-gradient(to_bottom,var(--muted-foreground)_1px,transparent_1px)] bg-[size:24px_24px] opacity-5" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--muted-foreground)_1px,transparent_1px),linear-gradient(to_bottom,var(--muted-foreground)_1px,transparent_1px)] bg-[size:24px_24px] opacity-5 pointer-events-none" />
 
             {/* Spotlight Effect */}
             <div className="absolute inset-0 pointer-events-none">
@@ -96,16 +97,18 @@ export default function HeroModern() {
                 >
                     <button
                         onClick={handleScrollToServices}
-                        className="group relative px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg hover:bg-primary transition-all duration-300 flex items-center gap-2"
+                        className="group relative px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg hover:bg-primary hover:text-white transition-all duration-300 flex items-center gap-2"
                     >
                         Projelerimizi Keşfet
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         <div className="absolute inset-0 rounded-full bg-white/20 blur-xl opacity-0 group-hover:opacity-50 transition-opacity" />
                     </button>
 
-                    <button className="px-8 py-4 rounded-full border border-border text-foreground font-medium hover:bg-secondary/20 transition-colors">
-                        Bizimle Tanışın
-                    </button>
+                    <Link href="/contact">
+                        <button className="px-8 py-4 rounded-full border border-border text-foreground font-medium hover:bg-secondary/20 transition-colors">
+                            Bizimle Tanışın
+                        </button>
+                    </Link>
                 </motion.div>
             </div>
 
