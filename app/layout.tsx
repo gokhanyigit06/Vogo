@@ -31,13 +31,42 @@ const gochiHand = Gochi_Hand({
 });
 
 // Settings verisini çekme fonksiyonu
+import { createClient } from "@supabase/supabase-js";
+
+// Server-side Supabase Client for Build Time
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = (supabaseUrl && supabaseKey)
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
+
+// Settings verisini çekme fonksiyonu (Direct DB Call)
 async function getSettings() {
+  if (!supabase) return null;
+
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/settings`, {
-      next: { revalidate: 60 } // 1 dakikada bir güncelle
-    });
-    if (!res.ok) return null;
-    return res.json();
+    const { data, error } = await supabase
+      .from('settings')
+      .select('*')
+      .single();
+
+    if (error) {
+      // Tablo boşsa veya hata varsa null dön, fallback kullanılsın
+      return null;
+    }
+
+    // Veritabanı formatını frontend formatına çevir (snake_case -> camelCase manuel map)
+    // Not: API route'da bu mapleme yapılıyordu, burada da yapmalıyız.
+    return {
+      siteTitle: data.site_title,
+      siteDescription: data.site_description,
+      favicon: data.favicon_url,
+      googleAnalytics: data.google_analytics_id,
+      googleTagManager: data.google_tag_manager_id,
+      facebookPixel: data.facebook_pixel_id,
+      customHeadScripts: data.custom_head_scripts,
+      customBodyScripts: data.custom_body_scripts
+    };
   } catch (error) {
     console.error("Settings fetch failed in layout:", error);
     return null;
