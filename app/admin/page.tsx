@@ -83,8 +83,11 @@ export default function AdminDashboard() {
             {/* Header Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-4xl font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground">
-                        {getGreeting()}, {userName} 👋
+                    <h1 className="text-4xl font-bold flex items-center gap-2 flex-wrap">
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground">
+                            {getGreeting()}, {userName}
+                        </span>
+                        <span>👋</span>
                     </h1>
                     <p className="text-muted-foreground mt-2 text-lg">
                         Bugün ajansın performansı <span className="text-primary font-bold">Harika</span> görünüyor.

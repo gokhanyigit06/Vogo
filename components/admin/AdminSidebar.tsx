@@ -32,15 +32,15 @@ export default function AdminSidebar() {
     return (
         <>
             {/* Sidebar - Desktop */}
-            <aside className="hidden lg:block w-64 bg-slate-900 border-r border-slate-800 fixed h-screen">
-                <div className="p-6 border-b border-slate-800">
+            <aside className="hidden lg:block w-64 bg-sidebar border-r border-sidebar-border fixed h-screen transition-colors duration-300">
+                <div className="p-6 border-b border-sidebar-border">
                     <Link href="/admin" className="text-xl font-bold flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">V</span>
+                        <div className="w-8 h-8 bg-gradient-to-br from-primary to-teal-500 rounded-lg flex items-center justify-center">
+                            <span className="text-primary-foreground font-bold text-sm">V</span>
                         </div>
                         <div>
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Vogo</span>
-                            <span className="text-white"> Admin</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">Vogo</span>
+                            <span className="text-foreground"> Admin</span>
                         </div>
                     </Link>
                 </div>
@@ -51,8 +51,8 @@ export default function AdminSidebar() {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border shadow-sm'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50'
                                 }`}
                         >
                             <item.icon className="w-5 h-5" />
@@ -61,10 +61,10 @@ export default function AdminSidebar() {
                     ))}
                 </nav>
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-sidebar-border">
                     <Link
                         href="/"
-                        className="flex items-center justify-center gap-2 text-slate-400 hover:text-white transition-colors text-sm"
+                        className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
                     >
                         ← Siteye Dön
                     </Link>
@@ -74,7 +74,7 @@ export default function AdminSidebar() {
             {/* Mobile Menu Button */}
             <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-slate-900 border border-slate-800 rounded-xl text-white"
+                className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-sidebar border border-sidebar-border rounded-xl text-foreground bg-opacity-90 backdrop-blur"
             >
                 {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -82,21 +82,21 @@ export default function AdminSidebar() {
             {/* Sidebar - Mobile */}
             {sidebarOpen && (
                 <div
-                    className="lg:hidden fixed inset-0 bg-black/50 z-40"
+                    className="lg:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
                     onClick={() => setSidebarOpen(false)}
                 >
                     <aside
-                        className="w-64 bg-slate-900 h-screen border-r border-slate-800"
+                        className="w-64 bg-sidebar h-screen border-r border-sidebar-border"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="p-6 border-b border-slate-800">
+                        <div className="p-6 border-b border-sidebar-border">
                             <Link href="/admin" className="text-xl font-bold flex items-center gap-2">
-                                <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">V</span>
+                                <div className="w-8 h-8 bg-gradient-to-br from-primary to-teal-500 rounded-lg flex items-center justify-center">
+                                    <span className="text-primary-foreground font-bold text-sm">V</span>
                                 </div>
                                 <div>
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Vogo</span>
-                                    <span className="text-white"> Admin</span>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">Vogo</span>
+                                    <span className="text-foreground"> Admin</span>
                                 </div>
                             </Link>
                         </div>
@@ -108,8 +108,8 @@ export default function AdminSidebar() {
                                     href={item.href}
                                     onClick={() => setSidebarOpen(false)}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                        ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border'
+                                        : 'text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50'
                                         }`}
                                 >
                                     <item.icon className="w-5 h-5" />
