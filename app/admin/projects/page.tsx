@@ -104,7 +104,7 @@ export default function ProjectsPage() {
                 <div className="flex flex-wrap gap-3">
                     <Link
                         href="/admin/projects/new"
-                        className="group px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 hover:scale-105 active:scale-95"
+                        className="group px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 hover:scale-105 active:scale-95"
                     >
                         <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
                         Yeni Proje
@@ -318,3 +318,4 @@ export default function ProjectsPage() {
         </div>
     )
 }
+

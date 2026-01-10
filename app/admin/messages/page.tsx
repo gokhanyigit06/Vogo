@@ -115,7 +115,7 @@ export default function MessagesAdminPage() {
                         </div>
 
                         <div className="p-4 border-t border-border bg-card/30">
-                            <a href={`mailto:${selectedMessage.email}?subject=Ynt: ${selectedMessage.subject}`} className="inline-flex px-6 py-3 bg-emerald-500 text-foreground rounded-xl font-bold hover:bg-emerald-600 transition-colors items-center gap-2">
+                            <a href={`mailto:${selectedMessage.email}?subject=Ynt: ${selectedMessage.subject}`} className="inline-flex px-6 py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors items-center gap-2">
                                 <Reply className="w-4 h-4" /> E-posta ile Yanıtla
                             </a>
                         </div>
@@ -132,3 +132,4 @@ export default function MessagesAdminPage() {
         </div>
     )
 }
+

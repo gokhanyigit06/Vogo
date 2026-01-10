@@ -98,7 +98,7 @@ export default function ClientsPage() {
                 </div>
                 <Link
                     href="/admin/clients/new"
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 w-fit"
+                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 w-fit"
                 >
                     <Plus className="w-5 h-5" />
                     Yeni Müşteri
@@ -148,7 +148,7 @@ export default function ClientsPage() {
                         {!searchTerm && (
                             <Link
                                 href="/admin/clients/new"
-                                className="inline-block mt-4 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-foreground rounded-xl font-medium transition-all"
+                                className="inline-block mt-4 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
                             >
                                 İlk Müşteriyi Ekle
                             </Link>
@@ -212,3 +212,4 @@ export default function ClientsPage() {
         </div>
     )
 }
+

@@ -55,30 +55,30 @@ export default function FinancePage() {
 
             {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-gradient-to-br from-emerald-500/10 to-slate-900 border border-emerald-500/20 p-6 rounded-2xl">
-                    <TrendingUp className="w-8 h-8 text-emerald-400 mb-3" />
+                <div className="bg-card border border-emerald-500/20 p-6 rounded-notebook card-light-shadow">
+                    <TrendingUp className="w-8 h-8 text-emerald-500 mb-3" />
                     <p className="text-muted-foreground text-sm">Toplam Gelir</p>
                     <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalIncome)}</h3>
                 </div>
 
-                <div className="bg-gradient-to-br from-red-500/10 to-slate-900 border border-red-500/20 p-6 rounded-2xl">
-                    <TrendingDown className="w-8 h-8 text-red-400 mb-3" />
+                <div className="bg-card border border-red-500/20 p-6 rounded-notebook card-light-shadow">
+                    <TrendingDown className="w-8 h-8 text-red-500 mb-3" />
                     <p className="text-muted-foreground text-sm">Toplam Gider</p>
                     <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalExpenses)}</h3>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-500/10 to-slate-900 border border-blue-500/20 p-6 rounded-2xl">
-                    <DollarSign className="w-8 h-8 text-blue-400 mb-3" />
+                <div className="bg-card border border-blue-500/20 p-6 rounded-notebook card-light-shadow">
+                    <DollarSign className="w-8 h-8 text-blue-500 mb-3" />
                     <p className="text-muted-foreground text-sm">Net Kar</p>
-                    <h3 className={`text-2xl font-bold mt-1 ${profit >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
+                    <h3 className={`text-2xl font-bold mt-1 ${profit >= 0 ? 'text-blue-500' : 'text-red-500'}`}>
                         {formatCurrency(profit)}
                     </h3>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-500/10 to-slate-900 border border-purple-500/20 p-6 rounded-2xl">
-                    <Calendar className="w-8 h-8 text-purple-400 mb-3" />
+                <div className="bg-card border border-purple-500/20 p-6 rounded-notebook card-light-shadow">
+                    <Calendar className="w-8 h-8 text-purple-500 mb-3" />
                     <p className="text-muted-foreground text-sm">Aylık Düzenli Net</p>
-                    <h3 className="text-2xl font-bold text-purple-400 mt-1">
+                    <h3 className="text-2xl font-bold text-purple-500 mt-1">
                         {formatCurrency(monthlyRecurringIncome - monthlyRecurringExpenses)}
                     </h3>
                 </div>

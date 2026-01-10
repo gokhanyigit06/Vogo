@@ -69,7 +69,7 @@ export default function SettingsAdminPage() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-foreground px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                    className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
                 >
                     {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                     {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
@@ -219,3 +219,4 @@ export default function SettingsAdminPage() {
         </div>
     )
 }
+

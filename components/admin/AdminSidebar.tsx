@@ -52,7 +52,7 @@ export default function AdminSidebar() {
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
                                 ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border shadow-sm'
-                                : 'text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50'
+                                : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
                                 }`}
                         >
                             <item.icon className="w-5 h-5" />
@@ -109,7 +109,7 @@ export default function AdminSidebar() {
                                     onClick={() => setSidebarOpen(false)}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
                                         ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border'
-                                        : 'text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50'
+                                        : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
                                         }`}
                                 >
                                     <item.icon className="w-5 h-5" />

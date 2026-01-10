@@ -71,7 +71,7 @@ export default function TeamPage() {
         switch (role) {
             case 'admin': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
             case 'manager': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-            default: return 'bg-slate-700/50 text-slate-400 border-slate-600'
+            default: return 'bg-slate-700/50 text-muted-foreground border-slate-600'
         }
     }
 
@@ -89,15 +89,15 @@ export default function TeamPage() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <UsersRound className="w-8 h-8 text-emerald-500" />
                         Takım Üyeleri
                     </h1>
-                    <p className="text-slate-400 mt-1">Ekip arkadaşlarınızı yönetin</p>
+                    <p className="text-muted-foreground mt-1">Ekip arkadaşlarınızı yönetin</p>
                 </div>
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
                 >
                     <UserPlus className="w-5 h-5" />
                     {showForm ? 'Formu Gizle' : 'Üye Ekle'}
@@ -106,40 +106,40 @@ export default function TeamPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                    <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-3">Yeni Takım Üyesi</h2>
+                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-6 space-y-4">
+                    <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Takım Üyesi</h2>
 
                     <div className="grid md:grid-cols-3 gap-4">
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">İsim Soyisim *</label>
+                            <label className="block text-muted-foreground text-sm font-medium mb-2">İsim Soyisim *</label>
                             <input
                                 type="text"
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="Ahmet Yılmaz"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">E-posta *</label>
+                            <label className="block text-muted-foreground text-sm font-medium mb-2">E-posta *</label>
                             <input
                                 type="email"
                                 required
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="ahmet@firma.com"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Rol</label>
+                            <label className="block text-muted-foreground text-sm font-medium mb-2">Rol</label>
                             <select
                                 value={formData.role}
                                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="member">Üye</option>
                                 <option value="manager">Müdür</option>
@@ -151,7 +151,7 @@ export default function TeamPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all"
+                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-foreground rounded-xl font-bold transition-all"
                     >
                         {loading ? 'Ekleniyor...' : 'Üye Ekle'}
                     </button>
@@ -161,24 +161,24 @@ export default function TeamPage() {
             {/* Team List */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {team.length === 0 ? (
-                    <div className="col-span-full p-12 text-center bg-slate-900 border border-slate-800 rounded-2xl">
+                    <div className="col-span-full p-12 text-center bg-card border border-border rounded-2xl">
                         <UsersRound className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                        <p className="text-slate-400">Henüz takım üyesi eklenmemiş</p>
+                        <p className="text-muted-foreground">Henüz takım üyesi eklenmemiş</p>
                     </div>
                 ) : (
                     team.map((member) => (
-                        <div key={member.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-emerald-500/30 transition-all">
+                        <div key={member.id} className="bg-card border border-border rounded-2xl p-6 hover:border-emerald-500/30 transition-all">
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex-1">
-                                    <h3 className="text-lg font-bold text-white mb-1">{member.name}</h3>
-                                    <p className="text-slate-400 text-sm">{member.email}</p>
+                                    <h3 className="text-lg font-bold text-foreground mb-1">{member.name}</h3>
+                                    <p className="text-muted-foreground text-sm">{member.email}</p>
                                 </div>
                                 <span className={`text-xs px-2.5 py-1 rounded-md font-medium border ${getRoleBadge(member.role)}`}>
                                     {getRoleText(member.role)}
                                 </span>
                             </div>
 
-                            <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
+                            <div className="flex items-center gap-2 pt-4 border-t border-border">
                                 <button
                                     onClick={() => handleDelete(member.id)}
                                     className="flex-1 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-400 transition-colors flex items-center justify-center gap-2 text-sm"
