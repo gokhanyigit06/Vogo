@@ -42,84 +42,104 @@ export default function NewProjectPage() {
     }
 
     return (
-        <div className="p-8 max-w-5xl mx-auto space-y-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-16 z-20 bg-background/80 backdrop-blur-md py-4 -my-4 border-b border-border">
+        <div className="p-8 max-w-5xl mx-auto space-y-8 pb-20">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-4 border-b border-border">
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/portfolio" className="p-2 hover:bg-card rounded-lg text-slate-400 hover:text-foreground transition-colors">
+                    <Link href="/admin/portfolio" className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground rounded-xl transition-all">
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-bold text-foreground">Yeni Proje Ekle</h1>
-                        <p className="text-muted-foreground text-sm">Portfolyonuza yeni bir başarı hikayesi ekleyin.</p>
+                        <h1 className="text-3xl font-bold text-foreground tracking-tight">Yeni Proje Ekle</h1>
+                        <p className="text-muted-foreground mt-1">Portfolyonuza yeni bir başarı hikayesi ekleyin.</p>
                     </div>
                 </div>
                 <div className="flex gap-3">
+                    <Link href="/admin/portfolio" className="px-6 py-2.5 rounded-xl border border-border text-foreground font-medium hover:bg-muted transition-colors">
+                        İptal
+                    </Link>
                     <button
                         onClick={handlePublish}
                         disabled={isSubmitting}
-                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                        className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
                     >
-                        <Send className="w-4 h-4" /> {isSubmitting ? 'Ekleniyor...' : 'Projeyi Yayınla'}
+                        {isSubmitting ? <span className="animate-pulse">Ekleniyor...</span> : <><Send className="w-4 h-4" /> Projeyi Yayınla</>}
                     </button>
                 </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-12 gap-8">
                 {/* Sol: Genel Bilgiler */}
-                <div className="space-y-6">
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-6">
-                        <div>
-                            <label className="block text-foreground text-sm font-medium mb-3">Proje Başlığı</label>
-                            <input
-                                type="text"
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 shadow-sm"
-                                placeholder="Örn: A City AVM Web Sitesi"
-                                value={formData.title}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            />
+                <div className="lg:col-span-8 space-y-8">
+                    <div className="bg-card border border-border rounded-notebook p-8 space-y-6 shadow-sm">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-3">
+                                <label className="block text-foreground text-sm font-bold ml-1">Proje Başlığı</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
+                                    placeholder="Örn: A City AVM Web Sitesi"
+                                    value={formData.title}
+                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="block text-foreground text-sm font-bold ml-1">Müşteri Adı</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
+                                    placeholder="Örn: A City AVM"
+                                    value={formData.client}
+                                    onChange={(e) => setFormData({ ...formData, client: e.target.value })}
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label className="block text-foreground text-sm font-medium mb-3">Müşteri Adı</label>
-                            <input
-                                type="text"
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 shadow-sm"
-                                placeholder="Örn: A City AVM"
-                                value={formData.client}
-                                onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-foreground text-sm font-medium mb-3">Kategori</label>
-                            <select
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 shadow-sm appearance-none"
-                                value={formData.category}
-                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                            >
-                                {["Web Tasarım", "Reklam Yönetimi", "E-Ticaret", "AI Çözümleri", "Marka", "Yazılım"].map(cat => (
-                                    <option key={cat} value={cat}>{cat}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
 
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
-                        <label className="block text-foreground text-sm font-medium mb-3">Açıklama (Kısa)</label>
-                        <textarea
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
-                            placeholder="Projenin amacı ve sonucu hakkında kısa bilgi..."
-                            value={formData.desc}
-                            onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
-                        />
+                        <div className="space-y-3">
+                            <label className="block text-foreground text-sm font-bold ml-1">Kategori</label>
+                            <div className="relative">
+                                <select
+                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none font-medium cursor-pointer"
+                                    value={formData.category}
+                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                >
+                                    {["Web Tasarım", "Reklam Yönetimi", "E-Ticaret", "AI Çözümleri", "Marka", "Yazılım"].map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
+                                </select>
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+                                    <Tag className="w-4 h-4" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            <label className="block text-foreground text-sm font-bold ml-1">Açıklama (Kısa)</label>
+                            <div className="relative">
+                                <textarea
+                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all h-40 resize-none font-medium leading-relaxed"
+                                    placeholder="Projenin amacı ve sonucu hakkında kısa bilgi..."
+                                    value={formData.desc}
+                                    onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
+                                />
+                                <div className="absolute right-4 top-4 pointer-events-none text-muted-foreground">
+                                    <AlignLeft className="w-4 h-4" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 {/* Sağ: Görsel */}
-                <div className="space-y-6">
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
-                        <h3 className="font-bold text-foreground flex items-center gap-2 text-sm border-b border-border pb-3">
-                            <ImageIcon className="w-4 h-4 text-emerald-500" />
-                            Proje Görseli
-                        </h3>
+                <div className="lg:col-span-4 space-y-8">
+                    <div className="bg-card border border-border rounded-notebook p-8 space-y-6 shadow-sm sticky top-8">
+                        <div>
+                            <h3 className="font-bold text-foreground flex items-center gap-2 text-lg mb-1">
+                                <ImageIcon className="w-5 h-5 text-emerald-500" />
+                                Proje Görseli
+                            </h3>
+                            <p className="text-muted-foreground text-sm mb-6">Projenizi en iyi yansıtan ana görseli yükleyin.</p>
+                        </div>
                         <ImageUploader
                             value={formData.image}
                             onChange={(url) => setFormData({ ...formData, image: url })}
