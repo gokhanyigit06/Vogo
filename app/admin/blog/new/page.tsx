@@ -5,6 +5,7 @@ import { ArrowLeft, Save, Send, Image as ImageIcon, FileText, Tag, AlignLeft } f
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import ImageUploader from "@/components/admin/ImageUploader"
+import RichTextEditor from "@/components/admin/RichTextEditor"
 
 // Türkçe karakter slug dönüştürme
 function generateSlug(text: string): string {
@@ -132,22 +133,13 @@ export default function NewBlogPostPage() {
                         )}
                     </div>
 
-                    {/* Content Editor (Simple Textarea for now) */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col min-h-[500px]">
-                        <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-4">
-                            <span className="text-slate-400 text-sm font-medium flex items-center gap-2"><AlignLeft className="w-4 h-4" /> İçerik</span>
-                            {/* Toolbar Placeholder */}
-                            <div className="ml-auto flex gap-1">
-                                {['B', 'I', 'U', 'H1', 'H2', 'Link'].map((tool) => (
-                                    <button key={tool} className="w-8 h-8 rounded hover:bg-slate-800 text-slate-400 text-xs font-bold">{tool}</button>
-                                ))}
-                            </div>
-                        </div>
-                        <textarea
-                            placeholder="İçeriğinizi buraya yazmaya başlayın..."
-                            className="w-full flex-1 bg-transparent border-none text-slate-300 focus:ring-0 resize-none leading-relaxed placeholder:text-slate-700"
-                            value={formData.content}
-                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    {/* Content Editor (TipTap) */}
+                    <div className="space-y-2">
+                        <label className="block text-slate-400 text-sm font-medium mb-1 pl-1">İçerik</label>
+                        <RichTextEditor
+                            content={formData.content}
+                            onChange={(html) => setFormData({ ...formData, content: html })}
+                            placeholder="Hikayenizi anlatın..."
                         />
                     </div>
                 </div>

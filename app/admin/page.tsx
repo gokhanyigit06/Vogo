@@ -14,12 +14,15 @@ interface DashboardStats {
     upcomingDeadlines: any[]
     recentTransactions: any[]
 }
+import { createClient } from "@/lib/supabase-client"
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null)
     const [loading, setLoading] = useState(true)
     const [userName, setUserName] = useState("Volkan Bey")
     const [hideSensitiveData, setHideSensitiveData] = useState(false)
+
+    const supabase = createClient()
 
     useEffect(() => {
         // 1. Dashboard verilerini çek
@@ -34,10 +37,16 @@ export default function AdminDashboard() {
                 setLoading(false)
             })
 
-        // 2. Kullanıcı adını çek (Local Storage veya Supabase'den)
-        // Şimdilik statik Volkan Bey kalabilir veya auth'dan çekebiliriz.
-        // const { data: { user } } = await supabase.auth.getUser()
-        // if (user?.user_metadata?.full_name) setUserName(user.user_metadata.full_name)
+        // 2. Kullanıcı adını çek
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                // Metadata varsa oradan, yoksa email'den isim türet
+                const name = user.user_metadata?.full_name || user.email?.split('@')[0]
+                if (name) setUserName(name)
+            }
+        }
+        getUser()
     }, [])
 
     const getGreeting = () => {
