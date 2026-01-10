@@ -169,7 +169,7 @@ export default function TasksPage() {
         .then(r => r.json())
         .then(data => {
             if (Array.isArray(data)) {
-                setTasks(data)
+                setTasks(Array.isArray(data) ? data : [])
             } else {
                 console.error("Tasks API returned non-array:", data)
                 setTasks([])

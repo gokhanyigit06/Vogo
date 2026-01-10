@@ -111,12 +111,12 @@ export default function ProjectDetailPage() {
         <div className="p-8 max-w-7xl mx-auto space-y-8 print:p-0 print:bg-white print:text-black">
             {/* Header */}
             <div className="flex items-center gap-4 print:hidden">
-                <Link href="/admin/projects" className="p-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
+                <Link href="/admin/projects" className="p-2 bg-muted rounded-lg hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors">
                     <ArrowLeft className="w-5 h-5" />
                 </Link>
                 <div>
                     <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-bold text-white">{project.name}</h1>
+                        <h1 className="text-3xl font-bold text-foreground">{project.name}</h1>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold border ${project.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                             project.status === 'in_progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                                 'bg-slate-800 text-slate-400 border-slate-700'
@@ -125,7 +125,7 @@ export default function ProjectDetailPage() {
                                 project.status === 'in_progress' ? 'Devam Ediyor' : project.status}
                         </span>
                     </div>
-                    <p className="text-slate-400 mt-1 flex items-center gap-2">
+                    <p className="text-muted-foreground mt-1 flex items-center gap-2">
                         <Building2 className="w-4 h-4" />
                         {project.clients?.company || project.clients?.name || 'Müşteri Yok'}
                     </p>
@@ -145,19 +145,19 @@ export default function ProjectDetailPage() {
                 <div className="lg:col-span-2 space-y-8">
 
                     {/* Açıklama Kartı */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 print:border-gray-200 print:bg-white print:p-0">
-                        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2 print:text-black">
+                    <div className="bg-card border border-border rounded-notebook p-6 print:border-gray-200 print:bg-white print:p-0">
+                        <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2 print:text-black">
                             <Briefcase className="w-5 h-5 text-emerald-500 print:text-black" />
                             Proje Detayları
                         </h2>
-                        <p className="text-slate-300 leading-relaxed whitespace-pre-wrap print:text-gray-700">
+                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap print:text-gray-700">
                             {project.description || 'Açıklama girilmemiş.'}
                         </p>
                     </div>
 
                     {/* Notlar Bölümü */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 print:hidden">
-                        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <div className="bg-card border border-border rounded-notebook p-6 print:hidden">
+                        <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                             <StickyNote className="w-5 h-5 text-yellow-500" />
                             Proje Notları
                         </h2>
@@ -169,7 +169,7 @@ export default function ProjectDetailPage() {
                                 value={newNote}
                                 onChange={(e) => setNewNote(e.target.value)}
                                 placeholder="Proje ile ilgili not ekle..."
-                                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-emerald-500"
+                                className="flex-1 bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:outline-none focus:border-emerald-500"
                             />
                             <button
                                 type="submit"
@@ -186,9 +186,9 @@ export default function ProjectDetailPage() {
                                 <p className="text-slate-500 text-sm text-center py-4">Henüz not eklenmemiş.</p>
                             ) : (
                                 notes.map((note) => (
-                                    <div key={note.id} className="group flex items-start justify-between bg-slate-950 p-3 rounded-xl border border-slate-800/50 hover:border-slate-700 transition-colors">
+                                    <div key={note.id} className="group flex items-start justify-between bg-muted p-3 rounded-xl border border-border hover:border-border/80 transition-colors">
                                         <div>
-                                            <p className="text-slate-300 text-sm">{note.content}</p>
+                                            <p className="text-foreground text-sm">{note.content}</p>
                                             <span className="text-slate-600 text-[10px] mt-1 block">
                                                 {new Date(note.created_at).toLocaleString('tr-TR')}
                                             </span>
@@ -206,9 +206,9 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {/* Görevler Listesi */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 print:border-gray-200 print:bg-white print:p-0 print:mt-6">
+                    <div className="bg-card border border-border rounded-notebook p-6 print:border-gray-200 print:bg-white print:p-0 print:mt-6">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-bold text-white flex items-center gap-2 print:text-black">
+                            <h2 className="text-xl font-bold text-foreground flex items-center gap-2 print:text-black">
                                 <CheckCircle2 className="w-5 h-5 text-blue-500 print:text-black" />
                                 Proje Görevleri
                             </h2>
@@ -224,12 +224,12 @@ export default function ProjectDetailPage() {
                         ) : (
                             <div className="space-y-3">
                                 {project.tasks.map((task: any) => (
-                                    <div key={task.id} className="flex items-center justify-between p-3 bg-slate-950 rounded-xl border border-slate-800/50 print:bg-white print:border-gray-200 print:border-b">
+                                    <div key={task.id} className="flex items-center justify-between p-3 bg-muted rounded-xl border border-border print:bg-white print:border-gray-200 print:border-b">
                                         <div className="flex items-center gap-3">
                                             <div className={`w-2 h-2 rounded-full ${task.status === 'done' ? 'bg-emerald-500' :
                                                 task.status === 'in_progress' ? 'bg-blue-500' : 'bg-slate-500'
                                                 } print:bg-black`} />
-                                            <span className={`text-sm font-medium ${task.status === 'done' ? 'text-slate-500 line-through' : 'text-slate-200 print:text-black'}`}>
+                                            <span className={`text-sm font-medium ${task.status === 'done' ? 'text-muted-foreground line-through' : 'text-foreground print:text-black'}`}>
                                                 {task.title}
                                             </span>
                                         </div>
@@ -248,11 +248,11 @@ export default function ProjectDetailPage() {
                 <div className="space-y-6 print:hidden">
 
                     {/* İlerleme Durumu */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">İlerleme</h3>
+                    <div className="bg-card border border-border rounded-notebook p-6">
+                        <h3 className="text-sm font-bold text-muted-foreground uppercase mb-4">İlerleme</h3>
                         <div className="flex items-end justify-between mb-2">
-                            <span className="text-3xl font-bold text-white">%{progress}</span>
-                            <span className="text-sm text-slate-400">{completedTasks}/{totalTasks} Görev</span>
+                            <span className="text-3xl font-bold text-foreground">%{progress}</span>
+                            <span className="text-sm text-muted-foreground">{completedTasks}/{totalTasks} Görev</span>
                         </div>
                         <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                             <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: `${progress}%` }} />
@@ -260,19 +260,19 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {/* Finansal Özet */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">Finansal</h3>
+                    <div className="bg-card border border-border rounded-notebook p-6">
+                        <h3 className="text-sm font-bold text-muted-foreground uppercase mb-4">Finansal</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="text-xs text-slate-500 block mb-1">Toplam Bütçe</label>
-                                <div className="text-xl font-bold text-white flex items-center gap-1">
+                                <div className="text-xl font-bold text-foreground flex items-center gap-1">
                                     <DollarSign className="w-5 h-5 text-emerald-500" />
                                     {project.budget ? project.budget.toLocaleString('tr-TR') : '0'} ₺
                                 </div>
                             </div>
                             <div className="pt-4 border-t border-slate-800">
                                 <label className="text-xs text-slate-500 block mb-1">Bitiş Tarihi</label>
-                                <div className="text-sm font-medium text-white flex items-center gap-2">
+                                <div className="text-sm font-medium text-foreground flex items-center gap-2">
                                     <Calendar className="w-4 h-4 text-blue-500" />
                                     {project.end_date ? new Date(project.end_date).toLocaleDateString('tr-TR') : 'Belirsiz'}
                                 </div>
@@ -281,7 +281,7 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {/* Aksiyonlar */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-3">
                         <Link
                             href={`/admin/projects/edit/${project.id}`}
                             className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-colors"
@@ -291,7 +291,7 @@ export default function ProjectDetailPage() {
                         </Link>
                         <button
                             onClick={handlePrint}
-                            className="w-full flex items-center justify-center gap-2 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-medium transition-colors"
+                            className="w-full flex items-center justify-center gap-2 py-3 bg-muted hover:bg-muted/80 text-foreground rounded-xl font-medium transition-colors"
                         >
                             <Printer className="w-4 h-4" />
                             Rapor Oluştur

@@ -30,9 +30,10 @@ export default function ClientsPage() {
         try {
             const res = await fetch('/api/clients')
             const data = await res.json()
-            setClients(data)
+            setClients(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Fetch error:', error)
+            setClients([])
         } finally {
             setLoading(false)
         }
