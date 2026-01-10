@@ -120,13 +120,13 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {/* Gelir Kartı */}
-                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/10 hover:bg-card/80">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-notebook card-light-shadow p-6 transition-all hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-emerald-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
-                        <div className="p-3 bg-emerald-500/10 rounded-xl">
+                        <div className="p-3 bg-emerald-500/10 rounded-2xl">
                             <TrendingUp className="w-6 h-6 text-emerald-500" />
                         </div>
-                        <span className="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg text-xs font-bold">+12%</span>
+                        <span className="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-xl text-xs font-bold">+12%</span>
                     </div>
                     <div className="relative z-10">
                         <p className="text-muted-foreground text-sm font-medium mb-1">Toplam Gelir</p>
@@ -135,7 +135,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Gider Kartı */}
-                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10 dark:hover:shadow-red-500/10 hover:bg-card/80">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-notebook card-light-shadow p-6 transition-all hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10 dark:hover:shadow-red-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-red-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-red-500/10 rounded-xl">
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Kar Kartı */}
-                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/10 hover:bg-card/80">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-notebook card-light-shadow p-6 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-blue-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-blue-500/10 rounded-xl">
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Proje Kartı */}
-                <div className="relative group overflow-hidden bg-card border border-border rounded-3xl p-6 transition-all hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 dark:hover:shadow-purple-500/10 hover:bg-card/80">
+                <div className="relative group overflow-hidden bg-card border border-border rounded-notebook card-light-shadow p-6 transition-all hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 dark:hover:shadow-purple-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-purple-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
                         <div className="p-3 bg-purple-500/10 rounded-xl">

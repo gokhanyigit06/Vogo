@@ -9,7 +9,7 @@ export default function AdminLayout({
     children: React.ReactNode
 }) {
     return (
-        <div className="min-h-screen bg-background flex transition-colors duration-300">
+        <div className="min-h-screen bg-background notebook-grid flex transition-colors duration-300">
             <AdminSidebar />
             <main className="flex-1 lg:ml-64">
                 {children}
