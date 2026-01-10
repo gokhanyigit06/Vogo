@@ -23,9 +23,10 @@ export default function TeamPage() {
         try {
             const res = await fetch('/api/team')
             const data = await res.json()
-            setTeam(data)
+            setTeam(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Fetch error:', error)
+            setTeam([])
         }
     }
 
@@ -97,7 +98,7 @@ export default function TeamPage() {
                 </div>
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
                 >
                     <UserPlus className="w-5 h-5" />
                     {showForm ? 'Formu Gizle' : 'Üye Ekle'}
@@ -151,7 +152,7 @@ export default function TeamPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-foreground rounded-xl font-bold transition-all"
+                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all"
                     >
                         {loading ? 'Ekleniyor...' : 'Üye Ekle'}
                     </button>

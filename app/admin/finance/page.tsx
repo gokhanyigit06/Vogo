@@ -18,8 +18,13 @@ export default function FinancePage() {
             fetch('/api/finance/income').then(r => r.json()),
             fetch('/api/finance/expenses').then(r => r.json())
         ]).then(([incomeData, expensesData]) => {
-            setIncome(incomeData)
-            setExpenses(expensesData)
+            setIncome(Array.isArray(incomeData) ? incomeData : [])
+            setExpenses(Array.isArray(expensesData) ? expensesData : [])
+            setLoading(false)
+        }).catch(err => {
+            console.error('Finance data error:', err)
+            setIncome([])
+            setExpenses([])
             setLoading(false)
         })
     }, [])

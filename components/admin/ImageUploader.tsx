@@ -60,7 +60,7 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
         <div className="space-y-4">
             {/* Önizleme Alanı */}
             {preview ? (
-                <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-slate-700 group">
+                <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-border group">
                     <img
                         src={preview}
                         alt="Preview"
@@ -77,7 +77,7 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
                     </div>
                 </div>
             ) : (
-                <div className="relative aspect-video w-full border-2 border-dashed border-slate-700 rounded-xl hover:border-emerald-500/50 hover:bg-slate-800/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
+                <div className="relative aspect-video w-full border-2 border-dashed border-border rounded-xl hover:border-emerald-500/50 hover:bg-muted/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
                     <input
                         type="file"
                         accept="image/*"
@@ -88,15 +88,15 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
                     {uploading ? (
                         <>
                             <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
-                            <span className="text-sm text-slate-400">Yükleniyor...</span>
+                            <span className="text-sm text-muted-foreground">Yükleniyor...</span>
                         </>
                     ) : (
                         <>
-                            <div className="p-3 bg-slate-800 rounded-full group-hover:scale-110 transition-transform">
+                            <div className="p-3 bg-muted rounded-full group-hover:scale-110 transition-transform">
                                 <Upload className="w-6 h-6 text-emerald-500" />
                             </div>
-                            <span className="text-sm text-slate-400 font-medium group-hover:text-emerald-400 transition-colors">Resim Yüklemek İçin Tıklayın</span>
-                            <span className="text-xs text-slate-600">JPG, PNG, WEBP (Max 2MB)</span>
+                            <span className="text-sm text-muted-foreground font-medium group-hover:text-emerald-400 transition-colors">Resim Yüklemek İçin Tıklayın</span>
+                            <span className="text-xs text-muted-foreground/60">JPG, PNG, WEBP (Max 2MB)</span>
                         </>
                     )}
                 </div>

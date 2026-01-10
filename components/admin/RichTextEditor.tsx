@@ -29,7 +29,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
             StarterKit,
             Image.configure({
                 HTMLAttributes: {
-                    class: 'rounded-xl shadow-lg border border-slate-700 my-6 max-h-[500px] w-auto mx-auto',
+                    class: 'rounded-xl shadow-lg border border-border my-6 max-h-[500px] w-auto mx-auto',
                 },
             }),
             Link.configure({
@@ -41,7 +41,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
             Youtube.configure({
                 controls: false,
                 HTMLAttributes: {
-                    class: 'rounded-xl shadow-lg border border-slate-700 my-6 w-full aspect-video',
+                    class: 'rounded-xl shadow-lg border border-border my-6 w-full aspect-video',
                 },
             }),
             Placeholder.configure({
@@ -52,12 +52,13 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
         content: content,
         editorProps: {
             attributes: {
-                class: 'prose prose-invert prose-lg max-w-none focus:outline-none min-h-[400px]',
+                class: 'prose prose-lg dark:prose-invert max-w-none focus:outline-none min-h-[400px] prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground',
             },
         },
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML())
         },
+        immediatelyRender: false,
     })
 
     const supabase = createClient()
@@ -141,7 +142,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
             className={`p-2 rounded-lg transition-colors flex items-center justify-center
                 ${isActive
                     ? 'bg-emerald-500/20 text-emerald-400'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                 }
                 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
             `}
@@ -151,10 +152,10 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
     )
 
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm flex flex-col min-h-[600px]">
+        <div className="bg-card border border-border rounded-notebook overflow-hidden shadow-sm flex flex-col min-h-[600px]">
 
             {/* Toolbar */}
-            <div className="flex flex-wrap items-center gap-1 p-3 border-b border-slate-800 bg-slate-900/50">
+            <div className="flex flex-wrap items-center gap-1 p-3 border-b border-border bg-muted/30">
 
                 <ToolbarButton
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -175,7 +176,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                     title="Üstü Çizili"
                 />
 
-                <div className="w-px h-6 bg-slate-800 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <ToolbarButton
                     onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -190,7 +191,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                     title="Başlık 2"
                 />
 
-                <div className="w-px h-6 bg-slate-800 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <ToolbarButton
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -203,7 +204,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                     icon={ListOrdered}
                 />
 
-                <div className="w-px h-6 bg-slate-800 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <ToolbarButton
                     onClick={setLink}
@@ -222,14 +223,14 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                     icon={Code}
                 />
 
-                <div className="w-px h-6 bg-slate-800 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <button
                     type="button"
                     onClick={addImage}
                     disabled={isUploading}
                     title="Görsel Yükle"
-                    className="p-2 rounded-lg transition-colors flex items-center justify-center text-slate-400 hover:bg-slate-800 hover:text-slate-200 hover:text-emerald-400"
+                    className="p-2 rounded-lg transition-colors flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground hover:text-emerald-400"
                 >
                     {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
                 </button>

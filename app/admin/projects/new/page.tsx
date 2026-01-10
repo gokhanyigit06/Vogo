@@ -25,7 +25,11 @@ export default function NewProjectPage() {
     useEffect(() => {
         fetch('/api/clients')
             .then(res => res.json())
-            .then(data => setClients(data))
+            .then(data => setClients(Array.isArray(data) ? data : []))
+            .catch(err => {
+                console.error('Error fetching clients:', err)
+                setClients([])
+            })
     }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
