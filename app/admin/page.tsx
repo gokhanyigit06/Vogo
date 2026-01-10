@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, ArrowRight, Zap, Target, Activity } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, ArrowRight, Zap, Target, Activity, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 
 interface DashboardStats {
@@ -18,8 +18,8 @@ interface DashboardStats {
 export default function AdminDashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null)
     const [loading, setLoading] = useState(true)
-
     const [userName, setUserName] = useState("Volkan Bey")
+    const [hideSensitiveData, setHideSensitiveData] = useState(false)
 
     useEffect(() => {
         // 1. Dashboard verilerini çek
@@ -59,6 +59,7 @@ export default function AdminDashboard() {
     }
 
     const formatCurrency = (amount: number) => {
+        if (hideSensitiveData) return '₺ ••••••••'
         return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount)
     }
 
@@ -80,11 +81,21 @@ export default function AdminDashboard() {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
+                    {/* Privacy Toggle Button */}
+                    <button
+                        onClick={() => setHideSensitiveData(!hideSensitiveData)}
+                        className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 hover:text-white hover:border-slate-700 transition-all flex items-center gap-2"
+                        title={hideSensitiveData ? "Verileri Göster" : "Verileri Gizle"}
+                    >
+                        {hideSensitiveData ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        <span className="text-xs font-bold">{hideSensitiveData ? "Gizli" : "Açık"}</span>
+                    </button>
+
                     <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm flex items-center gap-2">
                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                         Sistem Online
                     </div>
-                    <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm">
+                    <div className="hidden md:block px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-slate-400 text-sm">
                         {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
                     </div>
                 </div>
@@ -297,4 +308,3 @@ export default function AdminDashboard() {
         </div>
     )
 }
-
