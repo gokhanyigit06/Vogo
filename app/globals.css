@@ -269,10 +269,15 @@ html {
 /* NOTEBOOK THEME UTILITIES (Light Mode) */
 /* ===================== */
 
-/* Not Defteri Doku - Noktalı Kağıt */
+/* Not Defteri Doku - Noktalı Kağıt (Sadece Light Mode) */
 .notebook-grid {
   background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
   background-size: 16px 16px;
+}
+
+/* Dark mode'da notebook grid'i kaldır */
+.dark .notebook-grid {
+  background-image: none;
 }
 
 /* El Yazısı Font (Gochi Hand) */
