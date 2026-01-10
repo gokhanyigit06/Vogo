@@ -38,9 +38,8 @@ export default function ProjectsPage() {
             setProjects(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Fetch error:', error)
-        `n            catch (error) {
-            console.error('Fetch error:', error)
-        ([])`n        } finally {
+            setProjects([])
+        } finally {
             setLoading(false)
         }
     }
