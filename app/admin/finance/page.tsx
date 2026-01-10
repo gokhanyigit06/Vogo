@@ -38,7 +38,7 @@ export default function FinancePage() {
     const monthlyRecurringExpenses = recurringExpenses.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
 
     if (loading) {
-        return <div className="p-8"><div className="text-slate-400">Yükleniyor...</div></div>
+        return <div className="p-8"><div className="text-muted-foreground">Yükleniyor...</div></div>
     }
 
     return (
@@ -46,30 +46,30 @@ export default function FinancePage() {
 
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                     <DollarSign className="w-8 h-8 text-emerald-500" />
                     Finans Yönetimi
                 </h1>
-                <p className="text-slate-400 mt-1">Gelir, gider ve kar takibi</p>
+                <p className="text-muted-foreground mt-1">Gelir, gider ve kar takibi</p>
             </div>
 
             {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-gradient-to-br from-emerald-500/10 to-slate-900 border border-emerald-500/20 p-6 rounded-2xl">
                     <TrendingUp className="w-8 h-8 text-emerald-400 mb-3" />
-                    <p className="text-slate-400 text-sm">Toplam Gelir</p>
-                    <h3 className="text-2xl font-bold text-white mt-1">{formatCurrency(totalIncome)}</h3>
+                    <p className="text-muted-foreground text-sm">Toplam Gelir</p>
+                    <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalIncome)}</h3>
                 </div>
 
                 <div className="bg-gradient-to-br from-red-500/10 to-slate-900 border border-red-500/20 p-6 rounded-2xl">
                     <TrendingDown className="w-8 h-8 text-red-400 mb-3" />
-                    <p className="text-slate-400 text-sm">Toplam Gider</p>
-                    <h3 className="text-2xl font-bold text-white mt-1">{formatCurrency(totalExpenses)}</h3>
+                    <p className="text-muted-foreground text-sm">Toplam Gider</p>
+                    <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalExpenses)}</h3>
                 </div>
 
                 <div className="bg-gradient-to-br from-blue-500/10 to-slate-900 border border-blue-500/20 p-6 rounded-2xl">
                     <DollarSign className="w-8 h-8 text-blue-400 mb-3" />
-                    <p className="text-slate-400 text-sm">Net Kar</p>
+                    <p className="text-muted-foreground text-sm">Net Kar</p>
                     <h3 className={`text-2xl font-bold mt-1 ${profit >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
                         {formatCurrency(profit)}
                     </h3>
@@ -77,7 +77,7 @@ export default function FinancePage() {
 
                 <div className="bg-gradient-to-br from-purple-500/10 to-slate-900 border border-purple-500/20 p-6 rounded-2xl">
                     <Calendar className="w-8 h-8 text-purple-400 mb-3" />
-                    <p className="text-slate-400 text-sm">Aylık Düzenli Net</p>
+                    <p className="text-muted-foreground text-sm">Aylık Düzenli Net</p>
                     <h3 className="text-2xl font-bold text-purple-400 mt-1">
                         {formatCurrency(monthlyRecurringIncome - monthlyRecurringExpenses)}
                     </h3>
@@ -98,22 +98,22 @@ export default function FinancePage() {
             <div className="grid md:grid-cols-2 gap-6">
                 <Link
                     href="/admin/finance/income"
-                    className="bg-slate-900 border border-slate-800 hover:border-emerald-500/50 p-6 rounded-2xl transition-all group"
+                    className="bg-card border border-border hover:border-emerald-500/50 p-6 rounded-2xl transition-all group"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-xl font-bold text-white mb-2">Gelir Yönetimi</h3>
-                            <p className="text-slate-400 text-sm">
+                            <h3 className="text-xl font-bold text-foreground mb-2">Gelir Yönetimi</h3>
+                            <p className="text-muted-foreground text-sm">
                                 Müşteri ödemeleri ve düzenli gelirleri kaydet
                             </p>
                             <div className="mt-4 space-y-2">
                                 <div className="flex items-center gap-2 text-sm">
                                     <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                    <span className="text-slate-300">{income.length} kayıt</span>
+                                    <span className="text-muted-foreground">{income.length} kayıt</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
                                     <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                                    <span className="text-slate-300">{recurringIncome.length} düzenli gelir</span>
+                                    <span className="text-muted-foreground">{recurringIncome.length} düzenli gelir</span>
                                 </div>
                             </div>
                         </div>
@@ -123,22 +123,22 @@ export default function FinancePage() {
 
                 <Link
                     href="/admin/finance/expenses"
-                    className="bg-slate-900 border border-slate-800 hover:border-red-500/50 p-6 rounded-2xl transition-all group"
+                    className="bg-card border border-border hover:border-red-500/50 p-6 rounded-2xl transition-all group"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-xl font-bold text-white mb-2">Gider Yönetimi</h3>
-                            <p className="text-slate-400 text-sm">
+                            <h3 className="text-xl font-bold text-foreground mb-2">Gider Yönetimi</h3>
+                            <p className="text-muted-foreground text-sm">
                                 Masraflar ve düzenli ödemeleri kaydet
                             </p>
                             <div className="mt-4 space-y-2">
                                 <div className="flex items-center gap-2 text-sm">
                                     <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                    <span className="text-slate-300">{expenses.length} kayıt</span>
+                                    <span className="text-muted-foreground">{expenses.length} kayıt</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
                                     <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                                    <span className="text-slate-300">{recurringExpenses.length} düzenli gider</span>
+                                    <span className="text-muted-foreground">{recurringExpenses.length} düzenli gider</span>
                                 </div>
                             </div>
                         </div>
@@ -148,17 +148,17 @@ export default function FinancePage() {
 
                 <Link
                     href="/admin/finance/receivables"
-                    className="bg-slate-900 border border-slate-800 hover:border-blue-500/50 p-6 rounded-2xl transition-all group md:col-span-2 lg:col-span-1"
+                    className="bg-card border border-border hover:border-blue-500/50 p-6 rounded-2xl transition-all group md:col-span-2 lg:col-span-1"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-xl font-bold text-white mb-2">Alacak Takibi</h3>
-                            <p className="text-slate-400 text-sm">
+                            <h3 className="text-xl font-bold text-foreground mb-2">Alacak Takibi</h3>
+                            <p className="text-muted-foreground text-sm">
                                 Müşterilerden beklenen ödemeler
                             </p>
                             <div className="mt-4 flex items-center gap-2 text-sm">
                                 <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                                <span className="text-slate-300">Borçlu müşterileri listele</span>
+                                <span className="text-muted-foreground">Borçlu müşterileri listele</span>
                             </div>
                         </div>
                         <DollarSign className="w-12 h-12 text-blue-400 group-hover:scale-110 transition-transform" />
@@ -169,17 +169,17 @@ export default function FinancePage() {
             {/* Recurring Info */}
             {(recurringIncome.length > 0 || recurringExpenses.length > 0) && (
                 <div className="bg-purple-500/10 border border-purple-500/20 p-6 rounded-2xl">
-                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-purple-400" />
                         Düzenli Ödemeler
                     </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                            <p className="text-slate-400 text-sm mb-2">Düzenli Gelirler</p>
+                            <p className="text-muted-foreground text-sm mb-2">Düzenli Gelirler</p>
                             <p className="text-emerald-400 text-xl font-bold">{formatCurrency(monthlyRecurringIncome)}/ay</p>
                         </div>
                         <div>
-                            <p className="text-slate-400 text-sm mb-2">Düzenli Giderler</p>
+                            <p className="text-muted-foreground text-sm mb-2">Düzenli Giderler</p>
                             <p className="text-red-400 text-xl font-bold">{formatCurrency(monthlyRecurringExpenses)}/ay</p>
                         </div>
                     </div>
@@ -188,8 +188,8 @@ export default function FinancePage() {
 
             {/* Partner Balances (Cari Hesaplar) */}
             {expenses.some(e => e.paid_by) && (
-                <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <div className="bg-card border border-border p-6 rounded-2xl">
+                    <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-blue-400" />
                         Ortak Cari Hesapları
                     </h3>
@@ -208,10 +208,10 @@ export default function FinancePage() {
                             }
                             return acc
                         }, {})).map((partner: any) => (
-                            <div key={partner.id} className="bg-slate-950 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+                            <div key={partner.id} className="bg-background border border-border p-4 rounded-xl flex items-center justify-between">
                                 <div>
-                                    <p className="text-slate-400 text-sm">Şirketin {partner.name}'a Borcu</p>
-                                    <p className="text-xl font-bold text-white mt-1">{formatCurrency(partner.amount)}</p>
+                                    <p className="text-muted-foreground text-sm">Şirketin {partner.name}'a Borcu</p>
+                                    <p className="text-xl font-bold text-foreground mt-1">{formatCurrency(partner.amount)}</p>
                                 </div>
                                 <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
                                     <span className="text-blue-400 font-bold">{partner.name[0]}</span>

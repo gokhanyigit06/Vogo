@@ -75,7 +75,7 @@ export default function ProjectsPage() {
         completed: { color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', label: 'Tamamlandı', icon: '✅' },
         in_progress: { color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', label: 'Devam Ediyor', icon: '🚀' },
         quote: { color: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', label: 'Teklif', icon: '📝' },
-        cancelled: { color: 'bg-slate-700/50 text-slate-400 border-slate-600', label: 'İptal', icon: '❌' },
+        cancelled: { color: 'bg-slate-700/50 text-muted-foreground border-slate-600', label: 'İptal', icon: '❌' },
     }
 
     if (loading) {
@@ -83,7 +83,7 @@ export default function ProjectsPage() {
             <div className="p-8 max-w-7xl mx-auto flex items-center justify-center h-[50vh]">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-10 h-10 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
-                    <p className="text-slate-400 animate-pulse">Projeler Yükleniyor...</p>
+                    <p className="text-muted-foreground animate-pulse">Projeler Yükleniyor...</p>
                 </div>
             </div>
         )
@@ -95,16 +95,16 @@ export default function ProjectsPage() {
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <Briefcase className="w-8 h-8 text-emerald-500" />
                         Projeler
                     </h1>
-                    <p className="text-slate-400 mt-2">Toplam <span className="text-white font-bold">{projects.length}</span> projeniz bulunuyor.</p>
+                    <p className="text-muted-foreground mt-2">Toplam <span className="text-foreground font-bold">{projects.length}</span> projeniz bulunuyor.</p>
                 </div>
                 <div className="flex flex-wrap gap-3">
                     <Link
                         href="/admin/projects/new"
-                        className="group px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 hover:scale-105 active:scale-95"
+                        className="group px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 hover:scale-105 active:scale-95"
                     >
                         <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
                         Yeni Proje
@@ -113,7 +113,7 @@ export default function ProjectsPage() {
             </div>
 
             {/* Filters & Actions Bar */}
-            <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center sticky top-4 z-10 shadow-xl shadow-black/20 backdrop-blur-md bg-opacity-90">
+            <div className="bg-card border border-border p-4 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center sticky top-4 z-10 shadow-xl shadow-black/20 backdrop-blur-md bg-opacity-90">
 
                 {/* Search */}
                 <div className="relative w-full md:w-96">
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
                     <input
                         type="text"
                         placeholder="Proje adı, müşteri veya açıklama ara..."
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-300 focus:outline-none focus:border-emerald-500 transition-colors text-sm"
+                        className="w-full bg-background border border-border rounded-xl pl-10 pr-4 py-2.5 text-muted-foreground focus:outline-none focus:border-emerald-500 transition-colors text-sm"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -132,7 +132,7 @@ export default function ProjectsPage() {
                     <div className="relative">
                         <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <select
-                            className="w-full md:w-48 bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-8 py-2.5 text-slate-300 focus:outline-none focus:border-emerald-500 appearance-none text-sm cursor-pointer hover:bg-slate-900 transition-colors"
+                            className="w-full md:w-48 bg-background border border-border rounded-xl pl-10 pr-8 py-2.5 text-muted-foreground focus:outline-none focus:border-emerald-500 appearance-none text-sm cursor-pointer hover:bg-card transition-colors"
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                         >
@@ -145,12 +145,12 @@ export default function ProjectsPage() {
                     </div>
 
                     {/* View Toggle */}
-                    <div className="flex bg-slate-950 border border-slate-800 rounded-xl p-1">
+                    <div className="flex bg-background border border-border rounded-xl p-1">
                         <button
                             onClick={() => setViewMode('grid')}
                             className={cn(
                                 "p-2 rounded-lg transition-all",
-                                viewMode === 'grid' ? "bg-slate-800 text-white shadow" : "text-slate-500 hover:text-slate-300"
+                                viewMode === 'grid' ? "bg-muted text-foreground shadow" : "text-slate-500 hover:text-muted-foreground"
                             )}
                         >
                             <LayoutGrid className="w-4 h-4" />
@@ -159,7 +159,7 @@ export default function ProjectsPage() {
                             onClick={() => setViewMode('list')}
                             className={cn(
                                 "p-2 rounded-lg transition-all",
-                                viewMode === 'list' ? "bg-slate-800 text-white shadow" : "text-slate-500 hover:text-slate-300"
+                                viewMode === 'list' ? "bg-muted text-foreground shadow" : "text-slate-500 hover:text-muted-foreground"
                             )}
                         >
                             <ListIcon className="w-4 h-4" />
@@ -170,22 +170,22 @@ export default function ProjectsPage() {
 
             {/* Projects List/Grid */}
             {filteredProjects.length === 0 ? (
-                <div className="text-center py-20 bg-slate-900 border border-slate-800 border-dashed rounded-3xl">
-                    <div className="mx-auto w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                <div className="text-center py-20 bg-card border border-border border-dashed rounded-3xl">
+                    <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
                         <Search className="w-8 h-8 text-slate-500" />
                     </div>
-                    <h3 className="text-lg font-bold text-white">Sonuç Bulunamadı</h3>
-                    <p className="text-slate-400 mt-1">Arama kriterlerinize uygun proje yok.</p>
+                    <h3 className="text-lg font-bold text-foreground">Sonuç Bulunamadı</h3>
+                    <p className="text-muted-foreground mt-1">Arama kriterlerinize uygun proje yok.</p>
                 </div>
             ) : viewMode === 'grid' ? (
                 // GRID VIEW
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
-                        <div key={project.id} className="group relative bg-slate-900 border border-slate-800 rounded-3xl p-6 transition-all hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/10 flex flex-col h-full">
+                        <div key={project.id} className="group relative bg-card border border-border rounded-3xl p-6 transition-all hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/10 flex flex-col h-full">
 
                             {/* Card Header */}
                             <div className="flex items-start justify-between mb-4">
-                                <div className="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 shadow-inner border border-slate-700">
+                                <div className="w-12 h-12 bg-muted rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 shadow-inner border border-slate-700">
                                     {statusConfig[project.status as keyof typeof statusConfig]?.icon || '📁'}
                                 </div>
                                 <div className="flex gap-2">
@@ -197,11 +197,11 @@ export default function ProjectsPage() {
 
                             {/* Content */}
                             <div className="flex-1">
-                                <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-emerald-400 transition-colors">
+                                <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1 group-hover:text-emerald-400 transition-colors">
                                     {project.name || 'İsimsiz Proje'}
                                 </h3>
 
-                                <div className="flex items-center gap-2 text-slate-400 text-sm mb-4">
+                                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
                                     <Users className="w-4 h-4" />
                                     <span className="truncate">
                                         {project.clients?.name || 'Müşteri Belirtilmedi'}
@@ -218,17 +218,17 @@ export default function ProjectsPage() {
 
                             {/* Footer Info */}
                             <div className="mt-auto space-y-4">
-                                <div className="flex items-center justify-between py-4 border-t border-slate-800/50">
+                                <div className="flex items-center justify-between py-4 border-t border-border/50">
                                     <div className="flex flex-col">
                                         <span className="text-slate-500 text-xs">Bütçe</span>
-                                        <div className="flex items-center gap-1.5 text-sm font-bold text-white mt-0.5">
+                                        <div className="flex items-center gap-1.5 text-sm font-bold text-foreground mt-0.5">
                                             <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
                                             {formatCurrency(project.budget)}
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-end">
                                         <span className="text-slate-500 text-xs">Teslim Tarihi</span>
-                                        <div className="flex items-center gap-1.5 text-sm font-medium text-slate-300 mt-0.5">
+                                        <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground mt-0.5">
                                             <Calendar className="w-3.5 h-3.5 text-blue-500" />
                                             {project.end_date ? new Date(project.end_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }) : '-'}
                                         </div>
@@ -239,7 +239,7 @@ export default function ProjectsPage() {
                                 <div className="grid grid-cols-5 gap-2">
                                     <Link
                                         href={`/admin/projects/${project.id}`}
-                                        className="col-span-4 flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white py-2.5 rounded-xl text-sm font-medium transition-colors"
+                                        className="col-span-4 flex items-center justify-center gap-2 bg-muted hover:bg-slate-700 text-foreground py-2.5 rounded-xl text-sm font-medium transition-colors"
                                     >
                                         Projeyi Yönet
                                     </Link>
@@ -257,10 +257,10 @@ export default function ProjectsPage() {
                 </div>
             ) : (
                 // LIST VIEW
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
+                <div className="bg-card border border-border rounded-3xl overflow-hidden">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-slate-950/50 border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+                            <tr className="bg-background/50 border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
                                 <th className="p-4 font-medium pl-6">Proje Adı</th>
                                 <th className="p-4 font-medium">Müşteri</th>
                                 <th className="p-4 font-medium">Bütçe</th>
@@ -271,19 +271,19 @@ export default function ProjectsPage() {
                         </thead>
                         <tbody className="divide-y divide-slate-800">
                             {filteredProjects.map((project) => (
-                                <tr key={project.id} className="group hover:bg-slate-800/30 transition-colors">
+                                <tr key={project.id} className="group hover:bg-muted/30 transition-colors">
                                     <td className="p-4 pl-6">
-                                        <div className="font-bold text-white">{project.name || 'İsimsiz'}</div>
+                                        <div className="font-bold text-foreground">{project.name || 'İsimsiz'}</div>
                                         <div className="text-xs text-slate-500 line-clamp-1 max-w-[200px]">{project.description}</div>
                                     </td>
-                                    <td className="p-4 text-slate-300 text-sm">
+                                    <td className="p-4 text-muted-foreground text-sm">
                                         {project.clients?.name || '-'}
                                         {project.clients?.company && <div className="text-xs text-slate-500">{project.clients.company}</div>}
                                     </td>
                                     <td className="p-4 text-emerald-400 font-mono text-sm font-bold">
                                         {formatCurrency(project.budget)}
                                     </td>
-                                    <td className="p-4 text-slate-400 text-sm">
+                                    <td className="p-4 text-muted-foreground text-sm">
                                         {project.end_date ? new Date(project.end_date).toLocaleDateString('tr-TR') : '-'}
                                     </td>
                                     <td className="p-4">
@@ -295,14 +295,14 @@ export default function ProjectsPage() {
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <Link
                                                 href={`/admin/projects/${project.id}`}
-                                                className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-white transition-colors"
+                                                className="p-2 hover:bg-slate-700 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                                                 title="Düzenle"
                                             >
                                                 <MoreHorizontal className="w-4 h-4" />
                                             </Link>
                                             <button
                                                 onClick={() => handleDelete(project.id)}
-                                                className="p-2 hover:bg-red-500/20 rounded-lg text-slate-400 hover:text-red-400 transition-colors"
+                                                className="p-2 hover:bg-red-500/20 rounded-lg text-muted-foreground hover:text-red-400 transition-colors"
                                                 title="Sil"
                                             >
                                                 <Trash2 className="w-4 h-4" />

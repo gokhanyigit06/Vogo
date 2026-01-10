@@ -62,8 +62,8 @@ export default function ClientsPage() {
         switch (status) {
             case 'active': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
             case 'potential': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-            case 'inactive': return 'bg-slate-700/50 text-slate-400 border-slate-600'
-            default: return 'bg-slate-700/50 text-slate-400'
+            case 'inactive': return 'bg-slate-700/50 text-muted-foreground border-slate-600'
+            default: return 'bg-slate-700/50 text-muted-foreground'
         }
     }
 
@@ -79,7 +79,7 @@ export default function ClientsPage() {
     if (loading) {
         return (
             <div className="p-8">
-                <div className="text-slate-400">Yükleniyor...</div>
+                <div className="text-muted-foreground">Yükleniyor...</div>
             </div>
         )
     }
@@ -90,15 +90,15 @@ export default function ClientsPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <Users className="w-8 h-8 text-emerald-500" />
                         Müşteriler
                     </h1>
-                    <p className="text-slate-400 mt-1">Müşteri ilişkilerinizi yönetin</p>
+                    <p className="text-muted-foreground mt-1">Müşteri ilişkilerinizi yönetin</p>
                 </div>
                 <Link
                     href="/admin/clients/new"
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 w-fit"
+                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 w-fit"
                 >
                     <Plus className="w-5 h-5" />
                     Yeni Müşteri
@@ -113,24 +113,24 @@ export default function ClientsPage() {
                     placeholder="Müşteri ara (isim, şirket, email)..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full bg-card border border-border rounded-xl pl-12 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors"
                 />
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                    <p className="text-slate-400 text-sm">Toplam Müşteri</p>
-                    <p className="text-2xl font-bold text-white mt-1">{clients.length}</p>
+                <div className="bg-card border border-border p-4 rounded-xl">
+                    <p className="text-muted-foreground text-sm">Toplam Müşteri</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">{clients.length}</p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                    <p className="text-slate-400 text-sm">Aktif Müşteri</p>
+                <div className="bg-card border border-border p-4 rounded-xl">
+                    <p className="text-muted-foreground text-sm">Aktif Müşteri</p>
                     <p className="text-2xl font-bold text-emerald-400 mt-1">
                         {clients.filter(c => c.status === 'active').length}
                     </p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                    <p className="text-slate-400 text-sm">Potansiyel</p>
+                <div className="bg-card border border-border p-4 rounded-xl">
+                    <p className="text-muted-foreground text-sm">Potansiyel</p>
                     <p className="text-2xl font-bold text-blue-400 mt-1">
                         {clients.filter(c => c.status === 'potential').length}
                     </p>
@@ -138,17 +138,17 @@ export default function ClientsPage() {
             </div>
 
             {/* Clients List */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+            <div className="bg-card border border-border rounded-2xl overflow-hidden">
                 {filteredClients.length === 0 ? (
                     <div className="p-12 text-center">
                         <Users className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                        <p className="text-slate-400">
+                        <p className="text-muted-foreground">
                             {searchTerm ? 'Müşteri bulunamadı' : 'Henüz müşteri eklenmemiş'}
                         </p>
                         {!searchTerm && (
                             <Link
                                 href="/admin/clients/new"
-                                className="inline-block mt-4 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
+                                className="inline-block mt-4 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-foreground rounded-xl font-medium transition-all"
                             >
                                 İlk Müşteriyi Ekle
                             </Link>
@@ -157,22 +157,22 @@ export default function ClientsPage() {
                 ) : (
                     <div className="divide-y divide-slate-800">
                         {filteredClients.map((client) => (
-                            <div key={client.id} className="p-6 hover:bg-slate-800/50 transition-colors">
+                            <div key={client.id} className="p-6 hover:bg-muted/50 transition-colors">
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <h3 className="text-lg font-bold text-white">{client.name}</h3>
+                                            <h3 className="text-lg font-bold text-foreground">{client.name}</h3>
                                             <span className={`text-xs px-2.5 py-1 rounded-md font-medium border ${getStatusColor(client.status)}`}>
                                                 {getStatusText(client.status)}
                                             </span>
                                         </div>
                                         {client.company && (
-                                            <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                                            <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
                                                 <Building2 className="w-4 h-4" />
                                                 {client.company}
                                             </div>
                                         )}
-                                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-sm text-slate-400">
+                                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-sm text-muted-foreground">
                                             {client.email && (
                                                 <div className="flex items-center gap-2">
                                                     <Mail className="w-4 h-4" />
@@ -190,7 +190,7 @@ export default function ClientsPage() {
                                     <div className="flex items-center gap-2">
                                         <Link
                                             href={`/admin/clients/${client.id}`}
-                                            className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-white transition-colors"
+                                            className="p-2 bg-muted hover:bg-slate-700 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                                             title="Düzenle"
                                         >
                                             <Pencil className="w-4 h-4" />

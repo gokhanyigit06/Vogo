@@ -72,24 +72,24 @@ export default function NewBlogPostPage() {
         <div className="p-8 max-w-5xl mx-auto space-y-8">
 
             {/* Header & Actions */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-16 z-20 bg-slate-950/80 backdrop-blur-md py-4 -my-4 border-b border-white/5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-16 z-20 bg-background/80 backdrop-blur-md py-4 -my-4 border-b border-white/5">
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/blog" className="p-2 hover:bg-slate-900 rounded-lg text-slate-400 hover:text-white transition-colors">
+                    <Link href="/admin/blog" className="p-2 hover:bg-card rounded-lg text-muted-foreground hover:text-foreground transition-colors">
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-bold text-white">Yeni Yazı Ekle</h1>
-                        <p className="text-slate-400 text-sm">Blogunuz için yeni bir içerik oluşturun.</p>
+                        <h1 className="text-2xl font-bold text-foreground">Yeni Yazı Ekle</h1>
+                        <p className="text-muted-foreground text-sm">Blogunuz için yeni bir içerik oluşturun.</p>
                     </div>
                 </div>
                 <div className="flex gap-3">
-                    <button className="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl hover:bg-slate-700 transition-colors font-medium flex items-center gap-2">
+                    <button className="px-4 py-2 bg-muted text-muted-foreground rounded-xl hover:bg-slate-700 transition-colors font-medium flex items-center gap-2">
                         <Save className="w-4 h-4" /> Taslak Kaydet
                     </button>
                     <button
                         onClick={handlePublish}
                         disabled={isSubmitting}
-                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-foreground rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
                     >
                         <Send className="w-4 h-4" /> {isSubmitting ? 'Yayınlanıyor...' : 'Yayınla'}
                     </button>
@@ -103,12 +103,12 @@ export default function NewBlogPostPage() {
                 <div className="lg:col-span-2 space-y-6">
 
                     {/* Title Input */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
-                        <label className="block text-slate-400 text-sm font-medium mb-2">Yazı Başlığı</label>
+                    <div className="bg-card border border-border rounded-notebook p-6 shadow-sm">
+                        <label className="block text-muted-foreground text-sm font-medium mb-2">Yazı Başlığı</label>
                         <input
                             type="text"
                             placeholder="Müşterileri Etkileyecek 10 Web Tasarım İpucu..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 text-white text-lg font-bold placeholder:font-normal focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-slate-600"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-4 text-foreground text-lg font-bold placeholder:font-normal focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-slate-600"
                             value={formData.title}
                             onChange={(e) => {
                                 const newTitle = e.target.value
@@ -124,7 +124,7 @@ export default function NewBlogPostPage() {
                             <span>{formData.title.length} karakter</span>
                         </p>
                         {formData.slug && (
-                            <div className="mt-3 p-2 bg-slate-950 rounded-lg border border-slate-800">
+                            <div className="mt-3 p-2 bg-background rounded-lg border border-border">
                                 <span className="text-xs text-slate-500">URL: </span>
                                 <span className="text-xs text-emerald-400 font-mono">
                                     vogo.com/blog/{formData.slug}
@@ -135,7 +135,7 @@ export default function NewBlogPostPage() {
 
                     {/* Content Editor (TipTap) */}
                     <div className="space-y-2">
-                        <label className="block text-slate-400 text-sm font-medium mb-1 pl-1">İçerik</label>
+                        <label className="block text-muted-foreground text-sm font-medium mb-1 pl-1">İçerik</label>
                         <RichTextEditor
                             content={formData.content}
                             onChange={(html) => setFormData({ ...formData, content: html })}
@@ -148,16 +148,16 @@ export default function NewBlogPostPage() {
                 <div className="space-y-6">
 
                     {/* Category & Status */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                        <h3 className="font-bold text-white flex items-center gap-2 text-sm border-b border-slate-800 pb-3">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                        <h3 className="font-bold text-foreground flex items-center gap-2 text-sm border-b border-border pb-3">
                             <Tag className="w-4 h-4 text-emerald-500" />
                             Yayın Ayarları
                         </h3>
 
                         <div>
-                            <label className="block text-slate-400 text-xs font-bold mb-2 uppercase">Kategori</label>
+                            <label className="block text-muted-foreground text-xs font-bold mb-2 uppercase">Kategori</label>
                             <select
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-300 focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-muted-foreground focus:outline-none focus:border-emerald-500"
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                             >
@@ -170,9 +170,9 @@ export default function NewBlogPostPage() {
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-xs font-bold mb-2 uppercase">Durum</label>
+                            <label className="block text-muted-foreground text-xs font-bold mb-2 uppercase">Durum</label>
                             <select
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-300 focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-muted-foreground focus:outline-none focus:border-emerald-500"
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                             >
@@ -184,8 +184,8 @@ export default function NewBlogPostPage() {
                     </div>
 
                     {/* Featured Image */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                        <h3 className="font-bold text-white flex items-center gap-2 text-sm border-b border-slate-800 pb-3">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                        <h3 className="font-bold text-foreground flex items-center gap-2 text-sm border-b border-border pb-3">
                             <ImageIcon className="w-4 h-4 text-emerald-500" />
                             Kapak Görseli
                         </h3>
@@ -196,14 +196,14 @@ export default function NewBlogPostPage() {
                     </div>
 
                     {/* Excerpt (SEO) */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                        <h3 className="font-bold text-white flex items-center gap-2 text-sm border-b border-slate-800 pb-3">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                        <h3 className="font-bold text-foreground flex items-center gap-2 text-sm border-b border-border pb-3">
                             <FileText className="w-4 h-4 text-emerald-500" />
                             Özet (SEO Açıklaması)
                         </h3>
                         <textarea
                             placeholder="Yazının kısa bir özeti..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-sm text-slate-300 focus:outline-none focus:border-emerald-500 h-24 resize-none placeholder:text-slate-600"
+                            className="w-full bg-background border border-border rounded-xl px-3 py-3 text-sm text-muted-foreground focus:outline-none focus:border-emerald-500 h-24 resize-none placeholder:text-slate-600"
                             value={formData.excerpt}
                             onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                         />
