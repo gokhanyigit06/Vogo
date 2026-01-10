@@ -93,7 +93,7 @@ export default function SettingsAdminPage() {
                 <div className="lg:col-span-2 space-y-8">
 
                     {/* Genel Bilgiler */}
-                    <div className="bg-card border border-border rounded-2xl p-6 space-y-6">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-6">
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2 border-b border-border pb-4">
                             <Globe className="w-5 h-5 text-emerald-500" /> Genel Bilgiler
                         </h3>
@@ -122,7 +122,7 @@ export default function SettingsAdminPage() {
                     </div>
 
                     {/* İletişim Bilgileri */}
-                    <div className="bg-card border border-border rounded-2xl p-6 space-y-6">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-6">
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2 border-b border-border pb-4">
                             <Mail className="w-5 h-5 text-blue-500" /> İletişim Bilgileri
                         </h3>
@@ -159,7 +159,7 @@ export default function SettingsAdminPage() {
                     </div>
 
                     {/* Sosyal Medya */}
-                    <div className="bg-card border border-border rounded-2xl p-6 space-y-6">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-6">
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2 border-b border-border pb-4">
                             <Instagram className="w-5 h-5 text-pink-500" /> Sosyal Medya
                         </h3>
@@ -199,7 +199,7 @@ export default function SettingsAdminPage() {
                     </div>
 
                     {/* Bakım Modu */}
-                    <div className="bg-card border border-border rounded-2xl p-6 flex items-center justify-between">
+                    <div className="bg-card border border-border rounded-notebook p-6 flex items-center justify-between">
                         <div>
                             <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                                 <Lock className={`w-5 h-5 ${formData.maintenanceMode ? 'text-red-500' : 'text-slate-500'}`} /> Bakım Modu
@@ -208,7 +208,7 @@ export default function SettingsAdminPage() {
                         </div>
                         <button
                             onClick={() => setFormData({ ...formData, maintenanceMode: !formData.maintenanceMode })}
-                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${formData.maintenanceMode ? 'bg-emerald-500' : 'bg-slate-700'}`}
+                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${formData.maintenanceMode ? 'bg-emerald-500' : 'bg-muted'}`}
                         >
                             <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${formData.maintenanceMode ? 'translate-x-7' : 'translate-x-1'}`} />
                         </button>

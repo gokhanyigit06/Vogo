@@ -45,11 +45,11 @@ export default function NewProjectPage() {
         <div className="p-8 max-w-5xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-16 z-20 bg-slate-950/80 backdrop-blur-md py-4 -my-4 border-b border-white/5">
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/portfolio" className="p-2 hover:bg-slate-900 rounded-lg text-slate-400 hover:text-white transition-colors">
+                    <Link href="/admin/portfolio" className="p-2 hover:bg-card rounded-lg text-slate-400 hover:text-foreground transition-colors">
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-bold text-white">Yeni Proje Ekle</h1>
+                        <h1 className="text-2xl font-bold text-foreground">Yeni Proje Ekle</h1>
                         <p className="text-slate-400 text-sm">Portfolyonuza yeni bir başarı hikayesi ekleyin.</p>
                     </div>
                 </div>
@@ -67,12 +67,12 @@ export default function NewProjectPage() {
             <div className="grid lg:grid-cols-2 gap-8">
                 {/* Sol: Genel Bilgiler */}
                 <div className="space-y-6">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Proje Başlığı</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="Örn: A City AVM Web Sitesi"
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -82,7 +82,7 @@ export default function NewProjectPage() {
                             <label className="block text-slate-400 text-sm font-medium mb-2">Müşteri Adı</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="Örn: A City AVM"
                                 value={formData.client}
                                 onChange={(e) => setFormData({ ...formData, client: e.target.value })}
@@ -91,7 +91,7 @@ export default function NewProjectPage() {
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Kategori</label>
                             <select
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-emerald-500"
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                             >
@@ -102,10 +102,10 @@ export default function NewProjectPage() {
                         </div>
                     </div>
 
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
                         <label className="block text-slate-400 text-sm font-medium mb-2">Açıklama (Kısa)</label>
                         <textarea
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
                             placeholder="Projenin amacı ve sonucu hakkında kısa bilgi..."
                             value={formData.desc}
                             onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
@@ -115,8 +115,8 @@ export default function NewProjectPage() {
 
                 {/* Sağ: Görsel */}
                 <div className="space-y-6">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                        <h3 className="font-bold text-white flex items-center gap-2 text-sm border-b border-slate-800 pb-3">
+                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                        <h3 className="font-bold text-foreground flex items-center gap-2 text-sm border-b border-border pb-3">
                             <ImageIcon className="w-4 h-4 text-emerald-500" />
                             Proje Görseli
                         </h3>

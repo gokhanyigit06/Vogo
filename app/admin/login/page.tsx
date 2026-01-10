@@ -39,19 +39,19 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-background px-4">
             {/* Background Decor */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px]" />
                 <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]" />
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl relative z-10">
+            <div className="bg-card border border-border p-8 rounded-notebook w-full max-w-md shadow-2xl relative z-10">
                 <div className="text-center mb-8">
-                    <div className="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mx-auto mb-4 border border-slate-700">
+                    <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center mx-auto mb-4 border border-border">
                         <Lock className="w-6 h-6 text-emerald-500" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white">Admin Girişi</h1>
+                    <h1 className="text-2xl font-bold text-foreground">Admin Girişi</h1>
                     <p className="text-slate-400 mt-2 text-sm">Vogo Agency yönetim paneline erişmek için giriş yapın.</p>
                 </div>
 
@@ -63,7 +63,7 @@ export default function LoginPage() {
                             <input
                                 type="email"
                                 required
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                className="w-full bg-background border border-border rounded-xl pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors"
                                 placeholder="admin@vogo.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -78,7 +78,7 @@ export default function LoginPage() {
                             <input
                                 type="password"
                                 required
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                className="w-full bg-background border border-border rounded-xl pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

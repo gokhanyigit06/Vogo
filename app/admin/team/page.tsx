@@ -71,7 +71,7 @@ export default function TeamPage() {
         switch (role) {
             case 'admin': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
             case 'manager': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-            default: return 'bg-slate-700/50 text-muted-foreground border-slate-600'
+            default: return 'bg-slate-700/50 text-muted-foreground border-border'
         }
     }
 
@@ -106,7 +106,7 @@ export default function TeamPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-6 space-y-4">
+                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Takım Üyesi</h2>
 
                     <div className="grid md:grid-cols-3 gap-4">
@@ -161,13 +161,13 @@ export default function TeamPage() {
             {/* Team List */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {team.length === 0 ? (
-                    <div className="col-span-full p-12 text-center bg-card border border-border rounded-2xl">
+                    <div className="col-span-full p-12 text-center bg-card border border-border rounded-notebook">
                         <UsersRound className="w-16 h-16 text-slate-700 mx-auto mb-4" />
                         <p className="text-muted-foreground">Henüz takım üyesi eklenmemiş</p>
                     </div>
                 ) : (
                     team.map((member) => (
-                        <div key={member.id} className="bg-card border border-border rounded-2xl p-6 hover:border-emerald-500/30 transition-all">
+                        <div key={member.id} className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all">
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex-1">
                                     <h3 className="text-lg font-bold text-foreground mb-1">{member.name}</h3>

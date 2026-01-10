@@ -128,12 +128,12 @@ export default function ExpensesPage() {
                 <div>
                     <Link
                         href="/admin/finance"
-                        className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-4"
+                        className="inline-flex items-center gap-2 text-slate-400 hover:text-foreground transition-colors mb-4"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Finans'a Dön
                     </Link>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <TrendingDown className="w-8 h-8 text-red-500" />
                         Gider Yönetimi
                     </h1>
@@ -149,15 +149,15 @@ export default function ExpensesPage() {
 
             {/* Stats */}
             <div className="grid md:grid-cols-3 gap-4">
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Toplam Gider</p>
                     <p className="text-2xl font-bold text-red-400 mt-1">{formatCurrency(totalExpenses)}</p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Kayıt Sayısı</p>
-                    <p className="text-2xl font-bold text-white mt-1">{expenses.length}</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">{expenses.length}</p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Düzenli Gider</p>
                     <p className="text-2xl font-bold text-purple-400 mt-1">{recurringExpenses.length} kayıt</p>
                 </div>
@@ -165,8 +165,8 @@ export default function ExpensesPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-                    <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-3">Yeni Gider Kaydı</h2>
+                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
+                    <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Gider Kaydı</h2>
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
@@ -177,7 +177,7 @@ export default function ExpensesPage() {
                                 step="0.01"
                                 value={formData.amount}
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                                 placeholder="0.00"
                             />
                         </div>
@@ -189,7 +189,7 @@ export default function ExpensesPage() {
                                 required
                                 value={formData.date}
                                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                             />
                         </div>
 
@@ -199,7 +199,7 @@ export default function ExpensesPage() {
                                 required
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                             >
                                 <option value="rent">Kira</option>
                                 <option value="salary">Maaş</option>
@@ -215,7 +215,7 @@ export default function ExpensesPage() {
                             <select
                                 value={formData.paid_by}
                                 onChange={(e) => setFormData({ ...formData, paid_by: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                             >
                                 <option value="">Şirket Kasası / Banka</option>
                                 {members.map(member => (
@@ -233,7 +233,7 @@ export default function ExpensesPage() {
                                 type="text"
                                 value={formData.vendor}
                                 onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                                 placeholder="Örneğin: AWS, Google Ads..."
                             />
                         </div>
@@ -244,7 +244,7 @@ export default function ExpensesPage() {
                                 type="text"
                                 value={formData.invoice_number}
                                 onChange={(e) => setFormData({ ...formData, invoice_number: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                                 placeholder="FT-2024-001"
                             />
                         </div>
@@ -255,23 +255,23 @@ export default function ExpensesPage() {
                                 type="text"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                                 placeholder="Ocak ayı ofis kirası"
                             />
                         </div>
                     </div>
 
                     {/* Recurring Section */}
-                    <div className="border-t border-slate-800 pt-4">
+                    <div className="border-t border-border pt-4">
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={formData.is_recurring}
                                 onChange={(e) => setFormData({ ...formData, is_recurring: e.target.checked })}
-                                className="w-5 h-5 bg-slate-950 border-slate-700 rounded text-red-500 focus:ring-red-500"
+                                className="w-5 h-5 bg-background border-border rounded text-red-500 focus:ring-red-500"
                             />
                             <div>
-                                <span className="text-white font-medium flex items-center gap-2">
+                                <span className="text-foreground font-medium flex items-center gap-2">
                                     <Calendar className="w-4 h-4 text-purple-400" />
                                     Düzenli Gider (Aylık tekrar eden)
                                 </span>
@@ -286,7 +286,7 @@ export default function ExpensesPage() {
                                     <select
                                         value={formData.recurrence_frequency}
                                         onChange={(e) => setFormData({ ...formData, recurrence_frequency: e.target.value })}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                                     >
                                         <option value="monthly">Aylık</option>
                                         <option value="quarterly">3 Ayda Bir</option>
@@ -301,7 +301,7 @@ export default function ExpensesPage() {
                                         max="31"
                                         value={formData.recurrence_day}
                                         onChange={(e) => setFormData({ ...formData, recurrence_day: parseInt(e.target.value) })}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-red-500"
                                     />
                                 </div>
                             </div>
@@ -322,9 +322,9 @@ export default function ExpensesPage() {
             )}
 
             {/* Expenses List */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-                <div className="p-4 border-b border-slate-800">
-                    <h3 className="text-lg font-bold text-white">Gider Kayıtları</h3>
+            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+                <div className="p-4 border-b border-border">
+                    <h3 className="text-lg font-bold text-foreground">Gider Kayıtları</h3>
                 </div>
                 {expenses.length === 0 ? (
                     <div className="p-12 text-center text-slate-400">
@@ -336,10 +336,10 @@ export default function ExpensesPage() {
                             <div key={item.id} className="p-4 hover:bg-slate-800/50 transition-colors flex items-center justify-between">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-1">
-                                        <h4 className="text-white font-medium">
+                                        <h4 className="text-foreground font-medium">
                                             {item.description || categoryLabels[item.category]}
                                         </h4>
-                                        <span className="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded-md">
+                                        <span className="text-xs px-2 py-1 bg-muted text-slate-400 rounded-md">
                                             {categoryLabels[item.category]}
                                         </span>
                                         {item.team_members && (

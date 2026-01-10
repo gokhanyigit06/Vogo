@@ -62,20 +62,20 @@ export default function NewProjectPage() {
             <div className="mb-8">
                 <Link
                     href="/admin/projects"
-                    className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-4"
+                    className="inline-flex items-center gap-2 text-slate-400 hover:text-foreground transition-colors mb-4"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     Projelere Dön
                 </Link>
-                <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                     <Briefcase className="w-8 h-8 text-emerald-500" />
                     Yeni Proje Ekle
                 </h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                    <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-3">
+                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                    <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Proje Bilgileri
                     </h2>
 
@@ -87,7 +87,7 @@ export default function NewProjectPage() {
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="E-Ticaret Web Sitesi"
                             />
                         </div>
@@ -97,7 +97,7 @@ export default function NewProjectPage() {
                             <select
                                 value={formData.client_id}
                                 onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
                                 {clients.map(client => (
@@ -113,7 +113,7 @@ export default function NewProjectPage() {
                             <select
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="quote">Teklif Aşamasında</option>
                                 <option value="in_progress">Devam Ediyor</option>
@@ -128,7 +128,7 @@ export default function NewProjectPage() {
                                 type="date"
                                 value={formData.start_date}
                                 onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             />
                         </div>
 
@@ -138,7 +138,7 @@ export default function NewProjectPage() {
                                 type="date"
                                 value={formData.end_date}
                                 onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             />
                         </div>
 
@@ -149,7 +149,7 @@ export default function NewProjectPage() {
                                 step="0.01"
                                 value={formData.budget}
                                 onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="0.00"
                             />
                         </div>
@@ -159,7 +159,7 @@ export default function NewProjectPage() {
                             <select
                                 value={formData.priority}
                                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="low">Düşük</option>
                                 <option value="medium">Orta</option>
@@ -172,7 +172,7 @@ export default function NewProjectPage() {
                             <textarea
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
                                 placeholder="Proje detayları..."
                             />
                         </div>
@@ -190,7 +190,7 @@ export default function NewProjectPage() {
                     </button>
                     <Link
                         href="/admin/projects"
-                        className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition-all border border-slate-700"
+                        className="px-6 py-3 bg-muted hover:bg-muted text-foreground rounded-xl font-bold transition-all border border-border"
                     >
                         İptal
                     </Link>

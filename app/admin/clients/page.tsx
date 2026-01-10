@@ -62,7 +62,7 @@ export default function ClientsPage() {
         switch (status) {
             case 'active': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
             case 'potential': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-            case 'inactive': return 'bg-slate-700/50 text-muted-foreground border-slate-600'
+            case 'inactive': return 'bg-slate-700/50 text-muted-foreground border-border'
             default: return 'bg-slate-700/50 text-muted-foreground'
         }
     }
@@ -138,7 +138,7 @@ export default function ClientsPage() {
             </div>
 
             {/* Clients List */}
-            <div className="bg-card border border-border rounded-2xl overflow-hidden">
+            <div className="bg-card border border-border rounded-notebook overflow-hidden">
                 {filteredClients.length === 0 ? (
                     <div className="p-12 text-center">
                         <Users className="w-16 h-16 text-slate-700 mx-auto mb-4" />
@@ -190,7 +190,7 @@ export default function ClientsPage() {
                                     <div className="flex items-center gap-2">
                                         <Link
                                             href={`/admin/clients/${client.id}`}
-                                            className="p-2 bg-muted hover:bg-slate-700 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+                                            className="p-2 bg-muted hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                                             title="Düzenle"
                                         >
                                             <Pencil className="w-4 h-4" />

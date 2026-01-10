@@ -49,7 +49,7 @@ export default function BlogManagementPage() {
                     <input
                         type="text"
                         placeholder="Yazı başlığı veya kategori ara..."
-                        className="w-full bg-background border border-border rounded-2xl pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-muted-foreground"
+                        className="w-full bg-background border border-border rounded-notebook pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-muted-foreground"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />

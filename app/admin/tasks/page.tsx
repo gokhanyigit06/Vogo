@@ -33,7 +33,7 @@ const COLUMNS = [
 // --- Visual Component (Pure UI) ---
 function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOverlay?: boolean, onClick?: () => void }) {
     const priorityColor = {
-        low: 'bg-slate-700 text-slate-300',
+        low: 'bg-muted text-slate-300',
         medium: 'bg-yellow-500/10 text-yellow-500',
         high: 'bg-red-500/10 text-red-500'
     }[task.priority || 'medium']
@@ -44,7 +44,7 @@ function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOver
     return (
         <div
             onClick={onClick}
-            className={`bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-slate-600 transition-colors shadow-sm group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50 cursor-grabbing' : ''}`}
+            className={`bg-card border border-border p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-border transition-colors shadow-sm group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50 cursor-grabbing' : ''}`}
         >
             <div className="flex justify-between items-start mb-2">
                 <span className={`text-xs px-2 py-0.5 rounded font-medium ${priorityColor}`}>
@@ -58,11 +58,11 @@ function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOver
                 )}
             </div>
 
-            <h4 className="font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">{task.title}</h4>
+            <h4 className="font-bold text-foreground mb-2 group-hover:text-emerald-400 transition-colors">{task.title}</h4>
 
             <div className="flex items-center gap-4 text-slate-500 text-xs mt-3">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-slate-400">
                         {task.team_members?.name?.[0] || '?'}
                     </div>
                 </div>
@@ -109,8 +109,8 @@ function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, ti
     const { setNodeRef } = useDroppable({ id })
 
     return (
-        <div ref={setNodeRef} className="flex flex-col h-full bg-slate-950/50 rounded-2xl p-4 border border-slate-800 min-h-[500px]">
-            <div className={`flex items-center justify-between border-b border-slate-800 pb-3 mb-4 ${color.replace('bg-', 'text-')}`}>
+        <div ref={setNodeRef} className="flex flex-col h-full bg-slate-950/50 rounded-notebook p-4 border border-border min-h-[500px]">
+            <div className={`flex items-center justify-between border-b border-border pb-3 mb-4 ${color.replace('bg-', 'text-')}`}>
                 <h3 className="font-bold flex items-center gap-2">
                     {id === 'todo' && <AlertCircle className="w-5 h-5" />}
                     {id === 'in_progress' && <Clock className="w-5 h-5" />}
@@ -275,7 +275,7 @@ export default function TasksPage() {
         <div className="p-8 max-w-7xl mx-auto space-y-8 h-screen flex flex-col">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         Görev Yönetimi
                     </h1>
@@ -328,10 +328,10 @@ export default function TasksPage() {
 
             {showModal && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-md">
+                    <div className="bg-card border border-border rounded-notebook p-6 w-full max-w-md">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-bold text-white">Yeni Görev Ekle</h2>
-                            <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white">
+                            <h2 className="text-xl font-bold text-foreground">Yeni Görev Ekle</h2>
+                            <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-foreground">
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
@@ -341,7 +341,7 @@ export default function TasksPage() {
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-lg p-3 text-foreground focus:outline-none focus:border-emerald-500"
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
                                 />
@@ -350,7 +350,7 @@ export default function TasksPage() {
                                 <div>
                                     <label className="block text-sm font-medium text-slate-400 mb-1">Atanan Kişi</label>
                                     <select
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white"
+                                        className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
                                         value={formData.assigned_to}
                                         onChange={e => setFormData({ ...formData, assigned_to: e.target.value })}
                                     >
@@ -363,7 +363,7 @@ export default function TasksPage() {
                                 <div>
                                     <label className="block text-sm font-medium text-slate-400 mb-1">Öncelik</label>
                                     <select
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white"
+                                        className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
                                         value={formData.priority}
                                         onChange={e => setFormData({ ...formData, priority: e.target.value })}
                                     >
@@ -377,7 +377,7 @@ export default function TasksPage() {
                                 <label className="block text-sm font-medium text-slate-400 mb-1">Bitiş Tarihi</label>
                                 <input
                                     type="date"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white"
+                                    className="w-full bg-background border border-border rounded-lg p-3 text-foreground"
                                     value={formData.due_date}
                                     onChange={e => setFormData({ ...formData, due_date: e.target.value })}
                                 />

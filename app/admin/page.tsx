@@ -123,7 +123,7 @@ export default function AdminDashboard() {
                 <div className="relative group overflow-hidden bg-card border border-border rounded-notebook card-light-shadow p-6 transition-all hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/10 hover:bg-card/80">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-emerald-500/20" />
                     <div className="flex justify-between items-start mb-4 relative z-10">
-                        <div className="p-3 bg-emerald-500/10 rounded-2xl">
+                        <div className="p-3 bg-emerald-500/10 rounded-notebook">
                             <TrendingUp className="w-6 h-6 text-emerald-500" />
                         </div>
                         <span className="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-xl text-xs font-bold">+12%</span>
@@ -260,29 +260,29 @@ export default function AdminDashboard() {
 
                     {/* Hızlı Ekleme Butonları */}
                     <div className="grid grid-cols-2 gap-4">
-                        <Link href="/admin/projects/new" className="bg-emerald-600 hover:bg-emerald-500 p-4 rounded-2xl transition-all shadow-lg shadow-emerald-500/20 text-center group">
+                        <Link href="/admin/projects/new" className="bg-emerald-600 hover:bg-emerald-500 p-4 rounded-notebook transition-all shadow-lg shadow-emerald-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <Briefcase className="w-5 h-5 text-white" />
+                                <Briefcase className="w-5 h-5 text-foreground" />
                             </div>
-                            <span className="text-white font-bold text-sm">Proje Ekle</span>
+                            <span className="text-foreground font-bold text-sm">Proje Ekle</span>
                         </Link>
-                        <Link href="/admin/tasks" className="bg-blue-600 hover:bg-blue-500 p-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 text-center group">
+                        <Link href="/admin/tasks" className="bg-blue-600 hover:bg-blue-500 p-4 rounded-notebook transition-all shadow-lg shadow-blue-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <Target className="w-5 h-5 text-white" />
+                                <Target className="w-5 h-5 text-foreground" />
                             </div>
-                            <span className="text-white font-bold text-sm">Görev Ata</span>
+                            <span className="text-foreground font-bold text-sm">Görev Ata</span>
                         </Link>
-                        <Link href="/admin/finance/income" className="bg-purple-600 hover:bg-purple-500 p-4 rounded-2xl transition-all shadow-lg shadow-purple-500/20 text-center group">
+                        <Link href="/admin/finance/income" className="bg-purple-600 hover:bg-purple-500 p-4 rounded-notebook transition-all shadow-lg shadow-purple-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <DollarSign className="w-5 h-5 text-white" />
+                                <DollarSign className="w-5 h-5 text-foreground" />
                             </div>
-                            <span className="text-white font-bold text-sm">Gelir Gir</span>
+                            <span className="text-foreground font-bold text-sm">Gelir Gir</span>
                         </Link>
-                        <Link href="/admin/clients/new" className="bg-orange-600 hover:bg-orange-500 p-4 rounded-2xl transition-all shadow-lg shadow-orange-500/20 text-center group">
+                        <Link href="/admin/clients/new" className="bg-orange-600 hover:bg-orange-500 p-4 rounded-notebook transition-all shadow-lg shadow-orange-500/20 text-center group">
                             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                <Users className="w-5 h-5 text-white" />
+                                <Users className="w-5 h-5 text-foreground" />
                             </div>
-                            <span className="text-white font-bold text-sm">Müşteri</span>
+                            <span className="text-foreground font-bold text-sm">Müşteri</span>
                         </Link>
                     </div>
 

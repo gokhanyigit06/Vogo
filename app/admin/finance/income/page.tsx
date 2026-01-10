@@ -113,12 +113,12 @@ export default function IncomePage() {
                 <div>
                     <Link
                         href="/admin/finance"
-                        className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-4"
+                        className="inline-flex items-center gap-2 text-slate-400 hover:text-foreground transition-colors mb-4"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Finans'a Dön
                     </Link>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <TrendingUp className="w-8 h-8 text-emerald-500" />
                         Gelir Yönetimi
                     </h1>
@@ -134,15 +134,15 @@ export default function IncomePage() {
 
             {/* Stats */}
             <div className="grid md:grid-cols-3 gap-4">
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Toplam Gelir</p>
                     <p className="text-2xl font-bold text-emerald-400 mt-1">{formatCurrency(totalIncome)}</p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Kayıt Sayısı</p>
-                    <p className="text-2xl font-bold text-white mt-1">{income.length}</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">{income.length}</p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Düzenli Gelir</p>
                     <p className="text-2xl font-bold text-purple-400 mt-1">{recurringIncome.length} kayıt</p>
                 </div>
@@ -150,8 +150,8 @@ export default function IncomePage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-                    <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-3">Yeni Gelir Kaydı</h2>
+                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
+                    <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Gelir Kaydı</h2>
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
@@ -159,7 +159,7 @@ export default function IncomePage() {
                             <select
                                 value={formData.client_id}
                                 onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
                                 {clients.map(client => (
@@ -178,7 +178,7 @@ export default function IncomePage() {
                                 step="0.01"
                                 value={formData.amount}
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="0.00"
                             />
                         </div>
@@ -190,7 +190,7 @@ export default function IncomePage() {
                                 required
                                 value={formData.date}
                                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             />
                         </div>
 
@@ -199,7 +199,7 @@ export default function IncomePage() {
                             <select
                                 value={formData.payment_method}
                                 onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="bank_transfer">Havale/EFT</option>
                                 <option value="cash">Nakit</option>
@@ -213,7 +213,7 @@ export default function IncomePage() {
                                 type="text"
                                 value={formData.invoice_number}
                                 onChange={(e) => setFormData({ ...formData, invoice_number: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="FA-2024-001"
                             />
                         </div>
@@ -224,23 +224,23 @@ export default function IncomePage() {
                                 type="text"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                 placeholder="Web tasarım projesi ödemesi"
                             />
                         </div>
                     </div>
 
                     {/* Recurring Section */}
-                    <div className="border-t border-slate-800 pt-4">
+                    <div className="border-t border-border pt-4">
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={formData.is_recurring}
                                 onChange={(e) => setFormData({ ...formData, is_recurring: e.target.checked })}
-                                className="w-5 h-5 bg-slate-950 border-slate-700 rounded text-emerald-500 focus:ring-emerald-500"
+                                className="w-5 h-5 bg-background border-border rounded text-emerald-500 focus:ring-emerald-500"
                             />
                             <div>
-                                <span className="text-white font-medium flex items-center gap-2">
+                                <span className="text-foreground font-medium flex items-center gap-2">
                                     <Calendar className="w-4 h-4 text-purple-400" />
                                     Düzenli Gelir (Aylık tekrar eden)
                                 </span>
@@ -255,7 +255,7 @@ export default function IncomePage() {
                                     <select
                                         value={formData.recurrence_frequency}
                                         onChange={(e) => setFormData({ ...formData, recurrence_frequency: e.target.value })}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                     >
                                         <option value="monthly">Aylık</option>
                                         <option value="quarterly">3 Ayda Bir</option>
@@ -270,7 +270,7 @@ export default function IncomePage() {
                                         max="31"
                                         value={formData.recurrence_day}
                                         onChange={(e) => setFormData({ ...formData, recurrence_day: parseInt(e.target.value) })}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                                     />
                                 </div>
                             </div>
@@ -291,9 +291,9 @@ export default function IncomePage() {
             )}
 
             {/* Income List */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-                <div className="p-4 border-b border-slate-800">
-                    <h3 className="text-lg font-bold text-white">Gelir Kayıtları</h3>
+            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+                <div className="p-4 border-b border-border">
+                    <h3 className="text-lg font-bold text-foreground">Gelir Kayıtları</h3>
                 </div>
                 {income.length === 0 ? (
                     <div className="p-12 text-center text-slate-400">
@@ -305,7 +305,7 @@ export default function IncomePage() {
                             <div key={item.id} className="p-4 hover:bg-slate-800/50 transition-colors flex items-center justify-between">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-1">
-                                        <h4 className="text-white font-medium">
+                                        <h4 className="text-foreground font-medium">
                                             {item.description || 'Ödeme'}
                                         </h4>
                                         {item.is_recurring && (

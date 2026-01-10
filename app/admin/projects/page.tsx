@@ -75,7 +75,7 @@ export default function ProjectsPage() {
         completed: { color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', label: 'Tamamlandı', icon: '✅' },
         in_progress: { color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', label: 'Devam Ediyor', icon: '🚀' },
         quote: { color: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', label: 'Teklif', icon: '📝' },
-        cancelled: { color: 'bg-slate-700/50 text-muted-foreground border-slate-600', label: 'İptal', icon: '❌' },
+        cancelled: { color: 'bg-slate-700/50 text-muted-foreground border-border', label: 'İptal', icon: '❌' },
     }
 
     if (loading) {
@@ -113,7 +113,7 @@ export default function ProjectsPage() {
             </div>
 
             {/* Filters & Actions Bar */}
-            <div className="bg-card border border-border p-4 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center sticky top-4 z-10 shadow-xl shadow-black/20 backdrop-blur-md bg-opacity-90">
+            <div className="bg-card border border-border p-4 rounded-notebook flex flex-col md:flex-row gap-4 justify-between items-center sticky top-4 z-10 shadow-xl shadow-black/20 backdrop-blur-md bg-opacity-90">
 
                 {/* Search */}
                 <div className="relative w-full md:w-96">
@@ -185,7 +185,7 @@ export default function ProjectsPage() {
 
                             {/* Card Header */}
                             <div className="flex items-start justify-between mb-4">
-                                <div className="w-12 h-12 bg-muted rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 shadow-inner border border-slate-700">
+                                <div className="w-12 h-12 bg-muted rounded-notebook flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 shadow-inner border border-border">
                                     {statusConfig[project.status as keyof typeof statusConfig]?.icon || '📁'}
                                 </div>
                                 <div className="flex gap-2">
@@ -239,7 +239,7 @@ export default function ProjectsPage() {
                                 <div className="grid grid-cols-5 gap-2">
                                     <Link
                                         href={`/admin/projects/${project.id}`}
-                                        className="col-span-4 flex items-center justify-center gap-2 bg-muted hover:bg-slate-700 text-foreground py-2.5 rounded-xl text-sm font-medium transition-colors"
+                                        className="col-span-4 flex items-center justify-center gap-2 bg-muted hover:bg-muted text-foreground py-2.5 rounded-xl text-sm font-medium transition-colors"
                                     >
                                         Projeyi Yönet
                                     </Link>
@@ -295,7 +295,7 @@ export default function ProjectsPage() {
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <Link
                                                 href={`/admin/projects/${project.id}`}
-                                                className="p-2 hover:bg-slate-700 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+                                                className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                                                 title="Düzenle"
                                             >
                                                 <MoreHorizontal className="w-4 h-4" />

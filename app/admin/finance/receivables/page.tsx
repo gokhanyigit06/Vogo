@@ -49,25 +49,25 @@ export default function ReceivablesPage() {
                 <div>
                     <Link
                         href="/admin/finance"
-                        className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-4"
+                        className="inline-flex items-center gap-2 text-slate-400 hover:text-foreground transition-colors mb-4"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Finans'a Dön
                     </Link>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <Wallet className="w-8 h-8 text-blue-500" />
                         Alacak Takibi
                     </h1>
                     <p className="text-slate-400 mt-1">Projelerden beklenen tahsilatlar</p>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-right">
+                <div className="bg-card border border-border p-4 rounded-xl text-right">
                     <p className="text-slate-400 text-sm">Toplam Alacak</p>
                     <p className="text-2xl font-bold text-blue-400">{formatCurrency(totalReceivable)}</p>
                 </div>
             </div>
 
             {/* List */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+            <div className="bg-card border border-border rounded-notebook overflow-hidden">
                 {receivables.length === 0 ? (
                     <div className="p-12 text-center text-slate-400">
                         Harika! Tahsil edilmemiş alacak bulunmuyor.
@@ -75,7 +75,7 @@ export default function ReceivablesPage() {
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="bg-slate-950 text-slate-400">
+                            <thead className="bg-background text-slate-400">
                                 <tr>
                                     <th className="p-4 font-medium">Müşteri</th>
                                     <th className="p-4 font-medium">Proje</th>
@@ -89,7 +89,7 @@ export default function ReceivablesPage() {
                                 {receivables.map((item, index) => (
                                     <tr key={index} className="hover:bg-slate-800/50 transition-colors">
                                         <td className="p-4">
-                                            <div className="font-medium text-white">{item.clientName}</div>
+                                            <div className="font-medium text-foreground">{item.clientName}</div>
                                             <div className="text-sm text-slate-500">{item.companyName}</div>
                                         </td>
                                         <td className="p-4 text-slate-300">{item.projectName}</td>

@@ -98,7 +98,7 @@ export default function FinancePage() {
             <div className="grid md:grid-cols-2 gap-6">
                 <Link
                     href="/admin/finance/income"
-                    className="bg-card border border-border hover:border-emerald-500/50 p-6 rounded-2xl transition-all group"
+                    className="bg-card border border-border hover:border-emerald-500/50 p-6 rounded-notebook transition-all group"
                 >
                     <div className="flex items-center justify-between">
                         <div>
@@ -123,7 +123,7 @@ export default function FinancePage() {
 
                 <Link
                     href="/admin/finance/expenses"
-                    className="bg-card border border-border hover:border-red-500/50 p-6 rounded-2xl transition-all group"
+                    className="bg-card border border-border hover:border-red-500/50 p-6 rounded-notebook transition-all group"
                 >
                     <div className="flex items-center justify-between">
                         <div>
@@ -148,7 +148,7 @@ export default function FinancePage() {
 
                 <Link
                     href="/admin/finance/receivables"
-                    className="bg-card border border-border hover:border-blue-500/50 p-6 rounded-2xl transition-all group md:col-span-2 lg:col-span-1"
+                    className="bg-card border border-border hover:border-blue-500/50 p-6 rounded-notebook transition-all group md:col-span-2 lg:col-span-1"
                 >
                     <div className="flex items-center justify-between">
                         <div>
@@ -168,7 +168,7 @@ export default function FinancePage() {
 
             {/* Recurring Info */}
             {(recurringIncome.length > 0 || recurringExpenses.length > 0) && (
-                <div className="bg-purple-500/10 border border-purple-500/20 p-6 rounded-2xl">
+                <div className="bg-purple-500/10 border border-purple-500/20 p-6 rounded-notebook">
                     <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-purple-400" />
                         Düzenli Ödemeler
@@ -188,7 +188,7 @@ export default function FinancePage() {
 
             {/* Partner Balances (Cari Hesaplar) */}
             {expenses.some(e => e.paid_by) && (
-                <div className="bg-card border border-border p-6 rounded-2xl">
+                <div className="bg-card border border-border p-6 rounded-notebook">
                     <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-blue-400" />
                         Ortak Cari Hesapları

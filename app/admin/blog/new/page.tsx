@@ -83,7 +83,7 @@ export default function NewBlogPostPage() {
                     </div>
                 </div>
                 <div className="flex gap-3">
-                    <button className="px-4 py-2 bg-muted text-muted-foreground rounded-xl hover:bg-slate-700 transition-colors font-medium flex items-center gap-2">
+                    <button className="px-4 py-2 bg-muted text-muted-foreground rounded-xl hover:bg-muted transition-colors font-medium flex items-center gap-2">
                         <Save className="w-4 h-4" /> Taslak Kaydet
                     </button>
                     <button
