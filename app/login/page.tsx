@@ -2,12 +2,10 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { supabase } from "@/lib/supabase"
-import { useRouter } from "next/navigation"
 import { Lock, Mail, ArrowRight, Loader2, AlertCircle } from "lucide-react"
+import { loginAction } from "./actions"
 
 export default function LoginPage() {
-    const router = useRouter()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
@@ -18,57 +16,19 @@ export default function LoginPage() {
         setLoading(true)
         setError(null)
 
-        console.log("🔐 Login attempt started...")
-        console.log("📧 Email:", email)
-        console.log("🌐 Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+        console.log("🔐 Server action login başlatılıyor...")
 
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            })
-
-            console.log("📥 Login response:", { data, error })
-
-            if (error) {
-                console.error("❌ Supabase Auth Error:", error.message)
-                throw error
+            await loginAction(email, password)
+            // Başarılı olursa server action redirect yapacak
+        } catch (err) {
+            console.log("Server action response:", err)
+            // NEXT_REDIRECT hatası başarılı redirect anlamına gelir
+            if (err && typeof err === 'object' && 'digest' in err) {
+                console.log("✅ Redirect başarılı!")
+                return
             }
-
-            if (data.user && data.session) {
-                console.log("✅ Login successful! User:", data.user.email)
-                console.log("🔑 Session:", data.session)
-
-                // Session'ı manuel set edelim
-                try {
-                    await supabase.auth.setSession({
-                        access_token: data.session.access_token,
-                        refresh_token: data.session.refresh_token
-                    })
-                    console.log("✅ Session set edildi")
-                } catch (e) {
-                    console.error("Session set hatası:", e)
-                }
-
-                // Kısa bekleme
-                await new Promise(resolve => setTimeout(resolve, 300))
-
-                // Redirect
-                console.log("🔄 Admin paneline yönlendiriliyor...")
-
-                try {
-                    window.location.replace('/admin')
-                } catch (e) {
-                    console.error("window.location.replace hatası, href deneniyor:", e)
-                    window.location.href = '/admin'
-                }
-            } else {
-                console.warn("⚠️ Login başarılı ama session yok!")
-                setError("Session oluşturulamadı. Tekrar deneyin.")
-            }
-        } catch (err: any) {
-            console.error("💥 Login error details:", err)
-            setError(err.message || "Giriş başarısız. Bilgilerinizi kontrol edin.")
+            setError("Giriş başarısız. Bilgilerinizi kontrol edin.")
         } finally {
             setLoading(false)
         }
@@ -91,7 +51,7 @@ export default function LoginPage() {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
+                transition={{ duration: 0.5, easeOut }}
                 className="w-full max-w-md mx-4 relative z-10"
             >
                 {/* Kartın Kendisi */}
