@@ -37,8 +37,16 @@ export default function AdminSidebar() {
     }, [])
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut()
-        router.push('/login')
+        try {
+            const { error } = await supabase.auth.signOut()
+            if (error) console.error('Error signing out:', error)
+        } catch (error) {
+            console.error('SignOut Exception:', error)
+        } finally {
+            // Force redirect
+            router.replace('/login')
+            router.refresh()
+        }
     }
 
     const menuItems = [

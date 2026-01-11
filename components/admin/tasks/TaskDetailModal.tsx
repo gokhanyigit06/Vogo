@@ -19,7 +19,8 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
         project_id: task.project_id,
         due_date: task.due_date ? task.due_date.split('T')[0] : '',
         status: task.status,
-        priority: task.priority
+        priority: task.priority,
+        tags: task.tags || []
     })
 
     const supabase = createBrowserClient(
@@ -157,8 +158,8 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                     </select>
                                 ) : (
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${task.status === 'done' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                                            task.status === 'in_progress' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                                                'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                                        task.status === 'in_progress' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                                            'bg-slate-500/10 text-slate-500 border-slate-500/20'
                                         }`}>
                                         {task.status === 'done' ? 'Tamamlandı' :
                                             task.status === 'in_progress' ? 'Sürüyor' : 'Yapılacak'}
@@ -413,15 +414,41 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             ) : (
                                 <div className="inline-flex">
                                     <span className={`px-4 py-2 rounded-lg text-sm font-bold capitalize border shadow-sm flex items-center gap-2 ${task.priority === 'high' ? 'bg-red-50 text-red-600 border-red-200' :
-                                            task.priority === 'low' ? 'bg-slate-50 text-slate-600 border-slate-200' :
-                                                'bg-amber-50 text-amber-600 border-amber-200'
+                                        task.priority === 'low' ? 'bg-slate-50 text-slate-600 border-slate-200' :
+                                            'bg-amber-50 text-amber-600 border-amber-200'
                                         }`}>
                                         <span className={`w-2 h-2 rounded-full ${task.priority === 'high' ? 'bg-red-500' :
-                                                task.priority === 'low' ? 'bg-slate-500' :
-                                                    'bg-amber-500'
+                                            task.priority === 'low' ? 'bg-slate-500' :
+                                                'bg-amber-500'
                                             }`}></span>
                                         {task.priority === 'high' ? 'Yüksek' : task.priority === 'low' ? 'Düşük' : 'Orta'}
                                     </span>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Tags Field */}
+                        <div>
+                            <label className="text-xs font-bold text-muted-foreground uppercase mb-2 block tracking-wider">Etiketler</label>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    className="w-full bg-white border border-border rounded-lg p-2.5 text-sm text-foreground"
+                                    value={Array.isArray(editForm.tags) ? editForm.tags.join(', ') : editForm.tags || ''}
+                                    onChange={e => setEditForm({ ...editForm, tags: e.target.value.split(',').map((t: string) => t.trim()) })}
+                                    placeholder="Frontend, Bug, Acil (Virgülle ayırın)"
+                                />
+                            ) : (
+                                <div className="flex flex-wrap gap-2">
+                                    {task.tags && Array.isArray(task.tags) && task.tags.length > 0 ? (
+                                        task.tags.map((tag: string, i: number) => (
+                                            <span key={i} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded border border-slate-200">
+                                                {tag}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-sm text-muted-foreground italic">Etiket yok</span>
+                                    )}
                                 </div>
                             )}
                         </div>
