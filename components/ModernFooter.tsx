@@ -5,15 +5,28 @@ import { Twitter, Linkedin, Instagram, ArrowUp, Facebook, Youtube } from "lucide
 import { useState, useEffect } from "react"
 import Link from "next/link"
 
+import { supabase } from "@/lib/supabase"
+
 export default function ModernFooter() {
     const [settings, setSettings] = useState<any>(null)
 
     useEffect(() => {
-        // Cache could be handled better but client-side fetch is OK here for updated data
-        fetch('/api/settings')
-            .then(res => res.json())
-            .then(data => setSettings(data))
-            .catch(err => console.error('Settings fetch error:', err))
+        const fetchSettings = async () => {
+            const { data } = await supabase.from('settings').select('*').single()
+            if (data) {
+                setSettings({
+                    siteTitle: data.site_title,
+                    siteDescription: data.site_description,
+                    twitter: data.twitter,
+                    linkedin: data.linkedin,
+                    instagram: data.instagram,
+                    facebook: data.facebook,
+                    youtube: data.youtube,
+                    address: data.address
+                })
+            }
+        }
+        fetchSettings()
     }, [])
 
     const scrollToTop = () => {
