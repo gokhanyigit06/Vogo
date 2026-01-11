@@ -35,16 +35,36 @@ export default function LoginPage() {
                 throw error
             }
 
-            if (data.user) {
+            if (data.user && data.session) {
                 console.log("✅ Login successful! User:", data.user.email)
-                console.log("🔑 Session token:", data.session?.access_token?.substring(0, 20) + "...")
+                console.log("🔑 Session:", data.session)
 
-                // Session cookie'nin set edilmesi için kısa bir bekleme
-                await new Promise(resolve => setTimeout(resolve, 500))
+                // Session'ı manuel set edelim
+                try {
+                    await supabase.auth.setSession({
+                        access_token: data.session.access_token,
+                        refresh_token: data.session.refresh_token
+                    })
+                    console.log("✅ Session set edildi")
+                } catch (e) {
+                    console.error("Session set hatası:", e)
+                }
 
-                // Full page reload ile redirect (middleware'in session'ı görmesi için)
-                console.log("🔄 Redirecting to /admin...")
-                window.location.href = '/admin'
+                // Kısa bekleme
+                await new Promise(resolve => setTimeout(resolve, 300))
+
+                // Redirect
+                console.log("🔄 Admin paneline yönlendiriliyor...")
+
+                try {
+                    window.location.replace('/admin')
+                } catch (e) {
+                    console.error("window.location.replace hatası, href deneniyor:", e)
+                    window.location.href = '/admin'
+                }
+            } else {
+                console.warn("⚠️ Login başarılı ama session yok!")
+                setError("Session oluşturulamadı. Tekrar deneyin.")
             }
         } catch (err: any) {
             console.error("💥 Login error details:", err)
