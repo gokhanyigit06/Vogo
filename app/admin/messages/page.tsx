@@ -9,18 +9,55 @@ export default function MessagesAdminPage() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        loadMessages()
+    }, [])
+
+    const loadMessages = () => {
+        setLoading(true)
         fetch('/api/messages')
             .then(res => res.json())
             .then(data => {
                 setMessages(data)
                 setLoading(false)
-                if (data.length > 0) setSelectedId(data[0].id)
+                if (data.length > 0 && !selectedId) setSelectedId(data[0].id)
             })
             .catch(err => {
                 console.error(err)
                 setLoading(false)
             })
-    }, [])
+    }
+
+    const handleDelete = async (id: number) => {
+        if (!confirm('Bu mesajı silmek istediğinizden emin misiniz?')) return
+
+        try {
+            const res = await fetch('/api/messages', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            })
+
+            if (res.ok) {
+                setSelectedId(null)
+                loadMessages()
+            }
+        } catch (error) {
+            console.error('Delete error:', error)
+        }
+    }
+
+    const markAsRead = async (id: number, is_read: boolean) => {
+        try {
+            await fetch('/api/messages', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, is_read })
+            })
+            loadMessages()
+        } catch (error) {
+            console.error('Mark as read error:', error)
+        }
+    }
 
     const selectedMessage = messages.find(m => m.id === selectedId)
 
@@ -84,7 +121,11 @@ export default function MessagesAdminPage() {
                                 <button className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground" title="Yanıtla">
                                     <Reply className="w-5 h-5" />
                                 </button>
-                                <button className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-red-400" title="Sil">
+                                <button
+                                    onClick={() => handleDelete(selectedMessage.id)}
+                                    className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-red-400"
+                                    title="Sil"
+                                >
                                     <Trash2 className="w-5 h-5" />
                                 </button>
                             </div>
