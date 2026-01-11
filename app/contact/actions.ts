@@ -84,8 +84,7 @@ export async function submitContactForm(formData: ContactFormData) {
             email: formData.email.trim().toLowerCase(),
             phone: formData.phone?.trim() || null,
             subject: formData.subject.trim(),
-            message: formData.message.trim(),
-            status: 'unread'
+            message: formData.message.trim()
         })
 
         const { data, error } = await supabase
@@ -96,9 +95,7 @@ export async function submitContactForm(formData: ContactFormData) {
                     email: formData.email.trim().toLowerCase(),
                     phone: formData.phone?.trim() || null,
                     subject: formData.subject.trim(),
-                    message: formData.message.trim(),
-                    status: 'unread',
-                    created_at: new Date().toISOString()
+                    message: formData.message.trim()
                 }
             ])
             .select()
