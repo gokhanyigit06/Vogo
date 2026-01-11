@@ -15,15 +15,34 @@ export default function AdminSidebar() {
 
     useEffect(() => {
         const getUser = async () => {
+            // 1. Auth user'ı al
             const { data: { user } } = await supabase.auth.getUser()
 
-            if (user) {
-                setUserProfile({
-                    email: user.email,
-                    name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
-                    role: 'admin', // Everyone who can login is admin
-                    avatar_url: user.user_metadata?.avatar_url
-                })
+            if (user && user.email) {
+                // 2. Team tablosundan bu maile sahip üyeyi bul
+                const { data: teamMember } = await supabase
+                    .from('team')
+                    .select('*')
+                    .eq('email', user.email)
+                    .single()
+
+                if (teamMember) {
+                    // Team tablosundaki veriyi kullan
+                    setUserProfile({
+                        email: user.email,
+                        name: teamMember.name,
+                        role: teamMember.role,
+                        avatar_url: teamMember.avatar_url
+                    })
+                } else {
+                    // Fallback: Team tablosunda yoksa auth verisini kullan
+                    setUserProfile({
+                        email: user.email,
+                        name: user.user_metadata?.full_name || user.email?.split('@')[0],
+                        role: 'admin',
+                        avatar_url: user.user_metadata?.avatar_url
+                    })
+                }
             }
         }
         getUser()

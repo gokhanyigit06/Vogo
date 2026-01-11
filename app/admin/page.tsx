@@ -38,17 +38,25 @@ export default function AdminDashboard() {
                 setLoading(false)
             })
 
-        // 2. Kullanıcı adını çek
+        // 2. Kullanıcı adını çek (Team tablosundan)
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser()
-            if (user) {
-                // Try full_name from metadata, then display_name, then parse from email
-                const name =
-                    user.user_metadata?.full_name ||
-                    user.user_metadata?.name ||
-                    user.email?.split('@')[0] ||
-                    'User'
-                setUserName(name.charAt(0).toUpperCase() + name.slice(1))
+            if (user && user.email) {
+                // Team tablosundan bu maile sahip üyeyi bul
+                const { data: teamMember } = await supabase
+                    .from('team')
+                    .select('name')
+                    .eq('email', user.email)
+                    .single()
+
+                if (teamMember && teamMember.name) {
+                    const firstName = teamMember.name.split(' ')[0]
+                    setUserName(firstName)
+                } else {
+                    // Fallback
+                    const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'
+                    setUserName(name.charAt(0).toUpperCase() + name.slice(1))
+                }
             }
         }
         getUser()
