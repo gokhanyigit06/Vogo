@@ -53,11 +53,15 @@ export async function submitContactForm(formData: ContactFormData) {
             }
         }
 
-        // Create Supabase client
+        // Create Supabase client with service role for RLS bypass
         const cookieStore = await cookies()
+
+        // Use service role key if available for admin operations
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
         const supabase = createServerClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            supabaseKey,
             {
                 cookies: {
                     get(name: string) {
