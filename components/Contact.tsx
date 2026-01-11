@@ -18,11 +18,16 @@ export default function Contact() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        console.log("🚀 Form submit başladı")
+        console.log("📋 Form data:", formData)
+
         setLoading(true)
         setResult(null)
 
         try {
+            console.log("📤 Server action çağrılıyor...")
             const response = await submitContactForm(formData)
+            console.log("📥 Server response:", response)
 
             setResult({
                 success: response.success,
@@ -30,6 +35,7 @@ export default function Contact() {
             })
 
             if (response.success) {
+                console.log("✅ Form başarıyla gönderildi!")
                 // Reset form on success
                 setFormData({
                     name: "",
@@ -38,14 +44,18 @@ export default function Contact() {
                     subject: "",
                     message: ""
                 })
+            } else {
+                console.error("❌ Error:", response.error)
             }
         } catch (error) {
+            console.error("💥 Catch bloğu:", error)
             setResult({
                 success: false,
                 message: "Bir hata oluştu. Lütfen tekrar deneyin."
             })
         } finally {
             setLoading(false)
+            console.log("✅ Form submit tamamlandı")
         }
     }
 
@@ -162,8 +172,8 @@ export default function Contact() {
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className={`mb-6 p-4 rounded-xl flex items-start gap-3 ${result.success
-                                        ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-600'
-                                        : 'bg-red-500/10 border border-red-500/20 text-red-600'
+                                    ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-600'
+                                    : 'bg-red-500/10 border border-red-500/20 text-red-600'
                                     }`}
                             >
                                 {result.success ? (
