@@ -4,12 +4,14 @@ import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare,
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase-client"
+import { logoutAction } from "@/app/actions/auth"
 
 export default function AdminSidebar() {
     const pathname = usePathname()
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [userProfile, setUserProfile] = useState<any>(null)
+    const supabase = createClient()
 
     useEffect(() => {
         const getUser = async () => {
@@ -30,12 +32,10 @@ export default function AdminSidebar() {
 
     const handleSignOut = async () => {
         try {
-            await supabase.auth.signOut()
-            // Force full page reload to clear all state and redirect to login
-            window.location.href = '/login'
+            await logoutAction()
         } catch (error) {
             console.error('SignOut Exception:', error)
-            // Even if error, redirect to login
+            // Fallback
             window.location.href = '/login'
         }
     }
