@@ -2,13 +2,12 @@
 
 import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, Layers, LogOut } from "lucide-react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 
 export default function AdminSidebar() {
     const pathname = usePathname()
-    const router = useRouter()
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [userProfile, setUserProfile] = useState<any>(null)
 
@@ -28,16 +27,16 @@ export default function AdminSidebar() {
         getUser()
     }, [])
 
+
     const handleSignOut = async () => {
         try {
-            const { error } = await supabase.auth.signOut()
-            if (error) console.error('Error signing out:', error)
+            await supabase.auth.signOut()
+            // Force full page reload to clear all state and redirect to login
+            window.location.href = '/login'
         } catch (error) {
             console.error('SignOut Exception:', error)
-        } finally {
-            // Force redirect
-            router.replace('/login')
-            router.refresh()
+            // Even if error, redirect to login
+            window.location.href = '/login'
         }
     }
 
