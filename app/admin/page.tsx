@@ -42,9 +42,13 @@ export default function AdminDashboard() {
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser()
             if (user) {
-                // Metadata varsa oradan, yoksa email'den isim türet
-                const name = user.user_metadata?.full_name || user.email?.split('@')[0]
-                if (name) setUserName(name)
+                // Try full_name from metadata, then display_name, then parse from email
+                const name =
+                    user.user_metadata?.full_name ||
+                    user.user_metadata?.name ||
+                    user.email?.split('@')[0] ||
+                    'User'
+                setUserName(name.charAt(0).toUpperCase() + name.slice(1))
             }
         }
         getUser()

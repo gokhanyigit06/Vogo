@@ -14,22 +14,14 @@ export default function AdminSidebar() {
 
     useEffect(() => {
         const getUser = async () => {
-            // Get Auth User
             const { data: { user } } = await supabase.auth.getUser()
 
             if (user) {
-                // Fetch Team Profile matching email
-                const { data: teamMember } = await supabase
-                    .from('team')
-                    .select('*')
-                    .eq('email', user.email)
-                    .single()
-
                 setUserProfile({
                     email: user.email,
-                    name: teamMember?.name || user.email?.split('@')[0], // Fallback to email username
-                    role: teamMember?.role || 'user',
-                    avatar_url: teamMember?.avatar_url
+                    name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+                    role: 'admin', // Everyone who can login is admin
+                    avatar_url: user.user_metadata?.avatar_url
                 })
             }
         }
