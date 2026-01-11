@@ -1,5 +1,4 @@
-
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -18,15 +17,34 @@ if (!supabaseUrl || !supabaseAnonKey) {
     }
 }
 
-export const supabase = createClient(url, key)
+// Singleton pattern - sadece bir kere oluştur
+let supabaseInstance: SupabaseClient | null = null
+
+export const supabase = (() => {
+    if (!supabaseInstance) {
+        supabaseInstance = createClient(url, key, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        })
+    }
+    return supabaseInstance
+})()
 
 // Admin Client (Service Role) - RLS Bypass
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-export const supabaseAdmin = serviceRoleKey
-    ? createClient(url, serviceRoleKey, {
-        auth: {
-            autoRefreshToken: false,
-            persistSession: false
-        }
-    })
-    : supabase
+let supabaseAdminInstance: SupabaseClient | null = null
+
+export const supabaseAdmin = (() => {
+    if (!supabaseAdminInstance && serviceRoleKey) {
+        supabaseAdminInstance = createClient(url, serviceRoleKey, {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        })
+    }
+    return supabaseAdminInstance || supabase
+})()
