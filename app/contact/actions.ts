@@ -74,6 +74,16 @@ export async function submitContactForm(formData: ContactFormData) {
         )
 
         // Insert message into database
+        console.log('📝 Inserting into Supabase...')
+        console.log('📋 Data to insert:', {
+            name: formData.name.trim(),
+            email: formData.email.trim().toLowerCase(),
+            phone: formData.phone?.trim() || null,
+            subject: formData.subject.trim(),
+            message: formData.message.trim(),
+            status: 'unread'
+        })
+
         const { data, error } = await supabase
             .from('messages')
             .insert([
@@ -92,6 +102,10 @@ export async function submitContactForm(formData: ContactFormData) {
 
         if (error) {
             console.error('❌ Supabase error:', error)
+            console.error('❌ Error code:', error.code)
+            console.error('❌ Error message:', error.message)
+            console.error('❌ Error details:', error.details)
+            console.error('❌ Error hint:', error.hint)
             return {
                 success: false,
                 error: 'Mesaj gönderilemedi. Lütfen tekrar deneyin.'
