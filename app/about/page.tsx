@@ -68,7 +68,7 @@ export default function AboutPage() {
                             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-blue-500 rounded-[2.5rem] rotate-6 opacity-10 blur-xl" />
                             <div className="relative h-[500px] rounded-[2.5rem] overflow-hidden border border-border shadow-2xl">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80"
+                                    src="/team-collaboration.png"
                                     alt="Team working"
                                     fill
                                     className="object-cover hover:scale-105 transition-transform duration-700"

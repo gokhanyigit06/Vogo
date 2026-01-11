@@ -20,7 +20,7 @@ const services = [
             "SEO optimized architecture",
             "Modern UI/UX principles"
         ],
-        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80",
+        image: "/services/web-development.png",
         stats: { value: "50+", label: "Web Projects" }
     },
     {
@@ -37,7 +37,7 @@ const services = [
             "Content strategy & creation",
             "Link building campaigns"
         ],
-        image: "https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?w=1200&q=80",
+        image: "/services/seo.png",
         stats: { value: "#1", label: "Top Rankings" }
     },
     {
@@ -54,7 +54,7 @@ const services = [
             "ROI-focused optimization",
             "Performance tracking & analytics"
         ],
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80",
+        image: "/services/digital-marketing.png",
         stats: { value: "3x", label: "ROI Increase" }
     },
     {
@@ -71,7 +71,7 @@ const services = [
             "Analytics & insights",
             "Growth strategy planning"
         ],
-        image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&q=80",
+        image: "/services/mobile-app.png",
         stats: { value: "10x", label: "Engagement Boost" }
     },
     {
@@ -88,7 +88,7 @@ const services = [
             "Real-time menu updates",
             "AI-powered recommendations"
         ],
-        image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
+        image: "/services/branding.png",
         stats: { value: "100+", label: "Restaurants" }
     },
     {
@@ -105,7 +105,7 @@ const services = [
             "Mobile app development",
             "Enterprise solutions"
         ],
-        image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80",
+        image: "/services/software-development.png",
         stats: { value: "∞", label: "Custom Solutions" }
     },
 ]

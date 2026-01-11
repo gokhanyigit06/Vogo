@@ -18,20 +18,37 @@ export default function LoginPage() {
         setLoading(true)
         setError(null)
 
+        console.log("🔐 Login attempt started...")
+        console.log("📧 Email:", email)
+        console.log("🌐 Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+
         try {
-            const { error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password
             })
 
-            if (error) throw error
+            console.log("📥 Login response:", { data, error })
 
-            // Başarılı
-            router.push('/admin')
-            router.refresh()
+            if (error) {
+                console.error("❌ Supabase Auth Error:", error.message)
+                throw error
+            }
+
+            if (data.user) {
+                console.log("✅ Login successful! User:", data.user.email)
+                console.log("🔑 Session token:", data.session?.access_token?.substring(0, 20) + "...")
+
+                // Session cookie'nin set edilmesi için kısa bir bekleme
+                await new Promise(resolve => setTimeout(resolve, 500))
+
+                // Full page reload ile redirect (middleware'in session'ı görmesi için)
+                console.log("🔄 Redirecting to /admin...")
+                window.location.href = '/admin'
+            }
         } catch (err: any) {
-            console.error("Login error:", err)
-            setError("Giriş başarısız. Bilgilerinizi kontrol edin.")
+            console.error("💥 Login error details:", err)
+            setError(err.message || "Giriş başarısız. Bilgilerinizi kontrol edin.")
         } finally {
             setLoading(false)
         }

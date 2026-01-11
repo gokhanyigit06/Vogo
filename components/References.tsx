@@ -21,7 +21,7 @@ const testimonials = [
         content: "Vogo Agency ile çalışmak işimizin dijital dönüşümünde tam bir dönüm noktası oldu. Satışlarımız %200 arttı!",
         author: "Ahmet Yılmaz",
         role: "CEO, TechCorp",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
+        avatar: "/avatars/ceo-avatar.png",
         rating: 5
     },
     {
@@ -29,7 +29,7 @@ const testimonials = [
         content: "Profesyonel yaklaşımları ve yaratıcı çözümleri ile markamıza değer kattılar. Kesinlikle tavsiye ediyorum.",
         author: "Ayşe Kaya",
         role: "Marketing Director, GlobalFine",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
+        avatar: "/avatars/marketing-director-avatar.png",
         rating: 5
     },
     {
@@ -37,7 +37,7 @@ const testimonials = [
         content: "Özel yazılım çözümleri sayesinde operasyonel verimliliğimiz arttı. Ekip her zaman çok ilgiliydi.",
         author: "Mehmet Demir",
         role: "CTO, EcoStyle",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
+        avatar: "/avatars/cto-avatar.png",
         rating: 5
     }
 ]
