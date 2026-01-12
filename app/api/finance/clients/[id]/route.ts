@@ -39,8 +39,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         if (clientError) throw clientError
 
-        // İşlem geçmişi (transactions) - Eğer tablo varsa
-        // Yoksa boş array dönüp hata vermesin
+        // İşlem geçmişi (transactions)
         let transactions = []
         try {
             const { data: trx, error: trxError } = await supabase
@@ -67,6 +66,43 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             .select('*')
             .eq('client_id', id)
             .order('date', { ascending: false })
+
+        // ------------------------------------------------------------------
+        // SELF-HEALING: Eğer veritabanındaki bakiye (trigger sorunu yüzünden) hatalıysa,
+        // anlık olarak hesapla ve düzelt.
+        // ------------------------------------------------------------------
+        if (incomes && incomes.length > 0) {
+            const calculatedRevenue = incomes.reduce((sum, item) => sum + parseFloat(item.amount), 0)
+            const calculatedPaid = incomes
+                .filter((i: any) => i.status === 'paid' || i.is_paid === true)
+                .reduce((sum, i) => sum + parseFloat(i.amount), 0)
+
+            const calculatedBalance = calculatedRevenue - calculatedPaid
+
+            // Toleranslı karşılaştırma (Float hassasiyeti)
+            const diffRev = Math.abs((client.total_revenue || 0) - calculatedRevenue)
+            const diffPaid = Math.abs((client.total_paid || 0) - calculatedPaid)
+            const diffBal = Math.abs((client.balance || 0) - calculatedBalance)
+
+            if (diffRev > 0.1 || diffPaid > 0.1 || diffBal > 0.1) {
+                console.log(`[Finance Self-Healing] Client ${id} balance mismatch detected. Fixing...`)
+                console.log(`DB Balance: ${client.balance}, Calculated: ${calculatedBalance}`)
+
+                // Veritabanını güncelle (Arka planda)
+                await supabase.from('clients').update({
+                    total_revenue: calculatedRevenue,
+                    total_paid: calculatedPaid,
+                    balance: calculatedBalance,
+                    last_transaction_date: new Date().toISOString()
+                }).eq('id', id)
+
+                // API yanıtını güncelle (UI anında doğru görsün)
+                client.total_revenue = calculatedRevenue
+                client.total_paid = calculatedPaid
+                client.balance = calculatedBalance
+            }
+        }
+        // ------------------------------------------------------------------
 
         return NextResponse.json({
             client,

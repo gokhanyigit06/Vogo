@@ -76,18 +76,19 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                     <div className="bg-card border border-border p-6 rounded-notebook">
                         <h3 className="font-bold text-foreground mb-4">Finansal Özet</h3>
                         <div className="space-y-4">
-                            <div className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg">
-                                <span className="text-sm text-muted-foreground">Toplam Borç</span>
+                            {/* CSS FIX: bg-slate-800 yerine bg-muted/50 kullanıldı, border eklendi */}
+                            <div className="flex justify-between items-center p-3 bg-muted/50 border border-border rounded-xl">
+                                <span className="text-sm text-muted-foreground">Toplam Borç (Ciro)</span>
                                 <span className="font-bold text-foreground">{formatCurrency(client.total_revenue)}</span>
                             </div>
-                            <div className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-muted/50 border border-border rounded-xl">
                                 <span className="text-sm text-muted-foreground">Toplam Ödenen</span>
                                 <span className="font-bold text-emerald-500">{formatCurrency(client.total_paid)}</span>
                             </div>
                             <div className="pt-2 border-t border-border mt-2">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-bold text-foreground">Güncel Bakiye</span>
-                                    <span className={`text-xl font-bold ${(client.balance || 0) > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                                    <span className="text-sm font-bold text-foreground">Güncel Bakiye (Kalan)</span>
+                                    <span className={`text-xl font-bold ${(client.balance || 0) > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
                                         {formatCurrency(client.balance)}
                                     </span>
                                 </div>
@@ -110,13 +111,15 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                             {/* Eğer Transaction tablosu boşsa projelere ve ödemelere göre sanal bir timeline oluştur */}
                             {incomes?.map((inc: any) => (
                                 <div key={inc.id} className="relative">
-                                    <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-card"></div>
-                                    <div className="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20">
+                                    <div className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-4 border-card ${inc.status === 'pending' || !inc.is_paid ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+                                    <div className={`p-4 rounded-xl border ${inc.status === 'pending' || !inc.is_paid ? 'bg-amber-500/10 border-amber-500/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
                                         <div className="flex justify-between items-start mb-1">
-                                            <span className="font-bold text-emerald-500">Tahsilat / Ödeme Alındı</span>
+                                            <span className={`font-bold ${inc.status === 'pending' || !inc.is_paid ? 'text-amber-500' : 'text-emerald-500'}`}>
+                                                {inc.status === 'pending' || !inc.is_paid ? 'Bekleyen Ödeme (Alacak)' : 'Tahsilat / Ödeme Alındı'}
+                                            </span>
                                             <span className="text-xs text-muted-foreground">{new Date(inc.date).toLocaleDateString('tr-TR')}</span>
                                         </div>
-                                        <p className="text-foreground font-medium">{inc.description}</p>
+                                        <p className="text-foreground font-medium">{inc.description || 'Ödeme Hareketi'}</p>
                                         <p className="text-lg font-bold text-foreground mt-1">{formatCurrency(inc.amount)}</p>
                                     </div>
                                 </div>
