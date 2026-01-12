@@ -71,6 +71,33 @@ export async function POST(request: NextRequest) {
     }
 }
 
+// PUT - Üye güncelle
+export async function PUT(request: NextRequest) {
+    try {
+        const supabase = await createClient()
+        const body = await request.json()
+        const { id, name, email, role, avatar_url } = body
+
+        if (!id) {
+            return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
+        }
+
+        const { data, error } = await supabase
+            .from('team')
+            .update({ name, email, role, avatar_url })
+            .eq('id', id)
+            .select()
+            .single()
+
+        if (error) throw error
+
+        return NextResponse.json(data)
+    } catch (error: any) {
+        console.error('Team PUT error:', error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+}
+
 // DELETE - Üye sil
 export async function DELETE(request: NextRequest) {
     try {
