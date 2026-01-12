@@ -72,6 +72,13 @@ export async function PUT(request: NextRequest) {
         const body = await request.json()
         const { id, ...updateData } = body
 
+        // Boş string'leri null'a çevir
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === '') {
+                updateData[key] = null
+            }
+        })
+
         const { data, error } = await supabase
             .from('projects')
             .update(updateData)
