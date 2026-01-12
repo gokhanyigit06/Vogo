@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic"
 
 import { useEffect, useState } from "react"
-import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus, ArrowRight, FileText } from "lucide-react"
 import Link from "next/link"
 import IncomeTrendChart from "@/components/admin/charts/IncomeTrendChart"
 import ExpensePieChart from "@/components/admin/charts/ExpensePieChart"
@@ -11,27 +11,49 @@ import ExpensePieChart from "@/components/admin/charts/ExpensePieChart"
 export default function FinancePage() {
     const [income, setIncome] = useState<any[]>([])
     const [expenses, setExpenses] = useState<any[]>([])
+    const [payables, setPayables] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         Promise.all([
             fetch('/api/finance/income').then(r => r.json()),
-            fetch('/api/finance/expenses').then(r => r.json())
-        ]).then(([incomeData, expensesData]) => {
+            fetch('/api/finance/expenses').then(r => r.json()),
+            fetch('/api/finance/payables').then(r => r.json())
+        ]).then(([incomeData, expensesData, payablesData]) => {
             setIncome(Array.isArray(incomeData) ? incomeData : [])
             setExpenses(Array.isArray(expensesData) ? expensesData : [])
+            setPayables(Array.isArray(payablesData) ? payablesData : [])
             setLoading(false)
         }).catch(err => {
             console.error('Finance data error:', err)
+            // Hata olsa bile state'leri boş array yap ki crash olmasın
             setIncome([])
             setExpenses([])
+            setPayables([])
             setLoading(false)
         })
     }, [])
 
-    const totalIncome = income.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
-    const totalExpenses = expenses.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
-    const profit = totalIncome - totalExpenses
+    // Gelir Hesabı: Sadece tahsil edilmiş (beklemede olmayan) gelirleri topla
+    // Eğer status 'pending' ise veya is_paid false ise kara dahil etme
+    const totalCollectedIncome = income
+        .filter(i => i.status !== 'pending' && i.is_paid !== false)
+        .reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+
+    // Gider Hesabı: Expenses tablosundakiler gerçekleşmiş giderdir
+    const totalPaidExpenses = expenses.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+
+    // Net Kar
+    const profit = totalCollectedIncome - totalPaidExpenses
+
+    // Bakiye Hesapları
+    const totalReceivables = income
+        .filter(i => i.status === 'pending' || i.is_paid === false)
+        .reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+
+    const totalPayables = payables
+        .filter(p => p.status === 'pending')
+        .reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount)
@@ -43,12 +65,11 @@ export default function FinancePage() {
     const monthlyRecurringExpenses = recurringExpenses.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
 
     if (loading) {
-        return <div className="p-8"><div className="text-muted-foreground">Yükleniyor...</div></div>
+        return <div className="p-8 max-w-7xl mx-auto"><div className="text-muted-foreground">Yükleniyor...</div></div>
     }
 
     return (
         <div className="p-8 max-w-7xl mx-auto space-y-8">
-
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
@@ -59,32 +80,40 @@ export default function FinancePage() {
             </div>
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 <div className="bg-card border border-emerald-500/20 p-6 rounded-notebook card-light-shadow">
                     <TrendingUp className="w-8 h-8 text-emerald-500 mb-3" />
-                    <p className="text-muted-foreground text-sm">Toplam Gelir</p>
-                    <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalIncome)}</h3>
+                    <p className="text-muted-foreground text-sm">Gerçekleşen Gelir</p>
+                    <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalCollectedIncome)}</h3>
                 </div>
 
                 <div className="bg-card border border-red-500/20 p-6 rounded-notebook card-light-shadow">
-                    <TrendingDown className="w-8 h-8 text-red-500 mb-3" />
+                    <TrendingDown className="w-8 h-8 text-slate-500 mb-3" />
                     <p className="text-muted-foreground text-sm">Toplam Gider</p>
-                    <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalExpenses)}</h3>
+                    <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalPaidExpenses)}</h3>
                 </div>
 
                 <div className="bg-card border border-blue-500/20 p-6 rounded-notebook card-light-shadow">
                     <DollarSign className="w-8 h-8 text-blue-500 mb-3" />
-                    <p className="text-muted-foreground text-sm">Net Kar</p>
+                    <p className="text-muted-foreground text-sm">Net Kâr</p>
                     <h3 className={`text-2xl font-bold mt-1 ${profit >= 0 ? 'text-blue-500' : 'text-red-500'}`}>
                         {formatCurrency(profit)}
                     </h3>
                 </div>
 
-                <div className="bg-card border border-purple-500/20 p-6 rounded-notebook card-light-shadow">
-                    <Calendar className="w-8 h-8 text-purple-500 mb-3" />
-                    <p className="text-muted-foreground text-sm">Aylık Düzenli Net</p>
-                    <h3 className="text-2xl font-bold text-purple-500 mt-1">
-                        {formatCurrency(monthlyRecurringIncome - monthlyRecurringExpenses)}
+                <div className="bg-card border border-amber-500/20 p-6 rounded-notebook card-light-shadow">
+                    <Calendar className="w-8 h-8 text-amber-500 mb-3" />
+                    <p className="text-muted-foreground text-sm">Bekleyen Alacaklar</p>
+                    <h3 className="text-2xl font-bold text-amber-500 mt-1">
+                        {formatCurrency(totalReceivables)}
+                    </h3>
+                </div>
+
+                <div className="bg-card border border-red-500/20 p-6 rounded-notebook card-light-shadow">
+                    <Calendar className="w-8 h-8 text-red-500 mb-3" />
+                    <p className="text-muted-foreground text-sm">Ödenecek Borçlar</p>
+                    <h3 className="text-2xl font-bold text-red-500 mt-1">
+                        {formatCurrency(totalPayables)}
                     </h3>
                 </div>
             </div>
@@ -100,29 +129,38 @@ export default function FinancePage() {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Link
+                    href="/admin/finance/clients"
+                    className="bg-card border border-border hover:border-blue-500/50 p-6 rounded-notebook transition-all group"
+                >
+                    <div className="flex flex-col h-full justify-between">
+                        <div>
+                            <h3 className="text-lg font-bold text-foreground mb-2">Müşteri Carileri</h3>
+                            <p className="text-muted-foreground text-xs">
+                                Bakiye ve işlem geçmişi
+                            </p>
+                        </div>
+                        <div className="mt-4 flex justify-end">
+                            <ArrowRight className="w-8 h-8 text-blue-400 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
+                </Link>
+
                 <Link
                     href="/admin/finance/income"
                     className="bg-card border border-border hover:border-emerald-500/50 p-6 rounded-notebook transition-all group"
                 >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col h-full justify-between">
                         <div>
-                            <h3 className="text-xl font-bold text-foreground mb-2">Gelir Yönetimi</h3>
-                            <p className="text-muted-foreground text-sm">
-                                Müşteri ödemeleri ve düzenli gelirleri kaydet
+                            <h3 className="text-lg font-bold text-foreground mb-2">Gelirler</h3>
+                            <p className="text-muted-foreground text-xs">
+                                Tahsilat ve fatura girişi
                             </p>
-                            <div className="mt-4 space-y-2">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                    <span className="text-muted-foreground">{income.length} kayıt</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                                    <span className="text-muted-foreground">{recurringIncome.length} düzenli gelir</span>
-                                </div>
-                            </div>
                         </div>
-                        <Plus className="w-12 h-12 text-emerald-400 group-hover:scale-110 transition-transform" />
+                        <div className="mt-4 flex justify-end">
+                            <Plus className="w-8 h-8 text-emerald-400 group-hover:scale-110 transition-transform" />
+                        </div>
                     </div>
                 </Link>
 
@@ -130,43 +168,33 @@ export default function FinancePage() {
                     href="/admin/finance/expenses"
                     className="bg-card border border-border hover:border-red-500/50 p-6 rounded-notebook transition-all group"
                 >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col h-full justify-between">
                         <div>
-                            <h3 className="text-xl font-bold text-foreground mb-2">Gider Yönetimi</h3>
-                            <p className="text-muted-foreground text-sm">
-                                Masraflar ve düzenli ödemeleri kaydet
+                            <h3 className="text-lg font-bold text-foreground mb-2">Giderler</h3>
+                            <p className="text-muted-foreground text-xs">
+                                Masraf girişi ve takibi
                             </p>
-                            <div className="mt-4 space-y-2">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                    <span className="text-muted-foreground">{expenses.length} kayıt</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                                    <span className="text-muted-foreground">{recurringExpenses.length} düzenli gider</span>
-                                </div>
-                            </div>
                         </div>
-                        <Plus className="w-12 h-12 text-red-400 group-hover:scale-110 transition-transform" />
+                        <div className="mt-4 flex justify-end">
+                            <Plus className="w-8 h-8 text-red-500 group-hover:scale-110 transition-transform" />
+                        </div>
                     </div>
                 </Link>
 
                 <Link
-                    href="/admin/finance/receivables"
-                    className="bg-card border border-border hover:border-blue-500/50 p-6 rounded-notebook transition-all group md:col-span-2 lg:col-span-1"
+                    href="/admin/finance/payables"
+                    className="bg-card border border-border hover:border-red-500/50 p-6 rounded-notebook transition-all group"
                 >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col h-full justify-between">
                         <div>
-                            <h3 className="text-xl font-bold text-foreground mb-2">Alacak Takibi</h3>
-                            <p className="text-muted-foreground text-sm">
-                                Müşterilerden beklenen ödemeler
+                            <h3 className="text-lg font-bold text-foreground mb-2">Borçlar</h3>
+                            <p className="text-muted-foreground text-xs">
+                                Tedarikçi ve personel ödemeleri
                             </p>
-                            <div className="mt-4 flex items-center gap-2 text-sm">
-                                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                                <span className="text-muted-foreground">Borçlu müşterileri listele</span>
-                            </div>
                         </div>
-                        <DollarSign className="w-12 h-12 text-blue-400 group-hover:scale-110 transition-transform" />
+                        <div className="mt-4 flex justify-end">
+                            <FileText className="w-8 h-8 text-red-500 group-hover:scale-110 transition-transform" />
+                        </div>
                     </div>
                 </Link>
             </div>
@@ -176,7 +204,7 @@ export default function FinancePage() {
                 <div className="bg-purple-500/10 border border-purple-500/20 p-6 rounded-notebook">
                     <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-purple-400" />
-                        Düzenli Ödemeler
+                        Düzenli Ödemeler (Aylık)
                     </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
@@ -191,7 +219,7 @@ export default function FinancePage() {
                 </div>
             )}
 
-            {/* Partner Balances (Cari Hesaplar) */}
+            {/* Ortak Cari Hesapları */}
             {expenses.some(e => e.paid_by) && (
                 <div className="bg-card border border-border p-6 rounded-notebook">
                     <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
@@ -199,7 +227,6 @@ export default function FinancePage() {
                         Ortak Cari Hesapları
                     </h3>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Gruplama ve Hesaplama */}
                         {Object.values(expenses.reduce((acc: any, item) => {
                             if (item.paid_by && item.team_members) {
                                 if (!acc[item.paid_by]) {

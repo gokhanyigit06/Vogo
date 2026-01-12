@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic"
 
 import { useState, useEffect } from "react"
-import { ArrowLeft, Save, TrendingUp, Trash2, Calendar } from "lucide-react"
+import { ArrowLeft, Save, TrendingUp, Trash2, Calendar, Clock, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -21,6 +21,7 @@ export default function IncomePage() {
         payment_method: "bank_transfer",
         invoice_number: "",
         description: "",
+        status: "paid", // varsayılan ödendi
         is_recurring: false,
         recurrence_frequency: "monthly",
         recurrence_day: new Date().getDate(),
@@ -52,6 +53,7 @@ export default function IncomePage() {
                 ...formData,
                 client_id: formData.client_id ? parseInt(formData.client_id) : null,
                 amount: parseFloat(formData.amount),
+                is_paid: formData.status === 'paid' // status'a göre is_paid'i ayarla
             }
 
             const res = await fetch('/api/finance/income', {
@@ -72,6 +74,7 @@ export default function IncomePage() {
                 payment_method: "bank_transfer",
                 invoice_number: "",
                 description: "",
+                status: "paid",
                 is_recurring: false,
                 recurrence_frequency: "monthly",
                 recurrence_day: new Date().getDate(),
@@ -102,7 +105,15 @@ export default function IncomePage() {
         return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount)
     }
 
-    const totalIncome = income.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+    // Sadece ödenmiş (tahsil edilmiş) gelirleri topla
+    const totalCollectedIncome = income
+        .filter(i => i.status === 'paid' || i.is_paid === true)
+        .reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+
+    const pendingIncome = income
+        .filter(i => i.status === 'pending' || i.is_paid === false)
+        .reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+
     const recurringIncome = income.filter(i => i.is_recurring)
 
     return (
@@ -133,10 +144,14 @@ export default function IncomePage() {
             </div>
 
             {/* Stats */}
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-4 gap-4">
                 <div className="bg-card border border-border p-4 rounded-xl">
-                    <p className="text-slate-400 text-sm">Toplam Gelir</p>
-                    <p className="text-2xl font-bold text-emerald-400 mt-1">{formatCurrency(totalIncome)}</p>
+                    <p className="text-slate-400 text-sm">Tahsil Edilen</p>
+                    <p className="text-2xl font-bold text-emerald-400 mt-1">{formatCurrency(totalCollectedIncome)}</p>
+                </div>
+                <div className="bg-card border border-border p-4 rounded-xl">
+                    <p className="text-slate-400 text-sm">Bekleyen (Alacak)</p>
+                    <p className="text-2xl font-bold text-amber-500 mt-1">{formatCurrency(pendingIncome)}</p>
                 </div>
                 <div className="bg-card border border-border p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Kayıt Sayısı</p>
@@ -195,6 +210,18 @@ export default function IncomePage() {
                         </div>
 
                         <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Durum</label>
+                            <select
+                                value={formData.status}
+                                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            >
+                                <option value="paid">Tahsil Edildi (Kasa)</option>
+                                <option value="pending">Bekliyor (Alacak)</option>
+                            </select>
+                        </div>
+
+                        <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Ödeme Yöntemi</label>
                             <select
                                 value={formData.payment_method}
@@ -218,7 +245,7 @@ export default function IncomePage() {
                             />
                         </div>
 
-                        <div>
+                        <div className="md:col-span-2">
                             <label className="block text-slate-400 text-sm font-medium mb-2">Açıklama</label>
                             <input
                                 type="text"
@@ -308,6 +335,17 @@ export default function IncomePage() {
                                         <h4 className="text-foreground font-medium">
                                             {item.description || 'Ödeme'}
                                         </h4>
+                                        {item.status === 'pending' || item.is_paid === false ? (
+                                            <span className="text-xs px-2 py-1 bg-amber-500/10 text-amber-500 rounded-md border border-amber-500/20 flex items-center gap-1">
+                                                <Clock className="w-3 h-3" />
+                                                Bekliyor
+                                            </span>
+                                        ) : (
+                                            <span className="text-xs px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-md border border-emerald-500/20 flex items-center gap-1">
+                                                <CheckCircle2 className="w-3 h-3" />
+                                                Tahsil Edildi
+                                            </span>
+                                        )}
                                         {item.is_recurring && (
                                             <span className="text-xs px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md border border-purple-500/20 flex items-center gap-1">
                                                 <Calendar className="w-3 h-3" />
@@ -321,7 +359,9 @@ export default function IncomePage() {
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <p className="text-emerald-400 font-bold text-lg">{formatCurrency(item.amount)}</p>
+                                    <p className={`font-bold text-lg ${item.status === 'pending' || item.is_paid === false ? 'text-amber-500' : 'text-emerald-400'}`}>
+                                        {formatCurrency(item.amount)}
+                                    </p>
                                     <button
                                         onClick={() => handleDelete(item.id)}
                                         className="p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-400 transition-colors"

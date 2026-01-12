@@ -38,10 +38,8 @@ export async function POST(request: NextRequest) {
 
         if (error) throw error
 
-        // Eğer müşteriye bağlıysa, toplam gelirini güncelle
-        if (data.client_id) {
-            await supabase.rpc('update_client_revenue', { client_id: data.client_id })
-        }
+        // Not: Müşteri bakiyesi güncellemesi artık Veritabanı Trigger'ı ile otomatik yapılıyor.
+        // Manuel RPC çağrısına gerek kalmadı.
 
         return NextResponse.json(data)
     } catch (error: any) {
