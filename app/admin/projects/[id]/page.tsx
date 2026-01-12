@@ -28,6 +28,8 @@ export default function ProjectDetailPage() {
         if (params.id) {
             fetchProject(params.id as string)
             fetchNotes(params.id as string)
+            // Her render'da güncel task'ları yükle
+            refreshProjectTasks(params.id as string)
         }
     }, [params.id])
 
@@ -73,6 +75,31 @@ export default function ProjectDetailPage() {
             router.push('/admin/projects')
         } finally {
             setLoading(false)
+        }
+    }
+
+    const refreshProjectTasks = (projectId: string) => {
+        if (process.env.NODE_ENV === 'development') {
+            // localStorage'dan güncel task listesini al
+            try {
+                const stored = localStorage.getItem('mock_tasks')
+                if (stored) {
+                    const allTasks = JSON.parse(stored)
+                    const projectTasks = allTasks.filter((t: any) => t.project_id == projectId)
+                    setProject((prev: any) => prev ? { ...prev, tasks: projectTasks } : null)
+                }
+            } catch (e) {
+                console.error("Task refresh error:", e)
+            }
+        } else {
+            // Production: API'den task'ları çek
+            fetch(`/api/tasks`)
+                .then(r => r.json())
+                .then(allTasks => {
+                    const projectTasks = allTasks.filter((t: any) => t.project_id == projectId)
+                    setProject((prev: any) => prev ? { ...prev, tasks: projectTasks } : null)
+                })
+                .catch(e => console.error("Task fetch error:", e))
         }
     }
 
@@ -134,6 +161,11 @@ export default function ProjectDetailPage() {
 
                 // 3. Save back
                 localStorage.setItem('mock_tasks', JSON.stringify(localTasks))
+
+                // 4. Task board'a bildir
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new Event('tasks-updated'))
+                }
 
             } catch (e) { console.error("LS Sync Error", e) }
 

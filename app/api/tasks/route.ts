@@ -36,11 +36,14 @@ export async function GET(request: NextRequest) {
     try {
         const supabase = await createClient()
 
-        // Basit sorgu (İlişkisiz) - Güvenli mod
-        // Sorun Join'de. Sadeleştiriyorum.
+        // İlişkili dataları çek: team_members ve projects
         const { data, error } = await supabase
             .from('tasks')
-            .select('*')
+            .select(`
+                *,
+                team_members!tasks_assigned_to_fkey(id, name, email),
+                projects!tasks_project_id_fkey(id, name, title)
+            `)
             .order('id', { ascending: false })
 
         if (error) throw error

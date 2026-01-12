@@ -171,6 +171,22 @@ export default function TasksPage() {
         fetchTasks()
         fetchTeam()
         fetchProjects()
+
+        // LocalStorage değişikliklerini dinle
+        const handleTasksUpdate = () => {
+            console.log('🔄 Tasks updated event received, refreshing...')
+            fetchTasks()
+        }
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('tasks-updated', handleTasksUpdate)
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('tasks-updated', handleTasksUpdate)
+            }
+        }
     }, [])
 
     const fetchTasks = () => fetch('/api/tasks')
