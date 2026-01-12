@@ -358,7 +358,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                 <select
                                     className="w-full bg-white border border-border rounded-lg p-2.5 text-sm text-foreground focus:ring-2 focus:ring-emerald-500/20 outline-none"
                                     value={editForm.assigned_to || ''}
-                                    onChange={e => setEditForm({ ...editForm, assigned_to: e.target.value })}
+                                    onChange={e => setEditForm({ ...editForm, assigned_to: e.target.value ? e.target.value : null })}
                                 >
                                     <option value="">Atanmamış</option>
                                     {team.map((m: any) => (
@@ -367,13 +367,20 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                 </select>
                             ) : (
                                 <div className="flex items-center gap-3 p-1">
-                                    <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-emerald-500/10">
-                                        {task.team_members?.name?.[0]?.toUpperCase() || '?'}
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-foreground">{task.team_members?.name || 'Atanmamış'}</p>
-                                        <p className="text-xs text-muted-foreground">{task.team_members?.role || 'Üye'}</p>
-                                    </div>
+                                    {(() => {
+                                        const assignedUser = team.find((m: any) => m.id == task.assigned_to)
+                                        return (
+                                            <>
+                                                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-emerald-500/10">
+                                                    {assignedUser?.name?.[0]?.toUpperCase() || '?'}
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-bold text-foreground">{assignedUser?.name || 'Atanmamış'}</p>
+                                                    <p className="text-xs text-muted-foreground">{assignedUser?.role || 'Üye'}</p>
+                                                </div>
+                                            </>
+                                        )
+                                    })()}
                                 </div>
                             )}
                         </div>

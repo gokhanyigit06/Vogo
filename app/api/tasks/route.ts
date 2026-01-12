@@ -36,14 +36,10 @@ export async function GET(request: NextRequest) {
     try {
         const supabase = await createClient()
 
-        // İlişkili dataları çek: team_members ve projects
+        // Basit sorgu - JOIN yok, sadece task data
         const { data, error } = await supabase
             .from('tasks')
-            .select(`
-                *,
-                team_members!tasks_assigned_to_fkey(id, name, email),
-                projects!tasks_project_id_fkey(id, name, title)
-            `)
+            .select('*')
             .order('id', { ascending: false })
 
         if (error) throw error
@@ -96,18 +92,21 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 })
         }
 
+        // Boş string'leri null'a çevir
+        const updateData = {
+            title: body.title,
+            description: body.description,
+            status: body.status,
+            priority: body.priority,
+            assigned_to: body.assigned_to || null,
+            project_id: body.project_id || null,
+            due_date: body.due_date || null,
+            updated_at: new Date().toISOString()
+        }
+
         const { data, error } = await supabase
             .from('tasks')
-            .update({
-                title: body.title,
-                description: body.description,
-                status: body.status,
-                priority: body.priority,
-                assigned_to: body.assigned_to,
-                project_id: body.project_id,
-                due_date: body.due_date,
-                updated_at: new Date().toISOString()
-            })
+            .update(updateData)
             .eq('id', body.id)
             .select()
 

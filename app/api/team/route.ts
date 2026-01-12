@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         const supabase = await createClient()
 
         const { data, error } = await supabase
-            .from('team_members')
+            .from('team')
             .select('*')
             .order('created_at', { ascending: false })
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         const { name, email, role, avatar_url } = body
 
         const { data, error } = await supabase
-            .from('team_members')
+            .from('team')
             .insert([{ name, email, role, avatar_url }])
             .select()
             .single()
@@ -84,7 +84,7 @@ export async function DELETE(request: NextRequest) {
         const supabase = await createClient()
 
         const { error } = await supabase
-            .from('team_members')
+            .from('team')
             .delete()
             .eq('id', id)
 

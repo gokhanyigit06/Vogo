@@ -33,8 +33,7 @@ const COLUMNS = [
 ]
 
 // --- Visual Component (Pure UI) ---
-function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: Task, team?: any[], isOverlay?: boolean, onClick?: () => void }) {
-    const assignedUser = team.find((m: any) => m.id == task.assigned_to)
+function TaskCardView({ task, isOverlay = false, onClick }: { task: Task, isOverlay?: boolean, onClick?: () => void }) {
     const priorityColor = {
         low: 'bg-muted text-foreground',
         medium: 'bg-yellow-500/10 text-yellow-500',
@@ -72,7 +71,7 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
             <div className="flex items-center gap-4 text-muted-foreground text-xs mt-3">
                 <div className="flex items-center gap-1.5">
                     <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-foreground border border-border">
-                        {assignedUser?.name?.[0] || '?'}
+                        {task.team_members?.name?.[0] || '?'}
                     </div>
                 </div>
 
@@ -88,7 +87,7 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
 }
 
 // --- Draggable Wrapper ---
-function DraggableTaskCard({ task, team, onClick }: { task: Task, team: any[], onClick: () => void }) {
+function DraggableTaskCard({ task, onClick }: { task: Task, onClick: () => void }) {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: task.id.toString(),
         data: task
@@ -101,20 +100,20 @@ function DraggableTaskCard({ task, team, onClick }: { task: Task, team: any[], o
     if (isDragging) {
         return (
             <div ref={setNodeRef} style={style} className="opacity-50">
-                <TaskCardView task={task} team={team} />
+                <TaskCardView task={task} />
             </div>
         )
     }
 
     return (
         <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
-            <TaskCardView task={task} team={team} onClick={onClick} />
+            <TaskCardView task={task} onClick={onClick} />
         </div>
     )
 }
 
 // --- Column Component ---
-function KanbanColumn({ id, title, tasks, team, color, onTaskClick }: { id: string, title: string, tasks: Task[], team: any[], color: string, onTaskClick: (t: Task) => void }) {
+function KanbanColumn({ id, title, tasks, color, onTaskClick }: { id: string, title: string, tasks: Task[], color: string, onTaskClick: (t: Task) => void }) {
     const { setNodeRef } = useDroppable({ id })
 
     return (
@@ -132,7 +131,7 @@ function KanbanColumn({ id, title, tasks, team, color, onTaskClick }: { id: stri
             </div>
             <div className="space-y-3 flex-1">
                 {tasks.map(task => (
-                    <DraggableTaskCard key={task.id} task={task} team={team} onClick={() => onTaskClick(task)} />
+                    <DraggableTaskCard key={task.id} task={task} onClick={() => onTaskClick(task)} />
                 ))}
             </div>
         </div>
@@ -379,7 +378,6 @@ export default function TasksPage() {
                             id={col.id}
                             title={col.title}
                             color={col.color}
-                            team={team}
                             tasks={filteredTasks.filter(t => t.status === col.id)}
                             onTaskClick={(task) => {
                                 setSelectedTaskId(task.id)
@@ -389,7 +387,7 @@ export default function TasksPage() {
                 </div>
                 {createPortal(
                     <DragOverlay>
-                        {activeTask ? <TaskCardView task={activeTask} team={team} isOverlay /> : null}
+                        {activeTask ? <TaskCardView task={activeTask} isOverlay /> : null}
                     </DragOverlay>,
                     document.body
                 )}
