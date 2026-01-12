@@ -224,6 +224,15 @@ export default function TasksPage() {
             else if (process.env.NODE_ENV === 'development') setTeam(require('@/lib/mock-data').MOCK_TEAM)
             else setTeam([])
         })
+        .catch(err => {
+            console.error("Team fetch error:", err)
+            if (process.env.NODE_ENV === 'development') {
+                console.log("⚠️ Dev Mode: Using Mock Team")
+                setTeam(require('@/lib/mock-data').MOCK_TEAM)
+            } else {
+                setTeam([])
+            }
+        })
 
     const fetchProjects = () => fetch('/api/projects')
         .then(r => r.json())
