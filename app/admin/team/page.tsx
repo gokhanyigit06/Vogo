@@ -10,6 +10,7 @@ export default function TeamPage() {
     const [team, setTeam] = useState<any[]>([])
     const [showForm, setShowForm] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [selectedMember, setSelectedMember] = useState<any>(null) // Düzenleme için
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -37,16 +38,22 @@ export default function TeamPage() {
         setLoading(true)
 
         try {
+            const method = selectedMember ? 'PUT' : 'POST'
+            const body = selectedMember
+                ? JSON.stringify({ id: selectedMember.id, ...formData })
+                : JSON.stringify(formData)
+
             const res = await fetch('/api/team', {
-                method: 'POST',
+                method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body
             })
 
-            if (!res.ok) throw new Error('Eklenemedi')
+            if (!res.ok) throw new Error('İşlem başarısız')
 
-            alert('Takım üyesi eklendi!')
+            alert(selectedMember ? 'Üye güncellendi!' : 'Takım üyesi eklendi!')
             setShowForm(false)
+            setSelectedMember(null)
             setFormData({ name: "", email: "", role: "member", avatar_url: "" })
             fetchTeam()
         } catch (error) {
@@ -99,7 +106,11 @@ export default function TeamPage() {
                     <p className="text-muted-foreground mt-1">Ekip arkadaşlarınızı yönetin</p>
                 </div>
                 <button
-                    onClick={() => setShowForm(!showForm)}
+                    onClick={() => {
+                        setShowForm(!showForm)
+                        setSelectedMember(null)
+                        setFormData({ name: "", email: "", role: "member", avatar_url: "" })
+                    }}
                     className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
                 >
                     <UserPlus className="w-5 h-5" />
@@ -110,7 +121,9 @@ export default function TeamPage() {
             {/* Form */}
             {showForm && (
                 <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
-                    <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Takım Üyesi</h2>
+                    <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
+                        {selectedMember ? 'Üyeyi Düzenle' : 'Yeni Takım Üyesi'}
+                    </h2>
 
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="md:col-span-2">
@@ -165,7 +178,7 @@ export default function TeamPage() {
                         disabled={loading}
                         className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all"
                     >
-                        {loading ? 'Ekleniyor...' : 'Üye Ekle'}
+                        {loading ? (selectedMember ? 'Güncelleniyor...' : 'Ekleniyor...') : (selectedMember ? 'Güncelle' : 'Üye Ekle')}
                     </button>
                 </form>
             )}
@@ -179,11 +192,27 @@ export default function TeamPage() {
                     </div>
                 ) : (
                     team.map((member) => (
-                        <div key={member.id} className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all group relative">
+                        <div
+                            key={member.id}
+                            className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all group relative cursor-pointer"
+                            onClick={() => {
+                                setSelectedMember(member)
+                                setFormData({
+                                    name: member.name,
+                                    email: member.email,
+                                    role: member.role,
+                                    avatar_url: member.avatar_url || ""
+                                })
+                                setShowForm(true)
+                            }}
+                        >
                             {/* Actions */}
                             <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
-                                    onClick={() => handleDelete(member.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleDelete(member.id)
+                                    }}
                                     className="p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-400 transition-colors"
                                     title="Sil"
                                 >
