@@ -51,6 +51,18 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
+        // DB FIX: 'projects' tablosunda 'title' sütunu zorunlu (NOT NULL) olabilir.
+        // Ancak frontend genellikle 'name' gönderiyor.
+        // Bu yüzden eğer title yoksa, name değerini title'a kopyalıyoruz.
+        if (!body.title && body.name) {
+            body.title = body.name
+        }
+
+        // Benzer şekilde veritabanı 'name' bekleyip biz 'title' gönderiyorsak:
+        if (!body.name && body.title) {
+            body.name = body.title
+        }
+
         const { data, error } = await supabase
             .from('projects')
             .insert([body])
@@ -78,6 +90,11 @@ export async function PUT(request: NextRequest) {
                 updateData[key] = null
             }
         })
+
+        // DB FIX: Update sırasında da title/name senkronizasyonu
+        if (updateData.name && !updateData.title) {
+            updateData.title = updateData.name
+        }
 
         const { data, error } = await supabase
             .from('projects')
