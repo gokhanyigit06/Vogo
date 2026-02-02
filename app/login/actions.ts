@@ -1,43 +1,31 @@
 'use server'
 
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { signIn, signOut } from "@/lib/auth"
+import { AuthError } from "next-auth"
+import { redirect } from "next/navigation"
 
 export async function loginAction(email: string, password: string) {
-    const cookieStore = await cookies()
-
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                get(name: string) {
-                    return cookieStore.get(name)?.value
-                },
-                set(name: string, value: string, options: CookieOptions) {
-                    cookieStore.set(name, value, options)
-                },
-                remove(name: string, options: CookieOptions) {
-                    cookieStore.set(name, '', options)
-                }
+    try {
+        await signIn("credentials", {
+            email,
+            password,
+            redirect: false,
+        })
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case "CredentialsSignin":
+                    return { success: false, error: "Geçersiz email veya şifre" }
+                default:
+                    return { success: false, error: "Bir hata oluştu" }
             }
         }
-    )
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    })
-
-    if (error) {
-        return { success: false, error: error.message }
+        throw error
     }
 
-    if (data.session) {
-        // Session başarıyla set edildi, redirect yapabiliriz
-        redirect('/admin')
-    }
+    redirect("/admin")
+}
 
-    return { success: false, error: 'Session oluşturulamadı' }
+export async function logoutAction() {
+    await signOut({ redirectTo: "/login" })
 }

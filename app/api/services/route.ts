@@ -1,134 +1,102 @@
 import { NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
-const localDataPath = path.resolve('./data/services.json')
-
-async function getLocalServices() {
-    try {
-        const fileContents = await fs.readFile(localDataPath, 'utf8')
-        return JSON.parse(fileContents.replace(/^\uFEFF/, ''))
-    } catch { return [] }
-}
-
+// GET - Tüm hizmetleri getir
 export async function GET() {
-    // 1. Supabase
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-        try {
-            const { data, error } = await supabase
-                .from('services')
-                .select('*')
-                .order('id', { ascending: true })
+    try {
+        const services = await prisma.service.findMany({
+            orderBy: { id: 'asc' }
+        })
 
-            if (!error && data) return NextResponse.json(data)
-        } catch (err) { console.error(err) }
+        return NextResponse.json(services)
+    } catch (error: unknown) {
+        console.error('Services GET error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
-
-    // 2. Local Fallback
-    const localData = await getLocalServices()
-    return NextResponse.json(localData)
 }
 
+// POST - Yeni hizmet ekle
 export async function POST(request: Request) {
     try {
         const body = await request.json()
 
-        // Supabase
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            const { data, error } = await supabase
-                .from('services')
-                .insert([{
-                    title: body.title,
-                    slug: body.slug || body.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
-                    desc: body.desc,
-                    icon: body.icon || 'Layers',
-                    status: body.status || 'Pasif',
-                    views: 0,
-                    projects_count: 0
-                }])
-                .select()
+        const slug = body.slug || body.title.toLowerCase()
+            .replace(/ /g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/ğ/g, 'g')
+            .replace(/ü/g, 'u')
+            .replace(/ş/g, 's')
+            .replace(/ı/g, 'i')
+            .replace(/ö/g, 'o')
+            .replace(/ç/g, 'c')
 
-            if (!error) return NextResponse.json(data[0])
-        }
+        const service = await prisma.service.create({
+            data: {
+                title: body.title,
+                slug,
+                description: body.desc || body.description,
+                icon: body.icon || 'Layers',
+                status: body.status || 'Pasif',
+                views: 0,
+                projectsCount: 0
+            }
+        })
 
-        // Local Fallback
-        const localData = await getLocalServices()
-        const newService = { id: Date.now(), ...body }
-        localData.push(newService)
-        await fs.writeFile(localDataPath, JSON.stringify(localData, null, 2), 'utf8')
-
-        return NextResponse.json(newService)
-
-    } catch (error) {
-        return NextResponse.json({ error: 'Hata' }, { status: 500 })
+        return NextResponse.json(service)
+    } catch (error: unknown) {
+        console.error('Services POST error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
+// PUT - Hizmet güncelle
 export async function PUT(request: Request) {
     try {
         const body = await request.json()
-        const { id, ...updates } = body
+        const { id, desc, ...updates } = body
 
-        if (!id) return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
-
-        // 1. Supabase
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            const { data, error } = await supabase
-                .from('services')
-                .update(updates)
-                .eq('id', id)
-                .select()
-
-            if (!error) return NextResponse.json(data[0])
+        if (!id) {
+            return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        // 2. Local Fallback
-        const localData = await getLocalServices()
-        const index = localData.findIndex((item: any) => item.id == id)
+        // Map 'desc' to 'description' for Prisma
+        if (desc !== undefined) {
+            updates.description = desc
+        }
 
-        if (index === -1) return NextResponse.json({ error: 'Kayıt bulunamadı' }, { status: 404 })
+        const service = await prisma.service.update({
+            where: { id: parseInt(id) },
+            data: updates
+        })
 
-        localData[index] = { ...localData[index], ...updates }
-        await fs.writeFile(localDataPath, JSON.stringify(localData, null, 2), 'utf8')
-
-        return NextResponse.json(localData[index])
-
-    } catch (error) {
-        return NextResponse.json({ error: 'Güncelleme başarısız' }, { status: 500 })
+        return NextResponse.json(service)
+    } catch (error: unknown) {
+        console.error('Services PUT error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
+// DELETE - Hizmet sil
 export async function DELETE(request: Request) {
     try {
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
 
-        if (!id) return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
-
-        // 1. Supabase
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            const { error } = await supabase
-                .from('services')
-                .delete()
-                .eq('id', id)
-
-            if (!error) return NextResponse.json({ success: true })
+        if (!id) {
+            return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        // 2. Local Fallback
-        let localData = await getLocalServices()
-        const initialLength = localData.length
-        localData = localData.filter((item: any) => item.id != id)
+        await prisma.service.delete({
+            where: { id: parseInt(id) }
+        })
 
-        if (localData.length === initialLength) {
-            return NextResponse.json({ error: 'Kayıt bulunamadı' }, { status: 404 })
-        }
-
-        await fs.writeFile(localDataPath, JSON.stringify(localData, null, 2), 'utf8')
         return NextResponse.json({ success: true })
-
-    } catch (error) {
-        return NextResponse.json({ error: 'Silme başarısız' }, { status: 500 })
+    } catch (error: unknown) {
+        console.error('Services DELETE error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase-client'
+import { useSession } from 'next-auth/react'
+
+interface TeamMember {
+    id: number | string
+    name: string
+    email?: string
+    role?: string
+    active?: boolean
+}
 
 export function useTeamWithCurrentUser() {
-    const [team, setTeam] = useState<any[]>([])
+    const [team, setTeam] = useState<TeamMember[]>([])
     const [loading, setLoading] = useState(true)
+    const { data: session } = useSession()
 
     useEffect(() => {
         fetchTeamWithCurrentUser()
-    }, [])
+    }, [session])
 
     const fetchTeamWithCurrentUser = async () => {
         try {
@@ -16,16 +25,14 @@ export function useTeamWithCurrentUser() {
             const data = await res.json()
 
             console.log('📡 API Response:', data)
-            console.log('🔧 NODE_ENV:', process.env.NODE_ENV)
 
-            let teamList = []
+            let teamList: TeamMember[] = []
 
             if (Array.isArray(data) && data.length > 0) {
-                // Active kontrolü KALDIRILDI - tüm team memberları göster
                 teamList = data
                 console.log('✅ Using API data:', teamList)
             } else {
-                // API boş dönerse mock data kullan (her zaman)
+                // API boş dönerse mock data kullan
                 console.log('⚠️ Team API returned empty, using MOCK data')
                 teamList = [
                     { id: 101, name: "Ahmet Yılmaz", role: "Frontend Dev", active: true, email: "ahmet@vogo.com" },
@@ -35,22 +42,21 @@ export function useTeamWithCurrentUser() {
             }
 
             // 2. Authenticated user'ı kontrol et
-            const supabase = createClient()
-            const { data: { user } } = await supabase.auth.getUser()
+            if (session?.user?.email) {
+                const userEmail = session.user.email
+                const userName = session.user.name || userEmail.split('@')[0]
 
-            console.log('🔍 Auth User:', user?.email, user?.user_metadata)
-            console.log('📋 Team List BEFORE:', teamList.map((m: any) => ({ id: m.id, name: m.name, email: m.email })))
+                console.log('🔍 Auth User:', userEmail, userName)
 
-            if (user && user.email) {
                 // EMAIL bazında kontrol et (aynı email = aynı kişi)
-                const userExists = teamList.some((m: any) => m.email === user.email)
+                const userExists = teamList.some((m) => m.email === userEmail)
 
                 // Eğer listede yoksa ekle
                 if (!userExists) {
-                    const currentUser = {
-                        id: user.id,
-                        name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Ben',
-                        email: user.email,
+                    const currentUser: TeamMember = {
+                        id: session.user.id || 'current-user',
+                        name: userName,
+                        email: userEmail,
                         role: 'admin',
                         active: true
                     }
@@ -61,13 +67,15 @@ export function useTeamWithCurrentUser() {
                 }
             }
 
-            console.log('📋 Team List AFTER:', teamList.map((m: any) => ({ id: m.id, name: m.name })))
+            console.log('📋 Team List FINAL:', teamList.map((m) => ({ id: m.id, name: m.name })))
             setTeam(teamList)
         } catch (err) {
             console.error("Team fetch error:", err)
-            if (process.env.NODE_ENV === 'development') {
-                setTeam(require('@/lib/mock-data').MOCK_TEAM)
-            }
+            // Fallback mock data
+            setTeam([
+                { id: 101, name: "Ahmet Yılmaz", role: "Frontend Dev", active: true, email: "ahmet@vogo.com" },
+                { id: 102, name: "Zeynep Kaya", role: "Backend Dev", active: true, email: "zeynep@vogo.com" },
+            ])
         } finally {
             setLoading(false)
         }

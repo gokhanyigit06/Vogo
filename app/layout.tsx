@@ -7,6 +7,7 @@ import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
 import SmoothScroll from "@/components/SmoothScroll";
 import { Providers } from "./providers";
+import prisma from "@/lib/prisma";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,55 +31,52 @@ const gochiHand = Gochi_Hand({
   weight: ["400"],
 });
 
-// Settings verisini çekme fonksiyonu
-import { createClient } from "@supabase/supabase-js";
+// Default settings
+const defaultSettings = {
+  siteTitle: "Vogo Agency | Dijital Çözümler",
+  siteDescription: "Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.",
+  favicon: "/favicon.ico",
+  googleAnalytics: "",
+  googleTagManager: "",
+  facebookPixel: "",
+  customHeadScripts: "",
+  customBodyScripts: ""
+};
 
-// Server-side Supabase Client for Build Time
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = (supabaseUrl && supabaseKey)
-  ? createClient(supabaseUrl, supabaseKey)
-  : null;
-
-// Settings verisini çekme fonksiyonu (Direct DB Call)
+// Settings verisini çekme fonksiyonu (Prisma)
 async function getSettings() {
-  if (!supabase) return null;
-
   try {
-    const { data, error } = await supabase
-      .from('settings')
-      .select('*')
-      .single();
+    const setting = await prisma.setting.findUnique({
+      where: { key: 'site_settings' }
+    });
 
-    if (error) {
-      // Tablo boşsa veya hata varsa null dön, fallback kullanılsın
-      return null;
+    if (setting && setting.value) {
+      const value = setting.value as Record<string, unknown>;
+      return {
+        siteTitle: (value.siteTitle as string) || defaultSettings.siteTitle,
+        siteDescription: (value.siteDescription as string) || defaultSettings.siteDescription,
+        favicon: (value.favicon as string) || defaultSettings.favicon,
+        googleAnalytics: (value.googleAnalytics as string) || "",
+        googleTagManager: (value.googleTagManager as string) || "",
+        facebookPixel: (value.facebookPixel as string) || "",
+        customHeadScripts: (value.customHeadScripts as string) || "",
+        customBodyScripts: (value.customBodyScripts as string) || ""
+      };
     }
 
-    // Veritabanı formatını frontend formatına çevir (snake_case -> camelCase manuel map)
-    // Not: API route'da bu mapleme yapılıyordu, burada da yapmalıyız.
-    return {
-      siteTitle: data.site_title,
-      siteDescription: data.site_description,
-      favicon: data.favicon_url,
-      googleAnalytics: data.google_analytics_id,
-      googleTagManager: data.google_tag_manager_id,
-      facebookPixel: data.facebook_pixel_id,
-      customHeadScripts: data.custom_head_scripts,
-      customBodyScripts: data.custom_body_scripts
-    };
+    return defaultSettings;
   } catch (error) {
     console.error("Settings fetch failed in layout:", error);
-    return null;
+    return defaultSettings;
   }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
 
-  const title = settings?.siteTitle || "Vogo Agency | Dijital Çözümler";
-  const description = settings?.siteDescription || "Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.";
-  const favicon = settings?.favicon || "/favicon.ico";
+  const title = settings.siteTitle;
+  const description = settings.siteDescription;
+  const favicon = settings.favicon;
 
   return {
     title: {
@@ -109,7 +107,7 @@ export default async function RootLayout({
     <html lang="tr" suppressHydrationWarning className="scroll-smooth">
       <head>
         {/* Google Analytics */}
-        {settings?.googleAnalytics && (
+        {settings.googleAnalytics && (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${settings.googleAnalytics}`}
@@ -127,7 +125,7 @@ export default async function RootLayout({
         )}
 
         {/* Google Tag Manager - HEAD */}
-        {settings?.googleTagManager && (
+        {settings.googleTagManager && (
           <Script id="gtm-head" strategy="afterInteractive">
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -138,7 +136,7 @@ export default async function RootLayout({
         )}
 
         {/* Custom Head Scripts */}
-        {settings?.customHeadScripts && (
+        {settings.customHeadScripts && (
           <div dangerouslySetInnerHTML={{ __html: settings.customHeadScripts }} />
         )}
       </head>
@@ -147,7 +145,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} ${gochiHand.variable} antialiased bg-background text-foreground transition-colors duration-300`}
       >
         {/* Google Tag Manager - BODY (NoScript) */}
-        {settings?.googleTagManager && (
+        {settings.googleTagManager && (
           <noscript>
             <iframe
               src={`https://www.googletagmanager.com/ns.html?id=${settings.googleTagManager}`}
@@ -171,7 +169,7 @@ export default async function RootLayout({
           </div>
 
           {/* Custom Body Scripts */}
-          {settings?.customBodyScripts && (
+          {settings.customBodyScripts && (
             <div dangerouslySetInnerHTML={{ __html: settings.customBodyScripts }} />
           )}
 

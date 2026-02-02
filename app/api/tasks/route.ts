@@ -1,127 +1,94 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import prisma from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-// Helper to create authenticated client
-async function createClient() {
-    const cookieStore = await cookies()
-
-    return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                getAll() {
-                    return cookieStore.getAll()
-                },
-                setAll(cookiesToSet) {
-                    try {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            cookieStore.set(name, value, options)
-                        )
-                    } catch {
-                        // The `setAll` method was called from a Server Component.
-                        // This can be ignored if you have middleware refreshing
-                        // user sessions.
-                    }
-                },
-            },
-        }
-    )
-}
-
-export async function GET(request: NextRequest) {
+// GET - Tüm görevleri getir
+export async function GET() {
     try {
-        const supabase = await createClient()
+        const tasks = await prisma.task.findMany({
+            orderBy: { id: 'desc' },
+            include: {
+                project: {
+                    select: { id: true, title: true, name: true }
+                },
+                teamMember: {
+                    select: { id: true, name: true }
+                }
+            }
+        })
 
-        // Basit sorgu - JOIN yok, sadece task data
-        const { data, error } = await supabase
-            .from('tasks')
-            .select('*')
-            .order('id', { ascending: false })
-
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(tasks)
+    } catch (error: unknown) {
         console.error('Error fetching tasks:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
+// POST - Yeni görev ekle
 export async function POST(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const body = await request.json()
 
-        // Veri doğrulama
         if (!body.title) {
             return NextResponse.json({ error: 'Title is required' }, { status: 400 })
         }
 
-        const { data, error } = await supabase
-            .from('tasks')
-            .insert([{
+        const task = await prisma.task.create({
+            data: {
                 title: body.title,
                 description: body.description,
                 status: body.status || 'todo',
                 priority: body.priority || 'medium',
-                assigned_to: body.assigned_to,
-                project_id: body.project_id,
-                due_date: body.due_date,
-            }])
-            .select()
+                assignedTo: body.assigned_to ? parseInt(body.assigned_to) : null,
+                projectId: body.project_id ? parseInt(body.project_id) : null,
+                dueDate: body.due_date ? new Date(body.due_date) : null,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(task)
+    } catch (error: unknown) {
         console.error('Error creating task:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
+// PUT - Görev güncelle
 export async function PUT(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const body = await request.json()
 
         if (!body.id) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 })
         }
 
-        // Boş string'leri null'a çevir
-        const updateData = {
-            title: body.title,
-            description: body.description,
-            status: body.status,
-            priority: body.priority,
-            assigned_to: body.assigned_to || null,
-            project_id: body.project_id || null,
-            due_date: body.due_date || null,
-            updated_at: new Date().toISOString()
-        }
+        const task = await prisma.task.update({
+            where: { id: parseInt(body.id) },
+            data: {
+                title: body.title,
+                description: body.description,
+                status: body.status,
+                priority: body.priority,
+                assignedTo: body.assigned_to ? parseInt(body.assigned_to) : null,
+                projectId: body.project_id ? parseInt(body.project_id) : null,
+                dueDate: body.due_date ? new Date(body.due_date) : null,
+                completedAt: body.status === 'done' ? new Date() : null,
+            }
+        })
 
-        const { data, error } = await supabase
-            .from('tasks')
-            .update(updateData)
-            .eq('id', body.id)
-            .select()
-
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(task)
+    } catch (error: unknown) {
         console.error('Error updating task:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
+// DELETE - Görev sil
 export async function DELETE(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
 
@@ -129,16 +96,14 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 })
         }
 
-        const { error } = await supabase
-            .from('tasks')
-            .delete()
-            .eq('id', id)
-
-        if (error) throw error
+        await prisma.task.delete({
+            where: { id: parseInt(id) }
+        })
 
         return NextResponse.json({ success: true })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Error deleting task:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

@@ -7,7 +7,6 @@ import { DndContext, DragOverlay, useDraggable, useDroppable, DragEndEvent, useS
 import { Plus, Clock, CheckCircle2, AlertCircle, X } from "lucide-react"
 import { createPortal } from "react-dom"
 import TaskDetailModal from "@/components/admin/tasks/TaskDetailModal"
-import { createClient } from "@/lib/supabase-client"
 import { useTeamWithCurrentUser } from "@/hooks/useTeamWithCurrentUser"
 
 // --- Types ---

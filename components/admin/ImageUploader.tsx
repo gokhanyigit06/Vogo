@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react'
-import { createClient } from '@/lib/supabase-client'
 
 interface ImageUploaderProps {
     value?: string
@@ -8,11 +7,9 @@ interface ImageUploaderProps {
     bucket?: string
 }
 
-export default function ImageUploader({ value, onChange, bucket = 'images' }: ImageUploaderProps) {
+export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
     const [uploading, setUploading] = useState(false)
     const [preview, setPreview] = useState<string | undefined>(value)
-
-    const supabase = createClient()
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         try {
@@ -23,29 +20,25 @@ export default function ImageUploader({ value, onChange, bucket = 'images' }: Im
             }
 
             const file = e.target.files[0]
-            const fileExt = file.name.split('.').pop()
-            const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
-            const filePath = `${fileName}`
+            const formData = new FormData()
+            formData.append('file', file)
 
-            // Supabase Upload
-            const { error: uploadError } = await supabase.storage
-                .from(bucket)
-                .upload(filePath, file)
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            })
 
-            if (uploadError) {
-                throw uploadError
+            if (!res.ok) {
+                throw new Error('Upload failed')
             }
 
-            // Public URL Al
-            const { data } = supabase.storage
-                .from(bucket)
-                .getPublicUrl(filePath)
+            const data = await res.json()
+            setPreview(data.url)
+            onChange(data.url)
 
-            setPreview(data.publicUrl)
-            onChange(data.publicUrl)
-
-        } catch (error: any) {
-            alert('Yükleme hatası: ' + error.message)
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Unknown error'
+            alert('Yükleme hatası: ' + message)
         } finally {
             setUploading(false)
         }

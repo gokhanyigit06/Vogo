@@ -1,17 +1,15 @@
 import { NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
 // Varsayılan Sayfa İçerikleri (Fallback)
-const defaultPages: Record<string, any> = {
+const defaultPages: Record<string, unknown> = {
     home: {
         hero: {
             title: "Dijital Dünyada\nFark Yaratın",
             subtitle: "Modern tasarım, güçlü altyapı ve sonuç odaklı stratejiler ile markanızı geleceğe taşıyoruz.",
             buttonText: "Hemen Başlayın",
             buttonLink: "/contact",
-            imageUrl: "" // Varsayılan görsel boşsa placeholder kullanılır
+            imageUrl: ""
         },
         stats: {
             happyClients: "500+",
@@ -34,52 +32,51 @@ const defaultPages: Record<string, any> = {
     }
 }
 
-const localDataPath = path.resolve('./data/pages.json')
-
-// Local veriyi al
-async function getLocalPages() {
-    try {
-        await fs.mkdir(path.dirname(localDataPath), { recursive: true })
-        const fileContents = await fs.readFile(localDataPath, 'utf8')
-        return JSON.parse(fileContents)
-    } catch {
-        return {}
-    }
-}
-
 // GET - Tüm sayfaları veya tek bir sayfayı getir (?slug=home)
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const slug = searchParams.get('slug')
 
-    let pagesData = { ...defaultPages }
+    const pagesData: Record<string, unknown> = { ...defaultPages }
 
-    // 1. Supabase
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-        try {
-            const query = supabase.from('pages').select('*')
-            if (slug) query.eq('slug', slug)
+    try {
+        if (slug) {
+            // Tek sayfa
+            const page = await prisma.page.findUnique({
+                where: { slug }
+            })
 
-            const { data, error } = await query
-
-            if (!error && data) {
-                // DB verisini state'e merge et
-                data.forEach((page: any) => {
-                    pagesData[page.slug] = { ...defaultPages[page.slug], ...page.content }
-                })
+            if (page && page.content) {
+                try {
+                    const content = JSON.parse(page.content)
+                    return NextResponse.json({ ...(defaultPages[slug] as object || {}), ...content })
+                } catch {
+                    return NextResponse.json(defaultPages[slug] || {})
+                }
             }
-        } catch (err) { console.error(err) }
-    } else {
-        // 2. Local Fallback
-        const localData = await getLocalPages()
-        pagesData = { ...defaultPages, ...localData }
-    }
 
-    if (slug) {
-        return NextResponse.json(pagesData[slug] || defaultPages[slug] || {})
-    }
+            return NextResponse.json(defaultPages[slug] || {})
+        }
 
-    return NextResponse.json(pagesData)
+        // Tüm sayfalar
+        const pages = await prisma.page.findMany()
+
+        pages.forEach((page: { slug: string; content: string | null }) => {
+            if (page.content) {
+                try {
+                    const content = JSON.parse(page.content)
+                    pagesData[page.slug] = { ...(defaultPages[page.slug] as object || {}), ...content }
+                } catch {
+                    // JSON parse hatası, varsayılanı kullan
+                }
+            }
+        })
+
+        return NextResponse.json(pagesData)
+    } catch (error: unknown) {
+        console.error('Pages GET error:', error)
+        return NextResponse.json(slug ? (defaultPages[slug] || {}) : pagesData)
+    }
 }
 
 // POST - Sayfa içeriğini güncelle
@@ -92,27 +89,23 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Slug ve Content gerekli' }, { status: 400 })
         }
 
-        // 1. Supabase
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            const { error } = await supabase
-                .from('pages')
-                .upsert({
-                    slug,
-                    content,
-                    updated_at: new Date().toISOString()
-                }, { onConflict: 'slug' })
-
-            if (error) throw error
-        }
-
-        // 2. Local Fallback
-        const currentLocal = await getLocalPages()
-        currentLocal[slug] = content
-        await fs.writeFile(localDataPath, JSON.stringify(currentLocal, null, 2), 'utf8')
+        // Prisma'ya kaydet (upsert)
+        await prisma.page.upsert({
+            where: { slug },
+            update: {
+                content: JSON.stringify(content),
+            },
+            create: {
+                slug,
+                title: slug.charAt(0).toUpperCase() + slug.slice(1),
+                content: JSON.stringify(content),
+            }
+        })
 
         return NextResponse.json({ success: true, data: content })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Page Update Error:', error)
-        return NextResponse.json({ error: 'Sayfa kaydedilemedi: ' + error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: 'Sayfa kaydedilemedi: ' + message }, { status: 500 })
     }
 }

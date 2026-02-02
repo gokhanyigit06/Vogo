@@ -1,66 +1,32 @@
 "use client"
 
-import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, Layers, LogOut } from "lucide-react"
+import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, LogOut } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase-client"
-import { logoutAction } from "@/app/actions/auth"
+import { useState } from "react"
+import { useSession, signOut } from "next-auth/react"
 
 export default function AdminSidebar() {
     const pathname = usePathname()
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const [userProfile, setUserProfile] = useState<any>(null)
-    const supabase = createClient()
+    const { data: session } = useSession()
 
-    useEffect(() => {
-        const getUser = async () => {
-            // 1. Auth user'ı al
-            const { data: { user } } = await supabase.auth.getUser()
-
-            if (user && user.email) {
-                // 2. Team tablosundan bu maile sahip üyeyi bul
-                const { data: teamMember } = await supabase
-                    .from('team')
-                    .select('*')
-                    .eq('email', user.email)
-                    .single()
-
-                if (teamMember) {
-                    // Team tablosundaki veriyi kullan
-                    setUserProfile({
-                        email: user.email,
-                        name: teamMember.name,
-                        role: teamMember.role,
-                        avatar_url: teamMember.avatar_url
-                    })
-                } else {
-                    // Fallback: Team tablosunda yoksa auth verisini kullan
-                    setUserProfile({
-                        email: user.email,
-                        name: user.user_metadata?.full_name || user.email?.split('@')[0],
-                        role: 'admin',
-                        avatar_url: user.user_metadata?.avatar_url
-                    })
-                }
-            }
-        }
-        getUser()
-    }, [])
-
+    const userProfile = {
+        name: session?.user?.name || 'Loading...',
+        role: session?.user?.role || 'admin',
+        email: session?.user?.email || ''
+    }
 
     const handleSignOut = async () => {
         try {
-            await logoutAction()
+            await signOut({ callbackUrl: '/login' })
         } catch (error) {
             console.error('SignOut Exception:', error)
-            // Fallback
             window.location.href = '/login'
         }
     }
 
     const menuItems = [
-        // ... (menu items remain same)
         { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
         { icon: Users, label: "Müşteriler", href: "/admin/clients" },
         { icon: FolderKanban, label: "Projeler", href: "/admin/projects" },
@@ -116,17 +82,13 @@ export default function AdminSidebar() {
                 <div className="p-4 border-t border-sidebar-border">
                     <div className="flex items-center gap-3 p-3 rounded-xl bg-sidebar-accent/30 border border-sidebar-border/50">
                         <div className="w-10 h-10 rounded-full bg-sidebar-accent border border-sidebar-border flex items-center justify-center overflow-hidden shrink-0">
-                            {userProfile?.avatar_url ? (
-                                <img src={userProfile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-                            ) : (
-                                <span className="text-lg font-bold text-sidebar-primary">
-                                    {userProfile?.name?.charAt(0).toUpperCase() || '?'}
-                                </span>
-                            )}
+                            <span className="text-lg font-bold text-sidebar-primary">
+                                {userProfile.name?.charAt(0).toUpperCase() || '?'}
+                            </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-foreground truncate">{userProfile?.name || 'Yükleniyor...'}</p>
-                            <p className="text-xs text-muted-foreground truncate">{userProfile?.role === 'admin' ? 'Yönetici' : 'Üye'}</p>
+                            <p className="text-sm font-bold text-foreground truncate">{userProfile.name}</p>
+                            <p className="text-xs text-muted-foreground truncate">{userProfile.role === 'ADMIN' ? 'Yönetici' : 'Üye'}</p>
                         </div>
                         <button
                             onClick={handleSignOut}

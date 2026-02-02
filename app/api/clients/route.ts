@@ -1,20 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
 // GET - Tüm müşterileri getir
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
-        const { data, error } = await supabase
-            .from('clients')
-            .select('*')
-            .order('created_at', { ascending: false })
+        const clients = await prisma.client.findMany({
+            orderBy: { createdAt: 'desc' }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data || [])
-    } catch (error: any) {
+        return NextResponse.json(clients)
+    } catch (error: unknown) {
         console.error('Clients GET error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -23,18 +21,25 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
-        const { data, error } = await supabase
-            .from('clients')
-            .insert([body])
-            .select()
-            .single()
+        const client = await prisma.client.create({
+            data: {
+                name: body.name,
+                company: body.company,
+                email: body.email,
+                phone: body.phone,
+                address: body.address,
+                website: body.website,
+                status: body.status || 'active',
+                tags: body.tags || [],
+                notes: body.notes,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(client)
+    } catch (error: unknown) {
         console.error('Clients POST error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -44,19 +49,23 @@ export async function PUT(request: NextRequest) {
         const body = await request.json()
         const { id, ...updateData } = body
 
-        const { data, error } = await supabase
-            .from('clients')
-            .update(updateData)
-            .eq('id', id)
-            .select()
-            .single()
+        // Boş stringleri null'a çevir
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === '') {
+                updateData[key] = null
+            }
+        })
 
-        if (error) throw error
+        const client = await prisma.client.update({
+            where: { id: parseInt(id) },
+            data: updateData
+        })
 
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(client)
+    } catch (error: unknown) {
         console.error('Clients PUT error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -70,16 +79,14 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const { error } = await supabase
-            .from('clients')
-            .delete()
-            .eq('id', id)
-
-        if (error) throw error
+        await prisma.client.delete({
+            where: { id: parseInt(id) }
+        })
 
         return NextResponse.json({ success: true })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Clients DELETE error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

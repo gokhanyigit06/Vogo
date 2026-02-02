@@ -1,19 +1,25 @@
 "use client"
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { Briefcase, ArrowLeft, Calendar, DollarSign, Building2, CheckCircle2, AlertCircle, Printer, StickyNote, Plus, Trash2, Edit2, Circle, Loader2 } from "lucide-react"
+import { Briefcase, ArrowLeft, Calendar, DollarSign, Building2, CheckCircle2, Printer, StickyNote, Plus, Trash2, Edit2, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { createClient } from '@/lib/supabase-client'
 import TaskDetailModal from "@/components/admin/tasks/TaskDetailModal"
 
+interface Note {
+    id: number
+    content: string
+    created_at: string
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export default function ProjectDetailPage() {
     const params = useParams()
     const router = useRouter()
     const [project, setProject] = useState<any>(null)
     const [loading, setLoading] = useState(true)
 
-    // Notes State
-    const [notes, setNotes] = useState<any[]>([])
+    // Notes State (local storage for now, can be moved to API)
+    const [notes, setNotes] = useState<Note[]>([])
     const [newNote, setNewNote] = useState("")
     const [addingNote, setAddingNote] = useState(false)
 
@@ -21,8 +27,6 @@ export default function ProjectDetailPage() {
     const [newTaskTitle, setNewTaskTitle] = useState("")
     const [addingTask, setAddingTask] = useState(false)
     const [selectedTask, setSelectedTask] = useState<any>(null)
-
-    const supabase = createClient()
 
     useEffect(() => {
         if (params.id) {
@@ -103,15 +107,15 @@ export default function ProjectDetailPage() {
         }
     }
 
-    const fetchNotes = async (id: string) => {
-        const { data, error } = await supabase
-            .from('project_notes')
-            .select('*')
-            .eq('project_id', id)
-            .order('created_at', { ascending: false })
-
-        if (!error && data) {
-            setNotes(data)
+    const fetchNotes = (id: string) => {
+        // Using localStorage for notes (can be migrated to API later)
+        try {
+            const storedNotes = localStorage.getItem(`project_notes_${id}`)
+            if (storedNotes) {
+                setNotes(JSON.parse(storedNotes))
+            }
+        } catch (e) {
+            console.error('Failed to fetch notes:', e)
         }
     }
 
@@ -227,23 +231,22 @@ export default function ProjectDetailPage() {
         }
     }
 
-    const handleAddNote = async (e: React.FormEvent) => {
+    const handleAddNote = (e: React.FormEvent) => {
         e.preventDefault()
         if (!newNote.trim()) return
 
         setAddingNote(true)
         try {
-            const { error } = await supabase
-                .from('project_notes')
-                .insert([{
-                    project_id: params.id,
-                    content: newNote
-                }])
+            const newNoteObj: Note = {
+                id: Date.now(),
+                content: newNote,
+                created_at: new Date().toISOString()
+            }
 
-            if (error) throw error
-
+            const updatedNotes = [newNoteObj, ...notes]
+            setNotes(updatedNotes)
+            localStorage.setItem(`project_notes_${params.id}`, JSON.stringify(updatedNotes))
             setNewNote("")
-            fetchNotes(params.id as string)
         } catch (error) {
             console.error(error)
             alert('Not eklenirken hata oluştu.')
@@ -252,18 +255,13 @@ export default function ProjectDetailPage() {
         }
     }
 
-    const handleDeleteNote = async (noteId: number) => {
+    const handleDeleteNote = (noteId: number) => {
         if (!confirm("Notu silmek istediğinize emin misiniz?")) return
 
         try {
-            const { error } = await supabase
-                .from('project_notes')
-                .delete()
-                .eq('id', noteId)
-
-            if (error) throw error
-
-            setNotes(notes.filter(n => n.id !== noteId))
+            const updatedNotes = notes.filter(n => n.id !== noteId)
+            setNotes(updatedNotes)
+            localStorage.setItem(`project_notes_${params.id}`, JSON.stringify(updatedNotes))
         } catch (error) {
             console.error(error)
             alert('Silme hatası')

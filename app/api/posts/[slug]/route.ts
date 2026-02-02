@@ -1,55 +1,27 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        // Next.js 16: params is now a Promise
         const { slug } = await params
 
-        // 1. Supabase'den slug veya ID ile ara
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            // Önce slug ile dene
-            let { data, error } = await supabase
-                .from('posts')
-                .select('*')
-                .eq('slug', slug)
-                .single()
+        // Önce slug ile dene
+        let post = await prisma.post.findUnique({
+            where: { slug }
+        })
 
-            // Slug bulunamazsa ID ile dene (backward compatibility)
-            if (error && !isNaN(Number(slug))) {
-                const result = await supabase
-                    .from('posts')
-                    .select('*')
-                    .eq('id', Number(slug))
-                    .single()
-
-                data = result.data
-                error = result.error
-            }
-
-            if (!error && data) {
-                return NextResponse.json(data)
-            }
+        // Slug bulunamazsa ID ile dene (backward compatibility)
+        if (!post && !isNaN(Number(slug))) {
+            post = await prisma.post.findUnique({
+                where: { id: Number(slug) }
+            })
         }
 
-        // 2. Local fallback - data/posts.json'dan bul
-        const fs = await import('fs/promises')
-        const path = await import('path')
-        const localDataPath = path.resolve('./data/posts.json')
-
-        try {
-            const fileContents = await fs.readFile(localDataPath, 'utf8')
-            const posts = JSON.parse(fileContents.replace(/^\uFEFF/, ''))
-            const post = posts.find((p: any) => p.slug === slug || p.id.toString() === slug)
-
-            if (post) {
-                return NextResponse.json(post)
-            }
-        } catch (err) {
-            console.error('Local file read error:', err)
+        if (post) {
+            return NextResponse.json(post)
         }
 
         return NextResponse.json(

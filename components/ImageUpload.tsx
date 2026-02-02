@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react"
 import { UploadCloud, X, Image as ImageIcon, Loader2 } from "lucide-react"
-import { supabase } from "@/lib/supabase"
 
 interface ImageUploadProps {
     value?: string
@@ -34,26 +33,23 @@ export default function ImageUpload({ value, onChange, label = "Görsel Yükle",
         setLoading(true)
 
         try {
-            // Unique filename: timestamp-random-filename
-            const fileExt = file.name.split('.').pop()
-            const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-            const filePath = `${fileName}`
+            // FormData ile dosyayı API'ye gönder
+            const formData = new FormData()
+            formData.append('file', file)
 
-            // 3. Upload to Supabase 'images' bucket
-            const { error: uploadError } = await supabase.storage
-                .from('images')
-                .upload(filePath, file)
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            })
 
-            if (uploadError) throw uploadError
+            if (!res.ok) {
+                throw new Error('Upload failed')
+            }
 
-            // 4. Get Public URL
-            const { data } = supabase.storage
-                .from('images')
-                .getPublicUrl(filePath)
+            const data = await res.json()
+            onChange(data.url)
 
-            onChange(data.publicUrl)
-
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Upload hatası:", error)
             alert("Görsel yüklenirken bir sorun oluştu.")
         } finally {

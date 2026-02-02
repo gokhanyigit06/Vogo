@@ -1,100 +1,68 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import prisma from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-// Helper to create authenticated client
-async function createClient() {
-    const cookieStore = await cookies()
-
-    return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                getAll() {
-                    return cookieStore.getAll()
-                },
-                setAll(cookiesToSet) {
-                    try {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            cookieStore.set(name, value, options)
-                        )
-                    } catch {
-                        // Ignored
-                    }
-                },
-            },
-        }
-    )
-}
-
 // GET - Tüm takım üyelerini getir
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
-        const supabase = await createClient()
+        const members = await prisma.teamMember.findMany({
+            orderBy: { createdAt: 'desc' }
+        })
 
-        const { data, error } = await supabase
-            .from('team')
-            .select('*')
-            .order('created_at', { ascending: false })
-
-        if (error) throw error
-
-        return NextResponse.json(data || [])
-    } catch (error: any) {
+        return NextResponse.json(members)
+    } catch (error: unknown) {
         console.error('Team GET error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
 // POST - Yeni üye ekle
 export async function POST(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const body = await request.json()
-        const { name, email, role, avatar_url } = body
 
-        const { data, error } = await supabase
-            .from('team')
-            .insert([{ name, email, role, avatar_url }])
-            .select()
-            .single()
+        const member = await prisma.teamMember.create({
+            data: {
+                name: body.name,
+                email: body.email,
+                role: body.role || 'member',
+                avatarUrl: body.avatar_url || body.avatarUrl,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(member)
+    } catch (error: unknown) {
         console.error('Team POST error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
 // PUT - Üye güncelle
 export async function PUT(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const body = await request.json()
-        const { id, name, email, role, avatar_url } = body
+        const { id, avatar_url, ...rest } = body
 
         if (!id) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const { data, error } = await supabase
-            .from('team')
-            .update({ name, email, role, avatar_url })
-            .eq('id', id)
-            .select()
-            .single()
+        const member = await prisma.teamMember.update({
+            where: { id: parseInt(id) },
+            data: {
+                ...rest,
+                avatarUrl: avatar_url,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(member)
+    } catch (error: unknown) {
         console.error('Team PUT error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -108,18 +76,14 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const supabase = await createClient()
-
-        const { error } = await supabase
-            .from('team')
-            .delete()
-            .eq('id', id)
-
-        if (error) throw error
+        await prisma.teamMember.delete({
+            where: { id: parseInt(id) }
+        })
 
         return NextResponse.json({ success: true })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Team DELETE error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

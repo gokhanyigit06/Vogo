@@ -1,29 +1,13 @@
 import { MetadataRoute } from 'next'
+import prisma from '@/lib/prisma'
 
 async function getBlogPosts() {
     try {
-        // Try Supabase first
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-            const { createClient } = await import('@supabase/supabase-js')
-            const supabase = createClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-            )
-            const { data } = await supabase
-                .from('posts')
-                .select('slug, created_at, updated_at')
-                .eq('status', 'published')
-
-            if (data) return data
-        }
-
-        // Fallback to local
-        const fs = await import('fs/promises')
-        const path = await import('path')
-        const filePath = path.resolve('./data/posts.json')
-        const fileContents = await fs.readFile(filePath, 'utf8')
-        const posts = JSON.parse(fileContents.replace(/^\uFEFF/, ''))
-        return posts.filter((p: any) => p.status !== 'draft')
+        const posts = await prisma.post.findMany({
+            where: { status: 'published' },
+            select: { slug: true, createdAt: true, updatedAt: true }
+        })
+        return posts
     } catch (error) {
         console.error('Error fetching posts for sitemap:', error)
         return []
@@ -31,12 +15,12 @@ async function getBlogPosts() {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://vogo-agency.vercel.app' // Vercel URL'ini buraya koy
+    const baseUrl = process.env.NEXTAUTH_URL || 'https://vogo-agency.vercel.app'
 
     const posts = await getBlogPosts()
-    const blogUrls = posts.map((post: any) => ({
-        url: `${baseUrl}/blog/${post.slug || post.id}`,
-        lastModified: post.updated_at || post.created_at || new Date(),
+    const blogUrls = posts.map((post: { slug: string; createdAt: Date; updatedAt: Date }) => ({
+        url: `${baseUrl}/blog/${post.slug}`,
+        lastModified: post.updatedAt || post.createdAt || new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.7,
     }))

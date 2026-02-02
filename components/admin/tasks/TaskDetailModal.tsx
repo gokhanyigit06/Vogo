@@ -1,8 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Paperclip, MessageSquare, CheckSquare, Clock, Plus, Trash2, Edit2, Save, Loader2, Link as LinkIcon, Calendar } from "lucide-react"
-import { createBrowserClient } from '@supabase/ssr'
+import { X, Paperclip, MessageSquare, CheckSquare, Plus, Trash2, Edit2, Save, Loader2, Link as LinkIcon, Calendar } from "lucide-react"
 
 export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, projects = [], team = [] }: any) {
     const [checklists, setChecklists] = useState<any[]>(task.checklists || [])
@@ -22,11 +21,6 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
         priority: task.priority,
         tags: task.tags || []
     })
-
-    const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'public-anon-key'
-    )
 
     // Dosyaları çek
     useEffect(() => {

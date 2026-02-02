@@ -1,76 +1,100 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         // 1. Toplam gelir
-        const { data: incomeData, error: incomeError } = await supabase
-            .from('income')
-            .select('amount')
-
-        const totalIncome = incomeData?.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0) || 0
+        const incomeData = await prisma.income.findMany({
+            select: { amount: true }
+        })
+        const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0)
 
         // 2. Toplam gider
-        const { data: expenseData, error: expenseError } = await supabase
-            .from('expenses')
-            .select('amount')
-
-        const totalExpenses = expenseData?.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0) || 0
+        const expenseData = await prisma.expense.findMany({
+            select: { amount: true }
+        })
+        const totalExpenses = expenseData.reduce((sum, item) => sum + Number(item.amount), 0)
 
         // 3. Aktif proje sayısı
-        const { count: activeProjects } = await supabase
-            .from('projects')
-            .select('*', { count: 'exact', head: true })
-            .eq('status', 'in_progress')
+        const activeProjects = await prisma.project.count({
+            where: { status: 'in_progress' }
+        })
 
         // 4. Toplam müşteri sayısı
-        const { count: totalClients } = await supabase
-            .from('clients')
-            .select('*', { count: 'exact', head: true })
+        const totalClients = await prisma.client.count()
 
         // 5. Bu ayki gelir (son 30 gün)
         const thirtyDaysAgo = new Date()
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-        const { data: recentIncome } = await supabase
-            .from('income')
-            .select('amount')
-            .gte('date', thirtyDaysAgo.toISOString().split('T')[0])
-
-        const monthlyIncome = recentIncome?.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0) || 0
+        const recentIncomeData = await prisma.income.findMany({
+            where: {
+                date: { gte: thirtyDaysAgo }
+            },
+            select: { amount: true }
+        })
+        const monthlyIncome = recentIncomeData.reduce((sum, item) => sum + Number(item.amount), 0)
 
         // 6. Yaklaşan deadline'lar (gelecek 7 gün)
-        const today = new Date().toISOString().split('T')[0]
+        const today = new Date()
         const sevenDaysLater = new Date()
         sevenDaysLater.setDate(sevenDaysLater.getDate() + 7)
 
-        const { data: upcomingDeadlines } = await supabase
-            .from('projects')
-            .select('id, name, end_date, client_id')
-            .gte('end_date', today)
-            .lte('end_date', sevenDaysLater.toISOString().split('T')[0])
-            .order('end_date', { ascending: true })
-            .limit(5)
+        const upcomingDeadlines = await prisma.project.findMany({
+            where: {
+                endDate: {
+                    gte: today,
+                    lte: sevenDaysLater
+                }
+            },
+            select: {
+                id: true,
+                name: true,
+                title: true,
+                endDate: true,
+                clientId: true
+            },
+            orderBy: { endDate: 'asc' },
+            take: 5
+        })
 
-        // 7. Son gelir/gider hareketleri
-        const { data: recentTransactions } = await supabase
-            .from('income')
-            .select('id, amount, date, description, client_id')
-            .order('date', { ascending: false })
-            .limit(5)
+        // 7. Son gelir hareketleri
+        const recentTransactions = await prisma.income.findMany({
+            select: {
+                id: true,
+                amount: true,
+                date: true,
+                description: true,
+                clientId: true
+            },
+            orderBy: { date: 'desc' },
+            take: 5
+        })
 
         return NextResponse.json({
             totalIncome,
             totalExpenses,
             profit: totalIncome - totalExpenses,
-            activeProjects: activeProjects || 0,
-            totalClients: totalClients || 0,
+            activeProjects,
+            totalClients,
             monthlyIncome,
-            upcomingDeadlines: upcomingDeadlines || [],
-            recentTransactions: recentTransactions || [],
+            upcomingDeadlines: upcomingDeadlines.map(d => ({
+                id: d.id,
+                name: d.name || d.title,
+                end_date: d.endDate,
+                client_id: d.clientId
+            })),
+            recentTransactions: recentTransactions.map(t => ({
+                id: t.id,
+                amount: t.amount,
+                date: t.date,
+                description: t.description,
+                client_id: t.clientId
+            })),
         })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Dashboard stats error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

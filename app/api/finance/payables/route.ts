@@ -1,124 +1,95 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import prisma from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-// Helper to create authenticated client
-async function createClient() {
-    const cookieStore = await cookies()
-
-    return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                getAll() {
-                    return cookieStore.getAll()
-                },
-                setAll(cookiesToSet) {
-                    try {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            cookieStore.set(name, value, options)
-                        )
-                    } catch {
-                        // The `setAll` method was called from a Server Component.
-                        // This can be ignored if you have middleware refreshing
-                        // user sessions.
-                    }
-                },
-            },
-        }
-    )
-}
-
 // GET - Borçları getir
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
-        const supabase = await createClient()
-        const { data, error } = await supabase
-            .from('payables')
-            .select('*')
-            .order('due_date', { ascending: true })
+        const payables = await prisma.payable.findMany({
+            orderBy: { dueDate: 'asc' }
+        })
 
-        if (error) {
-            console.error('Payables API Error:', error)
-            // Tablo yoksa boş dön, 500 dönme ki dashboard patlamasın
-            if (error.code === '42P01') { // undefined_table
-                return NextResponse.json([])
-            }
-            return NextResponse.json({ error: error.message }, { status: 500 })
-        }
-
-        return NextResponse.json(data)
-    } catch (error: any) {
-        console.error('Internal Error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json(payables)
+    } catch (error: unknown) {
+        console.error('Payables API Error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
 // POST - Yeni borç ekle
 export async function POST(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const body = await request.json()
 
-        const { data, error } = await supabase
-            .from('payables')
-            .insert([body])
-            .select()
-            .single()
+        const payable = await prisma.payable.create({
+            data: {
+                vendorName: body.vendor_name || body.vendorName,
+                amount: parseFloat(body.amount),
+                dueDate: body.due_date ? new Date(body.due_date) : null,
+                status: body.status || 'pending',
+                category: body.category,
+                description: body.description,
+                paidDate: body.paid_date ? new Date(body.paid_date) : null,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json(payable)
+    } catch (error: unknown) {
+        console.error('Payables POST error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
 // PUT - Borç güncelle
 export async function PUT(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const body = await request.json()
-        const { id, ...updates } = body
+        const { id, vendor_name, due_date, paid_date, ...rest } = body
 
-        if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 })
+        if (!id) {
+            return NextResponse.json({ error: 'ID required' }, { status: 400 })
+        }
 
-        const { data, error } = await supabase
-            .from('payables')
-            .update(updates)
-            .eq('id', id)
-            .select()
-            .single()
+        const payable = await prisma.payable.update({
+            where: { id: parseInt(id) },
+            data: {
+                ...rest,
+                vendorName: vendor_name,
+                amount: rest.amount ? parseFloat(rest.amount) : undefined,
+                dueDate: due_date ? new Date(due_date) : undefined,
+                paidDate: paid_date ? new Date(paid_date) : undefined,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json(payable)
+    } catch (error: unknown) {
+        console.error('Payables PUT error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
 // DELETE - Borç sil
 export async function DELETE(request: NextRequest) {
     try {
-        const supabase = await createClient()
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
 
-        if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 })
+        if (!id) {
+            return NextResponse.json({ error: 'ID required' }, { status: 400 })
+        }
 
-        const { error } = await supabase
-            .from('payables')
-            .delete()
-            .eq('id', id)
-
-        if (error) throw error
+        await prisma.payable.delete({
+            where: { id: parseInt(id) }
+        })
 
         return NextResponse.json({ success: true })
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+    } catch (error: unknown) {
+        console.error('Payables DELETE error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase-client'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Lock, Mail, Loader2 } from 'lucide-react'
 
@@ -12,27 +12,27 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null)
     const router = useRouter()
 
-    const supabase = createClient()
-
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         setError(null)
 
         try {
-            const { error } = await supabase.auth.signInWithPassword({
+            const result = await signIn('credentials', {
                 email,
                 password,
+                redirect: false,
             })
 
-            if (error) {
-                throw error
+            if (result?.error) {
+                throw new Error(result.error)
             }
 
             router.push('/admin')
             router.refresh()
-        } catch (err: any) {
-            setError(err.message || "Giriş başarısız.")
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "Giriş başarısız."
+            setError(message)
         } finally {
             setLoading(false)
         }

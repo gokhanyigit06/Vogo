@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, ArrowRight, Zap, Target, Activity, Eye, EyeOff } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, Zap, Target, Activity, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/ThemeToggle"
-import { createClient } from "@/lib/supabase-client"
+import { useSession } from "next-auth/react"
 
 interface DashboardStats {
     totalIncome: number
@@ -13,20 +13,20 @@ interface DashboardStats {
     activeProjects: number
     totalClients: number
     monthlyIncome: number
-    upcomingDeadlines: any[]
-    recentTransactions: any[]
+    upcomingDeadlines: { id: number; name: string; end_date: string }[]
+    recentTransactions: { id: number; description: string; date: string; amount: number }[]
 }
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null)
     const [loading, setLoading] = useState(true)
-    const [userName, setUserName] = useState("Volkan Bey")
     const [hideSensitiveData, setHideSensitiveData] = useState(false)
+    const { data: session } = useSession()
 
-    const supabase = createClient()
+    const userName = session?.user?.name?.split(' ')[0] || 'Admin'
 
     useEffect(() => {
-        // 1. Dashboard verilerini çek
+        // Dashboard verilerini çek
         fetch('/api/dashboard')
             .then(res => res.json())
             .then(data => {
@@ -37,29 +37,6 @@ export default function AdminDashboard() {
                 console.error('Dashboard fetch error:', err)
                 setLoading(false)
             })
-
-        // 2. Kullanıcı adını çek (Team tablosundan)
-        const getUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (user && user.email) {
-                // Team tablosundan bu maile sahip üyeyi bul
-                const { data: teamMember } = await supabase
-                    .from('team')
-                    .select('name')
-                    .eq('email', user.email)
-                    .single()
-
-                if (teamMember && teamMember.name) {
-                    const firstName = teamMember.name.split(' ')[0]
-                    setUserName(firstName)
-                } else {
-                    // Fallback
-                    const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'
-                    setUserName(name.charAt(0).toUpperCase() + name.slice(1))
-                }
-            }
-        }
-        getUser()
     }, [])
 
     const getGreeting = () => {
@@ -243,7 +220,7 @@ export default function AdminDashboard() {
                             <Link href="/admin/finance/income" className="text-sm text-blue-500 hover:text-blue-400 font-medium">Tümünü Gör</Link>
                         </div>
                         <div className="divide-y divide-border">
-                            {stats?.recentTransactions?.slice(0, 5).map((t: any) => (
+                            {stats?.recentTransactions?.slice(0, 5).map((t) => (
                                 <div key={t.id} className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors">
                                     <div className="flex items-center gap-4">
                                         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-lg">
@@ -308,7 +285,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="max-h-[400px] overflow-y-auto custom-scrollbar p-2">
                             {stats?.upcomingDeadlines && stats.upcomingDeadlines.length > 0 ? (
-                                stats.upcomingDeadlines.map((p: any) => (
+                                stats.upcomingDeadlines.map((p) => (
                                     <div key={p.id} className="p-4 mb-2 bg-secondary/30 rounded-xl border border-border hover:border-yellow-500/30 transition-colors">
                                         <div className="flex justify-between items-start mb-2">
                                             <h4 className="font-bold text-foreground text-sm">{p.name}</h4>

@@ -12,7 +12,6 @@ import {
     Image as ImageIcon, Undo, Redo, Code, Youtube as YoutubeIcon,
     Loader2
 } from 'lucide-react'
-import { createClient } from '@/lib/supabase-client'
 import { useCallback, useState } from 'react'
 
 interface RichTextEditorProps {
@@ -61,8 +60,6 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
         immediatelyRender: false,
     })
 
-    const supabase = createClient()
-
     const addImage = useCallback(async () => {
         const input = document.createElement('input')
         input.type = 'file'
@@ -74,21 +71,18 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                 setIsUploading(true)
 
                 try {
-                    const fileExt = file.name.split('.').pop()
-                    const fileName = `blog-${Math.random().toString(36).substring(2)}.${fileExt}`
-                    const filePath = `content/${fileName}`
+                    const formData = new FormData()
+                    formData.append('file', file)
 
-                    const { error: uploadError } = await supabase.storage
-                        .from('images')
-                        .upload(filePath, file)
+                    const res = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
 
-                    if (uploadError) throw uploadError
+                    if (!res.ok) throw new Error('Upload failed')
 
-                    const { data } = supabase.storage
-                        .from('images')
-                        .getPublicUrl(filePath)
-
-                    editor?.chain().focus().setImage({ src: data.publicUrl }).run()
+                    const data = await res.json()
+                    editor?.chain().focus().setImage({ src: data.url }).run()
 
                 } catch (error) {
                     console.error(error)
@@ -100,7 +94,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
         }
 
         input.click()
-    }, [editor, supabase])
+    }, [editor])
 
     const addYoutubeVideo = useCallback(() => {
         const url = window.prompt('YouTube Video URL:')
@@ -133,7 +127,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
         return null
     }
 
-    const ToolbarButton = ({ onClick, isActive = false, disabled = false, icon: Icon, title }: any) => (
+    const ToolbarButton = ({ onClick, isActive = false, disabled = false, icon: Icon, title }: { onClick: () => void; isActive?: boolean; disabled?: boolean; icon: React.ComponentType<{ className?: string }>; title?: string }) => (
         <button
             type="button"
             onClick={onClick}

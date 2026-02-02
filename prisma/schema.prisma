@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma Schema - Vogo Agency
+// PostgreSQL + NextAuth.js + Coolify Compatible
 
 generator client {
   provider = "prisma-client-js"
@@ -8,52 +8,361 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
-// Blog Yazıları Modeli
+// ============================================
+// NextAuth.js Models (Required)
+// ============================================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // For credentials provider
+  role          String    @default("ADMIN")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================
+// Blog Posts (Blog Yazıları)
+// ============================================
+
 model Post {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   title     String
   slug      String   @unique
   excerpt   String?
-  content   String   @db.Text
+  content   String?  @db.Text
   image     String?
-  category  String
-  featured  Boolean  @default(false)
-  published Boolean  @default(false)
+  category  String?
+  readTime  String?  @default("5 dk") @map("read_time")
+  status    String   @default("published")
   views     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("posts")
 }
 
-// İletişim Formu Başvuruları (Leads)
-model Lead {
-  id        String   @id @default(cuid())
+// ============================================
+// Clients (Müşteriler)
+// ============================================
+
+model Client {
+  id                  Int       @id @default(autoincrement())
+  name                String
+  company             String?
+  email               String?
+  phone               String?
+  address             String?
+  website             String?
+  status              String    @default("active") // active, potential, inactive
+  tags                String[]
+  notes               String?   @db.Text
+  totalRevenue        Decimal   @default(0) @map("total_revenue") @db.Decimal(10, 2)
+  totalPaid           Decimal   @default(0) @map("total_paid") @db.Decimal(10, 2)
+  balance             Decimal   @default(0) @db.Decimal(10, 2)
+  lastTransactionDate DateTime? @map("last_transaction_date")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  projects     Project[]
+  income       Income[]
+  transactions ClientTransaction[]
+
+  @@map("clients")
+}
+
+// ============================================
+// Projects (Projeler)
+// ============================================
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  clientId    Int?      @map("client_id")
+  title       String?
+  name        String?
+  description String?   @db.Text
+  status      String    @default("in_progress")
+  category    String?
+  budget      Decimal?  @db.Decimal(10, 2)
+  actualCost  Decimal   @default(0) @map("actual_cost") @db.Decimal(10, 2)
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  priority    String    @default("medium")
+  progress    Int       @default(0)
+  image       String?
+  files       Json      @default("[]")
+  notes       String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  tasks  Task[]
+  income Income[]
+
+  @@map("projects")
+}
+
+// ============================================
+// Tasks (Görevler)
+// ============================================
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  projectId   Int?      @map("project_id")
+  assignedTo  Int?      @map("assigned_to")
+  title       String
+  description String?   @db.Text
+  status      String    @default("todo") // todo, in_progress, done
+  priority    String    @default("medium") // low, medium, high
+  dueDate     DateTime? @map("due_date")
+  completedAt DateTime? @map("completed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  teamMember   TeamMember?  @relation(fields: [assignedTo], references: [id], onDelete: SetNull)
+  attachments  TaskAttachment[]
+
+  @@map("tasks")
+}
+
+model TaskAttachment {
+  id        Int      @id @default(autoincrement())
+  taskId    Int      @map("task_id")
+  name      String
+  url       String
+  type      String?
+  size      Int?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("task_attachments")
+}
+
+// ============================================
+// Team Members (Takım Üyeleri)
+// ============================================
+
+model TeamMember {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String?  @unique
+  role        String   @default("member") // admin, manager, member
+  avatarUrl   String?  @map("avatar_url")
+  permissions Json     @default("{}")
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tasks Task[]
+
+  @@map("team_members")
+}
+
+// ============================================
+// Income (Gelirler)
+// ============================================
+
+model Income {
+  id            Int       @id @default(autoincrement())
+  clientId      Int?      @map("client_id")
+  projectId     Int?      @map("project_id")
+  amount        Decimal   @db.Decimal(10, 2)
+  date          DateTime
+  category      String    @default("payment") // payment, deposit, refund
+  paymentMethod String?   @map("payment_method") // bank_transfer, cash, card
+  invoiceNumber String?   @map("invoice_number")
+  description   String?   @db.Text
+  status        String    @default("paid")
+  isPaid        Boolean   @default(true) @map("is_paid")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  client  Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@map("income")
+}
+
+// ============================================
+// Expenses (Giderler)
+// ============================================
+
+model Expense {
+  id            Int      @id @default(autoincrement())
+  amount        Decimal  @db.Decimal(10, 2)
+  date          DateTime
+  category      String   // rent, salary, software, ads, office, other
+  description   String?  @db.Text
+  invoiceNumber String?  @map("invoice_number")
+  vendor        String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("expenses")
+}
+
+// ============================================
+// Payables (Borçlar)
+// ============================================
+
+model Payable {
+  id          Int       @id @default(autoincrement())
+  vendorName  String    @map("vendor_name")
+  amount      Decimal   @db.Decimal(10, 2)
+  dueDate     DateTime? @map("due_date")
+  status      String    @default("pending")
+  category    String?
+  description String?   @db.Text
+  paidDate    DateTime? @map("paid_date")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("payables")
+}
+
+// ============================================
+// Receivables (Alacaklar)
+// ============================================
+
+model Receivable {
+  id          Int       @id @default(autoincrement())
+  clientName  String    @map("client_name")
+  amount      Decimal   @db.Decimal(10, 2)
+  dueDate     DateTime? @map("due_date")
+  status      String    @default("pending")
+  description String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("receivables")
+}
+
+// ============================================
+// Client Transactions (Cari Hareketler)
+// ============================================
+
+model ClientTransaction {
+  id              Int      @id @default(autoincrement())
+  clientId        Int      @map("client_id")
+  type            String   // invoice, payment, refund
+  amount          Decimal  @db.Decimal(10, 2)
+  description     String?  @db.Text
+  referenceId     Int?     @map("reference_id")
+  transactionDate DateTime @default(now()) @map("transaction_date")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("client_transactions")
+}
+
+// ============================================
+// Services (Hizmetler)
+// ============================================
+
+model Service {
+  id            Int      @id @default(autoincrement())
+  title         String
+  slug          String   @unique
+  description   String?  @db.Text @map("descr")
+  icon          String?
+  status        String   @default("Aktif")
+  views         Int      @default(0)
+  projectsCount Int      @default(0) @map("projects_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("services")
+}
+
+// ============================================
+// Messages (İletişim Mesajları)
+// ============================================
+
+model Message {
+  id        Int      @id @default(autoincrement())
   name      String
   email     String
-  service   String
+  subject   String?
   message   String   @db.Text
-  status    String   @default("NEW") // NEW, READ, REPLIED
-  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("messages")
 }
 
-// Portfolyo Projeleri
-model Project {
-  id          String   @id @default(cuid())
-  title       String
-  category    String
-  description String
-  image       String
-  featured    Boolean  @default(true)
-  createdAt   DateTime @default(now())
+// ============================================
+// Settings (Ayarlar)
+// ============================================
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
 }
 
-// Admin Kullanıcıları (Gelecekte Auth eklendiğinde kullanılabilir)
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  role      String   @default("ADMIN")
-  createdAt DateTime @default(now())
+// ============================================
+// Pages (Dinamik Sayfalar)
+// ============================================
+
+model Page {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  content   String?  @db.Text
+  status    String   @default("published")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("pages")
 }

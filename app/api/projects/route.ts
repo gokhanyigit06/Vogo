@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
-// GET - Tüm projeleri getir
 // GET - Tüm projeleri veya tek projeyi getir (ID varsa)
 export async function GET(request: NextRequest) {
     try {
@@ -10,39 +9,38 @@ export async function GET(request: NextRequest) {
 
         if (id) {
             // Tekil proje detayı (Görevler ile birlikte)
-            const { data, error } = await supabase
-                .from('projects')
-                .select(`
-                    *,
-                    clients (id, name, company),
-                    tasks (*)
-                `)
-                .eq('id', id)
-                .single()
+            const project = await prisma.project.findUnique({
+                where: { id: parseInt(id) },
+                include: {
+                    client: {
+                        select: { id: true, name: true, company: true }
+                    },
+                    tasks: true
+                }
+            })
 
-            if (error) throw error
-            return NextResponse.json(data)
+            if (!project) {
+                return NextResponse.json({ error: 'Proje bulunamadı' }, { status: 404 })
+            }
+
+            return NextResponse.json(project)
         }
 
         // Liste
-        const { data, error } = await supabase
-            .from('projects')
-            .select(`
-                *,
-                clients (
-                  id,
-                  name,
-                  company
-                )
-            `)
-            .order('created_at', { ascending: false })
+        const projects = await prisma.project.findMany({
+            include: {
+                client: {
+                    select: { id: true, name: true, company: true }
+                }
+            },
+            orderBy: { createdAt: 'desc' }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data || [])
-    } catch (error: any) {
+        return NextResponse.json(projects)
+    } catch (error: unknown) {
         console.error('Projects GET error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -51,30 +49,32 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
-        // DB FIX: 'projects' tablosunda 'title' sütunu zorunlu (NOT NULL) olabilir.
-        // Ancak frontend genellikle 'name' gönderiyor.
-        // Bu yüzden eğer title yoksa, name değerini title'a kopyalıyoruz.
-        if (!body.title && body.name) {
-            body.title = body.name
-        }
+        // title/name senkronizasyonu
+        const title = body.title || body.name
+        const name = body.name || body.title
 
-        // Benzer şekilde veritabanı 'name' bekleyip biz 'title' gönderiyorsak:
-        if (!body.name && body.title) {
-            body.name = body.title
-        }
+        const project = await prisma.project.create({
+            data: {
+                title,
+                name,
+                description: body.description,
+                status: body.status || 'in_progress',
+                category: body.category,
+                budget: body.budget ? parseFloat(body.budget) : null,
+                startDate: body.startDate ? new Date(body.startDate) : null,
+                endDate: body.endDate ? new Date(body.endDate) : null,
+                priority: body.priority || 'medium',
+                progress: body.progress || 0,
+                image: body.image,
+                clientId: body.clientId ? parseInt(body.clientId) : null,
+            }
+        })
 
-        const { data, error } = await supabase
-            .from('projects')
-            .insert([body])
-            .select()
-            .single()
-
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(project)
+    } catch (error: unknown) {
         console.error('Projects POST error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -91,24 +91,27 @@ export async function PUT(request: NextRequest) {
             }
         })
 
-        // DB FIX: Update sırasında da title/name senkronizasyonu
+        // title/name senkronizasyonu
         if (updateData.name && !updateData.title) {
             updateData.title = updateData.name
         }
 
-        const { data, error } = await supabase
-            .from('projects')
-            .update(updateData)
-            .eq('id', id)
-            .select()
-            .single()
+        // Date conversions
+        if (updateData.startDate) updateData.startDate = new Date(updateData.startDate)
+        if (updateData.endDate) updateData.endDate = new Date(updateData.endDate)
+        if (updateData.budget) updateData.budget = parseFloat(updateData.budget)
+        if (updateData.clientId) updateData.clientId = parseInt(updateData.clientId)
 
-        if (error) throw error
+        const project = await prisma.project.update({
+            where: { id: parseInt(id) },
+            data: updateData
+        })
 
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(project)
+    } catch (error: unknown) {
         console.error('Projects PUT error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -122,16 +125,14 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const { error } = await supabase
-            .from('projects')
-            .delete()
-            .eq('id', id)
-
-        if (error) throw error
+        await prisma.project.delete({
+            where: { id: parseInt(id) }
+        })
 
         return NextResponse.json({ success: true })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Projects DELETE error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

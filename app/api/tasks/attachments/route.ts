@@ -1,60 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import prisma from '@/lib/prisma'
+import { writeFile, mkdir } from 'fs/promises'
+import path from 'path'
 
 export const dynamic = 'force-dynamic'
 
+// GET - Task attachments getir
 export async function GET(request: NextRequest) {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: { getAll() { return cookieStore.getAll() } }
-        }
-    )
-
     const { searchParams } = new URL(request.url)
     const taskId = searchParams.get('task_id')
 
     if (!taskId) return NextResponse.json([])
 
-    const { data } = await supabase
-        .from('task_attachments') // View veya Table adı
-        .select('*')
-        .eq('task_id', taskId)
+    try {
+        const attachments = await prisma.taskAttachment.findMany({
+            where: { taskId: parseInt(taskId) }
+        })
 
-    return NextResponse.json(data || [])
+        return NextResponse.json(attachments)
+    } catch (error: unknown) {
+        console.error('Attachments GET error:', error)
+        return NextResponse.json([])
+    }
 }
 
+// POST - Yeni attachment yükle
 export async function POST(request: NextRequest) {
     try {
-        const cookieStore = await cookies()
-        // Admin yetkisi gerekiyor mu? Evet, çünkü client-side RLS ile uğraşmayalım.
-        // Ama ssr client normalde kullanıcının yetkisiyle çalışır.
-        // Service Role Key varsa kullanalım, yoksa normal devam.
-
-        const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-        const supabase = serviceKey
-            ? createServerClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                serviceKey,
-                { cookies: { getAll() { return [] }, setAll() { } } } // Service Client cookie istemez
-            )
-            : createServerClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                {
-                    cookies: {
-                        getAll() { return cookieStore.getAll() },
-                        setAll(cookiesToSet) {
-                            try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) } catch { }
-                        },
-                    },
-                }
-            )
-
         const formData = await request.formData()
         const file = formData.get('file') as File
         const taskId = formData.get('task_id') as string
@@ -63,44 +35,60 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'File and Task ID required' }, { status: 400 })
         }
 
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${taskId}/${Math.random().toString(36).substring(7)}.${fileExt}`
+        // Dosya bilgilerini al
+        const fileExt = file.name.split('.').pop() || 'bin'
+        const fileName = `${taskId}_${Math.random().toString(36).substring(7)}.${fileExt}`
 
-        // 1. Upload to Storage
-        const { error: uploadError } = await supabase.storage
-            .from('task-attachments')
-            .upload(fileName, file, {
-                upsert: true,
-                contentType: file.type
-            })
+        // Upload dizini oluştur
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'tasks')
+        await mkdir(uploadDir, { recursive: true })
 
-        if (uploadError) {
-            console.error('Storage Upload Error:', uploadError)
-            return NextResponse.json({ error: uploadError.message }, { status: 500 })
+        // Dosyayı kaydet
+        const filePath = path.join(uploadDir, fileName)
+        const bytes = await file.arrayBuffer()
+        await writeFile(filePath, Buffer.from(bytes))
+
+        // URL oluştur
+        const fileUrl = `/uploads/tasks/${fileName}`
+
+        // DB'ye kaydet
+        const attachment = await prisma.taskAttachment.create({
+            data: {
+                taskId: parseInt(taskId),
+                name: file.name,
+                url: fileUrl,
+                type: fileExt,
+                size: file.size
+            }
+        })
+
+        return NextResponse.json(attachment)
+
+    } catch (error: unknown) {
+        console.error('Attachment save error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
+    }
+}
+
+// DELETE - Attachment sil
+export async function DELETE(request: NextRequest) {
+    try {
+        const { searchParams } = new URL(request.url)
+        const id = searchParams.get('id')
+
+        if (!id) {
+            return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        // 2. Get Public URL
-        const { data: urlData } = supabase.storage
-            .from('task-attachments')
-            .getPublicUrl(fileName)
+        await prisma.taskAttachment.delete({
+            where: { id: parseInt(id) }
+        })
 
-        // 3. Insert into DB
-        const { data, error: dbError } = await supabase
-            .from('task_attachments')
-            .insert([{
-                task_id: parseInt(taskId),
-                file_name: file.name,
-                file_url: urlData.publicUrl,
-                file_type: fileExt
-            }])
-            .select()
-
-        if (dbError) throw dbError
-
-        return NextResponse.json(data)
-
-    } catch (error: any) {
-        console.error('Attachment save error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json({ success: true })
+    } catch (error: unknown) {
+        console.error('Attachment DELETE error:', error)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

@@ -1,26 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
 // GET - Tüm giderleri getir
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
-        const { data, error } = await supabase
-            .from('expenses')
-            .select(`
-                *,
-                team_members (
-                    id,
-                    name
-                )
-            `)
-            .order('date', { ascending: false })
+        const expenses = await prisma.expense.findMany({
+            orderBy: { date: 'desc' }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data || [])
-    } catch (error: any) {
+        return NextResponse.json(expenses)
+    } catch (error: unknown) {
         console.error('Expenses GET error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -29,18 +21,22 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
-        const { data, error } = await supabase
-            .from('expenses')
-            .insert([body])
-            .select()
-            .single()
+        const expense = await prisma.expense.create({
+            data: {
+                amount: parseFloat(body.amount),
+                date: new Date(body.date),
+                category: body.category,
+                description: body.description,
+                invoiceNumber: body.invoice_number || body.invoiceNumber,
+                vendor: body.vendor,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(expense)
+    } catch (error: unknown) {
         console.error('Expenses POST error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -48,21 +44,23 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
     try {
         const body = await request.json()
-        const { id, ...updateData } = body
+        const { id, invoice_number, ...rest } = body
 
-        const { data, error } = await supabase
-            .from('expenses')
-            .update(updateData)
-            .eq('id', id)
-            .select()
-            .single()
+        const expense = await prisma.expense.update({
+            where: { id: parseInt(id) },
+            data: {
+                ...rest,
+                amount: rest.amount ? parseFloat(rest.amount) : undefined,
+                date: rest.date ? new Date(rest.date) : undefined,
+                invoiceNumber: invoice_number,
+            }
+        })
 
-        if (error) throw error
-
-        return NextResponse.json(data)
-    } catch (error: any) {
+        return NextResponse.json(expense)
+    } catch (error: unknown) {
         console.error('Expenses PUT error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }
 
@@ -76,16 +74,14 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const { error } = await supabase
-            .from('expenses')
-            .delete()
-            .eq('id', id)
-
-        if (error) throw error
+        await prisma.expense.delete({
+            where: { id: parseInt(id) }
+        })
 
         return NextResponse.json({ success: true })
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Expenses DELETE error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

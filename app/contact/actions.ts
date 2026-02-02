@@ -1,7 +1,6 @@
 'use server'
 
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import prisma from '@/lib/prisma'
 
 export interface ContactFormData {
     name: string
@@ -53,72 +52,23 @@ export async function submitContactForm(formData: ContactFormData) {
             }
         }
 
-        // Create Supabase client with service role for RLS bypass
-        const cookieStore = await cookies()
+        console.log('📝 Inserting message via Prisma...')
 
-        // Use service role key if available for admin operations
-        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-        const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            supabaseKey,
-            {
-                cookies: {
-                    get(name: string) {
-                        return cookieStore.get(name)?.value
-                    },
-                    set(name: string, value: string, options: CookieOptions) {
-                        cookieStore.set(name, value, options)
-                    },
-                    remove(name: string, options: CookieOptions) {
-                        cookieStore.set(name, '', options)
-                    }
-                }
+        const message = await prisma.message.create({
+            data: {
+                name: formData.name.trim(),
+                email: formData.email.trim().toLowerCase(),
+                subject: formData.subject.trim(),
+                message: formData.message.trim()
             }
-        )
-
-        // Insert message into database
-        console.log('📝 Inserting into Supabase...')
-        console.log('📋 Data to insert:', {
-            name: formData.name.trim(),
-            email: formData.email.trim().toLowerCase(),
-            phone: formData.phone?.trim() || null,
-            subject: formData.subject.trim(),
-            message: formData.message.trim()
         })
 
-        const { data, error } = await supabase
-            .from('messages')
-            .insert([
-                {
-                    name: formData.name.trim(),
-                    email: formData.email.trim().toLowerCase(),
-                    phone: formData.phone?.trim() || null,
-                    subject: formData.subject.trim(),
-                    message: formData.message.trim()
-                }
-            ])
-            .select()
-            .single()
-
-        if (error) {
-            console.error('❌ Supabase error:', error)
-            console.error('❌ Error code:', error.code)
-            console.error('❌ Error message:', error.message)
-            console.error('❌ Error details:', error.details)
-            console.error('❌ Error hint:', error.hint)
-            return {
-                success: false,
-                error: 'Mesaj gönderilemedi. Lütfen tekrar deneyin.'
-            }
-        }
-
-        console.log('✅ Message saved:', data)
+        console.log('✅ Message saved:', message)
 
         return {
             success: true,
             message: 'Mesajınız başarıyla gönderildi! En kısa sürede sizinle iletişime geçeceğiz.',
-            data
+            data: message
         }
 
     } catch (error) {
