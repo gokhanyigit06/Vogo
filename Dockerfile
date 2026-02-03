@@ -4,6 +4,7 @@
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
+ENV PRISMA_CLIENT_ENGINE_TYPE=library
 
 # Copy package files
 COPY package.json package-lock.json* ./
