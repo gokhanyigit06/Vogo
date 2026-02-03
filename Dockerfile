@@ -30,6 +30,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV PRISMA_CLIENT_ENGINE_TYPE=library
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
 
 # Build the application
 RUN npm run build
