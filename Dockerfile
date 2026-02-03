@@ -64,7 +64,9 @@ RUN mkdir -p .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy Prisma client
+# Copy Prisma client and all dependencies from deps
+# This ensures bcryptjs and other runtime dependencies are available
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=deps /app/node_modules/@prisma ./node_modules/@prisma
 
@@ -74,6 +76,9 @@ RUN npm install -g prisma@5.21.1
 # Copy start script
 COPY scripts/start.sh ./start.sh
 RUN chmod +x ./start.sh
+
+# Fix permissions for nextjs user
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 

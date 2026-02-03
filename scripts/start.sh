@@ -6,7 +6,6 @@ echo "Veritabani sifirlaniyor ve yeniden olusturuluyor (prisma db push --force-r
 npx prisma db push --force-reset --skip-generate
 
 echo "Admin kullanicisi olusturuluyor (seeding)..."
-npm install bcryptjs
 node prisma/seed.js
 
 echo "Uygulama baslatiliyor..."
