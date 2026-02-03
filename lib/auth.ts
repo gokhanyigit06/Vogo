@@ -21,7 +21,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
+                console.log("Login attempt for:", credentials?.email);
+
                 if (!credentials?.email || !credentials?.password) {
+                    console.log("Missing credentials");
                     return null
                 }
 
@@ -29,8 +32,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     where: { email: credentials.email as string }
                 })
 
-                if (!user || !user.password) {
-                    return null
+                if (!user) {
+                    console.log("User not found");
+                    return null;
+                }
+
+                if (!user.password) {
+                    console.log("User has no password set");
+                    return null;
                 }
 
                 const isPasswordValid = await bcrypt.compare(
@@ -39,8 +48,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 )
 
                 if (!isPasswordValid) {
+                    console.log("Password invalid");
                     return null
                 }
+
+                console.log("Login successful");
 
                 return {
                     id: user.id,
