@@ -5,6 +5,7 @@ FROM node:20-alpine AS deps
 
 WORKDIR /app
 ENV PRISMA_CLIENT_ENGINE_TYPE=library
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
 
 # Copy package files
 COPY package.json package-lock.json* ./
