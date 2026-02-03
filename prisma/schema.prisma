@@ -1,6 +1,3 @@
-// Prisma Schema - Vogo Agency
-// PostgreSQL + NextAuth.js + Coolify Compatible
-
 generator client {
   provider        = "prisma-client-js"
   engineType      = "library"
@@ -36,6 +33,7 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@index([userId])
+  @@schema("public")
 }
 
 model Session {
@@ -46,6 +44,7 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@schema("public")
 }
 
 model User {
@@ -62,6 +61,7 @@ model User {
   sessions      Session[]
 
   @@map("team")
+  @@schema("public")
 }
 
 model VerificationToken {
@@ -70,6 +70,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@schema("public")
 }
 
 // ============================================
@@ -91,6 +92,7 @@ model Post {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("posts")
+  @@schema("public")
 }
 
 // ============================================
@@ -120,6 +122,7 @@ model Client {
   transactions ClientTransaction[]
 
   @@map("clients")
+  @@schema("public")
 }
 
 // ============================================
@@ -151,6 +154,7 @@ model Project {
   income Income[]
 
   @@map("projects")
+  @@schema("public")
 }
 
 // ============================================
@@ -175,6 +179,7 @@ model Task {
   attachments  TaskAttachment[]
 
   @@map("tasks")
+  @@schema("public")
 }
 
 model TaskAttachment {
@@ -189,6 +194,7 @@ model TaskAttachment {
   task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   @@map("task_attachments")
+  @@schema("public")
 }
 
 // ============================================
@@ -209,6 +215,7 @@ model TeamMember {
   tasks Task[]
 
   @@map("team_members")
+  @@schema("public")
 }
 
 // ============================================
@@ -234,6 +241,7 @@ model Income {
   project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
 
   @@map("income")
+  @@schema("public")
 }
 
 // ============================================
@@ -252,6 +260,7 @@ model Expense {
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("expenses")
+  @@schema("public")
 }
 
 // ============================================
@@ -271,6 +280,7 @@ model Payable {
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
   @@map("payables")
+  @@schema("public")
 }
 
 // ============================================
@@ -288,6 +298,7 @@ model Receivable {
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
   @@map("receivables")
+  @@schema("public")
 }
 
 // ============================================
@@ -307,6 +318,7 @@ model ClientTransaction {
   client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   @@map("client_transactions")
+  @@schema("public")
 }
 
 // ============================================
@@ -325,6 +337,7 @@ model Service {
   createdAt     DateTime @default(now()) @map("created_at")
 
   @@map("services")
+  @@schema("public")
 }
 
 // ============================================
@@ -341,6 +354,7 @@ model Message {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("messages")
+  @@schema("public")
 }
 
 // ============================================
@@ -355,6 +369,7 @@ model Setting {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("settings")
+  @@schema("public")
 }
 
 // ============================================
@@ -371,4 +386,5 @@ model Page {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("pages")
+  @@schema("public")
 }
