@@ -2,9 +2,8 @@
 # STAGE 1: Dependencies
 # ================================
 FROM node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat openssl
 
-
+WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
