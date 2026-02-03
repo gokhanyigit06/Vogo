@@ -57,6 +57,7 @@ DATABASE_URL=postgresql://postgres:PASSWORD@vogo-postgres:5432/vogo_agency
 # NextAuth.js
 NEXTAUTH_SECRET=your-super-secret-key-generate-with-openssl
 NEXTAUTH_URL=https://yourdomain.com
+AUTH_TRUST_HOST=true
 
 # Node Environment
 NODE_ENV=production
