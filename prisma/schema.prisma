@@ -2,14 +2,16 @@
 // PostgreSQL + NextAuth.js + Coolify Compatible
 
 generator client {
-  provider      = "prisma-client-js"
-  engineType    = "library"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  engineType      = "library"
+  previewFeatures = ["multiSchema"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "auth"]
 }
 
 // ============================================
