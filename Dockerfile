@@ -4,6 +4,7 @@
 FROM node:20-alpine AS deps
 
 WORKDIR /app
+ENV PRISMA_CLIENT_ENGINE_TYPE=library
 
 # Copy package files
 COPY package.json package-lock.json* ./
@@ -29,6 +30,7 @@ COPY . .
 # Set environment
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+ENV PRISMA_CLIENT_ENGINE_TYPE=library
 ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
 
 # Build the application
@@ -43,6 +45,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV PRISMA_CLIENT_ENGINE_TYPE=library
 
 # Create non-root user for security
 RUN addgroup --system --gid 1001 nodejs
