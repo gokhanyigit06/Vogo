@@ -78,7 +78,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                 title={project.publicTitle || project.name || 'Proje'}
                 heroImage={project.heroImage || project.image || undefined}
                 heroVideo={project.heroVideo || undefined}
-                tagline={project.category}
+                tagline={project.category || undefined}
             />
 
             {/* Project Info Card */}
