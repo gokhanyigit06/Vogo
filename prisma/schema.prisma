@@ -157,6 +157,13 @@ model Project {
   gallery      Json      @default("[]") // Ekstra görseller (String array)
   files        Json      @default("[]")
   
+  // Premium Showcase Fields
+  heroImage    String?   @map("hero_image")    // Ana hero görseli
+  heroVideo    String?   @map("hero_video")    // Hero video URL (opsiyonel)
+  year         String?                          // Proje yılı (örn: "2024")
+  services     Json      @default("[]")         // Verilen hizmetler array
+  contentBlocks Json     @default("[]") @map("content_blocks") // Sayfa oluşturucu blokları
+  
   notes        String?   @db.Text
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")

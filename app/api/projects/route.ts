@@ -71,6 +71,13 @@ export async function POST(request: NextRequest) {
                 content: body.content,
                 order: body.order || 0,
 
+                // Premium Showcase Fields
+                heroImage: body.heroImage,
+                heroVideo: body.heroVideo,
+                year: body.year,
+                services: body.services || [],
+                contentBlocks: body.contentBlocks || [],
+
                 // Legacy / Shared
                 title,
                 name,

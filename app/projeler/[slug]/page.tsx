@@ -3,7 +3,10 @@ import { Metadata } from "next"
 import Link from "next/link"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Calendar, User, Tag, ExternalLink } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+import HeroSection from "@/components/project/HeroSection"
+import ProjectInfoCard from "@/components/project/ProjectInfoCard"
+import ContentBlockRenderer from "@/components/project/ContentBlockRenderer"
 
 // Types for params
 type Props = {
@@ -20,6 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: `${project.publicTitle || project.name} | Vogo Agency`,
         description: project.description || 'Proje detayları.',
+        openGraph: {
+            title: `${project.publicTitle || project.name} | Vogo Agency`,
+            description: project.description || 'Proje detayları.',
+            images: project.heroImage || project.image ? [project.heroImage || project.image!] : [],
+        }
     }
 }
 
@@ -48,92 +56,53 @@ export default async function ProjectDetailPage({ params }: Props) {
 
     if (!project) notFound()
 
+    // Parse services and content blocks from JSON
+    const services = Array.isArray(project.services) ? project.services : []
+    const contentBlocks = Array.isArray(project.contentBlocks) ? project.contentBlocks : []
+
     return (
-        <main className="min-h-screen bg-black text-white pb-20">
-            {/* Header / Hero */}
-            <section className="relative pt-32 pb-16 px-6 lg:px-12 border-b border-white/10 bg-zinc-900/50">
-                <div className="max-w-4xl mx-auto">
-                    <Link href="/projeler" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8">
-                        <ArrowLeft className="w-4 h-4" />
-                        Tüm Projeler
-                    </Link>
+        <main className="min-h-screen bg-white">
+            {/* Back Button */}
+            <div className="fixed top-8 left-8 z-50">
+                <Link
+                    href="/projeler"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-stone-200 rounded-full text-stone-700 hover:bg-stone-100 transition-all shadow-lg hover:shadow-xl"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="font-medium">Tüm Projeler</span>
+                </Link>
+            </div>
 
-                    <div className="space-y-4">
-                        {project.category && (
-                            <span className="inline-block px-3 py-1 text-sm font-bold text-emerald-400 border border-emerald-500/20 bg-emerald-500/10 rounded-full">
-                                {project.category}
-                            </span>
-                        )}
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
-                            {project.publicTitle || project.name}
-                        </h1>
-                        <p className="text-xl text-slate-400 leading-relaxed max-w-2xl">
-                            {project.description}
-                        </p>
-                    </div>
+            {/* Hero Section */}
+            <HeroSection
+                title={project.publicTitle || project.name || 'Proje'}
+                heroImage={project.heroImage || project.image || undefined}
+                heroVideo={project.heroVideo || undefined}
+                tagline={project.category}
+            />
 
-                    {/* Metadata Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 py-8 border-t border-white/10">
-                        {project.client?.company && (
-                            <div>
-                                <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Müşteri</div>
-                                <div className="font-medium text-white">{project.client.company}</div>
-                            </div>
-                        )}
-                        {project.startDate && (
-                            <div>
-                                <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Tarih</div>
-                                <div className="font-medium text-white">
-                                    {new Date(project.startDate).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long' })}
-                                </div>
-                            </div>
-                        )}
-                        {project.category && (
-                            <div>
-                                <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Kategori</div>
-                                <div className="font-medium text-white">{project.category}</div>
-                            </div>
-                        )}
-                        {/* Optional Live Link would go here */}
-                    </div>
-                </div>
-            </section>
+            {/* Project Info Card */}
+            <ProjectInfoCard
+                description={project.description || undefined}
+                client={project.client?.company || project.client?.name || undefined}
+                services={services}
+                year={project.year || undefined}
+                category={project.category || undefined}
+            />
 
-            {/* Content Body */}
-            <section className="px-6 lg:px-12 py-12">
-                <div className="max-w-4xl mx-auto">
-                    {/* Main Image */}
-                    {project.image && (
-                        <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-emerald-900/10 mb-12">
-                            <img
-                                src={project.image}
-                                alt={project.publicTitle || 'Proje Görseli'}
-                                className="w-full h-auto"
-                            />
-                        </div>
-                    )}
+            {/* Content Blocks */}
+            <ContentBlockRenderer blocks={contentBlocks} />
 
-                    {/* Rich Text Content */}
-                    <article className="prose prose-invert prose-lg max-w-none prose-emerald prose-headings:font-bold prose-headings:text-white prose-p:text-slate-300 prose-li:text-slate-300">
-                        {project.content ? (
+            {/* Legacy Content (if no blocks) */}
+            {contentBlocks.length === 0 && project.content && (
+                <section className="py-16 px-6 lg:px-12 bg-white">
+                    <div className="max-w-4xl mx-auto">
+                        <article className="prose prose-lg prose-stone max-w-none">
                             <div dangerouslySetInnerHTML={{ __html: project.content }} />
-                        ) : (
-                            <div className="text-slate-500 italic">
-                                Bu proje için henüz detaylı içerik girilmemiş.
-                            </div>
-                        )}
-                    </article>
-
-                    {/* Gallery (If implemented in future with JSON) */}
-                    {/* 
-                    {project.gallery && Array.isArray(project.gallery) && (
-                        <div className="grid grid-cols-2 gap-4 mt-12">
-                             ...
-                        </div>
-                    )}
-                    */}
-                </div>
-            </section>
+                        </article>
+                    </div>
+                </section>
+            )}
         </main>
     )
 }
