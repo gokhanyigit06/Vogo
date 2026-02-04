@@ -39,7 +39,7 @@ export default function PortfolioAdminPage() {
                     </h1>
                     <p className="text-slate-400 mt-1">Tamamlanan projeleri sergileyin ve yönetin.</p>
                 </div>
-                <Link href="/admin/portfolio/new">
+                <Link href="/admin/projects/new">
                     <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95">
                         <Plus className="w-5 h-5" /> Yeni Proje Ekle
                     </button>
@@ -61,11 +61,11 @@ export default function PortfolioAdminPage() {
                             </div>
                         </div>
                         <div className="p-6 flex flex-col flex-1">
-                            <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-emerald-400 transition-colors line-clamp-1">{project.title}</h3>
-                            <p className="text-slate-500 text-sm mb-4 line-clamp-1">{project.client}</p>
+                            <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-emerald-400 transition-colors line-clamp-1">{project.publicTitle || project.title || project.name}</h3>
+                            <p className="text-slate-500 text-sm mb-4 line-clamp-1">{project.client?.company || project.client?.name || 'Müşteri Yok'}</p>
 
                             <div className="mt-auto flex gap-2 pt-4 border-t border-border/50">
-                                <Link href={`/admin/portfolio/edit/${project.id}`} className="flex-1">
+                                <Link href={`/admin/projects/edit/${project.id}`} className="flex-1">
                                     <button className="w-full bg-muted hover:bg-muted text-foreground py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2">
                                         <Edit className="w-4 h-4" /> Düzenle
                                     </button>
@@ -79,7 +79,7 @@ export default function PortfolioAdminPage() {
                 ))}
 
                 {/* Add New Placeholder - Always visible */}
-                <Link href="/admin/portfolio/new" className="block h-full min-h-[300px]">
+                <Link href="/admin/projects/new" className="block h-full min-h-[300px]">
                     <button className="w-full h-full border-2 border-dashed border-border rounded-3xl flex flex-col items-center justify-center text-slate-500 hover:text-emerald-500 hover:border-emerald-500/50 hover:bg-slate-900/50 transition-all group">
                         <div className="w-16 h-16 rounded-full bg-card flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <Plus className="w-8 h-8" />

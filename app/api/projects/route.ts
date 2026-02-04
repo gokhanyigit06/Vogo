@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
                 description: body.description,
                 status: body.status || 'in_progress',
                 category: body.category,
+                categories: body.categories || [],
                 budget: body.budget ? parseFloat(body.budget) : null,
                 startDate: body.startDate ? new Date(body.startDate) : null,
                 endDate: body.endDate ? new Date(body.endDate) : null,

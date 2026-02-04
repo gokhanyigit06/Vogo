@@ -6,6 +6,10 @@ import { useState, useEffect } from "react"
 import { ArrowLeft, Save, Briefcase, Globe, FileText } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import ImageUploader from "@/components/admin/ImageUploader"
+import MultiImageUploader from "@/components/admin/MultiImageUploader"
+import TagsInput from "@/components/admin/TagsInput"
+import CategorySelect from "@/components/admin/CategorySelect"
 
 export default function NewProjectPage() {
     const router = useRouter()
@@ -18,7 +22,7 @@ export default function NewProjectPage() {
         description: "",
         content: "",
         status: "in_progress",
-        category: "",
+        categories: [] as string[],
         budget: "",
         start_date: new Date().toISOString().split('T')[0],
         end_date: "",
@@ -200,32 +204,19 @@ export default function NewProjectPage() {
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Kategori</label>
-                            <select
-                                value={formData.category}
-                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                            >
-                                <option value="">Seçiniz</option>
-                                <option value="Web Tasarım">Web Tasarım</option>
-                                <option value="E-Ticaret">E-Ticaret</option>
-                                <option value="Mobil Uygulama">Mobil Uygulama</option>
-                                <option value="Branding">Branding</option>
-                                <option value="SEO">SEO</option>
-                                <option value="Dijital Pazarlama">Dijital Pazarlama</option>
-                            </select>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Kategoriler</label>
+                            <CategorySelect
+                                value={formData.categories}
+                                onChange={(cats) => setFormData({ ...formData, categories: cats })}
+                            />
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel URL</label>
-                            <input
-                                type="url"
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel</label>
+                            <ImageUploader
                                 value={formData.heroImage}
-                                onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                                placeholder="https://example.com/image.jpg"
+                                onChange={(url) => setFormData({ ...formData, heroImage: url })}
                             />
-                            <p className="text-xs text-slate-500 mt-1">Proje detay sayfasının hero bölümünde gösterilecek</p>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -275,26 +266,20 @@ export default function NewProjectPage() {
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Hizmetler (virgülle ayırın)</label>
-                            <input
-                                type="text"
-                                value={formData.services.join(', ')}
-                                onChange={(e) => setFormData({ ...formData, services: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
-                                placeholder="Website Design, Development, SEO"
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hizmetler</label>
+                            <TagsInput
+                                value={formData.services}
+                                onChange={(tags) => setFormData({ ...formData, services: tags })}
+                                placeholder="Hizmet yazıp Enter'a basın..."
                             />
-                            <p className="text-xs text-slate-500 mt-1">Örnek: Website Design, Development, SEO</p>
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Galeri Görselleri (virgülle ayırın)</label>
-                            <textarea
-                                value={formData.gallery.join('\n')}
-                                onChange={(e) => setFormData({ ...formData, gallery: e.target.value.split('\n').map(s => s.trim()).filter(Boolean) })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32"
-                                placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Galeri Görselleri</label>
+                            <MultiImageUploader
+                                value={formData.gallery}
+                                onChange={(urls) => setFormData({ ...formData, gallery: urls })}
                             />
-                            <p className="text-xs text-slate-500 mt-1">Her satıra bir görsel URL'i yazın</p>
                         </div>
 
                         <div>

@@ -144,6 +144,7 @@ model Project {
 
   status       String    @default("in_progress")
   category     String?
+  categories   String[]  @default([])
   order        Int       @default(0)           // Sürükle-bırak sırası
 
   budget       Decimal?  @db.Decimal(10, 2)

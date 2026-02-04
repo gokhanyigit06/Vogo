@@ -6,6 +6,10 @@ import { useState, useEffect } from "react"
 import { ArrowLeft, Save, Briefcase, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useParams } from "next/navigation"
+import ImageUploader from "@/components/admin/ImageUploader"
+import MultiImageUploader from "@/components/admin/MultiImageUploader"
+import TagsInput from "@/components/admin/TagsInput"
+import CategorySelect from "@/components/admin/CategorySelect"
 
 export default function EditProjectPage() {
     const router = useRouter()
@@ -15,14 +19,26 @@ export default function EditProjectPage() {
     const [clients, setClients] = useState<any[]>([])
 
     const [formData, setFormData] = useState({
-        name: "",
-        client_id: "",
+        internalName: "",
+        publicTitle: "",
+        clientId: "",
         description: "",
+        content: "",
         status: "in_progress",
+        categories: [] as string[],
         budget: "",
         start_date: "",
         end_date: "",
         priority: "medium",
+        // Premium fields
+        heroImage: "",
+        year: new Date().getFullYear().toString(),
+        services: [] as string[],
+        // New metadata fields
+        market: "",
+        clientType: "",
+        websiteUrl: "",
+        gallery: [] as string[],
     })
 
     useEffect(() => {
@@ -37,45 +53,45 @@ export default function EditProjectPage() {
                     const cRes = await fetch('/api/clients')
                     const cData = await cRes.json()
                     if (Array.isArray(cData) && cData.length > 0) clientsData = cData
-                    else if (process.env.NODE_ENV === 'development') clientsData = require('@/lib/mock-data').MOCK_CLIENTS
                 } catch (e) {
-                    if (process.env.NODE_ENV === 'development') clientsData = require('@/lib/mock-data').MOCK_CLIENTS
+                    console.error("Clients fetch error", e)
                 }
                 setClients(clientsData)
 
                 // Project Fetch
-                let projectData: any = {}
-                try {
-                    const pRes = await fetch(`/api/projects?id=${id}`)
-                    if (pRes.ok) {
-                        const pData = await pRes.json()
-                        if (pData && pData.id) projectData = pData
-                    }
+                const pRes = await fetch(`/api/projects?id=${id}`)
+                if (!pRes.ok) throw new Error('Proje bulunamadı')
 
-                    if (!projectData.id && process.env.NODE_ENV === 'development') {
-                        projectData = require('@/lib/mock-data').MOCK_PROJECTS.find((p: any) => p.id == id) || {}
-                    }
-                } catch (e) {
-                    if (process.env.NODE_ENV === 'development') {
-                        projectData = require('@/lib/mock-data').MOCK_PROJECTS.find((p: any) => p.id == id) || {}
-                    }
-                }
+                const projectData = await pRes.json()
 
-                if (!projectData.id) throw new Error('Proje bulunamadı')
+                if (!projectData || !projectData.id) throw new Error('Proje verisi geçersiz')
 
                 // Form Data Set
                 const startDate = projectData.start_date ? new Date(projectData.start_date).toISOString().split('T')[0] : ""
                 const endDate = projectData.end_date ? new Date(projectData.end_date).toISOString().split('T')[0] : ""
 
                 setFormData({
-                    name: projectData.name || projectData.title || "", // Mock data uses title
-                    client_id: projectData.client_id || "",
+                    internalName: projectData.name || "",
+                    publicTitle: projectData.publicTitle || projectData.title || "",
+                    clientId: projectData.clientId || projectData.client_id || "",
                     description: projectData.description || "",
+                    content: projectData.content || "",
                     status: projectData.status || "in_progress",
+                    categories: Array.isArray(projectData.categories) && projectData.categories.length > 0
+                        ? projectData.categories
+                        : (projectData.category ? [projectData.category] : []),
                     budget: projectData.budget || "",
                     start_date: startDate,
                     end_date: endDate,
                     priority: projectData.priority || "medium",
+
+                    heroImage: projectData.heroImage || projectData.image || "", // Fallback to main image
+                    year: projectData.year || "",
+                    services: Array.isArray(projectData.services) ? projectData.services : [],
+                    market: projectData.market || "",
+                    clientType: projectData.clientType || "",
+                    websiteUrl: projectData.websiteUrl || "",
+                    gallery: Array.isArray(projectData.gallery) ? projectData.gallery : [],
                 })
                 setLoading(false)
 
@@ -97,15 +113,10 @@ export default function EditProjectPage() {
             const payload = {
                 id: params.id,
                 ...formData,
-                client_id: formData.client_id ? parseInt(formData.client_id as string) : null,
+                name: formData.internalName,
+                title: formData.publicTitle,
+                clientId: formData.clientId ? parseInt(formData.clientId as string) : null,
                 budget: formData.budget ? parseFloat(formData.budget as string) : null,
-            }
-
-            if (process.env.NODE_ENV === 'development') {
-                console.log("Mock Update:", payload)
-                alert('Proje başarıyla güncellendi (Mock)!')
-                router.push(`/admin/projects/${params.id}`)
-                return
             }
 
             const res = await fetch('/api/projects', {
@@ -114,13 +125,17 @@ export default function EditProjectPage() {
                 body: JSON.stringify(payload)
             })
 
-            if (!res.ok) throw new Error('Güncellenemedi')
+            if (!res.ok) {
+                const errorData = await res.json()
+                throw new Error(errorData.error || 'Güncellenemedi')
+            }
 
             alert('Proje başarıyla güncellendi!')
             router.push(`/admin/projects/${params.id}`)
             router.refresh()
-        } catch (error) {
-            alert('Bir hata oluştu!')
+        } catch (error: any) {
+            console.error(error)
+            alert(`Bir hata oluştu: ${error.message}`)
         } finally {
             setSubmitting(false)
         }
@@ -154,12 +169,23 @@ export default function EditProjectPage() {
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="md:col-span-2">
-                            <label className="block text-muted-foreground text-sm font-medium mb-2">Proje Adı *</label>
+                            <label className="block text-muted-foreground text-sm font-medium mb-2">Proje Adı (Internal) *</label>
                             <input
                                 type="text"
                                 required
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                value={formData.internalName}
+                                onChange={(e) => setFormData({ ...formData, internalName: e.target.value })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            />
+                        </div>
+
+                        <div className="md:col-span-2">
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Görünür Başlık (Public)</label>
+                            <input
+                                type="text"
+                                required
+                                value={formData.publicTitle}
+                                onChange={(e) => setFormData({ ...formData, publicTitle: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             />
                         </div>
@@ -167,8 +193,8 @@ export default function EditProjectPage() {
                         <div>
                             <label className="block text-muted-foreground text-sm font-medium mb-2">Müşteri</label>
                             <select
-                                value={formData.client_id}
-                                onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
+                                value={formData.clientId}
+                                onChange={(e) => setFormData({ ...formData, clientId: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
@@ -192,6 +218,81 @@ export default function EditProjectPage() {
                                 <option value="completed">Tamamlandı</option>
                                 <option value="cancelled">İptal</option>
                             </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Kategoriler</label>
+                            <CategorySelect
+                                value={formData.categories}
+                                onChange={(cats) => setFormData({ ...formData, categories: cats })}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel</label>
+                            <ImageUploader
+                                value={formData.heroImage}
+                                onChange={(url) => setFormData({ ...formData, heroImage: url })}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 col-span-2 md:col-span-2">
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Yıl</label>
+                                <input
+                                    type="text"
+                                    value={formData.year}
+                                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Market/Bölge</label>
+                                <input
+                                    type="text"
+                                    value={formData.market}
+                                    onChange={(e) => setFormData({ ...formData, market: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 col-span-2 md:col-span-2">
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Client Type</label>
+                                <input
+                                    type="text"
+                                    value={formData.clientType}
+                                    onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Website URL</label>
+                                <input
+                                    type="url"
+                                    value={formData.websiteUrl}
+                                    onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="col-span-2 md:col-span-2">
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hizmetler</label>
+                            <TagsInput
+                                value={formData.services}
+                                onChange={(tags) => setFormData({ ...formData, services: tags })}
+                                placeholder="Hizmet yazıp Enter'a basın..."
+                            />
+                        </div>
+
+                        <div className="col-span-2 md:col-span-2">
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Galeri Görselleri</label>
+                            <MultiImageUploader
+                                value={formData.gallery}
+                                onChange={(urls) => setFormData({ ...formData, gallery: urls })}
+                            />
                         </div>
 
                         <div>
@@ -244,6 +345,15 @@ export default function EditProjectPage() {
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                            />
+                        </div>
+
+                        <div className="md:col-span-2">
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Detaylı İçerik (HTML)</label>
+                            <textarea
+                                value={formData.content}
+                                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-64 font-mono text-sm"
                             />
                         </div>
                     </div>
