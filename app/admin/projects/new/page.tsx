@@ -14,14 +14,24 @@ export default function NewProjectPage() {
     const [formData, setFormData] = useState({
         internalName: "",
         publicTitle: "",
-        client_id: "",
+        clientId: "",
         description: "",
         content: "",
         status: "in_progress",
+        category: "",
         budget: "",
         start_date: new Date().toISOString().split('T')[0],
         end_date: "",
         priority: "medium",
+        // Premium fields
+        heroImage: "",
+        year: new Date().getFullYear().toString(),
+        services: [] as string[],
+        // New metadata fields
+        market: "",
+        clientType: "",
+        websiteUrl: "",
+        gallery: [] as string[],
     })
 
     useEffect(() => {
@@ -43,7 +53,7 @@ export default function NewProjectPage() {
                 ...formData,
                 name: formData.internalName, // fallback
                 title: formData.publicTitle, // fallback
-                client_id: formData.client_id ? parseInt(formData.client_id) : null,
+                clientId: formData.clientId ? parseInt(formData.clientId) : null,
                 budget: formData.budget ? parseFloat(formData.budget) : null,
             }
 
@@ -124,8 +134,8 @@ export default function NewProjectPage() {
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Müşteri</label>
                             <select
-                                value={formData.client_id}
-                                onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
+                                value={formData.clientId}
+                                onChange={(e) => setFormData({ ...formData, clientId: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
@@ -187,6 +197,104 @@ export default function NewProjectPage() {
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-24 resize-none"
                                 placeholder="Projenin 1-2 cümlelik özeti..."
                             />
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Kategori</label>
+                            <select
+                                value={formData.category}
+                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            >
+                                <option value="">Seçiniz</option>
+                                <option value="Web Tasarım">Web Tasarım</option>
+                                <option value="E-Ticaret">E-Ticaret</option>
+                                <option value="Mobil Uygulama">Mobil Uygulama</option>
+                                <option value="Branding">Branding</option>
+                                <option value="SEO">SEO</option>
+                                <option value="Dijital Pazarlama">Dijital Pazarlama</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel URL</label>
+                            <input
+                                type="url"
+                                value={formData.heroImage}
+                                onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                placeholder="https://example.com/image.jpg"
+                            />
+                            <p className="text-xs text-slate-500 mt-1">Proje detay sayfasının hero bölümünde gösterilecek</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Yıl</label>
+                                <input
+                                    type="text"
+                                    value={formData.year}
+                                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    placeholder="2024"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Market/Bölge</label>
+                                <input
+                                    type="text"
+                                    value={formData.market}
+                                    onChange={(e) => setFormData({ ...formData, market: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    placeholder="Global, Turkey, Europe..."
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Client Type</label>
+                                <input
+                                    type="text"
+                                    value={formData.clientType}
+                                    onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    placeholder="Food & Beverage, Technology..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-slate-400 text-sm font-medium mb-2">Website URL</label>
+                                <input
+                                    type="url"
+                                    value={formData.websiteUrl}
+                                    onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    placeholder="example.com"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hizmetler (virgülle ayırın)</label>
+                            <input
+                                type="text"
+                                value={formData.services.join(', ')}
+                                onChange={(e) => setFormData({ ...formData, services: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                placeholder="Website Design, Development, SEO"
+                            />
+                            <p className="text-xs text-slate-500 mt-1">Örnek: Website Design, Development, SEO</p>
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Galeri Görselleri (virgülle ayırın)</label>
+                            <textarea
+                                value={formData.gallery.join('\n')}
+                                onChange={(e) => setFormData({ ...formData, gallery: e.target.value.split('\n').map(s => s.trim()).filter(Boolean) })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32"
+                                placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"
+                            />
+                            <p className="text-xs text-slate-500 mt-1">Her satıra bir görsel URL'i yazın</p>
                         </div>
 
                         <div>
