@@ -74,10 +74,10 @@ export default async function ProjectDetailPage({ params }: Props) {
 
                     {/* Metadata Grid */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 py-8 border-t border-white/10">
-                        {project.clients?.company && (
+                        {project.client?.company && (
                             <div>
                                 <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Müşteri</div>
-                                <div className="font-medium text-white">{project.clients.company}</div>
+                                <div className="font-medium text-white">{project.client.company}</div>
                             </div>
                         )}
                         {project.startDate && (
