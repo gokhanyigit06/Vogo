@@ -136,17 +136,39 @@ export async function PUT(request: NextRequest) {
             updateData.title = updateData.name
         }
 
-        // Date conversions
+        // Date conversions - handle both camelCase and snake_case inputs
         if (updateData.startDate) updateData.startDate = new Date(updateData.startDate)
+        if (updateData.start_date) {
+            updateData.startDate = new Date(updateData.start_date)
+            delete updateData.start_date
+        }
+
         if (updateData.endDate) updateData.endDate = new Date(updateData.endDate)
+        if (updateData.end_date) {
+            updateData.endDate = new Date(updateData.end_date)
+            delete updateData.end_date
+        }
+
         if (updateData.budget) updateData.budget = parseFloat(updateData.budget)
 
-        // Fix snake_case to camelCase
+        // Handle client relation using explicit connect/disconnect
         if (updateData.client_id !== undefined) {
-            updateData.clientId = updateData.client_id ? parseInt(updateData.client_id) : null
+            const cid = updateData.client_id ? parseInt(updateData.client_id) : null
+            if (cid) {
+                updateData.client = { connect: { id: cid } }
+            } else {
+                updateData.client = { disconnect: true }
+            }
             delete updateData.client_id
-        } else if (updateData.clientId) {
-            updateData.clientId = parseInt(updateData.clientId)
+            delete updateData.clientId // ensure both are gone
+        } else if (updateData.clientId !== undefined) {
+            const cid = updateData.clientId ? parseInt(updateData.clientId) : null
+            if (cid) {
+                updateData.client = { connect: { id: cid } }
+            } else {
+                updateData.client = { disconnect: true }
+            }
+            delete updateData.clientId
         }
 
         const project = await prisma.project.update({
