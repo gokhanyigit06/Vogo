@@ -28,14 +28,14 @@ async function getProject(slugOrId: string) {
     // Try finding by slug first
     let project = await prisma.project.findUnique({
         where: { slug: slugOrId },
-        include: { clients: true }
+        include: { client: true }
     })
 
     // If not found, check if it's an ID (backward compatibility)
     if (!project && !isNaN(Number(slugOrId))) {
         project = await prisma.project.findUnique({
             where: { id: Number(slugOrId) },
-            include: { clients: true }
+            include: { client: true }
         })
     }
 
