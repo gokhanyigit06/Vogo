@@ -33,7 +33,10 @@ export async function GET(request: NextRequest) {
                     select: { id: true, name: true, company: true }
                 }
             },
-            orderBy: { createdAt: 'desc' }
+            orderBy: [
+                { order: 'asc' },
+                { createdAt: 'desc' }
+            ]
         })
 
         return NextResponse.json(projects)
@@ -53,8 +56,22 @@ export async function POST(request: NextRequest) {
         const title = body.title || body.name
         const name = body.name || body.title
 
+
+        const slug = body.slug || (body.publicTitle || body.name || '').toLowerCase()
+            .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+            .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+            .replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+
         const project = await prisma.project.create({
             data: {
+                // New Fields
+                internalName: body.internalName || body.name,
+                publicTitle: body.publicTitle || body.title || body.name,
+                slug: slug,
+                content: body.content,
+                order: body.order || 0,
+
+                // Legacy / Shared
                 title,
                 name,
                 description: body.description,

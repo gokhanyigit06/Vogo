@@ -130,24 +130,36 @@ model Client {
 // ============================================
 
 model Project {
-  id          Int       @id @default(autoincrement())
-  clientId    Int?      @map("client_id")
-  title       String?
-  name        String?
-  description String?   @db.Text
-  status      String    @default("in_progress")
-  category    String?
-  budget      Decimal?  @db.Decimal(10, 2)
-  actualCost  Decimal   @default(0) @map("actual_cost") @db.Decimal(10, 2)
-  startDate   DateTime? @map("start_date")
-  endDate     DateTime? @map("end_date")
-  priority    String    @default("medium")
-  progress    Int       @default(0)
-  image       String?
-  files       Json      @default("[]")
-  notes       String?   @db.Text
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  id           Int       @id @default(autoincrement())
+  clientId     Int?      @map("client_id")
+  internalName String?   @map("internal_name") // Admin için isim
+  publicTitle  String?   @map("public_title")  // Site için başlık
+  slug         String?   @unique               // URL için
+  description  String?   @db.Text              // Kısa açıklama
+  content      String?   @db.Text              // Detaylı içerik (HTML/RichText)
+  
+  // Eski alanlar (Mevcut veriyi korumak için tutuyoruz, zamanla migrate edilebilir)
+  name         String?   // Deprecated: use internalName
+  title        String?   // Deprecated: use publicTitle
+
+  status       String    @default("in_progress")
+  category     String?
+  order        Int       @default(0)           // Sürükle-bırak sırası
+
+  budget       Decimal?  @db.Decimal(10, 2)
+  actualCost   Decimal   @default(0) @map("actual_cost") @db.Decimal(10, 2)
+  startDate    DateTime? @map("start_date")
+  endDate      DateTime? @map("end_date")
+  priority     String    @default("medium")
+  progress     Int       @default(0)
+  
+  image        String?   // Kapak görseli
+  gallery      Json      @default("[]") // Ekstra görseller (String array)
+  files        Json      @default("[]")
+  
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
   client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
   tasks  Task[]
