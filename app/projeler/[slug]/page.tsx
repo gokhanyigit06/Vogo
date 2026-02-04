@@ -57,8 +57,8 @@ export default async function ProjectDetailPage({ params }: Props) {
     if (!project) notFound()
 
     // Parse services and content blocks from JSON
-    const services = Array.isArray(project.services) ? project.services : []
-    const contentBlocks = Array.isArray(project.contentBlocks) ? project.contentBlocks : []
+    const services = Array.isArray(project.services) ? (project.services as string[]) : []
+    const contentBlocks = Array.isArray(project.contentBlocks) ? (project.contentBlocks as any[]) : []
 
     return (
         <main className="min-h-screen bg-white">
