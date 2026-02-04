@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
-interface TeamMember {
-    id: number | string
+export interface TeamMember {
+    id: string | number
     name: string
     email?: string
     role?: string
+    avatar_url?: string // UI uses avatar_url
     active?: boolean
 }
 
@@ -22,60 +23,35 @@ export function useTeamWithCurrentUser() {
         try {
             // 1. Team listesini al
             const res = await fetch('/api/team')
+            if (!res.ok) throw new Error('Failed to fetch team')
+
             const data = await res.json()
+            let teamList: TeamMember[] = Array.isArray(data) ? data : []
 
-            console.log('📡 API Response:', data)
-
-            let teamList: TeamMember[] = []
-
-            if (Array.isArray(data) && data.length > 0) {
-                teamList = data
-                console.log('✅ Using API data:', teamList)
-            } else {
-                // API boş dönerse mock data kullan
-                console.log('⚠️ Team API returned empty, using MOCK data')
-                teamList = [
-                    { id: 101, name: "Ahmet Yılmaz", role: "Frontend Dev", active: true, email: "ahmet@vogo.com" },
-                    { id: 102, name: "Zeynep Kaya", role: "Backend Dev", active: true, email: "zeynep@vogo.com" },
-                    { id: 103, name: "Mehmet Demir", role: "Designer", active: true, email: "mehmet@vogo.com" }
-                ]
-            }
-
-            // 2. Authenticated user'ı kontrol et
+            // 2. Authenticated user'ı kontrol et ve gerekirse ekle (API henüz dönmediyse veya senkronizasyon sorunu varsa)
             if (session?.user?.email) {
                 const userEmail = session.user.email
-                const userName = session.user.name || userEmail.split('@')[0]
-
-                console.log('🔍 Auth User:', userEmail, userName)
-
-                // EMAIL bazında kontrol et (aynı email = aynı kişi)
+                // Email bazında kontrol et
                 const userExists = teamList.some((m) => m.email === userEmail)
 
-                // Eğer listede yoksa ekle
                 if (!userExists) {
                     const currentUser: TeamMember = {
                         id: session.user.id || 'current-user',
-                        name: userName,
+                        name: session.user.name || userEmail.split('@')[0],
                         email: userEmail,
-                        role: 'admin',
+                        role: (session.user as any).role || 'user',
+                        avatar_url: session.user.image || '',
                         active: true
                     }
-                    console.log('✅ Adding current user (not in list):', currentUser)
+                    // Listeye ekle
                     teamList = [currentUser, ...teamList]
-                } else {
-                    console.log('ℹ️ User already in team list (email match) - skipping')
                 }
             }
 
-            console.log('📋 Team List FINAL:', teamList.map((m) => ({ id: m.id, name: m.name })))
             setTeam(teamList)
         } catch (err) {
             console.error("Team fetch error:", err)
-            // Fallback mock data
-            setTeam([
-                { id: 101, name: "Ahmet Yılmaz", role: "Frontend Dev", active: true, email: "ahmet@vogo.com" },
-                { id: 102, name: "Zeynep Kaya", role: "Backend Dev", active: true, email: "zeynep@vogo.com" },
-            ])
+            setTeam([]) // Mock data yerine boş liste dön
         } finally {
             setLoading(false)
         }

@@ -88,7 +88,7 @@ export default function AdminSidebar() {
                         </div>
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold text-foreground truncate">{userProfile.name}</p>
-                            <p className="text-xs text-muted-foreground truncate">{userProfile.role === 'ADMIN' ? 'Yönetici' : 'Üye'}</p>
+                            <p className="text-xs text-muted-foreground truncate">{userProfile.role?.toUpperCase() === 'ADMIN' ? 'Yönetici' : 'Üye'}</p>
                         </div>
                         <button
                             onClick={handleSignOut}

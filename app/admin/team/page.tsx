@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic"
 
 import { useState, useEffect } from "react"
-import { UsersRound, UserPlus, Trash2, Mail, Shield } from "lucide-react"
+import { UsersRound, UserPlus, Trash2, Mail, Lock } from "lucide-react"
 import ImageUpload from "@/components/ImageUpload"
 
 export default function TeamPage() {
@@ -14,7 +14,8 @@ export default function TeamPage() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        role: "member",
+        password: "",
+        role: "user",
         avatar_url: ""
     })
 
@@ -49,28 +50,32 @@ export default function TeamPage() {
                 body
             })
 
-            if (!res.ok) throw new Error('İşlem başarısız')
+            const result = await res.json()
 
-            alert(selectedMember ? 'Üye güncellendi!' : 'Takım üyesi eklendi!')
+            if (!res.ok) throw new Error(result.error || 'İşlem başarısız')
+
+            alert(selectedMember ? 'Kullanıcı güncellendi!' : 'Kullanıcı eklendi!')
             setShowForm(false)
             setSelectedMember(null)
-            setFormData({ name: "", email: "", role: "member", avatar_url: "" })
+            setFormData({ name: "", email: "", password: "", role: "user", avatar_url: "" })
             fetchTeam()
-        } catch (error) {
-            alert('Bir hata oluştu!')
+        } catch (error: any) {
+            alert(error.message || 'Bir hata oluştu!')
         } finally {
             setLoading(false)
         }
     }
 
-    const handleDelete = async (id: number) => {
-        if (!confirm('Bu üyeyi silmek istediğinize emin misiniz?')) return
+    const handleDelete = async (id: string) => {
+        if (!confirm('Bu kullanıcıyı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')) return
 
         try {
             const res = await fetch(`/api/team?id=${id}`, { method: 'DELETE' })
             if (res.ok) {
                 setTeam(team.filter(t => t.id !== id))
-                alert('Üye silindi')
+                alert('Kullanıcı silindi')
+            } else {
+                alert('Silme işlemi başarısız')
             }
         } catch (error) {
             alert('Silme hatası')
@@ -78,7 +83,8 @@ export default function TeamPage() {
     }
 
     const getRoleBadge = (role: string) => {
-        switch (role) {
+        const r = role?.toLowerCase()
+        switch (r) {
             case 'admin': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
             case 'manager': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
             default: return 'bg-slate-700/50 text-muted-foreground border-border'
@@ -86,10 +92,11 @@ export default function TeamPage() {
     }
 
     const getRoleText = (role: string) => {
-        switch (role) {
+        const r = role?.toLowerCase()
+        switch (r) {
             case 'admin': return 'Yönetici'
             case 'manager': return 'Müdür'
-            default: return 'Üye'
+            default: return 'Kullanıcı'
         }
     }
 
@@ -101,20 +108,20 @@ export default function TeamPage() {
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <UsersRound className="w-8 h-8 text-emerald-500" />
-                        Takım Üyeleri
+                        Ekip Yönetimi
                     </h1>
-                    <p className="text-muted-foreground mt-1">Ekip arkadaşlarınızı yönetin</p>
+                    <p className="text-muted-foreground mt-1">Sisteme giriş yapabilecek kullanıcıları yönetin</p>
                 </div>
                 <button
                     onClick={() => {
                         setShowForm(!showForm)
                         setSelectedMember(null)
-                        setFormData({ name: "", email: "", role: "member", avatar_url: "" })
+                        setFormData({ name: "", email: "", password: "", role: "user", avatar_url: "" })
                     }}
                     className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
                 >
                     <UserPlus className="w-5 h-5" />
-                    {showForm ? 'Formu Gizle' : 'Üye Ekle'}
+                    {showForm ? 'Formu Gizle' : 'Kullanıcı Ekle'}
                 </button>
             </div>
 
@@ -122,7 +129,7 @@ export default function TeamPage() {
             {showForm && (
                 <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
-                        {selectedMember ? 'Üyeyi Düzenle' : 'Yeni Takım Üyesi'}
+                        {selectedMember ? 'Kullanıcıyı Düzenle' : 'Yeni Kullanıcı'}
                     </h2>
 
                     <div className="grid md:grid-cols-2 gap-6">
@@ -160,13 +167,28 @@ export default function TeamPage() {
                         </div>
 
                         <div>
+                            <label className="block text-muted-foreground text-sm font-medium mb-2 flex items-center gap-2">
+                                <Lock className="w-4 h-4" />
+                                {selectedMember ? 'Yeni Şifre (Opsiyonel)' : 'Şifre *'}
+                            </label>
+                            <input
+                                type="password"
+                                required={!selectedMember}
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                placeholder={selectedMember ? "Değiştirmek için yeni şifre girin" : "Güçlü bir şifre girin"}
+                            />
+                        </div>
+
+                        <div>
                             <label className="block text-muted-foreground text-sm font-medium mb-2">Rol</label>
                             <select
                                 value={formData.role}
                                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
                             >
-                                <option value="member">Üye</option>
+                                <option value="user">Kullanıcı</option>
                                 <option value="manager">Müdür</option>
                                 <option value="admin">Yönetici</option>
                             </select>
@@ -178,7 +200,7 @@ export default function TeamPage() {
                         disabled={loading}
                         className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all"
                     >
-                        {loading ? (selectedMember ? 'Güncelleniyor...' : 'Ekleniyor...') : (selectedMember ? 'Güncelle' : 'Üye Ekle')}
+                        {loading ? (selectedMember ? 'Güncelleniyor...' : 'Ekleniyor...') : (selectedMember ? 'Güncelle' : 'Kullanıcı Ekle')}
                     </button>
                 </form>
             )}
@@ -188,7 +210,7 @@ export default function TeamPage() {
                 {team.length === 0 ? (
                     <div className="col-span-full p-12 text-center bg-card border border-border rounded-notebook">
                         <UsersRound className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                        <p className="text-muted-foreground">Henüz takım üyesi eklenmemiş</p>
+                        <p className="text-muted-foreground">Henüz kullanıcı eklenmemiş</p>
                     </div>
                 ) : (
                     team.map((member) => (
@@ -200,7 +222,8 @@ export default function TeamPage() {
                                 setFormData({
                                     name: member.name,
                                     email: member.email,
-                                    role: member.role,
+                                    password: "", // Şifre güvenlik nedeniyle boş gelir
+                                    role: member.role || "user",
                                     avatar_url: member.avatar_url || ""
                                 })
                                 setShowForm(true)

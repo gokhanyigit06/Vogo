@@ -1,16 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
 
 export const dynamic = 'force-dynamic'
 
-// GET - Tüm takım üyelerini getir
+// GET - Tüm kullanıcıları (admin/manager/member) getir
 export async function GET() {
     try {
-        const members = await prisma.teamMember.findMany({
-            orderBy: { createdAt: 'desc' }
+        const users = await prisma.user.findMany({
+            orderBy: { createdAt: 'desc' },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                image: true,
+                createdAt: true
+            }
         })
 
-        return NextResponse.json(members)
+        // Frontend mock data yapısıyla uyumlu hale getir
+        const formattedUsers = users.map(user => ({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role, // ADMIN, EDITOR, USER
+            avatar_url: user.image,
+            active: true // User tablosunda active kolonu olmadığı için varsayılan true
+        }))
+
+        return NextResponse.json(formattedUsers)
     } catch (error: unknown) {
         console.error('Team GET error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -18,21 +37,46 @@ export async function GET() {
     }
 }
 
-// POST - Yeni üye ekle
+// POST - Yeni kullanıcı ekle
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
+        const { name, email, password, role, avatar_url } = body
 
-        const member = await prisma.teamMember.create({
+        if (!email || !password || !name) {
+            return NextResponse.json({ error: 'İsim, E-posta ve Şifre zorunludur' }, { status: 400 })
+        }
+
+        // E-posta kullanımda mı kontrol et
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        })
+
+        if (existingUser) {
+            return NextResponse.json({ error: 'Bu e-posta adresi zaten kullanımda' }, { status: 400 })
+        }
+
+        // Şifreyi hashle
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        const user = await prisma.user.create({
             data: {
-                name: body.name,
-                email: body.email,
-                role: body.role || 'member',
-                avatarUrl: body.avatar_url || body.avatarUrl,
+                name,
+                email,
+                password: hashedPassword,
+                role: role || 'USER',
+                image: avatar_url
             }
         })
 
-        return NextResponse.json(member)
+        return NextResponse.json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar_url: user.image
+        })
+
     } catch (error: unknown) {
         console.error('Team POST error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -40,25 +84,41 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// PUT - Üye güncelle
+// PUT - Kullanıcı güncelle
 export async function PUT(request: NextRequest) {
     try {
         const body = await request.json()
-        const { id, avatar_url, ...rest } = body
+        const { id, name, email, password, role, avatar_url } = body
 
         if (!id) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const member = await prisma.teamMember.update({
-            where: { id: parseInt(id) },
-            data: {
-                ...rest,
-                avatarUrl: avatar_url,
-            }
+        const updateData: any = {
+            name,
+            email,
+            role,
+            image: avatar_url
+        }
+
+        // Eğer yeni şifre girildiyse hashle ve güncelle
+        if (password && password.trim() !== '') {
+            updateData.password = await bcrypt.hash(password, 10)
+        }
+
+        const user = await prisma.user.update({
+            where: { id: String(id) }, // User ID string (cuid)
+            data: updateData
         })
 
-        return NextResponse.json(member)
+        return NextResponse.json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar_url: user.image
+        })
+
     } catch (error: unknown) {
         console.error('Team PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -66,7 +126,7 @@ export async function PUT(request: NextRequest) {
     }
 }
 
-// DELETE - Üye sil
+// DELETE - Kullanıcı sil
 export async function DELETE(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url)
@@ -76,8 +136,8 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.teamMember.delete({
-            where: { id: parseInt(id) }
+        await prisma.user.delete({
+            where: { id: String(id) }
         })
 
         return NextResponse.json({ success: true })
