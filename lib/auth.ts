@@ -52,32 +52,43 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     return null
                 }
 
-                console.log("Login successful");
+                console.log("Login successful:", user.email);
 
+                // Kullanıcı nesnesini döndür
                 return {
                     id: user.id,
                     email: user.email,
                     name: user.name,
                     role: user.role,
+                    image: user.image, // Avatar için önemli
                 }
             }
         })
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger, session }) {
+            // İlk login anı
             if (user) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                token.role = (user as any).role ?? 'ADMIN'
-                token.id = user.id ?? ''
+                token.id = user.id
+                token.role = (user as any).role
+                token.picture = user.image
+                token.name = user.name
             }
+
+            // Session update tetiklenirse (örn: profil güncelleme)
+            if (trigger === "update" && session) {
+                token.name = session.name
+                token.picture = session.image
+            }
+
             return token
         },
         async session({ session, token }) {
             if (session.user) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (session.user as any).role = token.role ?? 'ADMIN';
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (session.user as any).id = token.id ?? '';
+                session.user.id = token.id as string
+                (session.user as any).role = token.role as string
+                session.user.name = token.name as string
+                session.user.image = token.picture as string
             }
             return session
         },

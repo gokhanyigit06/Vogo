@@ -15,8 +15,9 @@ export async function POST(request: NextRequest) {
         const fileExt = file.name.split('.').pop() || 'bin'
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
 
-        // Upload dizini oluştur
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'images')
+        // Upload dizini oluştur (Proje kökünde 'uploads/images' klasörü)
+        // Public klasörü Next.js build sonrası read-only olabilir veya statik dosya olarak hemen görülmeyebilir.
+        const uploadDir = path.join(process.cwd(), 'uploads', 'images')
         await mkdir(uploadDir, { recursive: true })
 
         // Dosyayı kaydet
@@ -24,7 +25,8 @@ export async function POST(request: NextRequest) {
         const bytes = await file.arrayBuffer()
         await writeFile(filePath, Buffer.from(bytes))
 
-        // URL oluştur
+        // URL oluştur - Dynamic Route: /uploads/[...path]
+        // app/uploads/images/[dosya].jpg şeklinde erişilecek
         const fileUrl = `/uploads/images/${fileName}`
 
         return NextResponse.json({ url: fileUrl })

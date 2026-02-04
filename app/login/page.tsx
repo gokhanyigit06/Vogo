@@ -16,19 +16,18 @@ export default function LoginPage() {
         setLoading(true)
         setError(null)
 
-        console.log("🔐 Server action login başlatılıyor...")
-
         try {
-            await loginAction(email, password)
-            // Başarılı olursa server action redirect yapacak
-        } catch (err) {
-            console.log("Server action response:", err)
-            // NEXT_REDIRECT hatası başarılı redirect anlamına gelir
-            if (err && typeof err === 'object' && 'digest' in err) {
-                console.log("✅ Redirect başarılı!")
-                return
+            const result = await loginAction(email, password)
+
+            if (result?.success) {
+                // Client-side redirect
+                window.location.href = "/admin"
+            } else {
+                setError(result?.error || "Giriş başarısız")
             }
-            setError("Giriş başarısız. Bilgilerinizi kontrol edin.")
+        } catch (err) {
+            console.error("Login error:", err)
+            setError("Bir hata oluştu")
         } finally {
             setLoading(false)
         }

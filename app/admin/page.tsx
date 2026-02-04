@@ -23,7 +23,7 @@ export default function AdminDashboard() {
     const [hideSensitiveData, setHideSensitiveData] = useState(false)
     const { data: session } = useSession()
 
-    const userName = session?.user?.name?.split(' ')[0] || 'Admin'
+    const userName = session?.user?.name || 'Admin'
 
     useEffect(() => {
         // Dashboard verilerini çek
