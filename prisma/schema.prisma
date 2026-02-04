@@ -164,6 +164,11 @@ model Project {
   services     Json      @default("[]")         // Verilen hizmetler array
   contentBlocks Json     @default("[]") @map("content_blocks") // Sayfa oluşturucu blokları
   
+  // Additional Metadata Fields
+  market        String?                          // Pazar/Bölge (örn: "Global", "Turkey")
+  clientType    String?   @map("client_type")    // Müşteri tipi (örn: "Food & Beverage")
+  websiteUrl    String?   @map("website_url")    // Proje website URL'i
+  
   notes        String?   @db.Text
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")

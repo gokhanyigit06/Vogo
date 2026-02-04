@@ -87,6 +87,12 @@ export async function POST(request: NextRequest) {
                 services: body.services || [],
                 contentBlocks: body.contentBlocks || [],
 
+                // Additional Metadata
+                market: body.market,
+                clientType: body.clientType,
+                websiteUrl: body.websiteUrl,
+                gallery: body.gallery || [],
+
                 // Legacy / Shared
                 title,
                 name,

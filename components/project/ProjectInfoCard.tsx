@@ -4,6 +4,9 @@ interface ProjectInfoCardProps {
     services?: string[]
     year?: string
     category?: string
+    market?: string
+    clientType?: string
+    websiteUrl?: string
 }
 
 export default function ProjectInfoCard({
@@ -11,7 +14,10 @@ export default function ProjectInfoCard({
     client,
     services = [],
     year,
-    category
+    category,
+    market,
+    clientType,
+    websiteUrl
 }: ProjectInfoCardProps) {
     return (
         <section className="py-20 px-6 lg:px-12 bg-white">
@@ -72,6 +78,44 @@ export default function ProjectInfoCard({
                                 <div className="text-lg text-stone-900">
                                     {category}
                                 </div>
+                            </div>
+                        )}
+
+                        {market && (
+                            <div className="border-l-4 border-stone-900 pl-6">
+                                <div className="text-sm font-bold uppercase tracking-wider text-stone-400 mb-2">
+                                    Market
+                                </div>
+                                <div className="text-lg text-stone-900">
+                                    {market}
+                                </div>
+                            </div>
+                        )}
+
+                        {clientType && (
+                            <div className="border-l-4 border-stone-900 pl-6">
+                                <div className="text-sm font-bold uppercase tracking-wider text-stone-400 mb-2">
+                                    Client Type
+                                </div>
+                                <div className="text-lg text-stone-900">
+                                    {clientType}
+                                </div>
+                            </div>
+                        )}
+
+                        {websiteUrl && (
+                            <div className="border-l-4 border-stone-900 pl-6">
+                                <div className="text-sm font-bold uppercase tracking-wider text-stone-400 mb-2">
+                                    Website
+                                </div>
+                                <a
+                                    href={websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-lg text-emerald-600 hover:text-emerald-700 hover:underline transition-colors"
+                                >
+                                    {websiteUrl.replace(/^https?:\/\//, '')}
+                                </a>
                             </div>
                         )}
                     </div>

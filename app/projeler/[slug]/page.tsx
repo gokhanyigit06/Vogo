@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react"
 import HeroSection from "@/components/project/HeroSection"
 import ProjectInfoCard from "@/components/project/ProjectInfoCard"
 import ContentBlockRenderer from "@/components/project/ContentBlockRenderer"
+import ProjectGallery from "@/components/project/ProjectGallery"
 
 // Types for params
 type Props = {
@@ -59,6 +60,7 @@ export default async function ProjectDetailPage({ params }: Props) {
     // Parse services and content blocks from JSON
     const services = Array.isArray(project.services) ? (project.services as string[]) : []
     const contentBlocks = Array.isArray(project.contentBlocks) ? (project.contentBlocks as any[]) : []
+    const gallery = Array.isArray(project.gallery) ? (project.gallery as string[]) : []
 
     return (
         <main className="min-h-screen bg-white">
@@ -88,10 +90,16 @@ export default async function ProjectDetailPage({ params }: Props) {
                 services={services}
                 year={project.year || undefined}
                 category={project.category || undefined}
+                market={project.market || undefined}
+                clientType={project.clientType || undefined}
+                websiteUrl={project.websiteUrl || undefined}
             />
 
             {/* Content Blocks */}
             <ContentBlockRenderer blocks={contentBlocks} />
+
+            {/* Project Gallery */}
+            <ProjectGallery images={gallery} />
 
             {/* Legacy Content (if no blocks) */}
             {contentBlocks.length === 0 && project.content && (
