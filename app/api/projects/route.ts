@@ -124,56 +124,51 @@ export async function PUT(request: NextRequest) {
         const body = await request.json()
         const { id, ...updateData } = body
 
-        // Boş string'leri null'a çevir
-        Object.keys(updateData).forEach(key => {
-            if (updateData[key] === '') {
-                updateData[key] = null
+        // Explicitly select and validate known fields to prevent unknown argument errors
+        const sanitizedData: any = {
+            internalName: updateData.internalName || updateData.name,
+            publicTitle: updateData.publicTitle || updateData.title || updateData.internalName || updateData.name,
+            name: updateData.name || updateData.internalName, // legacy sync
+            title: updateData.title || updateData.publicTitle || updateData.name, // legacy sync
+            description: updateData.description,
+            content: updateData.content,
+            status: updateData.status,
+            category: updateData.category,
+            categories: updateData.categories,
+            order: updateData.order,
+            budget: updateData.budget ? parseFloat(updateData.budget) : undefined,
+            startDate: updateData.startDate ? new Date(updateData.startDate) : (updateData.start_date ? new Date(updateData.start_date) : undefined),
+            endDate: updateData.endDate ? new Date(updateData.endDate) : (updateData.end_date ? new Date(updateData.end_date) : undefined),
+            priority: updateData.priority,
+            heroImage: updateData.heroImage,
+            year: updateData.year,
+            services: updateData.services,
+            market: updateData.market,
+            clientType: updateData.clientType,
+            websiteUrl: updateData.websiteUrl,
+            gallery: updateData.gallery,
+        }
+
+        // Clean up undefined values to avoid overwriting with null unless intended
+        Object.keys(sanitizedData).forEach(key => {
+            if (sanitizedData[key] === undefined) {
+                delete sanitizedData[key]
             }
         })
 
-        // title/name senkronizasyonu
-        if (updateData.name && !updateData.title) {
-            updateData.title = updateData.name
-        }
-
-        // Date conversions - handle both camelCase and snake_case inputs
-        if (updateData.startDate) updateData.startDate = new Date(updateData.startDate)
-        if (updateData.start_date) {
-            updateData.startDate = new Date(updateData.start_date)
-            delete updateData.start_date
-        }
-
-        if (updateData.endDate) updateData.endDate = new Date(updateData.endDate)
-        if (updateData.end_date) {
-            updateData.endDate = new Date(updateData.end_date)
-            delete updateData.end_date
-        }
-
-        if (updateData.budget) updateData.budget = parseFloat(updateData.budget)
-
-        // Handle client relation using explicit connect/disconnect
-        if (updateData.client_id !== undefined) {
-            const cid = updateData.client_id ? parseInt(updateData.client_id) : null
+        // Handle client relation separately
+        if (updateData.client_id !== undefined || updateData.clientId !== undefined) {
+            const cid = updateData.client_id ? parseInt(updateData.client_id) : (updateData.clientId ? parseInt(updateData.clientId) : null)
             if (cid) {
-                updateData.client = { connect: { id: cid } }
+                sanitizedData.client = { connect: { id: cid } }
             } else {
-                updateData.client = { disconnect: true }
+                sanitizedData.client = { disconnect: true }
             }
-            delete updateData.client_id
-            delete updateData.clientId // ensure both are gone
-        } else if (updateData.clientId !== undefined) {
-            const cid = updateData.clientId ? parseInt(updateData.clientId) : null
-            if (cid) {
-                updateData.client = { connect: { id: cid } }
-            } else {
-                updateData.client = { disconnect: true }
-            }
-            delete updateData.clientId
         }
 
         const project = await prisma.project.update({
             where: { id: parseInt(id) },
-            data: updateData
+            data: sanitizedData
         })
 
         return NextResponse.json(project)
