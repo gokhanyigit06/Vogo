@@ -133,7 +133,14 @@ export async function PUT(request: NextRequest) {
         if (updateData.startDate) updateData.startDate = new Date(updateData.startDate)
         if (updateData.endDate) updateData.endDate = new Date(updateData.endDate)
         if (updateData.budget) updateData.budget = parseFloat(updateData.budget)
-        if (updateData.clientId) updateData.clientId = parseInt(updateData.clientId)
+
+        // Fix snake_case to camelCase
+        if (updateData.client_id !== undefined) {
+            updateData.clientId = updateData.client_id ? parseInt(updateData.client_id) : null
+            delete updateData.client_id
+        } else if (updateData.clientId) {
+            updateData.clientId = parseInt(updateData.clientId)
+        }
 
         const project = await prisma.project.update({
             where: { id: parseInt(id) },

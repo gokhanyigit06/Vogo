@@ -11,6 +11,7 @@ type Project = {
     category: string
     image: string
     description?: string
+    slug?: string
 }
 
 export default function FeaturedProjects() {
@@ -94,8 +95,8 @@ export default function FeaturedProjects() {
                                 transition={{ delay: index * 0.1 }}
                                 className="group relative rounded-[2rem] overflow-hidden bg-card border border-border hover:border-purple-500/30 transition-all cursor-pointer shadow-sm hover:shadow-2xl hover:shadow-purple-500/10"
                             >
-                                <Link href="/portfolio" className="block h-full">
-                                    {/* Link to portfolio list since we don't have detail pages yet */}
+                                <Link href={`/projeler/${project.slug || project.id}`} className="block h-full">
+                                    {/* Link to project detail page */}
                                     <div className="aspect-[16/10] overflow-hidden relative">
                                         {project.image ? (
                                             <img
