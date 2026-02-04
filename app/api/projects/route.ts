@@ -56,11 +56,20 @@ export async function POST(request: NextRequest) {
         const title = body.title || body.name
         const name = body.name || body.title
 
-
-        const slug = body.slug || (body.publicTitle || body.name || '').toLowerCase()
+        // Generate base slug
+        let baseSlug = body.slug || (body.publicTitle || body.name || '').toLowerCase()
             .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
             .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
             .replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+            .replace(/^-+|-+$/g, '') // Remove leading/trailing dashes
+
+        // Ensure slug is unique
+        let slug = baseSlug
+        let counter = 1
+        while (await prisma.project.findUnique({ where: { slug } })) {
+            slug = `${baseSlug}-${counter}`
+            counter++
+        }
 
         const project = await prisma.project.create({
             data: {
