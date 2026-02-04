@@ -29,8 +29,8 @@ async function getProjects() {
                 image: true,
                 category: true,
                 name: true, // fallback
-                image: true,
-                clients: {
+                // image: true, // Remove duplicated key
+                client: {
                     select: { company: true }
                 }
             }
@@ -101,9 +101,9 @@ export default async function ProjectsPage() {
 
                                 <div className="p-6 space-y-4">
                                     <div>
-                                        {project.clients?.company && (
+                                        {project.client?.company && (
                                             <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
-                                                {project.clients.company}
+                                                {project.client.company}
                                             </div>
                                         )}
                                         <h3 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
