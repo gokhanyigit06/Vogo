@@ -1,6 +1,6 @@
-
 import { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
@@ -8,6 +8,8 @@ import HeroSection from "@/components/project/HeroSection"
 import ProjectInfoCard from "@/components/project/ProjectInfoCard"
 import ContentBlockRenderer from "@/components/project/ContentBlockRenderer"
 import ProjectGallery from "@/components/project/ProjectGallery"
+import RelatedProjects from "@/components/project/RelatedProjects"
+import Contact from "@/components/Contact"
 
 // Types for params
 type Props = {
@@ -100,6 +102,15 @@ export default async function ProjectDetailPage({ params }: Props) {
 
             {/* Project Gallery */}
             <ProjectGallery images={gallery} />
+
+            {/* Related Projects */}
+            <RelatedProjects
+                currentId={project.id}
+                currentCategories={project.categories || []}
+            />
+
+            {/* Contact CTA */}
+            <Contact />
 
             {/* Legacy Content (if no blocks) */}
             {contentBlocks.length === 0 && project.content && (

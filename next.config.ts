@@ -10,6 +10,24 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'vogo-agency.com', // Self-check if used
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pub-b7fd9c30e33b4bfc948eeadd14c3551d.r2.dev', // R2 Storage
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
   async headers() {
