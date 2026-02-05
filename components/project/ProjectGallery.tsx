@@ -49,7 +49,7 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
                                     height={0}
                                     sizes="100vw"
                                     className="w-full h-auto object-cover"
-                                    unoptimized={image.startsWith('http')}
+                                    unoptimized={true}
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
                             </div>

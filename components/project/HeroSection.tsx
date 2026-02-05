@@ -76,8 +76,8 @@ export default function HeroSection({ title, heroImage, heroVideo, tagline }: He
                                     </div>
                                 </div>
 
-                                {/* Phone Frame (Right - Aesthetic positioning) */}
-                                <div className="relative w-64 lg:w-72 shrink-0 lg:-ml-24 lg:mb-8 z-20 transition-transform hover:-translate-y-2 duration-500 drop-shadow-2xl">
+                                {/* Phone Frame (Right - Separated) */}
+                                <div className="relative w-64 lg:w-72 shrink-0 z-20 transition-transform hover:-translate-y-2 duration-500 drop-shadow-2xl">
                                     <div className="relative rounded-[3rem] overflow-hidden shadow-2xl bg-gray-900 p-2 border-[6px] border-gray-900">
                                         {/* Dynamic Island / Notch */}
                                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-6 bg-black rounded-b-xl z-30"></div>
