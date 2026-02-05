@@ -32,6 +32,7 @@ type SettingsData = {
 
     // Marketing & SEO
     googleAnalytics: string
+    googleVerification: string // Search Console
     facebookPixel: string
     googleTagManager: string
     customHeadScripts: string
@@ -44,7 +45,7 @@ const initialSettings: SettingsData = {
     siteTitle: "", siteDescription: "", logo: "", favicon: "",
     email: "", phone: "", whatsapp: "", address: "", mapUrl: "",
     instagram: "", twitter: "", linkedin: "", facebook: "", youtube: "",
-    googleAnalytics: "", facebookPixel: "", googleTagManager: "",
+    googleAnalytics: "", googleVerification: "", facebookPixel: "", googleTagManager: "",
     customHeadScripts: "", customBodyScripts: "",
     maintenanceMode: false
 }
@@ -315,6 +316,14 @@ export default function SettingsPage() {
                                         className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-sm"
                                     />
                                     <p className="text-xs text-muted-foreground mt-1">Örn: G-1234567890</p>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-muted-foreground mb-2">Google Search Console (Doğrulama Kodu)</label>
+                                    <input
+                                        type="text" name="googleVerification" value={settings.googleVerification} onChange={handleChange} placeholder="Verfication Code (HTML Tag content)"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-sm"
+                                    />
+                                    <p className="text-xs text-muted-foreground mt-1">Meta tag içindeki 'content' değerini giriniz.</p>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Facebook Pixel ID</label>

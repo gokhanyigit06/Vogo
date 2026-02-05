@@ -37,6 +37,7 @@ const defaultSettings = {
   siteDescription: "Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.",
   favicon: "/favicon.ico",
   googleAnalytics: "",
+  googleVerification: "",
   googleTagManager: "",
   facebookPixel: "",
   customHeadScripts: "",
@@ -57,6 +58,7 @@ async function getSettings() {
         siteDescription: (value.siteDescription as string) || defaultSettings.siteDescription,
         favicon: (value.favicon as string) || defaultSettings.favicon,
         googleAnalytics: (value.googleAnalytics as string) || "",
+        googleVerification: (value.googleVerification as string) || "",
         googleTagManager: (value.googleTagManager as string) || "",
         facebookPixel: (value.facebookPixel as string) || "",
         customHeadScripts: (value.customHeadScripts as string) || "",
@@ -92,6 +94,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: title,
       description: description,
       siteName: title,
+    },
+    verification: {
+      google: settings.googleVerification || undefined,
     },
   };
 }
@@ -135,6 +140,24 @@ export default async function RootLayout({
           </Script>
         )}
 
+        {/* Facebook Pixel */}
+        {settings.facebookPixel && (
+          <Script id="facebook-pixel" strategy="afterInteractive">
+            {`
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${settings.facebookPixel}');
+              fbq('track', 'PageView');
+            `}
+          </Script>
+        )}
+
         {/* Custom Head Scripts */}
         {settings.customHeadScripts && (
           <div dangerouslySetInnerHTML={{ __html: settings.customHeadScripts }} />
@@ -152,6 +175,19 @@ export default async function RootLayout({
               height="0"
               width="0"
               style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
+
+        {/* Facebook Pixel - NoScript */}
+        {settings.facebookPixel && (
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style={{ display: 'none' }}
+              src={`https://www.facebook.com/tr?id=${settings.facebookPixel}&ev=PageView&noscript=1`}
+              alt=""
             />
           </noscript>
         )}
