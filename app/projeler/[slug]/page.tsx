@@ -83,7 +83,11 @@ export default async function ProjectDetailPage({ params }: Props) {
                 title={project.publicTitle || project.name || 'Proje'}
                 heroImage={project.heroImage || project.image || undefined}
                 heroVideo={project.heroVideo || undefined}
-                tagline={project.category || undefined}
+                tagline={
+                    (project.categories && project.categories.length > 0)
+                        ? project.categories.join(', ')
+                        : project.category || undefined
+                }
             />
 
             {/* Project Info Card */}
