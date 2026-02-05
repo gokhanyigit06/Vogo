@@ -56,8 +56,9 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 
-# Create uploads directory
-RUN mkdir -p public/uploads/tasks && chown -R nextjs:nodejs public/uploads
+# Create uploads directories for both project images and task files
+RUN mkdir -p uploads/images public/uploads/tasks && \
+    chown -R nextjs:nodejs uploads public/uploads
 
 # Set correct permissions for prerendered cache
 RUN mkdir -p .next

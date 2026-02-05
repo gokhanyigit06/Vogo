@@ -46,6 +46,21 @@ This guide explains how to deploy Vogo Agency to Coolify with PostgreSQL.
 
 ---
 
+## 💾 Step 2.5: Configure Persistent Volume for Uploads
+
+**IMPORTANT**: To ensure uploaded images persist across container restarts:
+
+1. In Coolify, go to your application settings
+2. Navigate to **Storage** or **Volumes** section
+3. Add a new persistent volume:
+   - **Source Path (Host)**: `/var/lib/coolify/volumes/vogo-uploads`
+   - **Destination Path (Container)**: `/app/uploads`
+   - **Type**: Bind Mount or Volume
+
+This ensures that all user-uploaded images in the `/uploads` folder are stored on the host machine and won't be lost when the container restarts or rebuilds.
+
+---
+
 ## ⚙️ Step 3: Configure Environment Variables
 
 In Coolify, add these environment variables to your application:
