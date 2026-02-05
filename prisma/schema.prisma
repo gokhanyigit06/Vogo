@@ -107,6 +107,7 @@ model Client {
   phone               String?
   address             String?
   website             String?
+  logo_url            String?   @map("logo_url")
   status              String    @default("active") // active, potential, inactive
   tags                String[]
   notes               String?   @db.Text
