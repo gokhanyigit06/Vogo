@@ -16,20 +16,58 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Sadece görsel dosyaları yüklenebilir' }, { status: 400 })
         }
 
-        // Get file extension
-        const fileExt = file.name.split('.').pop() || 'jpg'
         const timestamp = Date.now()
         const randomStr = Math.random().toString(36).substring(7)
-        const filename = `${timestamp}_${randomStr}.${fileExt}`
 
-        // Upload directory (root level, not in public/)
+        // Upload directory (root level)
         const uploadDir = path.join(process.cwd(), 'uploads', 'images')
         await mkdir(uploadDir, { recursive: true })
 
-        // Save file
-        const filePath = path.join(uploadDir, filename)
+        // Convert File to Buffer
         const bytes = await file.arrayBuffer()
-        await writeFile(filePath, Buffer.from(bytes))
+        const buffer = Buffer.from(bytes)
+
+        let finalBuffer = buffer
+        let filename = file.name
+        let fileExt = file.name.split('.').pop() || 'jpg'
+        let metadata = {
+            originalSize: buffer.length,
+            optimizedSize: buffer.length,
+            format: fileExt,
+            savings: '0%'
+        }
+
+        // Try Sharp processing (WebP conversion)
+        try {
+            // Lazy import sharp to avoid hard crashes if missing
+            const { processImage } = await import('@/lib/imageProcessor')
+
+            const processed = await processImage(buffer, {
+                width: 1600, // Max width
+                quality: 85,
+                format: 'webp'
+            })
+
+            finalBuffer = processed.buffer
+            fileExt = 'webp'
+            filename = `${timestamp}_${randomStr}.webp`
+
+            metadata = {
+                originalSize: buffer.length,
+                optimizedSize: processed.buffer.length,
+                format: 'webp',
+                savings: ((1 - processed.buffer.length / buffer.length) * 100).toFixed(1) + '%'
+            }
+
+        } catch (sharpError) {
+            console.warn('Sharp processing failed, falling back to original file:', sharpError)
+            // Fallback: Use original filename and buffer
+            filename = `${timestamp}_${randomStr}.${fileExt}`
+        }
+
+        // Save the file (optimized or original)
+        const filePath = path.join(uploadDir, filename)
+        await writeFile(filePath, finalBuffer)
 
         // Return URL
         const url = `/uploads/images/${filename}`
@@ -37,10 +75,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             url,
             success: true,
-            metadata: {
-                originalSize: file.size,
-                format: fileExt
-            }
+            metadata
         })
 
     } catch (error: unknown) {
