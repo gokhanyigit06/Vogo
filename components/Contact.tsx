@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
-import { submitContactForm, type ContactFormData } from "@/app/contact/actions"
+import { type ContactFormData } from "@/app/contact/actions"
 
 export default function Contact() {
     const [formData, setFormData] = useState<ContactFormData>({
@@ -19,24 +19,26 @@ export default function Contact() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         console.log("🚀 Form submit başladı")
-        console.log("📋 Form data:", formData)
 
         setLoading(true)
         setResult(null)
 
         try {
-            console.log("📤 Server action çağrılıyor...")
-            const response = await submitContactForm(formData)
-            console.log("📥 Server response:", response)
-
-            setResult({
-                success: response.success,
-                message: response.success ? response.message! : response.error!
+            const res = await fetch('/api/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
             })
 
-            if (response.success) {
+            const data = await res.json()
+
+            if (res.ok) {
                 console.log("✅ Form başarıyla gönderildi!")
-                // Reset form on success
+                setResult({
+                    success: true,
+                    message: "Mesajınız başarıyla gönderildi! En kısa sürede sizinle iletişime geçeceğiz."
+                })
+                // Reset form
                 setFormData({
                     name: "",
                     email: "",
@@ -45,13 +47,17 @@ export default function Contact() {
                     message: ""
                 })
             } else {
-                console.error("❌ Error:", response.error)
+                console.error("❌ Error response:", data)
+                setResult({
+                    success: false,
+                    message: data.error || "Bir hata oluştu. Lütfen tekrar deneyin."
+                })
             }
         } catch (error) {
-            console.error("💥 Catch bloğu:", error)
+            console.error("💥 Network error:", error)
             setResult({
                 success: false,
-                message: "Bir hata oluştu. Lütfen tekrar deneyin."
+                message: "Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin."
             })
         } finally {
             setLoading(false)
