@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
         const url = await saveImage(processedBuffer, filename)
 
         return NextResponse.json({
-            success: true,
             url,
+            success: true,
             metadata: {
                 originalWidth: originalDimensions.width,
                 originalHeight: originalDimensions.height,
