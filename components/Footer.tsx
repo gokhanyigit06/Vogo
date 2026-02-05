@@ -10,7 +10,7 @@ export default function Footer() {
                 <div className="grid md:grid-cols-4 gap-8">
                     <div className="space-y-4">
                         <div className="text-xl font-bold">
-                            <span className="text-primary">Vogo</span> Agency
+                            <span className="text-primary">Vogo</span> Lab
                         </div>
                         <p className="text-sm text-muted-foreground">
                             Dijital dünyada fark yaratan çözümler üretiyoruz.
@@ -57,7 +57,7 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-                    <p>&copy; {currentYear} Vogo Agency. Tüm hakları saklıdır.</p>
+                    <p>&copy; {currentYear} Vogo Lab. Tüm hakları saklıdır.</p>
                 </div>
             </div>
         </footer>

@@ -18,7 +18,7 @@ interface Client {
 const testimonials = [
     {
         id: 1,
-        content: "Vogo Agency ile çalışmak işimizin dijital dönüşümünde tam bir dönüm noktası oldu. Satışlarımız %200 arttı!",
+        content: "Vogo Lab ile çalışmak işimizin dijital dönüşümünde tam bir dönüm noktası oldu. Satışlarımız %200 arttı!",
         author: "Ahmet Yılmaz",
         role: "CEO, TechCorp",
         avatar: "/avatars/ceo-avatar.png",

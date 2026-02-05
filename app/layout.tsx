@@ -33,7 +33,7 @@ const gochiHand = Gochi_Hand({
 
 // Default settings
 const defaultSettings = {
-  siteTitle: "Vogo Agency | Dijital Çözümler",
+  siteTitle: "Vogo Lab | Dijital Çözümler",
   siteDescription: "Yüksek performanslı web siteleri, SEO ve dijital pazarlama çözümleri.",
   favicon: "/favicon.ico",
   googleAnalytics: "",

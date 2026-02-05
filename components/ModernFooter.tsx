@@ -56,7 +56,7 @@ export default function ModernFooter() {
                     <div className="space-y-4">
                         <div className="text-2xl font-bold">
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">
-                                {settings?.siteTitle ? settings.siteTitle : 'Vogo Agency'}
+                                {settings?.siteTitle ? settings.siteTitle : 'Vogo Lab'}
                             </span>
                         </div>
                         <p className="text-muted-foreground leading-relaxed">
@@ -152,7 +152,7 @@ export default function ModernFooter() {
                 {/* Bottom Bar */}
                 <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-muted-foreground text-sm text-center md:text-left">
-                        &copy; {currentYear} {settings?.siteTitle || 'Vogo Agency'}. Tüm hakları saklıdır.
+                        &copy; {currentYear} {settings?.siteTitle || 'Vogo Lab'}. Tüm hakları saklıdır.
                     </p>
                     <div className="flex items-center gap-6 text-sm">
                         <Link href="/privacy" className="text-muted-foreground hover:text-emerald-500 transition-colors">

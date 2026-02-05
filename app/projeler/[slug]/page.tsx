@@ -25,10 +25,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!project) return { title: 'Proje Bulunamadı' }
 
     return {
-        title: `${project.publicTitle || project.name} | Vogo Agency`,
+        title: `${project.publicTitle || project.name} | Vogo Lab`,
         description: project.description || 'Proje detayları.',
         openGraph: {
-            title: `${project.publicTitle || project.name} | Vogo Agency`,
+            title: `${project.publicTitle || project.name} | Vogo Lab`,
             description: project.description || 'Proje detayları.',
             images: project.heroImage || project.image ? [project.heroImage || project.image!] : [],
         }

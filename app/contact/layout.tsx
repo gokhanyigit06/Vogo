@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: "İletişim | Vogo Agency - Bize Ulaşın",
+    title: "İletişim | Vogo Lab - Bize Ulaşın",
     description: "Projenizi konuşmak ve teklif almak için hemen bizimle iletişime geçin. Ankara ofisimiz ve online kanallarımızla hizmetinizdeyiz.",
 }
 

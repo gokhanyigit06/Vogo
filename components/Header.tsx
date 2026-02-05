@@ -45,7 +45,7 @@ export default function Header() {
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">
                             {settings?.siteTitle?.split(' ')[0] || 'Vogo'}
                         </span>
-                        <span className="text-foreground"> {settings?.siteTitle?.split(' ').slice(1).join(' ') || 'Agency'}</span>
+                        <span className="text-foreground"> {settings?.siteTitle?.split(' ').slice(1).join(' ') || 'Lab'}</span>
                     </Link>
 
                     {/* Right: Theme Toggle (Visible on Desktop) and Mobile Spacer */}
@@ -111,7 +111,7 @@ export default function Header() {
                             className="absolute bottom-8 left-0 right-0 z-[105]"
                         >
                             <div className="container mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground text-sm">
-                                <p>info@vogoagency.com</p>
+                                <p>info@vogolab.com</p>
                                 <p>+90 507 734 75 21</p>
                                 <div className="flex gap-4">
                                     <a href="#" className="hover:text-primary transition-colors">Instagram</a>

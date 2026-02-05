@@ -67,7 +67,7 @@ export default function LoginPage() {
                             <span className="text-white text-3xl font-bold">V</span>
                         </motion.div>
                         <h1 className="text-3xl font-bold text-white tracking-tight mb-2">Hoşgeldiniz</h1>
-                        <p className="text-slate-400">Vogo Agency Admin Paneli</p>
+                        <p className="text-slate-400">Vogo Lab Admin Paneli</p>
                     </div>
 
                     {/* Hata Mesajı */}
@@ -133,7 +133,7 @@ export default function LoginPage() {
                     {/* Footer */}
                     <div className="mt-8 text-center">
                         <p className="text-xs text-slate-500">
-                            © {new Date().getFullYear()} Vogo Agency. Tüm hakları saklıdır.
+                            © {new Date().getFullYear()} Vogo Lab. Tüm hakları saklıdır.
                         </p>
                     </div>
                 </div>

@@ -78,7 +78,7 @@ export default function NotFoundContent() {
 
             {/* Footer Text */}
             <div className="absolute bottom-8 text-xs text-muted-foreground opacity-50">
-                Error Code: 404_PAGE_NOT_FOUND // Vogo Agency System
+                Error Code: 404_PAGE_NOT_FOUND // Vogo Lab System
             </div>
         </div>
     )

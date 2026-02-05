@@ -61,7 +61,7 @@ export default function HeroModern() {
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border backdrop-blur-sm mb-8 hover:bg-secondary/70 transition-colors cursor-default"
                 >
                     <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                    <span className="text-sm text-muted-foreground font-medium">Vogo Agency 2.0 Yayında</span>
+                    <span className="text-sm text-muted-foreground font-medium">Vogo Lab 2.0 Yayında</span>
                 </motion.div>
 
                 {/* Hero Title - Massive & Impactful */}

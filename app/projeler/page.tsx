@@ -5,8 +5,8 @@ import prisma from "@/lib/prisma"
 import { ArrowRight, Briefcase } from "lucide-react"
 
 export const metadata: Metadata = {
-    title: "Projelerimiz | Vogo Agency",
-    description: "Vogo Agency olarak hayata geçirdiğimiz başarılı e-ticaret ve yazılım projeleri.",
+    title: "Projelerimiz | Vogo Lab",
+    description: "Vogo Lab olarak hayata geçirdiğimiz başarılı e-ticaret ve yazılım projeleri.",
 }
 
 // Data fetching helper (Server Component)

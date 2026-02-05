@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: "Portfolyo | Vogo Agency - Başarı Hikayeleri",
+    title: "Portfolyo | Vogo Lab - Başarı Hikayeleri",
     description: "Web tasarım, e-ticaret ve dijital pazarlama alanındaki referanslarımız ve başarı hikayelerimizi inceleyin.",
 }
 

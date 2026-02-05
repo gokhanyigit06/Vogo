@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: "Blog | Vogo Agency - Dijital Öngörüler",
+    title: "Blog | Vogo Lab - Dijital Öngörüler",
     description: "Web tasarım trendleri, SEO ipuçları, dijital pazarlama stratejileri ve teknoloji dünyasından en güncel haberler.",
 }
 

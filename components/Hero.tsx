@@ -17,7 +17,7 @@ export default function Hero() {
                         <span className="text-white"> Bırakın</span>
                     </h1>
                     <p className="text-lg md:text-xl text-slate-300 max-w-[700px] mx-auto leading-relaxed">
-                        Vogo Agency ile markanızı yükseltin. Web tasarım, SEO ve dijital pazarlama çözümleriyle geleceği bugünden inşa ediyoruz.
+                        Vogo Lab ile markanızı yükseltin. Web tasarım, SEO ve dijital pazarlama çözümleriyle geleceği bugünden inşa ediyoruz.
                     </p>
                 </div>
 

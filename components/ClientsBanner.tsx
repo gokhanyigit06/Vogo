@@ -22,7 +22,7 @@ export default function ClientsBanner() {
                     transition={{ duration: 0.6 }}
                     className="text-center text-slate-400 text-sm mb-8"
                 >
-                    More than 1 million people across 200+ companies choose Vogo Agency
+                    More than 1 million people across 200+ companies choose Vogo Lab
                 </motion.p>
 
                 {/* Clients Grid */}
