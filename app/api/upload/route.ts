@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { processImage, saveImage, getImageDimensions } from '@/lib/imageProcessor'
+import { writeFile, mkdir } from 'fs/promises'
+import path from 'path'
 
 export async function POST(request: NextRequest) {
     try {
@@ -15,40 +16,30 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Sadece görsel dosyaları yüklenebilir' }, { status: 400 })
         }
 
-        // Convert File to Buffer
-        const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
-
-        // Get original dimensions
-        const originalDimensions = await getImageDimensions(buffer)
-
-        // Process image - auto convert to WebP and optimize
-        const { buffer: processedBuffer, metadata } = await processImage(buffer, {
-            width: 1600,  // Max width for high quality
-            quality: 85,
-            format: 'webp'
-        })
-
-        // Generate unique filename with .webp extension
+        // Get file extension
+        const fileExt = file.name.split('.').pop() || 'jpg'
         const timestamp = Date.now()
         const randomStr = Math.random().toString(36).substring(7)
-        const filename = `${timestamp}_${randomStr}.webp`
+        const filename = `${timestamp}_${randomStr}.${fileExt}`
 
-        // Save processed image
-        const url = await saveImage(processedBuffer, filename)
+        // Upload directory (root level, not in public/)
+        const uploadDir = path.join(process.cwd(), 'uploads', 'images')
+        await mkdir(uploadDir, { recursive: true })
+
+        // Save file
+        const filePath = path.join(uploadDir, filename)
+        const bytes = await file.arrayBuffer()
+        await writeFile(filePath, Buffer.from(bytes))
+
+        // Return URL
+        const url = `/uploads/images/${filename}`
 
         return NextResponse.json({
             url,
             success: true,
             metadata: {
-                originalWidth: originalDimensions.width,
-                originalHeight: originalDimensions.height,
-                width: metadata.width,
-                height: metadata.height,
-                format: metadata.format,
-                originalSize: buffer.length,
-                optimizedSize: processedBuffer.length,
-                savings: ((1 - processedBuffer.length / buffer.length) * 100).toFixed(1) + '%'
+                originalSize: file.size,
+                format: fileExt
             }
         })
 
