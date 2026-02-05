@@ -372,15 +372,38 @@ export default function EditProjectPage() {
                 <div className="flex gap-4">
                     <button
                         type="submit"
-                        disabled={submitting}
+                        disabled={loading || submitting}
                         className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
                     >
                         <Save className="w-5 h-5" />
-                        {submitting ? 'Güncelleniyor...' : 'Değişiklikleri Kaydet'}
+                        {submitting ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
                     </button>
+
+                    <button
+                        type="button"
+                        onClick={async () => {
+                            if (!window.confirm('Bu projeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) return
+
+                            setSubmitting(true)
+                            try {
+                                const res = await fetch(`/api/projects?id=${params.id}`, { method: 'DELETE' })
+                                if (!res.ok) throw new Error('Silinemedi')
+                                router.push('/admin/projects')
+                                router.refresh()
+                            } catch (error) {
+                                alert('Silinirken hata oluştu')
+                                setSubmitting(false)
+                            }
+                        }}
+                        className="px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl font-bold transition-all border border-red-200 flex items-center gap-2"
+                    >
+                        <Trash2 className="w-5 h-5" />
+                        Projeyi Sil
+                    </button>
+
                     <Link
-                        href={`/admin/projects/${params.id}`}
-                        className="px-6 py-3 bg-muted hover:bg-muted/80 text-foreground rounded-xl font-bold transition-all border border-border"
+                        href="/admin/projects"
+                        className="px-6 py-3 bg-muted hover:bg-muted text-foreground rounded-xl font-bold transition-all border border-border"
                     >
                         İptal
                     </Link>

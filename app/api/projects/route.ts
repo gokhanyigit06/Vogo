@@ -147,6 +147,7 @@ export async function PUT(request: NextRequest) {
             clientType: updateData.clientType,
             websiteUrl: updateData.websiteUrl,
             gallery: updateData.gallery,
+            image: updateData.image, // Featured/Card Image
         }
 
         // Clean up undefined values to avoid overwriting with null unless intended

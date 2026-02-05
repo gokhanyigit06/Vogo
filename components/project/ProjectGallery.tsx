@@ -45,10 +45,11 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
                                 <Image
                                     src={image}
                                     alt={`Gallery image ${index + 1}`}
-                                    width={1920}
-                                    height={1080}
-                                    className="w-full h-auto object-cover"
+                                    width={0}
+                                    height={0}
                                     sizes="100vw"
+                                    className="w-full h-auto object-cover"
+                                    unoptimized={image.startsWith('http')}
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
                             </div>
