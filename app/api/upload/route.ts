@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
                 format: 'webp'
             })
 
-            finalBuffer = processed.buffer
+            finalBuffer = Buffer.from(processed.buffer)
             fileExt = 'webp'
             filename = `${timestamp}_${randomStr}.webp`
 
