@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { processImage, saveImage, getImageDimensions } from '@/lib/imageProcessor'
 
 export async function POST(request: NextRequest) {
     try {
@@ -11,25 +10,47 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Dosya gerekli' }, { status: 400 })
         }
 
-        // Dosya bilgilerini al
-        const fileExt = file.name.split('.').pop() || 'bin'
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
+        // Check if file is an image
+        if (!file.type.startsWith('image/')) {
+            return NextResponse.json({ error: 'Sadece görsel dosyaları yüklenebilir' }, { status: 400 })
+        }
 
-        // Upload dizini oluştur (Proje kökünde 'uploads/images' klasörü)
-        // Public klasörü Next.js build sonrası read-only olabilir veya statik dosya olarak hemen görülmeyebilir.
-        const uploadDir = path.join(process.cwd(), 'uploads', 'images')
-        await mkdir(uploadDir, { recursive: true })
-
-        // Dosyayı kaydet
-        const filePath = path.join(uploadDir, fileName)
+        // Convert File to Buffer
         const bytes = await file.arrayBuffer()
-        await writeFile(filePath, Buffer.from(bytes))
+        const buffer = Buffer.from(bytes)
 
-        // URL oluştur - Dynamic Route: /uploads/[...path]
-        // app/uploads/images/[dosya].jpg şeklinde erişilecek
-        const fileUrl = `/uploads/images/${fileName}`
+        // Get original dimensions
+        const originalDimensions = await getImageDimensions(buffer)
 
-        return NextResponse.json({ url: fileUrl })
+        // Process image - auto convert to WebP and optimize
+        const { buffer: processedBuffer, metadata } = await processImage(buffer, {
+            width: 1600,  // Max width for high quality
+            quality: 85,
+            format: 'webp'
+        })
+
+        // Generate unique filename with .webp extension
+        const timestamp = Date.now()
+        const randomStr = Math.random().toString(36).substring(7)
+        const filename = `${timestamp}_${randomStr}.webp`
+
+        // Save processed image
+        const url = await saveImage(processedBuffer, filename)
+
+        return NextResponse.json({
+            success: true,
+            url,
+            metadata: {
+                originalWidth: originalDimensions.width,
+                originalHeight: originalDimensions.height,
+                width: metadata.width,
+                height: metadata.height,
+                format: metadata.format,
+                originalSize: buffer.length,
+                optimizedSize: processedBuffer.length,
+                savings: ((1 - processedBuffer.length / buffer.length) * 100).toFixed(1) + '%'
+            }
+        })
 
     } catch (error: unknown) {
         console.error('Upload error:', error)

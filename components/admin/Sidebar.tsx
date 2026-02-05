@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, FileText, Briefcase, Mail, Settings, LogOut, Layers, MessageSquare } from "lucide-react"
+import { LayoutDashboard, FileText, Briefcase, Mail, Settings, LogOut, Layers, MessageSquare, Zap } from "lucide-react"
 
 const menuItems = [
     { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
@@ -10,6 +10,7 @@ const menuItems = [
     { id: "blog", icon: FileText, label: "Blog Yönetimi", href: "/admin/blog" },
     { id: "portfolio", icon: Briefcase, label: "Portfolyo", href: "/admin/portfolio" },
     { id: "messages", icon: Mail, label: "Gelen Kutusu", href: "/admin/messages", badge: 3 },
+    { id: "image-optimizer", icon: Zap, label: "Image Optimizer", href: "/admin/tools/image-optimizer" },
     { id: "settings", icon: Settings, label: "Ayarlar", href: "/admin/settings" },
 ]
 
@@ -37,8 +38,8 @@ export default function AdminSidebar() {
                             key={item.id}
                             href={item.href}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isActive
-                                    ? "bg-emerald-500/10 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]"
-                                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                                ? "bg-emerald-500/10 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]"
+                                : "text-slate-400 hover:bg-slate-800 hover:text-white"
                                 }`}
                         >
                             <item.icon className={`w-5 h-5 ${isActive ? "text-emerald-400" : "text-slate-500 group-hover:text-white"}`} />

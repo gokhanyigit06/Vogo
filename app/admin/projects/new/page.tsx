@@ -214,6 +214,14 @@ export default function NewProjectPage() {
 
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel (Detay Sayfası)</label>
+                            <div className="mb-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700 text-xs space-y-1">
+                                <p className="text-slate-300 font-semibold">📐 Önerilen Boyutlar:</p>
+                                <ul className="list-disc list-inside text-slate-400 space-y-0.5">
+                                    <li>Genişlik: 1920px, Yükseklik: 1080px (16:9 oran)</li>
+                                    <li>Format: Herhangi (otomatik WebP'ye çevrilir)</li>
+                                    <li>Maksimum: 5MB (otomatik optimize edilir)</li>
+                                </ul>
+                            </div>
                             <ImageUploader
                                 value={formData.heroImage}
                                 onChange={(url) => setFormData({ ...formData, heroImage: url })}
@@ -222,6 +230,14 @@ export default function NewProjectPage() {
 
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Liste/Kart Görseli (Öne Çıkan)</label>
+                            <div className="mb-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700 text-xs space-y-1">
+                                <p className="text-slate-300 font-semibold">📐 Önerilen Boyutlar:</p>
+                                <ul className="list-disc list-inside text-slate-400 space-y-0.5">
+                                    <li>Genişlik: 1200px, Yükseklik: 900px (4:3 oran)</li>
+                                    <li>Format: Herhangi (otomatik WebP'ye çevrilir)</li>
+                                    <li>Maksimum: 5MB (otomatik optimize edilir)</li>
+                                </ul>
+                            </div>
                             <ImageUploader
                                 value={formData.image}
                                 onChange={(url) => setFormData({ ...formData, image: url })}
