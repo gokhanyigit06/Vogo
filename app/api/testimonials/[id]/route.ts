@@ -3,10 +3,11 @@ import prisma from '@/lib/prisma'
 
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = parseInt(params.id)
+        const { id: idStr } = await params
+        const id = parseInt(idStr)
         const body = await request.json()
 
         const testimonial = await prisma.testimonial.update({
@@ -30,10 +31,11 @@ export async function PUT(
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = parseInt(params.id)
+        const { id: idStr } = await params
+        const id = parseInt(idStr)
         await prisma.testimonial.delete({ where: { id } })
         return NextResponse.json({ success: true })
     } catch (error) {
