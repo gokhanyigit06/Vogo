@@ -10,6 +10,7 @@ import ContentBlockRenderer from "@/components/project/ContentBlockRenderer"
 import ProjectGallery from "@/components/project/ProjectGallery"
 import RelatedProjects from "@/components/project/RelatedProjects"
 import Contact from "@/components/Contact"
+import ModernFooter from "@/components/ModernFooter"
 
 // Types for params
 type Props = {
@@ -122,6 +123,8 @@ export default async function ProjectDetailPage({ params }: Props) {
                     </div>
                 </section>
             )}
+
+            <ModernFooter />
         </main>
     )
 }

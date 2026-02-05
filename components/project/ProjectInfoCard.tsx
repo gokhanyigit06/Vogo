@@ -4,6 +4,7 @@ interface ProjectInfoCardProps {
     services?: string[]
     year?: string
     category?: string
+    categories?: string[]
     market?: string
     clientType?: string
     websiteUrl?: string
@@ -15,6 +16,7 @@ export default function ProjectInfoCard({
     services = [],
     year,
     category,
+    categories,
     market,
     clientType,
     websiteUrl
@@ -70,13 +72,13 @@ export default function ProjectInfoCard({
                             </div>
                         )}
 
-                        {category && (
+                        {(category || (categories && categories.length > 0)) && (
                             <div className="border-l-4 border-stone-900 pl-6">
                                 <div className="text-sm font-bold uppercase tracking-wider text-stone-400 mb-2">
                                     Kategori
                                 </div>
                                 <div className="text-lg text-stone-900">
-                                    {category}
+                                    {categories && categories.length > 0 ? categories.join(', ') : category}
                                 </div>
                             </div>
                         )}

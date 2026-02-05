@@ -82,7 +82,7 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
                         <Link
                             key={project.id}
                             href={`/projeler/${project.slug}`}
-                            className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                            className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 z-10 hover:z-20"
                         >
                             <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
                                 {(project.image || project.heroImage) ? (
@@ -98,7 +98,7 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
                                         No Image
                                     </div>
                                 )}
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
                             </div>
 
                             <div className="p-6">
