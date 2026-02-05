@@ -163,6 +163,10 @@ export default function ProjectsPage() {
     const [isOrderChanged, setIsOrderChanged] = useState(false)
     const [savingOrder, setSavingOrder] = useState(false)
 
+    const [selectedStatus, setSelectedStatus] = useState("all")
+    const [selectedCategory, setSelectedCategory] = useState("all")
+    const [categories, setCategories] = useState<string[]>([])
+
     // DND Sensors
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -180,8 +184,17 @@ export default function ProjectsPage() {
             const res = await fetch('/api/projects')
             const data = await res.json()
             if (Array.isArray(data)) {
-                // Ensure they are sorted by order if API doesn't
                 setProjects(data)
+                // Extract categories
+                const cats = new Set<string>()
+                data.forEach((p: any) => {
+                    if (p.categories && Array.isArray(p.categories)) {
+                        p.categories.forEach((c: string) => cats.add(c))
+                    } else if (p.category) {
+                        cats.add(p.category)
+                    }
+                })
+                setCategories(Array.from(cats))
             }
         } catch (error) {
             console.error('Fetch error:', error)
@@ -247,11 +260,26 @@ export default function ProjectsPage() {
 
     const filteredProjects = projects.filter(project => {
         const search = searchTerm.toLowerCase()
-        return (
+        const matchesSearch = (
             (project.internalName?.toLowerCase().includes(search)) ||
             (project.publicTitle?.toLowerCase().includes(search)) ||
             (project.name?.toLowerCase().includes(search))
         )
+
+        const matchesStatus = selectedStatus === 'all' || project.status === selectedStatus
+
+        let matchesCategory = true
+        if (selectedCategory !== 'all') {
+            const pCats = (project as any).categories || []
+            const pCat = (project as any).category
+            if (Array.isArray(pCats) && pCats.length > 0) {
+                matchesCategory = pCats.includes(selectedCategory)
+            } else {
+                matchesCategory = pCat === selectedCategory
+            }
+        }
+
+        return matchesSearch && matchesStatus && matchesCategory
     })
 
     const statusConfig: any = {
@@ -296,8 +324,8 @@ export default function ProjectsPage() {
             </div>
 
             {/* Filter Bar */}
-            <div className="flex justify-between items-center gap-4 bg-card p-4 rounded-xl border border-border">
-                <div className="relative w-full max-w-sm">
+            <div className="flex flex-col md:flex-row gap-4 bg-card p-4 rounded-xl border border-border">
+                <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                         type="text"
@@ -307,13 +335,41 @@ export default function ProjectsPage() {
                         className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2 focus:ring-emerald-500"
                     />
                 </div>
-                <div className="flex bg-background border border-border rounded-lg p-1">
-                    <button onClick={() => setViewMode('grid')} className={cn("p-2 rounded", viewMode === 'grid' && "bg-muted shadow")}>
-                        <LayoutGrid className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => setViewMode('list')} className={cn("p-2 rounded", viewMode === 'list' && "bg-muted shadow")}>
-                        <ListIcon className="w-4 h-4" />
-                    </button>
+
+                <div className="flex gap-2 w-full md:w-auto overflow-x-auto">
+                    {/* Status Filter */}
+                    <select
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                        className="bg-background border border-border rounded-lg px-3 py-2 text-sm focus:ring-emerald-500"
+                    >
+                        <option value="all">Tüm Durumlar</option>
+                        <option value="completed">Tamamlandı</option>
+                        <option value="in_progress">Devam Ediyor</option>
+                        <option value="quote">Teklif</option>
+                        <option value="cancelled">İptal</option>
+                    </select>
+
+                    {/* Category Filter */}
+                    <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="bg-background border border-border rounded-lg px-3 py-2 text-sm focus:ring-emerald-500 min-w-[150px]"
+                    >
+                        <option value="all">Tüm Kategoriler</option>
+                        {categories.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
+
+                    <div className="flex bg-background border border-border rounded-lg p-1 shrink-0">
+                        <button onClick={() => setViewMode('grid')} className={cn("p-2 rounded", viewMode === 'grid' && "bg-muted shadow")}>
+                            <LayoutGrid className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => setViewMode('list')} className={cn("p-2 rounded", viewMode === 'list' && "bg-muted shadow")}>
+                            <ListIcon className="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
             </div>
 

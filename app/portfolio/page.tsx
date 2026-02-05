@@ -22,12 +22,14 @@ type Project = {
     slug?: string
 }
 
-const categories = ["Hepsi", "Web Tasarım", "Reklam Yönetimi", "E-Ticaret", "AI Çözümleri", "Marka", "Yazılım"]
+// ... types ...
+const categories = ["Hepsi"] // Base categories, will be extended
 
 export default function PortfolioPage() {
     const [selectedCategory, setSelectedCategory] = useState("Hepsi")
     const [projects, setProjects] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
+    const [dynamicCategories, setDynamicCategories] = useState<string[]>([])
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -36,6 +38,17 @@ export default function PortfolioPage() {
                 if (!res.ok) throw new Error('Projeler çekilemedi')
                 const data = await res.json()
                 setProjects(data)
+
+                // Extract unique categories
+                const allCats = new Set<string>()
+                data.forEach((p: Project) => {
+                    if (p.categories && Array.isArray(p.categories)) {
+                        p.categories.forEach(c => allCats.add(c))
+                    } else if (p.category) {
+                        allCats.add(p.category)
+                    }
+                })
+                setDynamicCategories(Array.from(allCats))
             } catch (error) {
                 console.error("Projeler yüklenirken hata:", error)
             } finally {
@@ -45,27 +58,31 @@ export default function PortfolioPage() {
         fetchProjects()
     }, [])
 
-    const filteredProjects = selectedCategory === "Hepsi"
-        ? projects
-        : projects.filter(project => {
-            // Check if categories array includes the selected category
-            if (project.categories && Array.isArray(project.categories)) {
-                return project.categories.includes(selectedCategory)
-            }
-            // Fallback for legacy data
-            return project.category === selectedCategory
-        })
+    const filteredProjects = projects.filter(project => {
+        if (selectedCategory === "Hepsi") {
+            // Show all EXCEPT those explicitly marked as 'Yakında' (if we had a flag)
+            // For now, show all completed projects usually. 
+            // Assuming 'status' field exists on project type, filter could be refined.
+            // But based on current data structure, 'Hepsi' shows everything.
+            return true
+        }
 
-    if (loading) {
-        return (
-            <div className="bg-background min-h-screen flex items-center justify-center">
-                <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="w-12 h-12 text-emerald-500 animate-spin" />
-                    <p className="text-muted-foreground font-medium">Portfolyo yükleniyor...</p>
-                </div>
-            </div>
-        )
-    }
+        if (selectedCategory === "Yakında!") {
+            // Filter logic for 'Yakında!' - e.g. status is NOT completed
+            // If project type has status, use it. Otherwise placeholder logic.
+            // As per current type definition in file, adding status check.
+            return (project as any).status === 'in_progress' || (project as any).status === 'quote'
+        }
+
+        // Check if categories array includes the selected category
+        if (project.categories && Array.isArray(project.categories)) {
+            return project.categories.includes(selectedCategory)
+        }
+        // Fallback for legacy data
+        return project.category === selectedCategory
+    })
+
+    const allTabs = ["Yakında!", "Hepsi", ...dynamicCategories]
 
     return (
         <>
@@ -91,21 +108,36 @@ export default function PortfolioPage() {
                 {/* Filter Tabs */}
                 <section className="container mx-auto px-4 md:px-8 max-w-7xl mb-16 relative z-10">
                     <div className="flex flex-wrap justify-center gap-3">
-                        {categories.map((category) => (
+                        {allTabs.map((category) => (
                             <button
                                 key={category}
                                 onClick={() => setSelectedCategory(category)}
-                                className="relative px-5 py-2.5 rounded-full text-sm font-bold transition-all focus:outline-none group"
+                                className={`relative px-5 py-2.5 rounded-full text-sm font-bold transition-all focus:outline-none group ${category === "Yakında!" ? "ml-2 mr-4" : ""
+                                    }`}
                             >
                                 {selectedCategory === category && (
                                     <motion.div
                                         layoutId="activeTab"
-                                        className="absolute inset-0 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/30"
+                                        className={`absolute inset-0 rounded-full shadow-lg ${category === "Yakında!"
+                                                ? "bg-gradient-to-r from-amber-400 to-orange-500 shadow-orange-500/30"
+                                                : "bg-emerald-500 shadow-emerald-500/30"
+                                            }`}
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                     />
                                 )}
-                                <span className={`relative z-10 ${selectedCategory === category ? 'text-white' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                                <span className={`relative z-10 flex items-center gap-2 ${selectedCategory === category
+                                        ? 'text-white'
+                                        : category === "Yakında!"
+                                            ? 'text-amber-600 hover:text-amber-700'
+                                            : 'text-muted-foreground group-hover:text-foreground'
+                                    }`}>
                                     {category}
+                                    {category === "Yakında!" && (
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                        </span>
+                                    )}
                                 </span>
                             </button>
                         ))}

@@ -157,7 +157,7 @@ export default async function RootLayout({
         )}
 
         <Providers>
-          <CustomCursor />
+          {/* <CustomCursor /> */}
           <SmoothScroll />
 
           <div className="fixed inset-0 pointer-events-none z-0 opacity-20 dark:opacity-100 transition-opacity">
