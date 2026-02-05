@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prisma'
+import { revalidatePath } from 'next/cache'
 
 export interface ContactFormData {
     name: string
@@ -64,6 +65,10 @@ export async function submitContactForm(formData: ContactFormData) {
         })
 
         console.log('✅ Message saved:', message)
+
+        // Admin panelini ve bildirimleri güncelle
+        revalidatePath('/admin/messages')
+        revalidatePath('/admin') // Dashboard sayacı için
 
         return {
             success: true,

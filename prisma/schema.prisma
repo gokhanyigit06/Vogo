@@ -109,6 +109,7 @@ model Client {
   website             String?
   logo_url            String?   @map("logo_url")
   status              String    @default("active") // active, potential, inactive
+  order               Int       @default(0)        // Markalar sıralaması için
   tags                String[]
   notes               String?   @db.Text
   totalRevenue        Decimal   @default(0) @map("total_revenue") @db.Decimal(10, 2)
@@ -412,5 +413,26 @@ model Page {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("pages")
+  @@schema("public")
+}
+
+// ============================================
+// Testimonials (Müşteri Yorumları)
+// ============================================
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  author    String
+  role      String?
+  company   String?
+  content   String   @db.Text
+  avatarUrl String?  @map("avatar_url")
+  rating    Int      @default(5)
+  order     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("testimonials")
   @@schema("public")
 }

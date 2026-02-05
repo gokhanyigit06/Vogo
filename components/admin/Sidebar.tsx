@@ -2,13 +2,14 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, FileText, Briefcase, Mail, Settings, LogOut, Layers, MessageSquare, Zap } from "lucide-react"
+import { LayoutDashboard, FileText, Briefcase, Mail, Settings, LogOut, Layers, MessageSquare, Zap, Star } from "lucide-react"
 
 const menuItems = [
     { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
     { id: "services", icon: Layers, label: "Hizmetler", href: "/admin/services" },
     { id: "blog", icon: FileText, label: "Blog Yönetimi", href: "/admin/blog" },
     { id: "portfolio", icon: Briefcase, label: "Portfolyo", href: "/admin/portfolio" },
+    { id: "references", icon: Star, label: "Referanslar", href: "/admin/references" },
     { id: "messages", icon: Mail, label: "Gelen Kutusu", href: "/admin/messages", badge: 3 },
     { id: "image-optimizer", icon: Zap, label: "Image Optimizer", href: "/admin/tools/image-optimizer" },
     { id: "settings", icon: Settings, label: "Ayarlar", href: "/admin/settings" },

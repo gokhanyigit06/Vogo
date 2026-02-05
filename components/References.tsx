@@ -9,67 +9,59 @@ interface Client {
     id: number
     name: string
     company?: string
-    email?: string
-    status: string
     logo_url?: string
+    status: string
+    order?: number
 }
 
-// Fixed Testimonials (Database integration for this is typically a separate task)
-const testimonials = [
-    {
-        id: 1,
-        content: "Vogo Lab ile çalışmak işimizin dijital dönüşümünde tam bir dönüm noktası oldu. Satışlarımız %200 arttı!",
-        author: "Ahmet Yılmaz",
-        role: "CEO, TechCorp",
-        avatar: "/avatars/ceo-avatar.png",
-        rating: 5
-    },
-    {
-        id: 2,
-        content: "Profesyonel yaklaşımları ve yaratıcı çözümleri ile markamıza değer kattılar. Kesinlikle tavsiye ediyorum.",
-        author: "Ayşe Kaya",
-        role: "Marketing Director, GlobalFine",
-        avatar: "/avatars/marketing-director-avatar.png",
-        rating: 5
-    },
-    {
-        id: 3,
-        content: "Özel yazılım çözümleri sayesinde operasyonel verimliliğimiz arttı. Ekip her zaman çok ilgiliydi.",
-        author: "Mehmet Demir",
-        role: "CTO, EcoStyle",
-        avatar: "/avatars/cto-avatar.png",
-        rating: 5
-    }
-]
+interface Testimonial {
+    id: number
+    author: string
+    role?: string
+    company?: string
+    content: string
+    avatarUrl?: string
+    rating: number
+}
 
 export default function References() {
     const [clients, setClients] = useState<Client[]>([])
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const fetchClients = async () => {
+        const fetchData = async () => {
             try {
-                // In production, you might want to filter only 'active' clients or have a specific 'show_in_references' flag
-                // For now, we fetch all and filter client-side if needed, or show all active ones.
-                const res = await fetch('/api/clients')
-                if (!res.ok) throw new Error('Failed to fetch clients')
+                // Fetch Clients and Testimonials in parallel
+                const [clientsRes, testimonialsRes] = await Promise.all([
+                    fetch('/api/clients'),
+                    fetch('/api/testimonials')
+                ])
 
-                const data = await res.json()
-                if (Array.isArray(data)) {
-                    // Filter: Only show active clients in the references section
-                    const activeClients = data.filter((c: Client) => c.status === 'active')
+                const clientsData = await clientsRes.json()
+                const testimonialsData = await testimonialsRes.json()
 
-                    // If no active clients, fallback to showing all or a subset to ensure UI isn't empty during dev
-                    setClients(activeClients.length > 0 ? activeClients : data.slice(0, 6))
+                if (Array.isArray(clientsData)) {
+                    // Filter active clients and sort by order
+                    const activeClients = clientsData
+                        .filter((c: Client) => c.status === 'active')
+                        .sort((a, b) => (a.order || 0) - (b.order || 0))
+
+                    setClients(activeClients)
                 }
+
+                if (Array.isArray(testimonialsData)) {
+                    setTestimonials(testimonialsData)
+                }
+
             } catch (error) {
-                console.error("Error loading clients:", error)
+                console.error("Error loading references data:", error)
             } finally {
                 setLoading(false)
             }
         }
 
-        fetchClients()
+        fetchData()
     }, [])
 
     return (
@@ -176,7 +168,7 @@ export default function References() {
                             {/* Author */}
                             <div className="flex items-center gap-4 mt-auto">
                                 <img
-                                    src={testimonial.avatar}
+                                    src={testimonial.avatarUrl || '/avatars/default-avatar.png'}
                                     alt={testimonial.author}
                                     className="w-12 h-12 rounded-full object-cover border-2 border-background shadow-md"
                                 />
