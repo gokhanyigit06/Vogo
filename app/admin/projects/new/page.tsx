@@ -29,6 +29,7 @@ export default function NewProjectPage() {
         priority: "medium",
         // Premium fields
         heroImage: "",
+        image: "",
         year: new Date().getFullYear().toString(),
         services: [] as string[],
         // New metadata fields
@@ -212,10 +213,18 @@ export default function NewProjectPage() {
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel</label>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel (Detay Sayfası)</label>
                             <ImageUploader
                                 value={formData.heroImage}
                                 onChange={(url) => setFormData({ ...formData, heroImage: url })}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Liste/Kart Görseli (Öne Çıkan)</label>
+                            <ImageUploader
+                                value={formData.image}
+                                onChange={(url) => setFormData({ ...formData, image: url })}
                             />
                         </div>
 

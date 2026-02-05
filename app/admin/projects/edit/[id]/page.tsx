@@ -32,6 +32,7 @@ export default function EditProjectPage() {
         priority: "medium",
         // Premium fields
         heroImage: "",
+        image: "",
         year: new Date().getFullYear().toString(),
         services: [] as string[],
         // New metadata fields
@@ -85,7 +86,8 @@ export default function EditProjectPage() {
                     end_date: endDate,
                     priority: projectData.priority || "medium",
 
-                    heroImage: projectData.heroImage || projectData.image || "", // Fallback to main image
+                    heroImage: projectData.heroImage || "",
+                    image: projectData.image || "",
                     year: projectData.year || "",
                     services: Array.isArray(projectData.services) ? projectData.services : [],
                     market: projectData.market || "",
@@ -229,10 +231,18 @@ export default function EditProjectPage() {
                         </div>
 
                         <div>
-                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel</label>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Hero Görsel (Detay Sayfası)</label>
                             <ImageUploader
                                 value={formData.heroImage}
                                 onChange={(url) => setFormData({ ...formData, heroImage: url })}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-slate-400 text-sm font-medium mb-2">Liste/Kart Görseli (Öne Çıkan)</label>
+                            <ImageUploader
+                                value={formData.image}
+                                onChange={(url) => setFormData({ ...formData, image: url })}
                             />
                         </div>
 

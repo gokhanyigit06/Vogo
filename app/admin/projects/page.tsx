@@ -34,7 +34,7 @@ interface Project {
     budget: number
     end_date: string
     order: number
-    clients?: {
+    client?: {
         name: string
         company: string
     }
@@ -90,7 +90,7 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
                     <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
                         <Users className="w-4 h-4" />
                         <span className="truncate">
-                            {project.clients?.name || 'Müşteri Yok'}
+                            {project.client?.company || project.client?.name || 'Müşteri Yok'}
                         </span>
                     </div>
                 </div>
@@ -103,7 +103,7 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
                         </span>
                     </div>
                     <Link
-                        href={`/admin/projects/${project.id}`}
+                        href={`/admin/projects/edit/${project.id}`}
                         className="text-sm font-medium text-emerald-500 hover:underline"
                     >
                         Düzenle
@@ -125,7 +125,7 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
                 <div className="text-xs text-slate-500">{project.publicTitle}</div>
             </td>
             <td className="p-4 text-muted-foreground text-sm">
-                {project.clients?.name || '-'}
+                {project.client?.company || project.client?.name || '-'}
             </td>
             <td className="p-4 font-mono text-sm">
                 {formatCurrency(project.budget)}

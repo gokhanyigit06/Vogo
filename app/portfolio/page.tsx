@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
 import Header from "@/components/Header"
 import ModernFooter from "@/components/ModernFooter"
 import ModernCTA from "@/components/ModernCTA"
@@ -11,11 +12,14 @@ import { ArrowUpRight, FolderOpen, Loader2 } from "lucide-react"
 type Project = {
     id: number | string
     title: string
-    category: string
+    category?: string
+    categories?: string[]
     desc?: string
     description?: string
-    image: string
+    image?: string
+    heroImage?: string
     client?: string
+    slug?: string
 }
 
 const categories = ["Hepsi", "Web Tasarım", "Reklam Yönetimi", "E-Ticaret", "AI Çözümleri", "Marka", "Yazılım"]
@@ -43,10 +47,14 @@ export default function PortfolioPage() {
 
     const filteredProjects = selectedCategory === "Hepsi"
         ? projects
-        : projects.filter(project =>
-            project.category === selectedCategory ||
-            (selectedCategory === "Web Tasarım" && project.category === "Web Design")
-        )
+        : projects.filter(project => {
+            // Check if categories array includes the selected category
+            if (project.categories && Array.isArray(project.categories)) {
+                return project.categories.includes(selectedCategory)
+            }
+            // Fallback for legacy data
+            return project.category === selectedCategory
+        })
 
     if (loading) {
         return (
@@ -111,56 +119,65 @@ export default function PortfolioPage() {
                         className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
                     >
                         <AnimatePresence mode="popLayout">
-                            {filteredProjects.map((project, index) => (
-                                <motion.div
-                                    layout
-                                    key={project.id || index}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="group relative rounded-[2rem] overflow-hidden bg-card border border-border hover:border-emerald-500/50 transition-all cursor-pointer shadow-sm hover:shadow-xl hover:shadow-emerald-500/10"
-                                >
-                                    {/* Image */}
-                                    <div className="aspect-[4/3] overflow-hidden relative">
-                                        {/* Placeholder/Fallback if image fails or empty */}
-                                        <div className="absolute inset-0 bg-muted flex items-center justify-center text-muted-foreground">
-                                            <FolderOpen className="w-12 h-12 opacity-20" />
-                                        </div>
-                                        {project.image && (
-                                            <img
-                                                src={project.image}
-                                                alt={project.title}
-                                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                            />
-                                        )}
+                            {filteredProjects.map((project, index) => {
+                                const displayCategory = (project.categories && project.categories.length > 0)
+                                    ? project.categories[0]
+                                    : (project.category || '-');
+                                const displayImage = project.image || project.heroImage;
 
-                                        {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                                    </div>
-
-                                    <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                                        <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="text-emerald-400 text-xs font-bold tracking-wider uppercase bg-black/30 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                                                    {project.category}
-                                                </span>
-                                                <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                                                    <ArrowUpRight className="w-5 h-5" />
+                                return (
+                                    <motion.div
+                                        layout
+                                        key={project.id || index}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="group relative rounded-[2rem] overflow-hidden bg-card border border-border hover:border-emerald-500/50 transition-all cursor-pointer shadow-sm hover:shadow-xl hover:shadow-emerald-500/10"
+                                    >
+                                        <Link href={`/projeler/${project.slug || project.id}`} className="block h-full">
+                                            {/* Image */}
+                                            <div className="aspect-[4/3] overflow-hidden relative">
+                                                {/* Placeholder/Fallback if image fails or empty */}
+                                                <div className="absolute inset-0 bg-muted flex items-center justify-center text-muted-foreground">
+                                                    <FolderOpen className="w-12 h-12 opacity-20" />
                                                 </div>
+                                                {displayImage && (
+                                                    <img
+                                                        src={displayImage}
+                                                        alt={project.title}
+                                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                    />
+                                                )}
+
+                                                {/* Gradient Overlay */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                                             </div>
 
-                                            <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
-                                                {project.title}
-                                            </h3>
+                                            <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                                                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <span className="text-emerald-400 text-xs font-bold tracking-wider uppercase bg-black/30 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                                                            {displayCategory}
+                                                        </span>
+                                                        <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                                                            <ArrowUpRight className="w-5 h-5" />
+                                                        </div>
+                                                    </div>
 
-                                            <p className="text-slate-300 text-sm line-clamp-2 group-hover:text-white transition-colors opacity-0 group-hover:opacity-100 duration-500">
-                                                {project.desc || project.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                                    <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
+                                                        {project.title}
+                                                    </h3>
+
+                                                    <p className="text-slate-300 text-sm line-clamp-2 group-hover:text-white transition-colors opacity-0 group-hover:opacity-100 duration-500">
+                                                        {project.desc || project.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    </motion.div>
+                                )
+                            })}
                         </AnimatePresence>
 
                         {filteredProjects.length === 0 && !loading && (

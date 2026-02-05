@@ -8,8 +8,10 @@ import { ArrowRight, ArrowUpRight, FolderOpen } from "lucide-react"
 type Project = {
     id: number | string
     title: string
-    category: string
-    image: string
+    category?: string
+    categories?: string[]
+    image?: string
+    heroImage?: string
     description?: string
     slug?: string
 }
@@ -86,60 +88,70 @@ export default function FeaturedProjects() {
                             <div key={i} className="aspect-[16/10] rounded-[2rem] bg-muted/50 animate-pulse border border-border" />
                         ))
                     ) : (
-                        projects.map((project, index) => (
-                            <motion.div
-                                key={project.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="group relative rounded-[2rem] overflow-hidden bg-card border border-border hover:border-purple-500/30 transition-all cursor-pointer shadow-sm hover:shadow-2xl hover:shadow-purple-500/10"
-                            >
-                                <Link href={`/projeler/${project.slug || project.id}`} className="block h-full">
-                                    {/* Link to project detail page */}
-                                    <div className="aspect-[16/10] overflow-hidden relative">
-                                        {project.image ? (
-                                            <img
-                                                src={project.image}
-                                                alt={project.title}
-                                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                            />
-                                        ) : (
-                                            <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                                                <FolderOpen className="w-16 h-16 text-muted-foreground/30" />
-                                            </div>
-                                        )}
+                        projects.map((project, index) => {
+                            // Determine display category: prefer first item of categories, fallback to legacy category
+                            const displayCategory = (project.categories && project.categories.length > 0)
+                                ? project.categories[0]
+                                : (project.category || '-');
 
-                                        {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                            // Determine display image: prefer image (card), fallback to heroImage
+                            const displayImage = project.image || project.heroImage;
 
-                                        {/* Content Overlay */}
-                                        <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end">
-                                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                                <div className="flex items-center justify-between mb-3">
-                                                    <span className="text-purple-300 text-xs font-bold tracking-wider uppercase bg-purple-900/50 backdrop-blur-md px-3 py-1 rounded-full border border-purple-500/30">
-                                                        {project.category}
-                                                    </span>
-                                                    <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
-                                                        <ArrowUpRight className="w-6 h-6" />
-                                                    </div>
+                            return (
+                                <motion.div
+                                    key={project.id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="group relative rounded-[2rem] overflow-hidden bg-card border border-border hover:border-purple-500/30 transition-all cursor-pointer shadow-sm hover:shadow-2xl hover:shadow-purple-500/10"
+                                >
+                                    <Link href={`/projeler/${project.slug || project.id}`} className="block h-full">
+                                        {/* Link to project detail page */}
+                                        <div className="aspect-[16/10] overflow-hidden relative">
+                                            {displayImage ? (
+                                                <img
+                                                    src={displayImage}
+                                                    alt={project.title}
+                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                />
+                                            ) : (
+                                                <div className="absolute inset-0 bg-muted flex items-center justify-center">
+                                                    <FolderOpen className="w-16 h-16 text-muted-foreground/30" />
                                                 </div>
+                                            )}
 
-                                                <h3 className="text-3xl font-bold text-white mb-2 leading-tight">
-                                                    {project.title}
-                                                </h3>
+                                            {/* Gradient Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
 
-                                                {project.description && (
-                                                    <p className="text-slate-300 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                                                        {project.description}
-                                                    </p>
-                                                )}
+                                            {/* Content Overlay */}
+                                            <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end">
+                                                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <span className="text-purple-300 text-xs font-bold tracking-wider uppercase bg-purple-900/50 backdrop-blur-md px-3 py-1 rounded-full border border-purple-500/30">
+                                                            {displayCategory}
+                                                        </span>
+                                                        <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
+                                                            <ArrowUpRight className="w-6 h-6" />
+                                                        </div>
+                                                    </div>
+
+                                                    <h3 className="text-3xl font-bold text-white mb-2 leading-tight">
+                                                        {project.title}
+                                                    </h3>
+
+                                                    {project.description && (
+                                                        <p className="text-slate-300 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                                            {project.description}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            </motion.div>
-                        ))
+                                    </Link>
+                                </motion.div>
+                            )
+                        })
                     )}
 
                     {!loading && projects.length === 0 && (

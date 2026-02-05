@@ -33,27 +33,24 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
 
     return (
         <>
-            <section className="py-16 px-6 lg:px-12 bg-stone-50">
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-8">
-                        Proje Görselleri
-                    </h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section className="py-0 bg-white">
+                <div className="w-full">
+                    <div className="flex flex-col gap-0">
                         {images.map((image, index) => (
                             <div
                                 key={index}
-                                className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group shadow-md hover:shadow-xl transition-shadow"
+                                className="relative w-full cursor-pointer group"
                                 onClick={() => openLightbox(index)}
                             >
                                 <Image
                                     src={image}
                                     alt={`Gallery image ${index + 1}`}
-                                    fill
-                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    width={1920}
+                                    height={1080}
+                                    className="w-full h-auto object-cover"
+                                    sizes="100vw"
                                 />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
                             </div>
                         ))}
                     </div>

@@ -67,7 +67,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             {/* Back Button */}
             <div className="fixed top-8 left-8 z-50">
                 <Link
-                    href="/projeler"
+                    href="/portfolio"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-stone-200 rounded-full text-stone-700 hover:bg-stone-100 transition-all shadow-lg hover:shadow-xl"
                 >
                     <ArrowLeft className="w-4 h-4" />
