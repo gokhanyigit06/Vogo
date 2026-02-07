@@ -81,6 +81,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const favicon = settings.favicon;
 
   return {
+    metadataBase: new URL('https://vogolab.com'),
     title: {
       default: title,
       template: `%s | ${title}`
