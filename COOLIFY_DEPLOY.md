@@ -76,6 +76,9 @@ AUTH_TRUST_HOST=true
 
 # Node Environment
 NODE_ENV=production
+
+# Google Gemini API (For AI Insights)
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ### Generate NEXTAUTH_SECRET
