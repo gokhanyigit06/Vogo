@@ -14,9 +14,9 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
     const [editForm, setEditForm] = useState({
         title: task.title,
         description: task.description,
-        assigned_to: task.assigned_to,
-        project_id: task.project_id,
-        due_date: task.due_date ? task.due_date.split('T')[0] : '',
+        assigned_to: task.assignedTo || task.assigned_to, // Handle both cases
+        project_id: task.projectId || task.project_id, // Handle both cases
+        due_date: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : (task.due_date ? task.due_date.split('T')[0] : ''),
         status: task.status,
         priority: task.priority,
         tags: task.tags || []

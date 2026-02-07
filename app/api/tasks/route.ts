@@ -35,14 +35,16 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Title is required' }, { status: 400 })
         }
 
+        console.log('Creating task with body:', body); // Debug log
+
         const task = await prisma.task.create({
             data: {
                 title: body.title,
                 description: body.description,
                 status: body.status || 'todo',
                 priority: body.priority || 'medium',
-                assignedTo: body.assigned_to ? parseInt(body.assigned_to) : null,
-                projectId: body.project_id ? parseInt(body.project_id) : null,
+                assignedTo: body.assigned_to ? parseInt(String(body.assigned_to)) : null,
+                projectId: body.project_id ? parseInt(String(body.project_id)) : null,
                 dueDate: body.due_date ? new Date(body.due_date) : null,
             }
         })
@@ -64,15 +66,17 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 })
         }
 
+        console.log('Updating task with body:', body); // Debug log
+
         const task = await prisma.task.update({
-            where: { id: parseInt(body.id) },
+            where: { id: parseInt(String(body.id)) },
             data: {
                 title: body.title,
                 description: body.description,
                 status: body.status,
                 priority: body.priority,
-                assignedTo: body.assigned_to ? parseInt(body.assigned_to) : null,
-                projectId: body.project_id ? parseInt(body.project_id) : null,
+                assignedTo: body.assigned_to ? parseInt(String(body.assigned_to)) : null,
+                projectId: body.project_id ? parseInt(String(body.project_id)) : null,
                 dueDate: body.due_date ? new Date(body.due_date) : null,
                 completedAt: body.status === 'done' ? new Date() : null,
             }
