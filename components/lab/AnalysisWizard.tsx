@@ -180,15 +180,15 @@ function AnalysisReport({ result, onRetry }: { result: AnalysisResult, onRetry: 
             {/* Detailed Lists */}
             <div className="grid md:grid-cols-2 gap-8 mt-8">
                 <div className="space-y-6">
-                    <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6">
-                        <h4 className="flex items-center gap-2 text-xl font-bold text-red-500 mb-4">
+                    <div className="bg-red-50 border border-red-200 rounded-2xl p-6 dark:bg-red-900/10 dark:border-red-500/20">
+                        <h4 className="flex items-center gap-2 text-xl font-bold text-red-600 dark:text-red-500 mb-4">
                             <AlertTriangle className="w-5 h-5" />
                             Kritik Hatalar
                         </h4>
                         <ul className="space-y-3">
                             {result.critical_issues.map((issue, i) => (
-                                <li key={i} className="flex gap-3 text-red-200/80 text-sm">
-                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                                <li key={i} className="flex gap-3 text-red-900 dark:text-red-200/80 text-sm font-medium">
+                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-600 dark:bg-red-500 shrink-0" />
                                     {issue}
                                 </li>
                             ))}
@@ -197,15 +197,15 @@ function AnalysisReport({ result, onRetry }: { result: AnalysisResult, onRetry: 
                 </div>
 
                 <div className="space-y-6">
-                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-6">
-                        <h4 className="flex items-center gap-2 text-xl font-bold text-emerald-500 mb-4">
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 dark:bg-emerald-500/10 dark:border-emerald-500/20">
+                        <h4 className="flex items-center gap-2 text-xl font-bold text-emerald-600 dark:text-emerald-500 mb-4">
                             <Sparkles className="w-5 h-5" />
                             Önerilen İyileştirmeler
                         </h4>
                         <ul className="space-y-3">
                             {result.improvements.map((item, i) => (
-                                <li key={i} className="flex gap-3 text-emerald-200/80 text-sm">
-                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                <li key={i} className="flex gap-3 text-emerald-900 dark:text-emerald-200/80 text-sm font-medium">
+                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500 shrink-0" />
                                     {item}
                                 </li>
                             ))}
@@ -234,8 +234,8 @@ function AnalysisReport({ result, onRetry }: { result: AnalysisResult, onRetry: 
                         }
                         alert("Rapor talebiniz alındı. Kısa süre içinde PDF olarak iletilecektir.");
                     }} className="flex gap-2">
-                        <input required type="email" placeholder="ornek@sirket.com" className="flex-1 bg-black/50 border border-white/10 rounded-lg px-4 py-2 focus:ring-1 focus:ring-emerald-500 outline-none transition-all" />
-                        <button type="submit" className="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-zinc-200 transition-all min-w-[100px]">Gönder</button>
+                        <input required type="email" placeholder="ornek@sirket.com" className="flex-1 bg-white text-black border border-white/10 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none transition-all placeholder:text-zinc-500" />
+                        <button type="submit" className="bg-white hover:bg-zinc-200 text-black px-6 py-2 rounded-lg font-bold transition-all min-w-[100px]">Gönder</button>
                     </form>
                 </div>
 

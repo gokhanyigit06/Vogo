@@ -47,10 +47,13 @@ export async function POST(req: Request) {
       Page Title: ${pageTitle}
       Meta Description: ${metaDescription}
       
+      OUTPUT LANGUAGE: TURKISH (TÜRKÇE)
+      All content in the "summary", "critical_issues", "improvements", and "positive_points" fields MUST be in Turkish.
+      
       Your goal is to provide a critical but constructive analysis focused on:
-      1. First Impressions & Design Aesthetics (Is it modern? trustworthy?)
+      1. First Impressions & Design Aesthetics (Modern mi? Güven veriyor mu?)
       2. User Experience (UX) & Navigation
-      3. SEO & Content Quality (Based on visible text and hierarchy)
+      3. SEO & Content Quality (Görünür metin ve hiyerarşiye dayalı)
       
       Return the response in strict JSON format with the following structure:
       {
@@ -60,20 +63,20 @@ export async function POST(req: Request) {
           "seo": 0-100,
           "content": 0-100
         },
-        "summary": "A brief 2-sentence summary of the overall audit.",
-        "critical_issues": ["Issue 1", "Issue 2", ...],
-        "improvements": ["Suggestion 1", "Suggestion 2", ...],
-        "positive_points": ["Good point 1", "Good point 2", ...]
+        "summary": "Genel denetimin 2 cümlelik Türkçe özeti.",
+        "critical_issues": ["Kritik Hata 1", "Kritik Hata 2", ...],
+        "improvements": ["Öneri 1", "Öneri 2", ...],
+        "positive_points": ["İyi nokta 1", "İyi nokta 2", ...]
       }
     `;
 
         if (isEcommerce) {
             systemPrompt += `
-        SPECIFIC E-COMMERCE INSTRUCTIONS (TrendScribe methodology):
-        - Analyze the Product Title: Is it descriptive? Does it contain keywords?
-        - Analyze the Main Image: Is it high quality? Does it show the product clearly?
-        - Analyze the Price Visibility and Call-to-Action (Add to Cart button).
-        - Check for Trust Signals (Reviews, badges).
+        ÖZEL E-TİCARET YÖNERGELERİ (TrendScribe metodolojisi):
+        - Ürün Başlığını Analiz Et: Açıklayıcı mı? Anahtar kelimeler içeriyor mu?
+        - Ana Görseli Analiz Et: Yüksek kaliteli mi? Ürünü net gösteriyor mu?
+        - Fiyat Görünürlüğü ve Harekete Geçirici Mesaj (Sepete Ekle butonu) analizi.
+        - Güven Sinyallerini Kontrol Et (Yorumlar, rozetler).
       `;
         }
 
