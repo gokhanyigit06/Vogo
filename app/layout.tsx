@@ -6,6 +6,7 @@ import Script from "next/script";
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
 import SmoothScroll from "@/components/SmoothScroll";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Providers } from "./providers";
 import prisma from "@/lib/prisma";
 
@@ -196,6 +197,7 @@ export default async function RootLayout({
         <Providers>
           {/* <CustomCursor /> */}
           <SmoothScroll />
+          <ScrollToTop />
 
           <div className="fixed inset-0 pointer-events-none z-0 opacity-20 dark:opacity-100 transition-opacity">
             <ParticleBackground />
