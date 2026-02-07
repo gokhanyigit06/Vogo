@@ -26,8 +26,23 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(project)
         }
 
+        const slug = searchParams.get('slug')
+        if (slug) {
+            const project = await prisma.project.findUnique({
+                where: { slug },
+                include: { client: true } // Include client for sidebar
+            })
+            if (!project) return NextResponse.json({ error: 'Proje bulunamadı' }, { status: 404 })
+            return NextResponse.json(project)
+        }
+
+        const isLab = searchParams.get('type') === 'lab'
+
         // Liste
         const projects = await prisma.project.findMany({
+            where: {
+                isLabProject: isLab
+            },
             include: {
                 client: {
                     select: { id: true, name: true, company: true }
@@ -63,6 +78,12 @@ export async function POST(request: NextRequest) {
             .replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
             .replace(/^-+|-+$/g, '') // Remove leading/trailing dashes
 
+        // Vogo Labs suffix logic
+        if (body.isLabProject && !baseSlug.endsWith('-lab')) {
+            // Optional: Force -lab suffix or just ensure uniqueness?
+            // User requested uniqueness check. 
+        }
+
         // Ensure slug is unique
         let slug = baseSlug
         let counter = 1
@@ -79,6 +100,12 @@ export async function POST(request: NextRequest) {
                 slug: slug,
                 content: body.content,
                 order: body.order || 0,
+
+                // Vogo Labs Fields
+                isLabProject: body.isLabProject || false,
+                thumbnail: body.thumbnail,
+                liveUrl: body.liveUrl,
+                tags: body.tags || [],
 
                 // Premium Showcase Fields
                 heroImage: body.heroImage,
@@ -148,6 +175,13 @@ export async function PUT(request: NextRequest) {
             websiteUrl: updateData.websiteUrl,
             gallery: updateData.gallery,
             image: updateData.image, // Featured/Card Image
+
+            // Vogo Labs
+            isLabProject: updateData.isLabProject,
+            thumbnail: updateData.thumbnail,
+            liveUrl: updateData.liveUrl,
+            tags: updateData.tags,
+            contentBlocks: updateData.contentBlocks,
         }
 
         // Clean up undefined values to avoid overwriting with null unless intended

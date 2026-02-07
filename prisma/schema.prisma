@@ -176,6 +176,12 @@ model Project {
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
+  // Vogo Labs (Laboratory) Fields
+  isLabProject Boolean   @default(false) @map("is_lab_project")
+  thumbnail    String?                        // Liste görünümü için küçük görsel
+  liveUrl      String?   @map("live_url")     // Canlı proje linki
+  tags         String[]  @default([])         // Kullanılan teknolojiler vb.
+
   client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
   tasks  Task[]
   income Income[]
