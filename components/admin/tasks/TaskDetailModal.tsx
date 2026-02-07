@@ -339,7 +339,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                         <LinkIcon className="w-4 h-4" />
                                     </div>
                                     <span className="font-medium truncate">
-                                        {projects.find((p: any) => p.id == task.project_id)?.title || 'Bağlı Proje Yok'}
+                                        {task.project?.title || projects.find((p: any) => p.id == (task.projectId || task.project_id))?.title || 'Bağlı Proje Yok'}
                                     </span>
                                 </div>
                             )}
@@ -362,7 +362,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             ) : (
                                 <div className="flex items-center gap-3 p-1">
                                     {(() => {
-                                        const assignedUser = team.find((m: any) => m.id == task.assigned_to)
+                                        const assignedUser = task.teamMember || team.find((m: any) => m.id == (task.assignedTo || task.assigned_to))
                                         return (
                                             <>
                                                 <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-emerald-500/10">
