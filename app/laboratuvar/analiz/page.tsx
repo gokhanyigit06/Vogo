@@ -5,6 +5,8 @@ import ModernFooter from "@/components/ModernFooter"
 import AnalysisWizard from "@/components/lab/AnalysisWizard"
 import { motion } from "framer-motion"
 
+import { Suspense } from "react"
+
 export default function AIAnalysisPage() {
     return (
         <>
@@ -20,7 +22,9 @@ export default function AIAnalysisPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <AnalysisWizard />
+                        <Suspense fallback={<div className="text-center py-20 text-muted-foreground">Yükleniyor...</div>}>
+                            <AnalysisWizard />
+                        </Suspense>
                     </motion.div>
                 </section>
             </main>
