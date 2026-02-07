@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, LogOut } from "lucide-react"
+import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, LogOut, FlaskConical } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -35,6 +35,7 @@ export default function AdminSidebar() {
         { icon: Users, label: "Ekip", href: "/admin/team" },
         { icon: FileText, label: "Blog", href: "/admin/blog" },
         { icon: Briefcase, label: "Portfolio", href: "/admin/portfolio" },
+        { icon: FlaskConical, label: "Vogo Labs", href: "/admin/laboratuvar" },
         { icon: MessageSquare, label: "Mesajlar", href: "/admin/messages" },
         { icon: Settings, label: "Ayarlar", href: "/admin/settings" },
     ]
