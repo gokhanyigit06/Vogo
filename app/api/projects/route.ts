@@ -36,12 +36,12 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(project)
         }
 
-        const isLab = searchParams.get('type') === 'lab'
+        const type = searchParams.get('type')
 
         // Liste
         const projects = await prisma.project.findMany({
             where: {
-                isLabProject: isLab
+                ...(type ? { isLabProject: type === 'lab' } : {}) // Filter only if type is provided
             },
             include: {
                 client: {

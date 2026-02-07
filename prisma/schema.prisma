@@ -59,6 +59,7 @@ model User {
   updatedAt     DateTime  @updatedAt @map("updated_at")
   accounts      Account[]
   sessions      Session[]
+  tasks         Task[] // Added relation to Task model
 
   @@map("team")
   @@schema("public")
@@ -197,7 +198,7 @@ model Project {
 model Task {
   id          Int       @id @default(autoincrement())
   projectId   Int?      @map("project_id")
-  assignedTo  Int?      @map("assigned_to")
+  assignedTo  String?   @map("assigned_to") // Changed from Int to String (User ID)
   title       String
   description String?   @db.Text
   status      String    @default("todo") // todo, in_progress, done
@@ -208,7 +209,7 @@ model Task {
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
   project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  teamMember   TeamMember?  @relation(fields: [assignedTo], references: [id], onDelete: SetNull)
+  user         User?        @relation(fields: [assignedTo], references: [id], onDelete: SetNull) // Relation to User (Auth)
   attachments  TaskAttachment[]
 
   @@map("tasks")

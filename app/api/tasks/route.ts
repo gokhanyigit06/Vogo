@@ -12,8 +12,9 @@ export async function GET() {
                 project: {
                     select: { id: true, title: true, name: true }
                 },
-                teamMember: {
-                    select: { id: true, name: true }
+                teamMember: false, // Removed old relation
+                user: { // New relation
+                    select: { id: true, name: true, image: true, email: true }
                 }
             }
         })
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
                 description: body.description,
                 status: body.status || 'todo',
                 priority: body.priority || 'medium',
-                assignedTo: body.assigned_to ? parseInt(String(body.assigned_to)) : null,
+                assignedTo: body.assigned_to ? String(body.assigned_to) : null, // String user ID
                 projectId: body.project_id ? parseInt(String(body.project_id)) : null,
                 dueDate: body.due_date ? new Date(body.due_date) : null,
             }
@@ -75,7 +76,7 @@ export async function PUT(request: NextRequest) {
                 description: body.description,
                 status: body.status,
                 priority: body.priority,
-                assignedTo: body.assigned_to ? parseInt(String(body.assigned_to)) : null,
+                assignedTo: body.assigned_to ? String(body.assigned_to) : null, // String user ID
                 projectId: body.project_id ? parseInt(String(body.project_id)) : null,
                 dueDate: body.due_date ? new Date(body.due_date) : null,
                 completedAt: body.status === 'done' ? new Date() : null,

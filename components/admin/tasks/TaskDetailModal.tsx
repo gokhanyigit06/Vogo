@@ -362,11 +362,24 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             ) : (
                                 <div className="flex items-center gap-3 p-1">
                                     {(() => {
-                                        const assignedUser = task.teamMember || team.find((m: any) => m.id == (task.assignedTo || task.assigned_to))
+                                        // API user nesnesini assignedTo ilişkisi üzerinden dönüyor olabilir ya da biz team listesinden buluruz
+                                        // User modelinde avatarUrl -> image olarak maplenmişti (API response formatına bakmak lazım)
+                                        // app/api/tasks/route.ts GET metodunda user select: { id, name, image, email } yaptık.
+
+                                        // Task objesinden gelen user:
+                                        const taskUser = (task as any).user;
+
+                                        // Team listesinden bulma (user ID string olduğu için == yeterli, ama === daha iyi)
+                                        const assignedUser = taskUser || team.find((m: any) => m.id == (task.assignedTo || task.assigned_to))
+
                                         return (
                                             <>
-                                                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-emerald-500/10">
-                                                    {assignedUser?.name?.[0]?.toUpperCase() || '?'}
+                                                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-emerald-500/10 overflow-hidden">
+                                                    {assignedUser?.image || assignedUser?.avatar_url ? (
+                                                        <img src={assignedUser.image || assignedUser.avatar_url} alt={assignedUser.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        assignedUser?.name?.[0]?.toUpperCase() || '?'
+                                                    )}
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-bold text-foreground">{assignedUser?.name || 'Atanmamış'}</p>
