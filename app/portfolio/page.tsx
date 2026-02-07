@@ -34,7 +34,7 @@ export default function PortfolioPage() {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const res = await fetch('/api/projects')
+                const res = await fetch('/api/projects?type=work')
                 if (!res.ok) throw new Error('Projeler çekilemedi')
                 const data = await res.json()
                 setProjects(data)
@@ -119,17 +119,17 @@ export default function PortfolioPage() {
                                     <motion.div
                                         layoutId="activeTab"
                                         className={`absolute inset-0 rounded-full shadow-lg ${category === "Yakında!"
-                                                ? "bg-gradient-to-r from-amber-400 to-orange-500 shadow-orange-500/30"
-                                                : "bg-emerald-500 shadow-emerald-500/30"
+                                            ? "bg-gradient-to-r from-amber-400 to-orange-500 shadow-orange-500/30"
+                                            : "bg-emerald-500 shadow-emerald-500/30"
                                             }`}
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                     />
                                 )}
                                 <span className={`relative z-10 flex items-center gap-2 ${selectedCategory === category
-                                        ? 'text-white'
-                                        : category === "Yakında!"
-                                            ? 'text-amber-600 hover:text-amber-700'
-                                            : 'text-muted-foreground group-hover:text-foreground'
+                                    ? 'text-white'
+                                    : category === "Yakında!"
+                                        ? 'text-amber-600 hover:text-amber-700'
+                                        : 'text-muted-foreground group-hover:text-foreground'
                                     }`}>
                                     {category}
                                     {category === "Yakında!" && (

@@ -23,8 +23,8 @@ export default function FeaturedProjects() {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                // Fetch all projects (or limit via API query if supported)
-                const res = await fetch('/api/projects')
+                // Fetch all projects (standard projects only)
+                const res = await fetch('/api/projects?type=work')
                 if (!res.ok) throw new Error('Fetch error')
                 const data = await res.json()
 

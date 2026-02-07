@@ -14,7 +14,7 @@ async function getProjects() {
     try {
         const projects = await prisma.project.findMany({
             where: {
-                // Filter options can go here
+                isLabProject: false
             },
             orderBy: [
                 { order: 'asc' },
