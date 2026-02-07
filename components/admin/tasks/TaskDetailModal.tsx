@@ -14,7 +14,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
     const [editForm, setEditForm] = useState({
         title: task.title,
         description: task.description,
-        assigned_to: task.assignedTo || task.assigned_to, // Handle both cases
+        assigned_to: (task as any).userId || task.assignedTo || task.assigned_to, // Priority: userId (String) -> assignedTo (Int/Legacy)
         project_id: task.projectId || task.project_id, // Handle both cases
         due_date: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : (task.due_date ? task.due_date.split('T')[0] : ''),
         status: task.status,
@@ -362,15 +362,12 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             ) : (
                                 <div className="flex items-center gap-3 p-1">
                                     {(() => {
-                                        // API user nesnesini assignedTo ilişkisi üzerinden dönüyor olabilir ya da biz team listesinden buluruz
-                                        // User modelinde avatarUrl -> image olarak maplenmişti (API response formatına bakmak lazım)
-                                        // app/api/tasks/route.ts GET metodunda user select: { id, name, image, email } yaptık.
-
-                                        // Task objesinden gelen user:
+                                        // Task objesinden gelen user (ilişki):
                                         const taskUser = (task as any).user;
 
-                                        // Team listesinden bulma (user ID string olduğu için == yeterli, ama === daha iyi)
-                                        const assignedUser = taskUser || team.find((m: any) => m.id == (task.assignedTo || task.assigned_to))
+                                        // Eğer user ilişkisi varsa onu kullan (yeni yapı)
+                                        // Yoksa legacy assignedTo (Int) ile team listesinden bulmaya çalış
+                                        const assignedUser = taskUser || team.find((m: any) => m.id === (task as any).userId || m.id == (task.assignedTo || task.assigned_to))
 
                                         return (
                                             <>

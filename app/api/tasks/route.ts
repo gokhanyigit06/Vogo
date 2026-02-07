@@ -12,7 +12,9 @@ export async function GET() {
                 project: {
                     select: { id: true, title: true, name: true }
                 },
-                teamMember: false, // Removed old relation
+                teamMember: { // Keep legacy
+                    select: { id: true, name: true }
+                },
                 user: { // New relation
                     select: { id: true, name: true, image: true, email: true }
                 }
@@ -44,7 +46,8 @@ export async function POST(request: NextRequest) {
                 description: body.description,
                 status: body.status || 'todo',
                 priority: body.priority || 'medium',
-                assignedTo: body.assigned_to ? String(body.assigned_to) : null, // String user ID
+                userId: body.assigned_to ? String(body.assigned_to) : null, // Store in new userId field
+                // Legacy: assignedTo will be null for new string-based assignments
                 projectId: body.project_id ? parseInt(String(body.project_id)) : null,
                 dueDate: body.due_date ? new Date(body.due_date) : null,
             }
@@ -76,7 +79,8 @@ export async function PUT(request: NextRequest) {
                 description: body.description,
                 status: body.status,
                 priority: body.priority,
-                assignedTo: body.assigned_to ? String(body.assigned_to) : null, // String user ID
+                userId: body.assigned_to ? String(body.assigned_to) : null, // Store in new userId field
+                // assignedTo: null, // Don't clear legacy field automatically, just switch to userId
                 projectId: body.project_id ? parseInt(String(body.project_id)) : null,
                 dueDate: body.due_date ? new Date(body.due_date) : null,
                 completedAt: body.status === 'done' ? new Date() : null,

@@ -18,8 +18,9 @@ interface Task {
     priority: 'low' | 'medium' | 'high'
     due_date?: string
     dueDate?: string // API response
-    assigned_to?: string // Changed to String
-    assignedTo?: string // API response (String)
+    assigned_to?: any // Changed to any to support both String (userId) and Int (legacy)
+    assignedTo?: any // API response
+    userId?: string // New field
     project_id?: number
     projectId?: number // API response
     team_members?: { name: string }
@@ -39,8 +40,8 @@ const COLUMNS = [
 
 // --- Visual Component (Pure UI) ---
 function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: Task, team?: any[], isOverlay?: boolean, onClick?: () => void }) {
-    // API assignedTo (camelCase) dönüyor olabilir, kontrol et
-    const assignedId = task.assignedTo || task.assigned_to
+    // Priority: user object -> userId -> assignedTo (legacy)
+    const assignedId = task.userId || task.assignedTo || task.assigned_to
     // API user objesi dönüyor (image ile), team listesinde avatar_url olabilir
     const assignedUser = task.user || team.find((m: any) => m.id == assignedId)
 
