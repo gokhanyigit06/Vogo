@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight, Loader2, Search, CheckCircle2, AlertTriangle, Sparkles, BarChart3, FileText, Send } from "lucide-react"
 import MagneticButton from "@/components/ui/MagneticButton"
+import { useSearchParams } from "next/navigation"
 
 type AnalysisResult = {
     scores: {
@@ -24,6 +25,22 @@ export default function AnalysisWizard() {
     const [result, setResult] = useState<AnalysisResult | null>(null)
     const [loadingStep, setLoadingStep] = useState(0)
 
+    const searchParams = useSearchParams()
+
+    // Auto-start if URL param is present
+    useEffect(() => {
+        const urlParam = searchParams.get('url')
+        const autoParam = searchParams.get('auto')
+
+        if (urlParam && autoParam === 'true' && step === 'input') {
+            setUrl(urlParam)
+            // Trigger analysis (we need to extract the logic to a function that doesn't rely on 'url' state immediately updating, or use a ref/effect)
+            // Actually, setting URL state and then triggering via another effect or calling the function with the param is better.
+            // Let's modify handleAnalyze to accept an optional URL arg.
+            handleAnalyze(urlParam)
+        }
+    }, [searchParams, step]) // Run once on mount/params change
+
     const loadingMessages = [
         "Web sitesi taranıyor...",
         "Ekran görüntüsü alınıyor...",
@@ -32,8 +49,9 @@ export default function AnalysisWizard() {
         "Rapor hazırlanıyor..."
     ]
 
-    const handleAnalyze = async () => {
-        if (!url) return
+    const handleAnalyze = async (overrideUrl?: string) => {
+        const targetUrl = overrideUrl || url
+        if (!targetUrl) return
 
         setStep("analyzing")
 
@@ -46,7 +64,7 @@ export default function AnalysisWizard() {
             const res = await fetch("/api/analyze", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url }),
+                body: JSON.stringify({ url: targetUrl }),
             })
 
             if (!res.ok) throw new Error("Analiz hatası")
@@ -101,7 +119,7 @@ export default function AnalysisWizard() {
                                 />
                                 <MagneticButton>
                                     <button
-                                        onClick={handleAnalyze}
+                                        onClick={() => handleAnalyze()}
                                         disabled={!url}
                                         className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                     >
