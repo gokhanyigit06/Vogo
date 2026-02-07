@@ -13,7 +13,6 @@ export async function POST(req: Request) {
         }
 
         // 1. Capture Screenshot with Puppeteer
-        // 1. Capture Screenshot with Puppeteer
         const browser = await puppeteer.launch({
             headless: true,
             executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
@@ -34,7 +33,9 @@ export async function POST(req: Request) {
         await browser.close();
 
         // 2. Prepare Gemini Prompt
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Using flash for speed
+        const modelsToTry = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest"];
+        let analysisData = null;
+        let lastError = null;
 
         const isEcommerce = url.includes("trendyol") || url.includes("etsy") || url.includes("amazon") || url.includes("hepsiburada");
 
@@ -83,21 +84,41 @@ export async function POST(req: Request) {
             },
         };
 
-        // 3. Generate Analysis
-        const result = await model.generateContent([systemPrompt, imagePart]);
-        const response = await result.response;
-        const text = response.text();
+        // 3. Generate Analysis with Fallback
+        for (const modelName of modelsToTry) {
+            try {
+                console.log(`Trying Gemini model: ${modelName}`);
+                const model = genAI.getGenerativeModel({ model: modelName });
 
-        // Clean up markdown code blocks if present
-        const cleanJson = text.replace(/```json/g, "").replace(/```/g, "");
-        const analysisData = JSON.parse(cleanJson);
+                const result = await model.generateContent([systemPrompt, imagePart]);
+                const response = await result.response;
+                const text = response.text();
+
+                // Clean up markdown code blocks if present
+                const cleanJson = text.replace(/```json/g, "").replace(/```/g, "");
+                analysisData = JSON.parse(cleanJson);
+
+                if (analysisData) break; // Success!
+            } catch (error) {
+                console.error(`Model ${modelName} failed:`, error);
+                lastError = error;
+                // Continue to next model
+            }
+        }
+
+        if (!analysisData) {
+            throw lastError || new Error("All Gemini models failed to respond.");
+        }
 
         return NextResponse.json(analysisData);
 
     } catch (error) {
         console.error("Analysis failed:", error);
         return NextResponse.json(
-            { error: "Analysis failed", details: error instanceof Error ? error.message : "Unknown error" },
+            {
+                error: "Analiz sırasında bir sorun oluştu.",
+                details: error instanceof Error ? error.message : "Bilinmeyen hata. Lütfen daha sonra tekrar deneyin."
+            },
             { status: 500 }
         );
     }
