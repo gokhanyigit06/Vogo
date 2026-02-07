@@ -83,7 +83,7 @@ export default function LabPage() {
                                     key={project.id}
                                     variants={{
                                         hidden: { opacity: 0, y: 40 },
-                                        show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] } }
+                                        show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] as unknown as number[] } }
                                     }}
                                 >
                                     <div className="group relative rounded-[2rem] overflow-hidden bg-card border border-border hover:border-emerald-500/50 transition-all cursor-pointer shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 aspect-[4/3]">

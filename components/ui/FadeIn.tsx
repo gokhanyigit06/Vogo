@@ -8,7 +8,7 @@ export default function FadeIn({ children, delay = 0, className = "" }: { childr
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+            transition={{ duration: 0.7, delay, ease: [0.21, 0.47, 0.32, 0.98] as unknown as number[] }}
             className={className}
         >
             {children}
