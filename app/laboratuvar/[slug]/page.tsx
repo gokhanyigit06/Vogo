@@ -6,9 +6,10 @@ import { Metadata } from "next"
 import { ContentBlock } from "@/types/lab"
 
 // --- Metadata ---
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params
     const project = await prisma.project.findUnique({
-        where: { slug: params.slug },
+        where: { slug },
         select: { publicTitle: true, description: true, heroImage: true }
     })
 
@@ -24,9 +25,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 // --- Component ---
-export default async function LabProjectDetail({ params }: { params: { slug: string } }) {
+export default async function LabProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
     const project = await prisma.project.findUnique({
-        where: { slug: params.slug },
+        where: { slug },
     })
 
     if (!project) notFound()
