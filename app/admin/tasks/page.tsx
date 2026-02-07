@@ -41,7 +41,8 @@ const COLUMNS = [
 function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: Task, team?: any[], isOverlay?: boolean, onClick?: () => void }) {
     // API assignedTo (camelCase) dönüyor olabilir, kontrol et
     const assignedId = task.assignedTo || task.assigned_to
-    const assignedUser = task.teamMember || team.find((m: any) => m.id == assignedId)
+    // API user objesi dönüyor (image ile), team listesinde avatar_url olabilir
+    const assignedUser = task.user || team.find((m: any) => m.id == assignedId)
 
     // API projectId dönüyor olabilir
     const projectId = task.projectId || task.project_id
@@ -83,9 +84,9 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
 
             <div className="flex items-center gap-4 text-muted-foreground text-xs mt-3">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-foreground border border-border overflow-hidden">
-                        {assignedUser?.avatarUrl || assignedUser?.avatar_url ? (
-                            <img src={assignedUser.avatarUrl || assignedUser.avatar_url} alt={assignedUser.name} className="w-full h-full object-cover" />
+                    <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-foreground border border-border overflow-hidden ring-1 ring-border">
+                        {assignedUser?.image || assignedUser?.avatar_url ? (
+                            <img src={assignedUser.image || assignedUser.avatar_url} alt={assignedUser.name} className="w-full h-full object-cover" />
                         ) : (
                             assignedUser?.name?.[0]?.toUpperCase() || '?'
                         )}
