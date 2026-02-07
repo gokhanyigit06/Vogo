@@ -11,7 +11,7 @@ export const metadata = {
 export const revalidate = 3600
 
 export default async function LabListingPage() {
-    let projects = []
+    let projects: any[] = []
     try {
         projects = await prisma.project.findMany({
             where: { isLabProject: true, status: { not: 'archived' } }, // Filter active
