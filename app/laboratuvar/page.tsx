@@ -6,7 +6,7 @@ import Link from "next/link"
 import Header from "@/components/Header"
 import ModernFooter from "@/components/ModernFooter"
 import ModernCTA from "@/components/ModernCTA"
-import { ArrowUpRight, FlaskConical, Beaker } from "lucide-react"
+import { ArrowUpRight, FlaskConical, Beaker, Sparkles, Loader2 } from "lucide-react"
 import ParallaxImage from "@/components/ui/ParallaxImage"
 import MagneticButton from "@/components/ui/MagneticButton"
 
@@ -57,6 +57,67 @@ export default function LabPage() {
                             Ekibimizin tutkuyla geliştirdiği yan projeler, açık kaynak kütüphaneler ve SaaS ürünleri.
                         </p>
                     </motion.div>
+                </section>
+
+                {/* Featured Tool: AI Insights */}
+                <section className="container mx-auto px-4 md:px-8 max-w-7xl mb-24 relative z-10">
+                    <div className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-zinc-900 to-black border border-white/10 p-8 md:p-12">
+                        {/* Background Effects */}
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
+
+                        <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                            <div className="flex-1 space-y-6 text-center md:text-left">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/20">
+                                    <Sparkles className="w-3 h-3" />
+                                    Yeni Araç
+                                </div>
+                                <h1 className="text-3xl md:text-5xl font-black text-white leading-tight">
+                                    Web Sitenizi <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Yapay Zeka ile Analiz Edin</span>
+                                </h1>
+                                <p className="text-lg text-zinc-400 max-w-xl">
+                                    Google Gemini ve Vision teknolojisi ile sitenizin tasarım, UX ve SEO performansını saniyeler içinde ölçümleyin. E-ticaret siteleri için özel analiz modu.
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
+                                    <Link href="/laboratuvar/analiz">
+                                        <div className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-4 px-8 rounded-xl transition-all flex items-center gap-3 text-lg cursor-pointer">
+                                            Ücretsiz Analiz Et
+                                            <ArrowUpRight className="w-5 h-5" />
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* Visual Representation */}
+                            <div className="flex-1 w-full max-w-md relative hidden md:block">
+                                <div className="aspect-square relative flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 rounded-full animate-pulse" />
+                                    <div className="relative bg-zinc-950 border border-white/10 rounded-2xl p-6 w-full shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
+                                        <div className="h-4 w-3/4 bg-zinc-800 rounded mb-4" />
+                                        <div className="h-80 bg-zinc-900 border border-white/5 rounded-lg mb-4 flex flex-col items-center justify-center relative overflow-hidden">
+                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 z-10" />
+                                            <Loader2 className="w-12 h-12 text-emerald-500 animate-spin mb-4" />
+                                            <span className="text-emerald-500 text-sm font-mono animate-pulse">Analyzing UX...</span>
+
+                                            {/* Floating Elements */}
+                                            <div className="absolute top-4 left-4 bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded border border-red-500/30">
+                                                SEO Error Detected
+                                            </div>
+                                            <div className="absolute bottom-4 right-4 bg-emerald-500/20 text-emerald-400 text-xs px-2 py-1 rounded border border-emerald-500/30">
+                                                Mobile Friendly
+                                            </div>
+                                        </div>
+
+                                        {/* Floating Score Card */}
+                                        <div className="absolute -top-6 -right-6 bg-zinc-900 border border-emerald-500/30 p-4 rounded-xl shadow-xl flex flex-col items-center z-20">
+                                            <span className="text-xs text-muted-foreground uppercase font-bold text-[10px]">Tasarım Skoru</span>
+                                            <span className="text-4xl font-black text-emerald-500">92</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 {/* Projects Grid */}
