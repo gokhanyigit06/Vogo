@@ -18,12 +18,13 @@ interface Task {
     priority: 'low' | 'medium' | 'high'
     due_date?: string
     dueDate?: string // API response
-    assigned_to?: number
-    assignedTo?: number // API response
+    assigned_to?: string // Changed to String
+    assignedTo?: string // API response (String)
     project_id?: number
     projectId?: number // API response
     team_members?: { name: string }
-    teamMember?: { name: string } // API response
+    teamMember?: { name: string }
+    user?: { name: string, image?: string, email?: string } // New relation
     projects?: { name: string }
     project?: { title: string, name: string } // API response
     checklists?: any[]
@@ -291,7 +292,7 @@ export default function TasksPage() {
 
         const payload = {
             ...formData,
-            assigned_to: formData.assigned_to ? Number(formData.assigned_to) : null,
+            assigned_to: formData.assigned_to ? String(formData.assigned_to) : null,
             project_id: formData.project_id ? Number(formData.project_id) : null,
             due_date: formData.due_date || null
         }
