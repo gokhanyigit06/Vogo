@@ -13,9 +13,11 @@ export async function POST(req: Request) {
         }
 
         // 1. Capture Screenshot with Puppeteer
+        // 1. Capture Screenshot with Puppeteer
         const browser = await puppeteer.launch({
             headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'] // Standard flags for server environments
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
         });
         const page = await browser.newPage();
 

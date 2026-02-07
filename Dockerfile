@@ -60,6 +60,19 @@ COPY --from=builder /app/prisma ./prisma
 RUN mkdir -p uploads/images public/uploads/tasks && \
     chown -R nextjs:nodejs uploads public/uploads
 
+# Install Chromium and dependencies for Puppeteer
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Tell Puppeteer to skip downloading Chrome. We'll be using the installed package.
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
 # Set correct permissions for prerendered cache
 RUN mkdir -p .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
