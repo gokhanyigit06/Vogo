@@ -68,7 +68,7 @@ export default function AIAnalysisSection() {
                                 />
                                 <MagneticButton>
                                     <button
-                                        onClick={handleAnalyze}
+                                        onClick={() => handleAnalyze()}
                                         disabled={!url || isLoading}
                                         className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-black font-bold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                     >

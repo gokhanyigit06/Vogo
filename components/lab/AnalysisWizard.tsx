@@ -238,7 +238,7 @@ function AnalysisReport({ result, onRetry }: { result: AnalysisResult, onRetry: 
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-emerald-500/5 blur-3xl pointer-events-none" />
 
                 <div className="max-w-xl mx-auto space-y-4 relative z-10">
-                    <h4 className="text-xl font-bold">Detaylı raporu mailine gönderelim mi?</h4>
+                    <h4 className="text-xl font-bold text-white">Detaylı raporu mailine gönderelim mi?</h4>
                     <form onSubmit={(e) => {
                         e.preventDefault();
                         const btn = e.currentTarget.querySelector('button');
