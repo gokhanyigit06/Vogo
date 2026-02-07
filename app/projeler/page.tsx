@@ -1,8 +1,8 @@
 
 import { Metadata } from "next"
-import Link from "next/link"
 import prisma from "@/lib/prisma"
-import { ArrowRight, Briefcase } from "lucide-react"
+import { Briefcase } from "lucide-react"
+import ProjectGrid from "@/components/ProjectGrid"
 
 export const metadata: Metadata = {
     title: "Projelerimiz | Vogo Lab",
@@ -14,8 +14,7 @@ async function getProjects() {
     try {
         const projects = await prisma.project.findMany({
             where: {
-                // Sadece aktif/yayında olanları göster
-                // Şimdilik status check'i esnek bırakıyorum, isterseniz 'completed' only yapabilirsiniz
+                // Filter options can go here
             },
             orderBy: [
                 { order: 'asc' },
@@ -29,7 +28,6 @@ async function getProjects() {
                 image: true,
                 category: true,
                 name: true, // fallback
-                // image: true, // Remove duplicated key
                 client: {
                     select: { company: true }
                 }
@@ -63,67 +61,9 @@ export default async function ProjectsPage() {
                 </div>
             </section>
 
-            {/* Projects Grid */}
+            {/* Projects Grid with Animations and Parallax */}
             <section className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
-                {projects.length === 0 ? (
-                    <div className="text-center py-20 text-slate-500">
-                        Henüz proje eklenmemiş.
-                    </div>
-                ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {projects.map((project, idx) => (
-                            <Link
-                                href={`/projeler/${project.slug || project.id}`}
-                                key={project.id}
-                                className="group block bg-zinc-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-900/20"
-                            >
-                                {/* Image Placeholder or Real Image */}
-                                <div className="aspect-[16/10] bg-zinc-800 relative overflow-hidden">
-                                    {project.image ? (
-                                        <img
-                                            src={project.image}
-                                            alt={project.publicTitle || project.name || 'Proje'}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-zinc-700 bg-zinc-900/80">
-                                            <Briefcase className="w-12 h-12 opacity-20" />
-                                        </div>
-                                    )}
-
-                                    {/* Overlay Category */}
-                                    {project.category && (
-                                        <div className="absolute top-4 left-4 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-xs text-white border border-white/10">
-                                            {project.category}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="p-6 space-y-4">
-                                    <div>
-                                        {project.client?.company && (
-                                            <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
-                                                {project.client.company}
-                                            </div>
-                                        )}
-                                        <h3 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
-                                            {project.publicTitle || project.name || 'İsimsiz Proje'}
-                                        </h3>
-                                    </div>
-
-                                    <p className="text-slate-400 text-sm line-clamp-3">
-                                        {project.description || 'Proje detayları hazırlanıyor...'}
-                                    </p>
-
-                                    <div className="pt-4 flex items-center text-sm font-medium text-white group-hover:text-emerald-400 transition-colors gap-2">
-                                        İncele
-                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
+                <ProjectGrid projects={projects} />
             </section>
         </main>
     )
