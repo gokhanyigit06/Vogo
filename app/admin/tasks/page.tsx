@@ -16,11 +16,16 @@ interface Task {
     description: string
     status: 'todo' | 'in_progress' | 'done'
     priority: 'low' | 'medium' | 'high'
-    due_date: string
-    assigned_to: number
-    project_id: number
+    due_date?: string
+    dueDate?: string // API response
+    assigned_to?: number
+    assignedTo?: number // API response
+    project_id?: number
+    projectId?: number // API response
     team_members?: { name: string }
+    teamMember?: { name: string } // API response
     projects?: { name: string }
+    project?: { title: string, name: string } // API response
     checklists?: any[]
     labels?: any[]
 }
@@ -33,7 +38,14 @@ const COLUMNS = [
 
 // --- Visual Component (Pure UI) ---
 function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: Task, team?: any[], isOverlay?: boolean, onClick?: () => void }) {
-    const assignedUser = team.find((m: any) => m.id == task.assigned_to)
+    // API assignedTo (camelCase) dönüyor olabilir, kontrol et
+    const assignedId = task.assignedTo || task.assigned_to
+    const assignedUser = task.teamMember || team.find((m: any) => m.id == assignedId)
+
+    // API projectId dönüyor olabilir
+    const projectId = task.projectId || task.project_id
+    const projectTitle = task.project?.title || task.project?.name || task.projects?.name
+
     const priorityColor = {
         low: 'bg-muted text-foreground',
         medium: 'bg-yellow-500/10 text-yellow-500',
@@ -52,17 +64,17 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
                 <span className={`text-xs px-2 py-0.5 rounded font-medium ${priorityColor}`}>
                     {task.priority === 'high' ? 'Yüksek' : task.priority === 'medium' ? 'Orta' : 'Düşük'}
                 </span>
-                {task.due_date && (
+                {(task.dueDate || task.due_date) && (
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {new Date(task.due_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                        {new Date(task.dueDate || task.due_date || '').toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                     </span>
                 )}
             </div>
 
-            {task.projects?.name && (
+            {projectTitle && (
                 <div className="text-[10px] text-muted-foreground bg-muted rounded px-2 py-1 mb-2 inline-block max-w-full truncate border border-border/50">
-                    📁 {task.projects.name}
+                    📁 {projectTitle}
                 </div>
             )}
 
@@ -70,8 +82,12 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
 
             <div className="flex items-center gap-4 text-muted-foreground text-xs mt-3">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-foreground border border-border">
-                        {assignedUser?.name?.[0] || '?'}
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-foreground border border-border overflow-hidden">
+                        {assignedUser?.avatarUrl || assignedUser?.avatar_url ? (
+                            <img src={assignedUser.avatarUrl || assignedUser.avatar_url} alt={assignedUser.name} className="w-full h-full object-cover" />
+                        ) : (
+                            assignedUser?.name?.[0]?.toUpperCase() || '?'
+                        )}
                     </div>
                 </div>
 
@@ -313,7 +329,7 @@ export default function TasksPage() {
     const selectedTask = selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null
 
     const filteredTasks = selectedProjectId
-        ? tasks.filter(t => t.project_id === Number(selectedProjectId))
+        ? tasks.filter(t => (t.projectId || t.project_id) === Number(selectedProjectId))
         : tasks
 
     if (!mounted) return <div className="p-8 text-muted-foreground">Yükleniyor...</div>
