@@ -19,7 +19,23 @@ export async function GET(
         }
 
         if (!existsSync(filePath)) {
-            return new NextResponse('File not found', { status: 404 });
+            // Return a placeholder SVG instead of 404 to prevent broken UI
+            const placeholderSvg = `
+                <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100%" height="100%" fill="#f1f5f9"/>
+                    <rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+                    <text x="50%" y="45%" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#94a3b8" text-anchor="middle" font-weight="bold">Görsel Bulunamadı</text>
+                    <text x="50%" y="55%" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#cbd5e1" text-anchor="middle">${path.basename(filePath)}</text>
+                </svg>
+            `.trim();
+
+            return new NextResponse(placeholderSvg, {
+                status: 200, // Return 200 so the browser accepts it as a valid image
+                headers: {
+                    'Content-Type': 'image/svg+xml',
+                    'Cache-Control': 'no-store, must-revalidate' // Don't cache placeholder forever
+                }
+            });
         }
 
         const fileStat = await stat(filePath);
@@ -37,6 +53,7 @@ export async function GET(
         else if (ext === '.webp') contentType = 'image/webp';
         else if (ext === '.svg') contentType = 'image/svg+xml';
         else if (ext === '.gif') contentType = 'image/gif';
+        else if (ext === '.avif') contentType = 'image/avif'; // Added AVIF support
 
         const headers = new Headers();
         headers.set('Content-Type', contentType);
