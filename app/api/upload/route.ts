@@ -29,7 +29,9 @@ export async function POST(request: NextRequest) {
 
         let finalBuffer = buffer
         let filename = file.name
-        let fileExt = file.name.split('.').pop() || 'jpg'
+        let fileExt = (file.name.split('.').pop() || 'jpg').toLowerCase()
+        if (fileExt === 'jfif') fileExt = 'jpg'
+
         let metadata = {
             originalSize: buffer.length,
             optimizedSize: buffer.length,
@@ -60,7 +62,7 @@ export async function POST(request: NextRequest) {
             }
 
         } catch (sharpError) {
-            console.warn('Sharp processing failed, falling back to original file:', sharpError)
+            console.warn('Sharp processing failed, falling back to original file. If this is a JFIF file, ensuring extension is jpg might help.', sharpError)
             // Fallback: Use original filename and buffer
             filename = `${timestamp}_${randomStr}.${fileExt}`
         }

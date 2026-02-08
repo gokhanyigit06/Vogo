@@ -18,17 +18,25 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'vogo-agency.com', // Self-check if used
+        hostname: 'vogo-agency.com',
         port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'pub-b7fd9c30e33b4bfc948eeadd14c3551d.r2.dev', // R2 Storage
+        hostname: 'pub-b7fd9c30e33b4bfc948eeadd14c3551d.r2.dev',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
         port: '',
         pathname: '/**',
       }
     ],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async headers() {
     return [

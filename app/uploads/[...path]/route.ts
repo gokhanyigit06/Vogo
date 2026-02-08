@@ -1,52 +1,51 @@
-import { NextRequest, NextResponse } from "next/server"
-import path from "path"
-import fs from "fs"
+import { NextRequest, NextResponse } from 'next/server';
+import { readFile, stat } from 'fs/promises';
+import path from 'path';
+import { existsSync } from 'fs';
 
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ path: string[] }> }
 ) {
-    // Await params as per Next.js 15+ changes
-    const resolvedParams = await params
-    const filePath = resolvedParams.path.join("/")
-
-    // Güvenlik: Sadece uploads klasöründen okumaya izin ver
-    // Directory Traversal saldırılarını önlemek için basit kontrol
-    if (filePath.includes("..")) {
-        return new NextResponse("Invalid path", { status: 400 })
-    }
-
-    // Dosyanın tam yolu: Proje kök dizini / uploads / istenen yol
-    // Örnek: c:\project\uploads\images\resim.jpg
-    const fullPath = path.join(process.cwd(), "uploads", filePath)
-
-    // Dosya var mı kontrol et
-    if (!fs.existsSync(fullPath)) {
-        return new NextResponse("File not found", { status: 404 })
-    }
-
     try {
-        // Dosyayı oku
-        const fileBuffer = fs.readFileSync(fullPath)
+        const resolvedParams = await params;
+        // Join the path segments to get the file path
+        const filePath = path.join(process.cwd(), 'uploads', ...resolvedParams.path);
 
-        // Mime type belirle (basitçe uzantıdan)
-        const ext = path.extname(fullPath).toLowerCase()
-        let contentType = "application/octet-stream"
+        // Security check: Ensure the path is within the uploads directory
+        const uploadsDir = path.join(process.cwd(), 'uploads');
+        if (!filePath.startsWith(uploadsDir)) {
+            return new NextResponse('Forbidden', { status: 403 });
+        }
 
-        if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg"
-        else if (ext === ".png") contentType = "image/png"
-        else if (ext === ".webp") contentType = "image/webp"
-        else if (ext === ".svg") contentType = "image/svg+xml"
+        if (!existsSync(filePath)) {
+            return new NextResponse('File not found', { status: 404 });
+        }
 
-        // Response döndür
-        return new NextResponse(fileBuffer, {
-            headers: {
-                "Content-Type": contentType,
-                "Cache-Control": "public, max-age=31536000, immutable"
-            }
-        })
+        const fileStat = await stat(filePath);
+        if (!fileStat.isFile()) {
+            return new NextResponse('Not a file', { status: 400 });
+        }
+
+        const fileBuffer = await readFile(filePath);
+
+        // Determine content type
+        const ext = path.extname(filePath).toLowerCase();
+        let contentType = 'application/octet-stream';
+        if (ext === '.jpg' || ext === '.jpeg' || ext === '.jfif') contentType = 'image/jpeg';
+        else if (ext === '.png') contentType = 'image/png';
+        else if (ext === '.webp') contentType = 'image/webp';
+        else if (ext === '.svg') contentType = 'image/svg+xml';
+        else if (ext === '.gif') contentType = 'image/gif';
+
+        const headers = new Headers();
+        headers.set('Content-Type', contentType);
+        headers.set('Content-Length', fileStat.size.toString());
+        headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+
+        return new NextResponse(fileBuffer, { headers });
     } catch (error) {
-        console.error("File serve error:", error)
-        return new NextResponse("Internal Server Error", { status: 500 })
+        console.error('Error serving file:', error);
+        return new NextResponse('Internal Server Error', { status: 500 });
     }
 }
