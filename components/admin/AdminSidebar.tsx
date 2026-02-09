@@ -26,9 +26,23 @@ export default function AdminSidebar() {
         }
     }
 
+    const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({})
+
+    const toggleSubmenu = (label: string) => {
+        setOpenSubmenus(prev => ({ ...prev, [label]: !prev[label] }))
+    }
+
     const menuItems = [
         { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
-        { icon: Users, label: "Müşteriler", href: "/admin/clients" },
+        {
+            icon: Users,
+            label: "Müşteriler",
+            href: "/admin/clients",
+            children: [
+                { label: "Listele", href: "/admin/clients" },
+                { label: "Sıralama", href: "/admin/clients/order" },
+            ]
+        },
         { icon: FolderKanban, label: "Projeler", href: "/admin/projects" },
         { icon: CheckCircle2, label: "Görevler", href: "/admin/tasks" },
         { icon: DollarSign, label: "Finans", href: "/admin/finance" },
@@ -45,6 +59,63 @@ export default function AdminSidebar() {
             return pathname === "/admin"
         }
         return pathname.startsWith(href)
+    }
+
+    const renderMenuItem = (item: any) => {
+        const hasChildren = item.children && item.children.length > 0
+        const isParentActive = isActive(item.href)
+        const isOpen = openSubmenus[item.label] || isParentActive
+
+        if (hasChildren) {
+            return (
+                <div key={item.href} className="flex flex-col gap-1">
+                    <button
+                        onClick={() => toggleSubmenu(item.label)}
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all w-full text-left ${isParentActive
+                            ? 'bg-sidebar-accent/50 text-sidebar-primary'
+                            : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
+                            }`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <item.icon className="w-5 h-5" />
+                            <span className="font-medium">{item.label}</span>
+                        </div>
+                        {/* Chevron Icon could go here */}
+                    </button>
+
+                    {isOpen && (
+                        <div className="flex flex-col gap-1 pl-11 pr-2">
+                            {item.children.map((child: any) => (
+                                <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    className={`py-2 px-3 rounded-lg text-sm transition-all ${pathname === child.href
+                                        ? 'bg-sidebar-accent text-sidebar-primary font-medium'
+                                        : 'text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/30'
+                                        }`}
+                                >
+                                    {child.label}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+        return (
+            <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
+                    ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border shadow-sm'
+                    : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
+                    }`}
+            >
+                <item.icon className="w-5 h-5" />
+                <span className="font-medium">{item.label}</span>
+            </Link>
+        )
     }
 
     return (
@@ -64,19 +135,7 @@ export default function AdminSidebar() {
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border shadow-sm'
-                                : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
-                                }`}
-                        >
-                            <item.icon className="w-5 h-5" />
-                            <span className="font-medium">{item.label}</span>
-                        </Link>
-                    ))}
+                    {menuItems.map(renderMenuItem)}
                 </nav>
 
                 {/* User Profile Section */}
@@ -134,20 +193,63 @@ export default function AdminSidebar() {
                         </div>
 
                         <nav className="p-4 space-y-2">
-                            {menuItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setSidebarOpen(false)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                        ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border'
-                                        : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
-                                        }`}
-                                >
-                                    <item.icon className="w-5 h-5" />
-                                    <span className="font-medium">{item.label}</span>
-                                </Link>
-                            ))}
+                            {menuItems.map((item) => {
+                                const hasChildren = item.children && item.children.length > 0
+                                const isParentActive = isActive(item.href)
+                                const isOpen = openSubmenus[item.label] || isParentActive
+
+                                if (hasChildren) {
+                                    return (
+                                        <div key={item.href} className="flex flex-col gap-1">
+                                            <button
+                                                onClick={() => toggleSubmenu(item.label)}
+                                                className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all w-full text-left ${isParentActive
+                                                    ? 'bg-sidebar-accent/50 text-sidebar-primary'
+                                                    : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <item.icon className="w-5 h-5" />
+                                                    <span className="font-medium">{item.label}</span>
+                                                </div>
+                                            </button>
+
+                                            {isOpen && (
+                                                <div className="flex flex-col gap-1 pl-11 pr-2">
+                                                    {item.children.map((child: any) => (
+                                                        <Link
+                                                            key={child.href}
+                                                            href={child.href}
+                                                            onClick={() => setSidebarOpen(false)}
+                                                            className={`py-2 px-3 rounded-lg text-sm transition-all ${pathname === child.href
+                                                                ? 'bg-sidebar-accent text-sidebar-primary font-medium'
+                                                                : 'text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/30'
+                                                                }`}
+                                                        >
+                                                            {child.label}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )
+                                }
+
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        onClick={() => setSidebarOpen(false)}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
+                                            ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border'
+                                            : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
+                                            }`}
+                                    >
+                                        <item.icon className="w-5 h-5" />
+                                        <span className="font-medium">{item.label}</span>
+                                    </Link>
+                                )
+                            })}
                         </nav>
                     </aside>
                 </div>
