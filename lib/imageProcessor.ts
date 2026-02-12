@@ -13,7 +13,7 @@ export interface ImageProcessOptions {
 export async function processImage(
     inputBuffer: Buffer,
     options: ImageProcessOptions = {}
-): Promise<{ buffer: Buffer; metadata: any }> {
+): Promise<{ buffer: Buffer; metadata: sharp.Metadata }> {
     const {
         width,
         height,
