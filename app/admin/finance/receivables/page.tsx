@@ -115,7 +115,7 @@ export default function ReceivablesPage() {
                                                     </a>
                                                 )}
                                                 {item.clientEmail && (
-                                                    <a href={`mailto:${item.clientEmail}`} className="p-2 bg-slate-500/10 hover:bg-slate-500/20 text-slate-400 rounded-lg transition-colors">
+                                                    <a href={`mailto:${item.clientEmail}`} className="p-2 bg-white0/10 hover:bg-white0/20 text-slate-400 rounded-lg transition-colors">
                                                         <Mail className="w-4 h-4" />
                                                     </a>
                                                 )}

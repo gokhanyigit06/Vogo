@@ -33,7 +33,7 @@ interface Task {
 }
 
 const COLUMNS = [
-    { id: 'todo', title: 'Yapılacaklar', color: 'bg-slate-500/10 border-slate-500/20 text-muted-foreground' },
+    { id: 'todo', title: 'Yapılacaklar', color: 'bg-white0/10 border-slate-500/20 text-muted-foreground' },
     { id: 'in_progress', title: 'Sürüyor', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
     { id: 'done', title: 'Tamamlandı', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' }
 ]
@@ -136,7 +136,7 @@ function KanbanColumn({ id, title, tasks, team, color, onTaskClick }: { id: stri
     const { setNodeRef } = useDroppable({ id })
 
     return (
-        <div ref={setNodeRef} className="flex flex-col h-full bg-slate-50 dark:bg-slate-900 rounded-notebook p-5 border border-border min-h-[500px] shadow-sm">
+        <div ref={setNodeRef} className="flex flex-col h-full bg-white dark:bg-slate-900 rounded-notebook p-5 border border-border min-h-[500px] shadow-sm">
             <div className={`flex items-center justify-between border-b border-border pb-3 mb-4 ${color.replace('bg-', 'text-')}`}>
                 <h3 className="font-bold flex items-center gap-2">
                     {id === 'todo' && <AlertCircle className="w-5 h-5" />}

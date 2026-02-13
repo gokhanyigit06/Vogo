@@ -62,8 +62,8 @@
   --radius: 2rem;
   /* Süper yuvarlak köşeler (32px) */
 
-  --background: #FFFEF9;
-  /* Krem/Kağıt rengi */
+  --background: #FFFFFF;
+  /* Pure White */
   --foreground: #2D3436;
   /* Yumuşak füme metin */
 
@@ -78,16 +78,16 @@
   /* Emerald 500 - Vogo yeşili */
   --primary-foreground: #ffffff;
 
-  --secondary: #F5F5F4;
-  /* Stone 100 */
+  --secondary: #FFFFFF;
+  /* Stone 100 -> Pure White */
   --secondary-foreground: #57534e;
 
-  --muted: #F5F5F4;
+  --muted: #FFFFFF;
   --muted-foreground: #A8A29E;
   /* Stone 400 */
 
-  --accent: #F0FDF4;
-  /* Emerald 50 - Hafif yeşil vurgu */
+  --accent: #FFFFFF;
+  /* Emerald 50 -> Pure White */
   --accent-foreground: #15803d;
   /* Emerald 700 */
 
@@ -110,7 +110,7 @@
   --sidebar-foreground: #2D3436;
   --sidebar-primary: #10b981;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #F5F5F4;
+  --sidebar-accent: #FFFFFF;
   --sidebar-accent-foreground: #10b981;
   --sidebar-border: #E2E8F0;
   --sidebar-ring: #10b981;
@@ -249,9 +249,8 @@
 /* Gradient Background - Only for Dark Mode usually, or adapted */
 .gradient-bg {
   /* Default to soft gradient for Light Mode */
-  background: linear-gradient(-45deg, #f0fdf4, #ecfdf5, #f0f9ff, #ffffff);
-  background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
+  background: #ffffff;
+  animation: none;
 }
 
 .dark .gradient-bg {
@@ -319,4 +318,14 @@ html {
 
 .note-annotation:hover::after {
   opacity: 1;
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

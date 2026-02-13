@@ -77,7 +77,7 @@ export default function NewProjectPage() {
                                 <label className="block text-foreground text-sm font-bold ml-1">Proje Başlığı</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
                                     placeholder="Örn: A City AVM Web Sitesi"
                                     value={formData.title}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -87,7 +87,7 @@ export default function NewProjectPage() {
                                 <label className="block text-foreground text-sm font-bold ml-1">Müşteri Adı</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
                                     placeholder="Örn: A City AVM"
                                     value={formData.client}
                                     onChange={(e) => setFormData({ ...formData, client: e.target.value })}
@@ -99,7 +99,7 @@ export default function NewProjectPage() {
                             <label className="block text-foreground text-sm font-bold ml-1">Kategori</label>
                             <div className="relative">
                                 <select
-                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none font-medium cursor-pointer"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none font-medium cursor-pointer"
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                 >
@@ -117,7 +117,7 @@ export default function NewProjectPage() {
                             <label className="block text-foreground text-sm font-bold ml-1">Açıklama (Kısa)</label>
                             <div className="relative">
                                 <textarea
-                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all h-40 resize-none font-medium leading-relaxed"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all h-40 resize-none font-medium leading-relaxed"
                                     placeholder="Projenin amacı ve sonucu hakkında kısa bilgi..."
                                     value={formData.desc}
                                     onChange={(e) => setFormData({ ...formData, desc: e.target.value })}

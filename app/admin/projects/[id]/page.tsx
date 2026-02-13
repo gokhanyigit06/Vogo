@@ -445,7 +445,7 @@ export default function ProjectDetailPage() {
                                             {task.priority && (
                                                 <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${task.priority === 'high' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
                                                     task.priority === 'medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
-                                                        'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                                                        'bg-white0/10 text-slate-500 border-slate-500/20'
                                                     }`}>
                                                     {task.priority === 'high' ? 'Yüksek' : task.priority === 'medium' ? 'Orta' : 'Düşük'}
                                                 </span>

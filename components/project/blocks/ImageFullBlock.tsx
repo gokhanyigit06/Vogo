@@ -7,7 +7,7 @@ interface ImageFullBlockProps {
 
 export default function ImageFullBlock({ url, alt = "Project image" }: ImageFullBlockProps) {
     return (
-        <div className="py-8 px-6 lg:px-12 bg-stone-50">
+        <div className="py-8 px-6 lg:px-12 bg-white">
             <div className="max-w-7xl mx-auto">
                 <div className="relative aspect-[16/9] rounded-2xl overflow-hidden shadow-xl">
                     <Image

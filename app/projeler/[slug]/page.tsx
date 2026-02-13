@@ -1,16 +1,10 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import Image from "next/image"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
-import HeroSection from "@/components/project/HeroSection"
-import ProjectInfoCard from "@/components/project/ProjectInfoCard"
-import ContentBlockRenderer from "@/components/project/ContentBlockRenderer"
-import ProjectGallery from "@/components/project/ProjectGallery"
-import RelatedProjects from "@/components/project/RelatedProjects"
-import Contact from "@/components/Contact"
 import ModernFooter from "@/components/ModernFooter"
+import Header from "@/components/Header"
 
 // Types for params
 type Props = {
@@ -66,69 +60,162 @@ export default async function ProjectDetailPage({ params }: Props) {
     const gallery = Array.isArray(project.gallery) ? (project.gallery as string[]) : []
 
     return (
-        <main className="min-h-screen bg-white">
-            {/* Back Button */}
-            <div className="fixed top-8 left-8 z-50">
-                <Link
-                    href="/portfolio"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-stone-200 rounded-full text-stone-700 hover:bg-stone-100 transition-all shadow-lg hover:shadow-xl"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="font-medium">Tüm Projeler</span>
-                </Link>
-            </div>
+        <>
+            <Header />
+            <main className="min-h-screen bg-white pt-24">
+                {/* Hero Image - Full Width */}
+                <section className="w-full">
+                    {project.heroImage || project.image ? (
+                        <div className="w-full aspect-[16/9] relative overflow-hidden">
+                            <img
+                                src={project.heroImage || project.image || ''}
+                                alt={project.publicTitle || project.name || 'Project'}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    ) : (
+                        <div className="w-full aspect-[16/9] bg-gray-100" />
+                    )}
+                </section>
 
-            {/* Hero Section */}
-            <HeroSection
-                title={project.publicTitle || project.name || 'Proje'}
-                heroImage={project.heroImage || project.image || undefined}
-                heroVideo={project.heroVideo || undefined}
-                tagline={
-                    (project.categories && project.categories.length > 0)
-                        ? project.categories.join(', ')
-                        : project.category || undefined
-                }
-            />
+                {/* Project Info Section */}
+                <section className="w-full px-4 md:px-8 py-16">
+                    <div className="max-w-7xl mx-auto">
+                        {/* Project Title & Type */}
+                        <div className="mb-12 pb-12 border-b border-black/10">
+                            <p className="text-sm uppercase tracking-widest text-black/50 mb-4">PROJECT</p>
+                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-black mb-2">
+                                {project.publicTitle || project.name}
+                            </h1>
+                            <p className="text-2xl md:text-3xl font-medium text-black/60">
+                                {project.category || 'WEBSITE'}
+                            </p>
+                        </div>
 
-            {/* Project Info Card */}
-            <ProjectInfoCard
-                description={project.description || undefined}
-                client={project.client?.company || project.client?.name || undefined}
-                services={services}
-                year={project.year || undefined}
-                category={project.category || undefined}
-                market={project.market || undefined}
-                clientType={project.clientType || undefined}
-                websiteUrl={project.websiteUrl || undefined}
-            />
+                        {/* Project Details Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                            {/* Client */}
+                            {(project.client?.company || project.client?.name) && (
+                                <div>
+                                    <h3 className="text-xs uppercase tracking-widest text-black/50 mb-2">CLIENT</h3>
+                                    <p className="text-lg font-medium text-black">
+                                        {project.client.company || project.client.name}
+                                    </p>
+                                </div>
+                            )}
 
-            {/* Content Blocks */}
-            <ContentBlockRenderer blocks={contentBlocks} />
+                            {/* Market */}
+                            {project.market && (
+                                <div>
+                                    <h3 className="text-xs uppercase tracking-widest text-black/50 mb-2">MARKET</h3>
+                                    <p className="text-lg font-medium text-black">{project.market}</p>
+                                </div>
+                            )}
 
-            {/* Project Gallery */}
-            <ProjectGallery images={gallery} />
+                            {/* Services */}
+                            {services.length > 0 && (
+                                <div>
+                                    <h3 className="text-xs uppercase tracking-widest text-black/50 mb-2">SERVICES</h3>
+                                    <p className="text-lg font-medium text-black">{services.join(', ')}</p>
+                                </div>
+                            )}
 
-            {/* Related Projects */}
-            <RelatedProjects
-                currentId={project.id}
-                currentCategories={project.categories || []}
-            />
+                            {/* Client Type */}
+                            {project.clientType && (
+                                <div>
+                                    <h3 className="text-xs uppercase tracking-widest text-black/50 mb-2">CLIENT TYPE</h3>
+                                    <p className="text-lg font-medium text-black">{project.clientType}</p>
+                                </div>
+                            )}
 
-            {/* Contact CTA */}
-            <Contact />
+                            {/* Website */}
+                            {project.websiteUrl && (
+                                <div>
+                                    <h3 className="text-xs uppercase tracking-widest text-black/50 mb-2">WEBSITE</h3>
+                                    <a
+                                        href={project.websiteUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-lg font-medium text-black hover:underline"
+                                    >
+                                        {project.websiteUrl.replace(/^https?:\/\//, '')}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
 
-            {/* Legacy Content (if no blocks) */}
-            {contentBlocks.length === 0 && project.content && (
-                <section className="py-16 px-6 lg:px-12 bg-white">
-                    <div className="max-w-4xl mx-auto">
-                        <article className="prose prose-lg prose-stone max-w-none">
-                            <div dangerouslySetInnerHTML={{ __html: project.content }} />
-                        </article>
+                        {/* The Case Section */}
+                        {project.description && (
+                            <div className="max-w-3xl">
+                                <h2 className="text-4xl md:text-5xl font-black text-black mb-6">THE CASE</h2>
+                                <p className="text-lg text-black/70 leading-relaxed mb-6">
+                                    {project.description}
+                                </p>
+                                {/* Read More Button - Optional */}
+                                {/* <button className="px-6 py-3 border-2 border-black rounded-full text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors">
+                                    READ MORE →
+                                </button> */}
+                            </div>
+                        )}
                     </div>
                 </section>
-            )}
 
+                {/* Gallery Section - Mixed Layout */}
+                {gallery.length > 0 && (
+                    <section className="w-full px-4 md:px-8 py-16 space-y-8">
+                        {gallery.map((image, index) => {
+                            // Alternate between full width and 2-column
+                            const isFullWidth = index % 3 === 0
+
+                            if (isFullWidth) {
+                                return (
+                                    <div key={index} className="w-full">
+                                        <img
+                                            src={image}
+                                            alt={`Gallery image ${index + 1}`}
+                                            className="w-full h-auto object-cover rounded-2xl"
+                                        />
+                                    </div>
+                                )
+                            } else {
+                                // Check if next image exists for 2-column layout
+                                const nextImage = gallery[index + 1]
+                                if (nextImage && index % 3 === 1) {
+                                    return (
+                                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <img
+                                                src={image}
+                                                alt={`Gallery image ${index + 1}`}
+                                                className="w-full h-auto object-cover rounded-2xl"
+                                            />
+                                            <img
+                                                src={nextImage}
+                                                alt={`Gallery image ${index + 2}`}
+                                                className="w-full h-auto object-cover rounded-2xl"
+                                            />
+                                        </div>
+                                    )
+                                } else if (index % 3 === 2) {
+                                    // Skip this one as it was already rendered in the pair
+                                    return null
+                                } else {
+                                    // Single image if no pair
+                                    return (
+                                        <div key={index} className="w-full">
+                                            <img
+                                                src={image}
+                                                alt={`Gallery image ${index + 1}`}
+                                                className="w-full h-auto object-cover rounded-2xl"
+                                            />
+                                        </div>
+                                    )
+                                }
+                            }
+                        })}
+                    </section>
+                )}
+            </main>
             <ModernFooter />
-        </main>
+        </>
     )
 }

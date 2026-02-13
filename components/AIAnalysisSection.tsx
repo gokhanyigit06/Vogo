@@ -21,8 +21,7 @@ export default function AIAnalysisSection() {
 
     return (
         <section className="py-24 bg-background transition-colors duration-300 relative overflow-hidden">
-            {/* Background Decor */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 dark:bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="max-w-4xl mx-auto text-center space-y-8">

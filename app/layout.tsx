@@ -199,10 +199,6 @@ export default async function RootLayout({
           <SmoothScroll />
           <ScrollToTop />
 
-          <div className="fixed inset-0 pointer-events-none z-0 opacity-20 dark:opacity-100 transition-opacity">
-            <ParticleBackground />
-          </div>
-
           <div className="relative z-10">
             {children}
           </div>

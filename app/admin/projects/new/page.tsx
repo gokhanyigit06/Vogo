@@ -120,7 +120,7 @@ export default function NewProjectPage() {
                         </div>
 
                         {/* Public Title */}
-                        <div className="md:col-span-2 bg-slate-50/5 p-4 rounded-xl border border-dashed border-border">
+                        <div className="md:col-span-2 bg-white/5 p-4 rounded-xl border border-dashed border-border">
                             <label className="block text-emerald-400 text-sm font-bold mb-2 flex items-center gap-2">
                                 <Globe className="w-4 h-4" />
                                 Site Başlığı (Müşteri Görür) *

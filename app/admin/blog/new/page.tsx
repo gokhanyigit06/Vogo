@@ -109,7 +109,7 @@ export default function NewBlogPostPage() {
                             <input
                                 type="text"
                                 placeholder="Müşterileri Etkileyecek 10 Web Tasarım İpucu..."
-                                className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-5 py-4 text-foreground text-lg font-bold placeholder:font-normal focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-muted-foreground"
+                                className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-5 py-4 text-foreground text-lg font-bold placeholder:font-normal focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-muted-foreground"
                                 value={formData.title}
                                 onChange={(e) => {
                                     const newTitle = e.target.value
@@ -158,7 +158,7 @@ export default function NewBlogPostPage() {
                             <div className="space-y-2">
                                 <label className="block text-foreground text-sm font-semibold">Kategori</label>
                                 <select
-                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none cursor-pointer"
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                 >
@@ -173,7 +173,7 @@ export default function NewBlogPostPage() {
                             <div className="space-y-2">
                                 <label className="block text-foreground text-sm font-semibold">Durum</label>
                                 <select
-                                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none cursor-pointer"
                                     value={formData.status}
                                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                                 >
@@ -202,7 +202,7 @@ export default function NewBlogPostPage() {
                             </h3>
                             <textarea
                                 placeholder="Yazının kısa bir özeti..."
-                                className="w-full bg-slate-50 dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground text-sm focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-32 resize-none placeholder:text-muted-foreground transition-all"
+                                className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground text-sm focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-32 resize-none placeholder:text-muted-foreground transition-all"
                                 value={formData.excerpt}
                                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                             />

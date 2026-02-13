@@ -181,7 +181,7 @@ export default function FinancePage() {
                         <div className="bg-card border border-red-500/20 p-6 rounded-xl">
                             <div className="flex justify-between items-start mb-3">
                                 <TrendingDown className="w-8 h-8 text-slate-500" />
-                                <span className="text-xs font-mono text-slate-500/50 bg-slate-500/5 px-2 py-1 rounded">
+                                <span className="text-xs font-mono text-slate-500/50 bg-white0/5 px-2 py-1 rounded">
                                     {dateFilter === 'allTime' ? 'TÜMÜ' : 'DÖNEMSEL'}
                                 </span>
                             </div>

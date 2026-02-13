@@ -62,7 +62,7 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
     if (loading || projects.length === 0) return null
 
     return (
-        <section className="py-24 bg-stone-50">
+        <section className="py-24 bg-white">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex items-end justify-between mb-12">
                     <div>
@@ -84,7 +84,7 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
                             href={`/projeler/${project.slug}`}
                             className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 z-10 hover:z-20"
                         >
-                            <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
+                            <div className="relative aspect-[4/3] overflow-hidden bg-white">
                                 {(project.image || project.heroImage) ? (
                                     <Image
                                         src={project.image || project.heroImage!}

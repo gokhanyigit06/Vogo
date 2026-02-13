@@ -16,7 +16,7 @@ export default function VideoBlock({ url, provider = 'youtube' }: VideoBlockProp
     }
 
     return (
-        <div className="py-8 px-6 lg:px-12 bg-stone-50">
+        <div className="py-8 px-6 lg:px-12 bg-white">
             <div className="max-w-5xl mx-auto">
                 <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl bg-black">
                     {provider === 'direct' ? (
