@@ -8,10 +8,6 @@ export default function MessagesAdminPage() {
     const [selectedId, setSelectedId] = useState<number | null>(null)
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        loadMessages()
-    }, [])
-
     const loadMessages = () => {
         setLoading(true)
         fetch('/api/messages')
@@ -26,6 +22,10 @@ export default function MessagesAdminPage() {
                 setLoading(false)
             })
     }
+
+    useEffect(() => {
+        loadMessages()
+    }, [])
 
     const handleDelete = async (id: number) => {
         if (!confirm('Bu mesajı silmek istediğinizden emin misiniz?')) return
@@ -101,7 +101,7 @@ export default function MessagesAdminPage() {
                                 <div className="flex justify-between items-start mb-1">
                                     <h4 className={`text-sm font-bold ${!msg.is_read ? 'text-foreground' : 'text-muted-foreground'}`}>{msg.name}</h4>
                                     <span className="text-xs text-slate-500">
-                                        {new Date(msg.created_at || Date.now()).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                                        {msg.created_at ? new Date(msg.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }) : ''}
                                     </span>
                                 </div>
                                 <p className={`text-sm mb-1 ${!msg.is_read ? 'text-foreground' : 'text-muted-foreground'}`}>{msg.subject || 'Konu Yok'}</p>
@@ -145,7 +145,7 @@ export default function MessagesAdminPage() {
                                 <div>
                                     <p className="text-foreground font-bold">{selectedMessage.name} <span className="text-slate-500 font-normal text-sm">&lt;{selectedMessage.email}&gt;</span></p>
                                     <p className="text-slate-500 text-xs flex items-center gap-1 mt-0.5">
-                                        <Clock className="w-3 h-3" /> {new Date(selectedMessage.created_at || Date.now()).toLocaleString('tr-TR')}
+                                        <Clock className="w-3 h-3" /> {selectedMessage.created_at ? new Date(selectedMessage.created_at).toLocaleString('tr-TR') : ''}
                                     </p>
                                 </div>
                             </div>

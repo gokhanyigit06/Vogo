@@ -6,6 +6,10 @@ import { useEffect, useState } from "react"
 import { Briefcase, Plus, Calendar, DollarSign, Trash2, Users, Search, Filter, LayoutGrid, List as ListIcon, MoreHorizontal, GripVertical, Save } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
     DndContext,
     closestCenter,
@@ -137,18 +141,20 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
             </td>
             <td className="p-4 text-right">
                 <div className="flex items-center justify-end gap-2">
-                    <Link
-                        href={`/admin/projects/${project.id}`}
-                        className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                        <MoreHorizontal className="w-4 h-4" />
+                    <Link href={`/admin/projects/edit/${project.id}`}>
+                        <Button variant="ghost" size="icon" title="Düzenle">
+                            <MoreHorizontal className="w-4 h-4" />
+                        </Button>
                     </Link>
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleDelete(project.id)}
-                        className="p-2 hover:bg-red-500/20 rounded-lg text-muted-foreground hover:text-red-400 transition-colors"
+                        className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                        title="Sil"
                     >
                         <Trash2 className="w-4 h-4" />
-                    </button>
+                    </Button>
                 </div>
             </td>
         </tr>
@@ -304,74 +310,77 @@ export default function ProjectsPage() {
                 </div>
                 <div className="flex gap-3">
                     {isOrderChanged && (
-                        <button
+                        <Button
                             onClick={saveOrder}
                             disabled={savingOrder}
-                            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all flex items-center gap-2 animate-pulse"
+                            className="font-bold flex items-center gap-2 animate-pulse"
+                            variant="secondary"
+                            size="lg"
                         >
-                            <Save className="w-5 h-5" />
+                            <Save className="w-5 h-5 mr-1" />
                             {savingOrder ? 'Kaydediliyor...' : 'Sıralamayı Kaydet'}
-                        </button>
+                        </Button>
                     )}
-                    <Link
-                        href="/admin/projects/new"
-                        className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all flex items-center gap-2"
-                    >
-                        <Plus className="w-5 h-5" />
-                        Yeni Proje
+                    <Link href="/admin/projects/new">
+                        <Button size="lg">
+                            <Plus className="w-5 h-5 mr-2" />
+                            Yeni Proje
+                        </Button>
                     </Link>
                 </div>
             </div>
 
             {/* Filter Bar */}
-            <div className="flex flex-col md:flex-row gap-4 bg-card p-4 rounded-xl border border-border">
+            <Card className="p-4 rounded-xl border border-border shadow-sm flex flex-col md:flex-row gap-4 mb-6">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input
+                    <Input
                         type="text"
                         placeholder="Ara..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2 focus:ring-emerald-500"
+                        className="pl-9"
                     />
                 </div>
 
                 <div className="flex gap-2 w-full md:w-auto overflow-x-auto">
                     {/* Status Filter */}
-                    <select
-                        value={selectedStatus}
-                        onChange={(e) => setSelectedStatus(e.target.value)}
-                        className="bg-background border border-border rounded-lg px-3 py-2 text-sm focus:ring-emerald-500"
-                    >
-                        <option value="all">Tüm Durumlar</option>
-                        <option value="completed">Tamamlandı</option>
-                        <option value="in_progress">Devam Ediyor</option>
-                        <option value="quote">Teklif</option>
-                        <option value="cancelled">İptal</option>
-                    </select>
+                    <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Tüm Durumlar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Tüm Durumlar</SelectItem>
+                            <SelectItem value="completed">Tamamlandı</SelectItem>
+                            <SelectItem value="in_progress">Devam Ediyor</SelectItem>
+                            <SelectItem value="quote">Teklif</SelectItem>
+                            <SelectItem value="cancelled">İptal</SelectItem>
+                        </SelectContent>
+                    </Select>
 
                     {/* Category Filter */}
-                    <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="bg-background border border-border rounded-lg px-3 py-2 text-sm focus:ring-emerald-500 min-w-[150px]"
-                    >
-                        <option value="all">Tüm Kategoriler</option>
-                        {categories.map(cat => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                    </select>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Tüm Kategoriler" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Tüm Kategoriler</SelectItem>
+                            {categories.map(cat => (
+                                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
-                    <div className="flex bg-background border border-border rounded-lg p-1 shrink-0">
-                        <button onClick={() => setViewMode('grid')} className={cn("p-2 rounded", viewMode === 'grid' && "bg-muted shadow")}>
+                    <div className="flex bg-muted rounded-md border border-border shrink-0">
+                        <Button variant={viewMode === 'grid' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('grid')}>
                             <LayoutGrid className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => setViewMode('list')} className={cn("p-2 rounded", viewMode === 'list' && "bg-muted shadow")}>
+                        </Button>
+                        <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('list')}>
                             <ListIcon className="w-4 h-4" />
-                        </button>
+                        </Button>
                     </div>
                 </div>
-            </div>
+            </Card>
 
             {/* Content */}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

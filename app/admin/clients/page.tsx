@@ -5,6 +5,9 @@ export const dynamic = "force-dynamic"
 import { useEffect, useState } from "react"
 import { Users, Plus, Search, Mail, Phone, Building2, ExternalLink, Pencil, Trash2 } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
 
 interface Client {
     id: number
@@ -35,15 +38,16 @@ export default function ClientsPage() {
                 setClients(data)
             } else if (process.env.NODE_ENV === 'development') {
                 console.log("⚠️ Dev Mode: Using Mock Clients")
-                const mocks = require('@/lib/mock-data').MOCK_CLIENTS
-                setClients(mocks)
+                const mockData = await import('@/lib/mock-data')
+                setClients(mockData.MOCK_CLIENTS as unknown as Client[])
             } else {
                 setClients([])
             }
         } catch (error) {
             console.error('Fetch error:', error)
             if (process.env.NODE_ENV === 'development') {
-                setClients(require('@/lib/mock-data').MOCK_CLIENTS)
+                const mockData = await import('@/lib/mock-data')
+                setClients(mockData.MOCK_CLIENTS as unknown as Client[])
             } else {
                 setClients([])
             }
@@ -110,49 +114,54 @@ export default function ClientsPage() {
                     </h1>
                     <p className="text-muted-foreground mt-1">Müşteri ilişkilerinizi yönetin</p>
                 </div>
-                <Link
-                    href="/admin/clients/new"
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 w-fit"
-                >
-                    <Plus className="w-5 h-5" />
-                    Yeni Müşteri
+                <Link href="/admin/clients/new">
+                    <Button className="w-fit" size="lg">
+                        <Plus className="w-5 h-5 mr-2" />
+                        Yeni Müşteri
+                    </Button>
                 </Link>
             </div>
 
             {/* Search */}
             <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
                     type="text"
                     placeholder="Müşteri ara (isim, şirket, email)..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-card border border-border rounded-xl pl-12 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="pl-12 py-6 text-base rounded-xl"
                 />
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-card border border-border p-4 rounded-xl">
-                    <p className="text-muted-foreground text-sm">Toplam Müşteri</p>
-                    <p className="text-2xl font-bold text-foreground mt-1">{clients.length}</p>
-                </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
-                    <p className="text-muted-foreground text-sm">Aktif Müşteri</p>
-                    <p className="text-2xl font-bold text-emerald-400 mt-1">
-                        {clients.filter(c => c.status === 'active').length}
-                    </p>
-                </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
-                    <p className="text-muted-foreground text-sm">Potansiyel</p>
-                    <p className="text-2xl font-bold text-blue-400 mt-1">
-                        {clients.filter(c => c.status === 'potential').length}
-                    </p>
-                </div>
+                <Card>
+                    <CardContent className="p-4">
+                        <p className="text-muted-foreground text-sm">Toplam Müşteri</p>
+                        <p className="text-2xl font-bold text-foreground mt-1">{clients.length}</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent className="p-4">
+                        <p className="text-muted-foreground text-sm">Aktif Müşteri</p>
+                        <p className="text-2xl font-bold text-emerald-400 mt-1">
+                            {clients.filter(c => c.status === 'active').length}
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent className="p-4">
+                        <p className="text-muted-foreground text-sm">Potansiyel</p>
+                        <p className="text-2xl font-bold text-blue-400 mt-1">
+                            {clients.filter(c => c.status === 'potential').length}
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
 
             {/* Clients List */}
-            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+            <Card className="rounded-xl overflow-hidden shadow-sm">
                 {filteredClients.length === 0 ? (
                     <div className="p-12 text-center">
                         <Users className="w-16 h-16 text-slate-700 mx-auto mb-4" />
@@ -160,16 +169,13 @@ export default function ClientsPage() {
                             {searchTerm ? 'Müşteri bulunamadı' : 'Henüz müşteri eklenmemiş'}
                         </p>
                         {!searchTerm && (
-                            <Link
-                                href="/admin/clients/new"
-                                className="inline-block mt-4 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
-                            >
-                                İlk Müşteriyi Ekle
+                            <Link href="/admin/clients/new">
+                                <Button className="mt-4">İlk Müşteriyi Ekle</Button>
                             </Link>
                         )}
                     </div>
                 ) : (
-                    <div className="divide-y divide-slate-800">
+                    <div className="divide-y divide-border">
                         {filteredClients.map((client) => (
                             <div key={client.id} className="p-6 hover:bg-muted/50 transition-colors">
                                 <div className="flex items-start justify-between gap-4">
@@ -202,27 +208,27 @@ export default function ClientsPage() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Link
-                                            href={`/admin/clients/${client.id}`}
-                                            className="p-2 bg-muted hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-                                            title="Düzenle"
-                                        >
-                                            <Pencil className="w-4 h-4" />
+                                        <Link href={`/admin/clients/${client.id}`}>
+                                            <Button variant="ghost" size="icon" title="Düzenle">
+                                                <Pencil className="w-4 h-4" />
+                                            </Button>
                                         </Link>
-                                        <button
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
                                             onClick={() => handleDelete(client.id)}
-                                            className="p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors"
+                                            className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
                                             title="Sil"
                                         >
                                             <Trash2 className="w-4 h-4" />
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
-            </div>
+            </Card>
         </div>
     )
 }

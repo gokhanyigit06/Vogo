@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Briefcase, ArrowLeft, Calendar, DollarSign, Building2, CheckCircle2, Printer, StickyNote, Plus, Trash2, Edit2, Loader2 } from "lucide-react"
 import Link from "next/link"
 import TaskDetailModal from "@/components/admin/tasks/TaskDetailModal"
+import { MOCK_PROJECTS, MOCK_TASKS, MOCK_TEAM } from "@/lib/mock-data"
 
 interface Note {
     id: number
@@ -51,10 +52,10 @@ export default function ProjectDetailPage() {
             // API'den gelmediyse ve Dev ortamındaysak, HATA ATMADAN ÖNCE Mock'a bak
             if (process.env.NODE_ENV === 'development') {
                 console.log("⚠️ Dev Mode: Looking for Mock Project")
-                const mockP = require('@/lib/mock-data').MOCK_PROJECTS.find((p: any) => p.id == id)
+                const mockP = MOCK_PROJECTS.find((p: any) => p.id == id)
                 if (mockP) {
                     // 1. Önce LocalStorage'dan güncel görevleri çek
-                    let allTasks = require('@/lib/mock-data').MOCK_TASKS
+                    let allTasks = MOCK_TASKS
                     try {
                         if (typeof window !== 'undefined') {
                             const local = localStorage.getItem('mock_tasks')
@@ -157,7 +158,7 @@ export default function ProjectDetailPage() {
                 if (stored) {
                     localTasks = JSON.parse(stored)
                 } else {
-                    localTasks = require('@/lib/mock-data').MOCK_TASKS
+                    localTasks = MOCK_TASKS
                 }
 
                 // 2. Add new task
@@ -208,7 +209,7 @@ export default function ProjectDetailPage() {
                 let localTasks = []
                 const stored = localStorage.getItem('mock_tasks')
                 if (stored) localTasks = JSON.parse(stored)
-                else localTasks = require('@/lib/mock-data').MOCK_TASKS
+                else localTasks = MOCK_TASKS
 
                 // Update status in global store
                 const globalUpdated = localTasks.map((t: any) =>
@@ -552,8 +553,8 @@ export default function ProjectDetailPage() {
                             localStorage.setItem('mock_tasks', JSON.stringify(filtered))
                         }
                     }}
-                    projects={require('@/lib/mock-data').MOCK_PROJECTS} // Pass available projects if needed
-                    team={require('@/lib/mock-data').MOCK_TEAM} // Pass available team
+                    projects={MOCK_PROJECTS} // Pass available projects if needed
+                    team={MOCK_TEAM} // Pass available team
                 />
             )}
         </div>

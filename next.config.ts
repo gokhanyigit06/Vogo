@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'standalone', // Required for Docker deployment
-  // @ts-ignore
+  // @ts-expect-error nextconfig allows eslint but old types might complain
   eslint: {
     ignoreDuringBuilds: true,
   },

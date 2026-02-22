@@ -5,6 +5,9 @@ import { TrendingUp, TrendingDown, DollarSign, Briefcase, Users, Calendar, Zap, 
 import Link from "next/link"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { useSession } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface DashboardStats {
     totalIncome: number
@@ -85,15 +88,16 @@ export default function AdminDashboard() {
                 <div className="flex items-center gap-3">
                     <ThemeToggle />
 
-                    {/* Privacy Toggle Button */}
-                    <button
+                    <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => setHideSensitiveData(!hideSensitiveData)}
-                        className="px-4 py-2 bg-card border border-border rounded-full text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all flex items-center gap-2 shadow-sm"
+                        className="rounded-full shadow-sm"
                         title={hideSensitiveData ? "Verileri Göster" : "Verileri Gizle"}
                     >
-                        {hideSensitiveData ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        <span className="text-xs font-bold">{hideSensitiveData ? "Gizli" : "Açık"}</span>
-                    </button>
+                        {hideSensitiveData ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+                        <span className="font-bold">{hideSensitiveData ? "Gizli" : "Açık"}</span>
+                    </Button>
 
                     <div className="px-4 py-2 bg-card border border-border rounded-full text-muted-foreground text-sm flex items-center gap-2 shadow-sm">
                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
@@ -211,36 +215,55 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Recent Transactions Table */}
-                    <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
-                        <div className="p-6 border-b border-border flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-lg font-bold flex items-center gap-2">
                                 <Activity className="w-5 h-5 text-blue-500" />
                                 Son İşlemler
-                            </h3>
-                            <Link href="/admin/finance/income" className="text-sm text-blue-500 hover:text-blue-400 font-medium">Tümünü Gör</Link>
-                        </div>
-                        <div className="divide-y divide-border">
-                            {stats?.recentTransactions?.slice(0, 5).map((t) => (
-                                <div key={t.id} className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-lg">
-                                            💰
-                                        </div>
-                                        <div>
-                                            <p className="text-foreground font-medium">{t.description || 'İşlem'}</p>
-                                            <p className="text-muted-foreground text-xs">{new Date(t.date).toLocaleDateString('tr-TR')}</p>
-                                        </div>
-                                    </div>
-                                    <span className="font-bold text-emerald-500">
-                                        +{formatCurrency(t.amount)}
-                                    </span>
-                                </div>
-                            ))}
-                            {(!stats?.recentTransactions || stats.recentTransactions.length === 0) && (
-                                <div className="p-8 text-center text-muted-foreground">Henüz finansal işlem yok.</div>
-                            )}
-                        </div>
-                    </div>
+                            </CardTitle>
+                            <Link href="/admin/finance/income" className="text-sm text-blue-500 hover:text-blue-400 font-medium">
+                                Tümünü Gör
+                            </Link>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Açıklama</TableHead>
+                                        <TableHead>Tarih</TableHead>
+                                        <TableHead className="text-right">Tutar</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {stats?.recentTransactions?.slice(0, 5).map((t) => (
+                                        <TableRow key={t.id}>
+                                            <TableCell className="font-medium">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm">
+                                                        💰
+                                                    </div>
+                                                    {t.description || 'İşlem'}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground text-xs">
+                                                {new Date(t.date).toLocaleDateString('tr-TR')}
+                                            </TableCell>
+                                            <TableCell className="text-right font-bold text-emerald-500">
+                                                +{formatCurrency(t.amount)}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {(!stats?.recentTransactions || stats.recentTransactions.length === 0) && (
+                                        <TableRow>
+                                            <TableCell colSpan={3} className="h-24 text-center text-muted-foreground">
+                                                Henüz finansal işlem yok.
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
 
                 </div>
 

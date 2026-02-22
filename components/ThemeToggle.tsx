@@ -8,6 +8,7 @@ export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
 
+    // eslint-disable-next-line
     useEffect(() => setMounted(true), [])
 
     if (!mounted) return <div className="w-24 h-9 bg-secondary/50 rounded-full animate-pulse" />

@@ -14,10 +14,21 @@ export default function HeroNew() {
 
     const [currentIndex, setCurrentIndex] = useState(0)
 
+    const [particles, setParticles] = useState<any[]>([])
+
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % rotatingTexts.length)
         }, 3000)
+
+        setParticles([...Array(20)].map(() => ({
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+            targetX: Math.random() * 100,
+            targetY: Math.random() * 100,
+            duration: Math.random() * 10 + 10
+        })))
+
         return () => clearInterval(interval)
     }, [])
 
@@ -32,34 +43,27 @@ export default function HeroNew() {
 
             {/* Floating Elements */}
             <div className="absolute inset-0 z-[1] pointer-events-none">
-                {[...Array(20)].map((_, i) => {
-                    const randomX = Math.random() * 100
-                    const randomY = Math.random() * 100
-                    const randomTargetX = Math.random() * 100
-                    const randomTargetY = Math.random() * 100
-
-                    return (
-                        <motion.div
-                            key={i}
-                            className="absolute w-1 h-1 bg-emerald-400/30 rounded-full"
-                            style={{
-                                left: `${randomX}%`,
-                                top: `${randomY}%`
-                            }}
-                            animate={{
-                                left: [`${randomX}%`, `${randomTargetX}%`],
-                                top: [`${randomY}%`, `${randomTargetY}%`],
-                                scale: [1, 1.5, 1],
-                                opacity: [0.3, 0.8, 0.3]
-                            }}
-                            transition={{
-                                duration: Math.random() * 10 + 10,
-                                repeat: Infinity,
-                                ease: "linear"
-                            }}
-                        />
-                    )
-                })}
+                {particles.map((p, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-1 h-1 bg-emerald-400/30 rounded-full"
+                        style={{
+                            left: `${p.x}%`,
+                            top: `${p.y}%`
+                        }}
+                        animate={{
+                            left: [`${p.x}%`, `${p.targetX}%`],
+                            top: [`${p.y}%`, `${p.targetY}%`],
+                            scale: [1, 1.5, 1],
+                            opacity: [0.3, 0.8, 0.3]
+                        }}
+                        transition={{
+                            duration: p.duration,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    />
+                ))}
             </div>
 
             <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-10 py-20">

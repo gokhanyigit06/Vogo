@@ -187,14 +187,42 @@ export default function TasksPage() {
         due_date: ''
     })
 
+    const fetchTasks = () => fetch('/api/tasks')
+        .then(r => r.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                setTasks(data)
+            } else if (process.env.NODE_ENV === 'development') {
+                import('@/lib/mock-data').then(m => setTasks(m.MOCK_TASKS as unknown as Task[]))
+            } else {
+                setTasks([])
+            }
+        })
+        .catch(err => {
+            console.error(err)
+            if (process.env.NODE_ENV === 'development') {
+                import('@/lib/mock-data').then(m => setTasks(m.MOCK_TASKS as unknown as Task[]))
+            } else {
+                setTasks([])
+            }
+        })
+
+    const fetchProjects = () => fetch('/api/projects')
+        .then(r => r.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) setProjects(data)
+            else if (process.env.NODE_ENV === 'development') {
+                import('@/lib/mock-data').then(m => setProjects(m.MOCK_PROJECTS))
+            }
+            else setProjects([])
+        })
+
     useEffect(() => {
         setMounted(true)
         fetchTasks()
         fetchProjects()
 
-        // LocalStorage değişikliklerini dinle
         const handleTasksUpdate = () => {
-            console.log('🔄 Tasks updated event received, refreshing...')
             fetchTasks()
         }
 
@@ -208,44 +236,6 @@ export default function TasksPage() {
             }
         }
     }, [])
-
-    const fetchTasks = () => fetch('/api/tasks')
-        .then(r => r.json())
-        .then(data => {
-            if (Array.isArray(data) && data.length > 0) {
-                setTasks(data)
-            } else if (process.env.NODE_ENV === 'development') {
-                console.log("⚠️ Dev Mode: Using Mock Tasks")
-                // LocalStorage varsa oradan al, yoksa sabit mock data
-                try {
-                    const localTasks = localStorage.getItem('mock_tasks')
-                    if (localTasks) setTasks(JSON.parse(localTasks))
-                    else setTasks(require('@/lib/mock-data').MOCK_TASKS)
-                } catch (e) {
-                    setTasks(require('@/lib/mock-data').MOCK_TASKS)
-                }
-            } else {
-                setTasks([])
-            }
-        })
-        .catch(err => {
-            console.error("Fetch error:", err)
-            if (process.env.NODE_ENV === 'development') {
-                setTasks(require('@/lib/mock-data').MOCK_TASKS)
-            } else {
-                setTasks([])
-            }
-        })
-
-
-    const fetchProjects = () => fetch('/api/projects')
-        .then(r => r.json())
-        .then(data => {
-            if (Array.isArray(data) && data.length > 0) setProjects(data)
-            else if (process.env.NODE_ENV === 'development') setProjects(require('@/lib/mock-data').MOCK_PROJECTS)
-            else setProjects([])
-        })
-
     const handleDelete = async (id: number) => {
         if (!confirm('Bu görevi silmek istediğinize emin misiniz?')) return
 
