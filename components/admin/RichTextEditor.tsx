@@ -34,7 +34,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
-                    class: 'text-emerald-400 hover:text-emerald-300 underline',
+                    class: 'text-vogo-aqua hover:text-vogo-ice underline',
                 },
             }),
             Youtube.configure({
@@ -135,7 +135,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
             title={title}
             className={`p-2 rounded-lg transition-colors flex items-center justify-center
                 ${isActive
-                    ? 'bg-emerald-500/20 text-emerald-400'
+                    ? 'bg-vogo-blue/20 text-vogo-aqua'
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                 }
                 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
@@ -146,7 +146,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
     )
 
     return (
-        <div className="bg-card border border-border rounded-notebook overflow-hidden shadow-sm flex flex-col min-h-[600px]">
+        <div className="glass-card rounded-notebook overflow-hidden shadow-sm flex flex-col min-h-[600px]">
 
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-1 p-3 border-b border-border bg-muted/30">
@@ -224,7 +224,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                     onClick={addImage}
                     disabled={isUploading}
                     title="Görsel Yükle"
-                    className="p-2 rounded-lg transition-colors flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground hover:text-emerald-400"
+                    className="p-2 rounded-lg transition-colors flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground hover:text-vogo-aqua"
                 >
                     {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
                 </button>

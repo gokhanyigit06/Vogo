@@ -104,7 +104,7 @@ export default function EditServicePage() {
                     </Link>
                     <div>
                         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                            <Layers className="w-6 h-6 text-emerald-500" />
+                            <Layers className="w-6 h-6 text-vogo-blue" />
                             Hizmeti Düzenle
                         </h1>
                         <p className="text-slate-400 text-sm">#{id} numaralı hizmet kaydını düzenliyorsunuz.</p>
@@ -121,7 +121,7 @@ export default function EditServicePage() {
                     <button
                         onClick={handleUpdate}
                         disabled={saving}
-                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+                        className="px-6 py-2 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center gap-2"
                     >
                         <Save className="w-4 h-4" /> {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
                     </button>
@@ -136,7 +136,7 @@ export default function EditServicePage() {
                             <label className="block text-slate-400 text-sm font-medium mb-2">Hizmet Adı</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue"
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                             />
@@ -145,7 +145,7 @@ export default function EditServicePage() {
                             <label className="block text-slate-400 text-sm font-medium mb-2">Slug (URL)</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-400 focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-400 focus:outline-none focus:border-vogo-blue"
                                 value={formData.slug}
                                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                             />
@@ -156,7 +156,7 @@ export default function EditServicePage() {
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Kısa Açıklama</label>
                             <textarea
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue h-32 resize-none"
                                 value={formData.desc}
                                 onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
                             />
@@ -168,7 +168,7 @@ export default function EditServicePage() {
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                         <label className="block text-slate-400 text-sm font-medium mb-2">Durum</label>
                         <select
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue"
                             value={formData.status}
                             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                         >
@@ -182,7 +182,7 @@ export default function EditServicePage() {
                         <label className="block text-slate-400 text-sm font-medium mb-2">İkon Adı (Lucide React)</label>
                         <input
                             type="text"
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue"
                             placeholder="Örn: Globe, Monitor, Code"
                             value={formData.icon}
                             onChange={(e) => setFormData({ ...formData, icon: e.target.value })}

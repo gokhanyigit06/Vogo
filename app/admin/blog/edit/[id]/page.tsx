@@ -92,13 +92,13 @@ export default function EditBlogPostPage() {
                 </div>
                 <div className="flex gap-3">
                     <button onClick={handleDelete} disabled={deleting} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500/20 font-bold flex gap-2 items-center"><Trash2 className="w-4 h-4" /> Sil</button>
-                    <button onClick={handleUpdate} disabled={saving} className="px-6 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 font-bold shadow-lg shadow-emerald-500/20 flex gap-2 items-center"><Save className="w-4 h-4" /> Kaydet</button>
+                    <button onClick={handleUpdate} disabled={saving} className="px-6 py-2 bg-vogo-blue text-white rounded-xl hover:bg-vogo-teal font-bold shadow-lg shadow-vogo-blue/20 flex gap-2 items-center"><Save className="w-4 h-4" /> Kaydet</button>
                 </div>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                    <div className="glass-card rounded-notebook p-6 space-y-4">
                         <label className="text-muted-foreground text-sm font-bold">Başlık</label>
                         <input type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-emerald-500" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
 
@@ -107,20 +107,20 @@ export default function EditBlogPostPage() {
                             {["Teknoloji", "Tasarım", "Yazılım", "Pazarlama", "SEO", "E-Ticaret"].map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                    <div className="glass-card rounded-notebook p-6 space-y-4">
                         <label className="text-muted-foreground text-sm font-bold">Kısa Özet</label>
                         <textarea className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-emerald-500 h-32" value={formData.excerpt} onChange={e => setFormData({ ...formData, excerpt: e.target.value })} />
                     </div>
                 </div>
                 <div className="space-y-6">
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                    <div className="glass-card rounded-notebook p-6 space-y-4">
                         <label className="text-muted-foreground text-sm font-bold">Görsel URL</label>
                         <ImageUploader
                             value={formData.image}
                             onChange={(url) => setFormData({ ...formData, image: url })}
                         />
                     </div>
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                    <div className="glass-card rounded-notebook p-6 space-y-4">
                         <label className="text-muted-foreground text-sm font-bold">İçerik</label>
                         <RichTextEditor
                             content={formData.content}

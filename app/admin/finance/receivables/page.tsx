@@ -42,7 +42,7 @@ export default function ReceivablesPage() {
     if (loading) return <div className="p-8"><div className="text-slate-400">Yükleniyor...</div></div>
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
 
             {/* Header */}
             <div className="flex items-center justify-between">
@@ -60,14 +60,14 @@ export default function ReceivablesPage() {
                     </h1>
                     <p className="text-slate-400 mt-1">Projelerden beklenen tahsilatlar</p>
                 </div>
-                <div className="bg-card border border-border p-4 rounded-xl text-right">
+                <div className="glass-card p-4 rounded-xl text-right">
                     <p className="text-slate-400 text-sm">Toplam Alacak</p>
                     <p className="text-2xl font-bold text-blue-400">{formatCurrency(totalReceivable)}</p>
                 </div>
             </div>
 
             {/* List */}
-            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+            <div className="glass-card rounded-notebook overflow-hidden">
                 {receivables.length === 0 ? (
                     <div className="p-12 text-center text-slate-400">
                         Harika! Tahsil edilmemiş alacak bulunmuyor.
@@ -80,7 +80,7 @@ export default function ReceivablesPage() {
                                     <th className="p-4 font-medium">Müşteri</th>
                                     <th className="p-4 font-medium">Proje</th>
                                     <th className="p-4 font-medium text-right">Proje Bedeli</th>
-                                    <th className="p-4 font-medium text-right bg-emerald-500/5 text-emerald-400">Ödenen</th>
+                                    <th className="p-4 font-medium text-right bg-vogo-blue/5 text-vogo-aqua">Ödenen</th>
                                     <th className="p-4 font-medium text-right bg-red-500/5 text-red-400">Kalan (Alacak)</th>
                                     <th className="p-4 font-medium text-center">Aksiyon</th>
                                 </tr>
@@ -94,7 +94,7 @@ export default function ReceivablesPage() {
                                         </td>
                                         <td className="p-4 text-slate-300">{item.projectName}</td>
                                         <td className="p-4 text-right text-slate-300 font-mono">{formatCurrency(item.budget)}</td>
-                                        <td className="p-4 text-right text-emerald-400 font-mono bg-emerald-500/5">{formatCurrency(item.paid)}</td>
+                                        <td className="p-4 text-right text-vogo-aqua font-mono bg-vogo-blue/5">{formatCurrency(item.paid)}</td>
                                         <td className="p-4 text-right text-red-400 font-bold font-mono bg-red-500/5">{formatCurrency(item.remaining)}</td>
                                         <td className="p-4">
                                             <div className="flex items-center justify-center gap-2">

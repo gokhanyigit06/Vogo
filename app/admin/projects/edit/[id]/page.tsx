@@ -158,13 +158,13 @@ export default function EditProjectPage() {
                     Projeye Dön
                 </Link>
                 <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                    <Briefcase className="w-8 h-8 text-emerald-500" />
+                    <Briefcase className="w-8 h-8 text-vogo-blue" />
                     Projeyi Düzenle
                 </h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4 shadow-sm">
+                <div className="glass-card rounded-notebook p-6 space-y-4 shadow-sm">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Proje Bilgileri
                     </h2>
@@ -177,7 +177,7 @@ export default function EditProjectPage() {
                                 required
                                 value={formData.internalName}
                                 onChange={(e) => setFormData({ ...formData, internalName: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -188,7 +188,7 @@ export default function EditProjectPage() {
                                 required
                                 value={formData.publicTitle}
                                 onChange={(e) => setFormData({ ...formData, publicTitle: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -197,7 +197,7 @@ export default function EditProjectPage() {
                             <select
                                 value={formData.clientId}
                                 onChange={(e) => setFormData({ ...formData, clientId: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
                                 {clients.map(client => (
@@ -213,7 +213,7 @@ export default function EditProjectPage() {
                             <select
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="quote">Teklif Aşamasında</option>
                                 <option value="in_progress">Devam Ediyor</option>
@@ -269,7 +269,7 @@ export default function EditProjectPage() {
                                     type="text"
                                     value={formData.year}
                                     onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 />
                             </div>
                             <div>
@@ -278,7 +278,7 @@ export default function EditProjectPage() {
                                     type="text"
                                     value={formData.market}
                                     onChange={(e) => setFormData({ ...formData, market: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 />
                             </div>
                         </div>
@@ -290,7 +290,7 @@ export default function EditProjectPage() {
                                     type="text"
                                     value={formData.clientType}
                                     onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 />
                             </div>
                             <div>
@@ -299,7 +299,7 @@ export default function EditProjectPage() {
                                     type="url"
                                     value={formData.websiteUrl}
                                     onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 />
                             </div>
                         </div>
@@ -327,7 +327,7 @@ export default function EditProjectPage() {
                                 type="date"
                                 value={formData.start_date}
                                 onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -337,7 +337,7 @@ export default function EditProjectPage() {
                                 type="date"
                                 value={formData.end_date}
                                 onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -348,7 +348,7 @@ export default function EditProjectPage() {
                                 step="0.01"
                                 value={formData.budget}
                                 onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -357,7 +357,7 @@ export default function EditProjectPage() {
                             <select
                                 value={formData.priority}
                                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="low">Düşük</option>
                                 <option value="medium">Orta</option>
@@ -370,7 +370,7 @@ export default function EditProjectPage() {
                             <textarea
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-32 resize-none"
                             />
                         </div>
 
@@ -379,7 +379,7 @@ export default function EditProjectPage() {
                             <textarea
                                 value={formData.content}
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-64 font-mono text-sm"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-64 font-mono text-sm"
                             />
                         </div>
                     </div>
@@ -389,7 +389,7 @@ export default function EditProjectPage() {
                     <button
                         type="submit"
                         disabled={loading || submitting}
-                        className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                        className="flex-1 px-6 py-3 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center justify-center gap-2"
                     >
                         <Save className="w-5 h-5" />
                         {submitting ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}

@@ -59,7 +59,7 @@ export default function PageEditor() {
         }))
     }
 
-    if (loading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-emerald-500 w-8 h-8" /></div>
+    if (loading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-vogo-blue w-8 h-8" /></div>
 
     // Sayfa Tiplerine Göre Form Renderlama
     const renderForm = () => {
@@ -70,9 +70,9 @@ export default function PageEditor() {
             return (
                 <div className="space-y-8">
                     {/* Hero Section */}
-                    <div className="bg-card border border-border rounded-xl p-6">
+                    <div className="glass-card rounded-xl p-6">
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-border pb-2">
-                            <Layout className="w-5 h-5 text-emerald-500" /> Hero Alanı (Giriş)
+                            <Layout className="w-5 h-5 text-vogo-blue" /> Hero Alanı (Giriş)
                         </h2>
 
                         <div className="grid gap-6">
@@ -84,7 +84,7 @@ export default function PageEditor() {
                                     value={content.hero?.title || ''}
                                     onChange={(e) => updateField('hero', 'title', e.target.value)}
                                     rows={2}
-                                    className="w-full bg-background border border-border rounded-lg p-3 focus:border-emerald-500 outline-none"
+                                    className="w-full bg-background border border-border rounded-lg p-3 focus:border-vogo-blue outline-none"
                                 />
                                 <p className="text-xs text-muted-foreground mt-1">Satır kırmak için Enter kullanın.</p>
                             </div>
@@ -97,7 +97,7 @@ export default function PageEditor() {
                                     value={content.hero?.subtitle || ''}
                                     onChange={(e) => updateField('hero', 'subtitle', e.target.value)}
                                     rows={3}
-                                    className="w-full bg-background border border-border rounded-lg p-3 focus:border-emerald-500 outline-none"
+                                    className="w-full bg-background border border-border rounded-lg p-3 focus:border-vogo-blue outline-none"
                                 />
                             </div>
 
@@ -110,7 +110,7 @@ export default function PageEditor() {
                                         type="text"
                                         value={content.hero?.buttonText || ''}
                                         onChange={(e) => updateField('hero', 'buttonText', e.target.value)}
-                                        className="w-full bg-background border border-border rounded-lg p-3 focus:border-emerald-500 outline-none"
+                                        className="w-full bg-background border border-border rounded-lg p-3 focus:border-vogo-blue outline-none"
                                     />
                                 </div>
                                 <div>
@@ -121,7 +121,7 @@ export default function PageEditor() {
                                         type="text"
                                         value={content.hero?.buttonLink || ''}
                                         onChange={(e) => updateField('hero', 'buttonLink', e.target.value)}
-                                        className="w-full bg-background border border-border rounded-lg p-3 focus:border-emerald-500 outline-none"
+                                        className="w-full bg-background border border-border rounded-lg p-3 focus:border-vogo-blue outline-none"
                                     />
                                 </div>
                             </div>
@@ -136,7 +136,7 @@ export default function PageEditor() {
                                         value={content.hero?.imageUrl || ''}
                                         onChange={(e) => updateField('hero', 'imageUrl', e.target.value)}
                                         placeholder="https://..."
-                                        className="w-full bg-background border border-border rounded-lg p-3 focus:border-emerald-500 outline-none"
+                                        className="w-full bg-background border border-border rounded-lg p-3 focus:border-vogo-blue outline-none"
                                     />
                                 </div>
                                 {content.hero?.imageUrl && (
@@ -149,9 +149,9 @@ export default function PageEditor() {
                     </div>
 
                     {/* Stats Section */}
-                    <div className="bg-card border border-border rounded-xl p-6">
+                    <div className="glass-card rounded-xl p-6">
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-border pb-2">
-                            <Layout className="w-5 h-5 text-emerald-500" /> İstatistikler
+                            <Layout className="w-5 h-5 text-vogo-blue" /> İstatistikler
                         </h2>
                         <div className="grid md:grid-cols-3 gap-4">
                             <div>
@@ -212,9 +212,9 @@ export default function PageEditor() {
             return (
                 <div className="space-y-8">
                     {/* Hero Section */}
-                    <div className="bg-card border border-border rounded-xl p-6">
+                    <div className="glass-card rounded-xl p-6">
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <Layout className="w-5 h-5 text-emerald-500" /> Hizmetler Başlık Alanı
+                            <Layout className="w-5 h-5 text-vogo-blue" /> Hizmetler Başlık Alanı
                         </h2>
                         <div className="grid gap-4">
                             <div>
@@ -242,11 +242,11 @@ export default function PageEditor() {
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h2 className="text-xl font-bold flex items-center gap-2">
-                                <Layout className="w-5 h-5 text-emerald-500" /> Hizmet Kartları
+                                <Layout className="w-5 h-5 text-vogo-blue" /> Hizmet Kartları
                             </h2>
                             <button
                                 onClick={handleAddService}
-                                className="px-4 py-2 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white rounded-lg font-bold text-sm transition-colors"
+                                className="px-4 py-2 bg-vogo-blue/10 text-vogo-blue hover:bg-vogo-blue hover:text-white rounded-lg font-bold text-sm transition-colors"
                             >
                                 + Yeni Hizmet Ekle
                             </button>
@@ -254,7 +254,7 @@ export default function PageEditor() {
 
                         <div className="grid gap-4">
                             {servicesList.map((service: any, index: number) => (
-                                <div key={index} className="bg-card border border-border rounded-xl p-6 relative group">
+                                <div key={index} className="glass-card rounded-xl p-6 relative group">
                                     <button
                                         onClick={() => handleRemoveService(index)}
                                         className="absolute top-4 right-4 text-slate-500 hover:text-red-500 p-2 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -320,9 +320,9 @@ export default function PageEditor() {
             return (
                 <div className="space-y-8">
                     {/* Hero Section */}
-                    <div className="bg-card border border-border rounded-xl p-6">
+                    <div className="glass-card rounded-xl p-6">
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <Layout className="w-5 h-5 text-emerald-500" /> Hakkımızda Başlık
+                            <Layout className="w-5 h-5 text-vogo-blue" /> Hakkımızda Başlık
                         </h2>
                         <div className="grid gap-4">
                             <div>
@@ -347,9 +347,9 @@ export default function PageEditor() {
                     </div>
 
                     {/* Detailed Content */}
-                    <div className="bg-card border border-border rounded-xl p-6">
+                    <div className="glass-card rounded-xl p-6">
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <FileText className="w-5 h-5 text-emerald-500" /> Detaylı İçerik
+                            <FileText className="w-5 h-5 text-vogo-blue" /> Detaylı İçerik
                         </h2>
                         <div className="grid gap-6">
                             <div>
@@ -389,7 +389,7 @@ export default function PageEditor() {
 
         // --- GENERIC / OTHER PAGES ---
         return (
-            <div className="bg-card border border-border rounded-xl p-6">
+            <div className="glass-card rounded-xl p-6">
                 <h2 className="text-xl font-bold mb-4">Genel İçerik Düzenleyici</h2>
                 <div className="space-y-4">
                     {/* Generic Hero Fields if exist */}
@@ -434,7 +434,7 @@ export default function PageEditor() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all disabled:opacity-70"
+                    className="px-6 py-3 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-vogo-blue/20 active:scale-95 transition-all disabled:opacity-70"
                 >
                     {saving ? <Loader2 className="animate-spin w-5 h-5" /> : <Save className="w-5 h-5" />}
                     {saving ? 'Kaydediliyor...' : 'Kaydet'}

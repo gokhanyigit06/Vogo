@@ -48,12 +48,12 @@ function SortableItem({ id, client }: { id: number; client: Client }) {
         <div
             ref={setNodeRef}
             style={style}
-            className="flex items-center gap-4 p-4 bg-card border border-border rounded-xl mb-3 shadow-sm group hover:border-emerald-500/30 transition-colors"
+            className="flex items-center gap-4 p-4 glass-card rounded-xl mb-3 shadow-sm group hover:border-vogo-blue/30 transition-colors"
         >
             <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing p-2 text-slate-500 hover:text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                className="cursor-grab active:cursor-grabbing p-2 text-slate-500 hover:text-vogo-blue hover:bg-vogo-blue/10 rounded-lg transition-colors"
             >
                 <GripVertical className="w-5 h-5" />
             </div>
@@ -159,7 +159,7 @@ export default function ReorderClientsPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+                <Loader2 className="w-8 h-8 animate-spin text-vogo-blue" />
             </div>
         )
     }
@@ -184,7 +184,7 @@ export default function ReorderClientsPage() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-6 py-2.5 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {saving ? (
                         <>
@@ -219,7 +219,7 @@ export default function ReorderClientsPage() {
             </DndContext>
 
             {clients.length === 0 && (
-                <div className="text-center py-12 text-muted-foreground bg-card border border-border rounded-xl">
+                <div className="text-center py-12 text-muted-foreground glass-card rounded-xl">
                     Sıralanacak aktif marka bulunamadı.
                 </div>
             )}

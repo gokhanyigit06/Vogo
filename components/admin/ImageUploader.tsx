@@ -70,7 +70,7 @@ export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
                     </div>
                 </div>
             ) : (
-                <div className="relative aspect-video w-full border-2 border-dashed border-border rounded-xl hover:border-emerald-500/50 hover:bg-muted/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
+                <div className="relative aspect-video w-full border-2 border-dashed border-border rounded-xl hover:border-vogo-blue/50 hover:bg-muted/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
                     <input
                         type="file"
                         accept="image/*"
@@ -80,15 +80,15 @@ export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
                     />
                     {uploading ? (
                         <>
-                            <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+                            <Loader2 className="w-8 h-8 text-vogo-blue animate-spin" />
                             <span className="text-sm text-muted-foreground">Yükleniyor...</span>
                         </>
                     ) : (
                         <>
                             <div className="p-3 bg-muted rounded-full group-hover:scale-110 transition-transform">
-                                <Upload className="w-6 h-6 text-emerald-500" />
+                                <Upload className="w-6 h-6 text-vogo-blue" />
                             </div>
-                            <span className="text-sm text-muted-foreground font-medium group-hover:text-emerald-400 transition-colors">Resim Yüklemek İçin Tıklayın</span>
+                            <span className="text-sm text-muted-foreground font-medium group-hover:text-vogo-aqua transition-colors">Resim Yüklemek İçin Tıklayın</span>
                             <span className="text-xs text-muted-foreground/60">JPG, PNG, WEBP (Max 2MB)</span>
                         </>
                     )}
@@ -106,7 +106,7 @@ export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
                         onChange(e.target.value)
                     }}
                     placeholder="Veya harici bir URL yapıştırın..."
-                    className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-vogo-blue"
                 />
             </div>
         </div>

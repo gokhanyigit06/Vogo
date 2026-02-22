@@ -52,8 +52,8 @@ export default function CategorySelect({ value = [], onChange }: CategorySelectP
                             onClick={() => toggleCategory(cat)}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all flex items-center gap-1.5
                                 ${isSelected
-                                    ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600'
-                                    : 'bg-background border-border text-muted-foreground hover:border-emerald-500/50 hover:text-foreground'
+                                    ? 'bg-vogo-blue/10 border-vogo-blue text-vogo-teal'
+                                    : 'bg-background border-border text-muted-foreground hover:border-vogo-blue/50 hover:text-foreground'
                                 }`}
                         >
                             {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -69,7 +69,7 @@ export default function CategorySelect({ value = [], onChange }: CategorySelectP
                     value={customCategory}
                     onChange={(e) => setCustomCategory(e.target.value)}
                     placeholder="Başka bir kategori ekle..."
-                    className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                    className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-vogo-blue"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addCustomCategory())}
                 />
                 <button
@@ -92,7 +92,7 @@ export default function CategorySelect({ value = [], onChange }: CategorySelectP
                                 key={cat}
                                 type="button"
                                 onClick={() => toggleCategory(cat)}
-                                className="bg-emerald-500/10 text-emerald-600 border border-emerald-500 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5"
+                                className="bg-vogo-blue/10 text-vogo-teal border border-vogo-blue px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5"
                             >
                                 <Check className="w-3.5 h-3.5" />
                                 {cat}

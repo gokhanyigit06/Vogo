@@ -126,7 +126,7 @@ export default function ReferencesPage() {
 
     // --- Render ---
     return (
-        <div className="p-8 max-w-7xl mx-auto">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh">
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground">Referanslar & Yorumlar</h1>
@@ -138,32 +138,32 @@ export default function ReferencesPage() {
             <div className="flex gap-4 mb-8 border-b border-border">
                 <button
                     onClick={() => setActiveTab('brands')}
-                    className={`pb-4 px-4 font-medium transition-colors relative ${activeTab === 'brands' ? 'text-emerald-500' : 'text-muted-foreground hover:text-foreground'}`}
+                    className={`pb-4 px-4 font-medium transition-colors relative ${activeTab === 'brands' ? 'text-vogo-blue' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                     <Building2 className="w-5 h-5 inline-block mr-2" />
                     Markalar
-                    {activeTab === 'brands' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 rounded-t-full" />}
+                    {activeTab === 'brands' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-vogo-blue rounded-t-full" />}
                 </button>
                 <button
                     onClick={() => setActiveTab('testimonials')}
-                    className={`pb-4 px-4 font-medium transition-colors relative ${activeTab === 'testimonials' ? 'text-emerald-500' : 'text-muted-foreground hover:text-foreground'}`}
+                    className={`pb-4 px-4 font-medium transition-colors relative ${activeTab === 'testimonials' ? 'text-vogo-blue' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                     <MessageSquare className="w-5 h-5 inline-block mr-2" />
                     Müşteri Yorumları
-                    {activeTab === 'testimonials' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 rounded-t-full" />}
+                    {activeTab === 'testimonials' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-vogo-blue rounded-t-full" />}
                 </button>
             </div>
 
             {loading ? (
                 <div className="flex justify-center py-20">
-                    <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
+                    <Loader2 className="w-10 h-10 text-vogo-blue animate-spin" />
                 </div>
             ) : (
                 <>
                     {/* --- BRANDS TAB --- */}
                     {activeTab === 'brands' && (
                         <div>
-                            <div className="bg-emerald-900/10 border border-emerald-900/20 text-emerald-400 p-4 rounded-xl mb-6 text-sm flex items-start gap-3">
+                            <div className="bg-vogo-teal/10 border border-vogo-teal/20 text-vogo-aqua p-4 rounded-xl mb-6 text-sm flex items-start gap-3">
                                 <ArrowUp className="w-5 h-5 shrink-0" />
                                 <div>
                                     <p className="font-bold">Nasıl Sıralanır?</p>
@@ -173,7 +173,7 @@ export default function ReferencesPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {clients.map((client, index) => (
-                                    <div key={client.id} className="bg-card border border-border p-4 rounded-xl flex items-center justify-between group hover:border-emerald-500/30 transition-colors">
+                                    <div key={client.id} className="glass-card p-4 rounded-xl flex items-center justify-between group hover:border-vogo-blue/30 transition-colors">
                                         <div className="flex items-center gap-4">
                                             <span className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-bold text-muted-foreground">
                                                 {index + 1}
@@ -217,7 +217,7 @@ export default function ReferencesPage() {
                                                 setEditItem({ author: '', role: '', company: '', content: '', rating: 5, avatarUrl: '' })
                                                 setIsEditing(true)
                                             }}
-                                            className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-600 transition-colors flex items-center gap-2"
+                                            className="bg-vogo-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-vogo-teal transition-colors flex items-center gap-2"
                                         >
                                             <Plus className="w-4 h-4" /> Yeni Yorum Ekle
                                         </button>
@@ -225,14 +225,14 @@ export default function ReferencesPage() {
 
                                     <div className="grid md:grid-cols-2 gap-6">
                                         {testimonials.map(testimonial => (
-                                            <div key={testimonial.id} className="bg-card border border-border p-6 rounded-xl relative group">
+                                            <div key={testimonial.id} className="glass-card p-6 rounded-xl relative group">
                                                 <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button
                                                         onClick={() => {
                                                             setEditItem(testimonial)
                                                             setIsEditing(true)
                                                         }}
-                                                        className="p-2 bg-muted rounded-lg hover:bg-emerald-500 hover:text-white transition-colors"
+                                                        className="p-2 bg-muted rounded-lg hover:bg-vogo-blue hover:text-white transition-colors"
                                                     >
                                                         <Edit className="w-4 h-4" />
                                                     </button>
@@ -254,7 +254,7 @@ export default function ReferencesPage() {
                                                     )}
                                                     <div>
                                                         <h3 className="font-bold text-foreground">{testimonial.author}</h3>
-                                                        <p className="text-sm text-emerald-500">{testimonial.role} {testimonial.company && `at ${testimonial.company}`}</p>
+                                                        <p className="text-sm text-vogo-blue">{testimonial.role} {testimonial.company && `at ${testimonial.company}`}</p>
                                                     </div>
                                                 </div>
 
@@ -276,7 +276,7 @@ export default function ReferencesPage() {
                                 </>
                             ) : (
                                 /* --- EDIT FORM --- */
-                                <div className="max-w-2xl mx-auto bg-card border border-border p-8 rounded-xl">
+                                <div className="max-w-2xl mx-auto glass-card p-8 rounded-xl">
                                     <div className="flex justify-between items-center mb-6">
                                         <h2 className="text-xl font-bold flex items-center gap-2">
                                             {editItem.id ? <Edit className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
@@ -366,7 +366,7 @@ export default function ReferencesPage() {
                                             </button>
                                             <button
                                                 type="submit"
-                                                className="px-6 py-2 bg-emerald-500 text-white rounded-lg font-bold hover:bg-emerald-600 transition-colors flex items-center gap-2"
+                                                className="px-6 py-2 bg-vogo-blue text-white rounded-lg font-bold hover:bg-vogo-teal transition-colors flex items-center gap-2"
                                             >
                                                 <Save className="w-4 h-4" /> Kaydet
                                             </button>

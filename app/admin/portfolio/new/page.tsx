@@ -61,7 +61,7 @@ export default function NewProjectPage() {
                     <button
                         onClick={handlePublish}
                         disabled={isSubmitting}
-                        className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                        className="px-6 py-2.5 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center gap-2 active:scale-95"
                     >
                         {isSubmitting ? <span className="animate-pulse">Ekleniyor...</span> : <><Send className="w-4 h-4" /> Projeyi Yayınla</>}
                     </button>
@@ -71,13 +71,13 @@ export default function NewProjectPage() {
             <div className="grid lg:grid-cols-12 gap-8">
                 {/* Sol: Genel Bilgiler */}
                 <div className="lg:col-span-8 space-y-8">
-                    <div className="bg-card border border-border rounded-notebook p-8 space-y-6 shadow-sm">
+                    <div className="glass-card rounded-notebook p-8 space-y-6 shadow-sm">
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-3">
                                 <label className="block text-foreground text-sm font-bold ml-1">Proje Başlığı</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all font-medium"
                                     placeholder="Örn: A City AVM Web Sitesi"
                                     value={formData.title}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -87,7 +87,7 @@ export default function NewProjectPage() {
                                 <label className="block text-foreground text-sm font-bold ml-1">Müşteri Adı</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all font-medium"
                                     placeholder="Örn: A City AVM"
                                     value={formData.client}
                                     onChange={(e) => setFormData({ ...formData, client: e.target.value })}
@@ -99,7 +99,7 @@ export default function NewProjectPage() {
                             <label className="block text-foreground text-sm font-bold ml-1">Kategori</label>
                             <div className="relative">
                                 <select
-                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none font-medium cursor-pointer"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all appearance-none font-medium cursor-pointer"
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                 >
@@ -117,7 +117,7 @@ export default function NewProjectPage() {
                             <label className="block text-foreground text-sm font-bold ml-1">Açıklama (Kısa)</label>
                             <div className="relative">
                                 <textarea
-                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all h-40 resize-none font-medium leading-relaxed"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3.5 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all h-40 resize-none font-medium leading-relaxed"
                                     placeholder="Projenin amacı ve sonucu hakkında kısa bilgi..."
                                     value={formData.desc}
                                     onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
@@ -132,10 +132,10 @@ export default function NewProjectPage() {
 
                 {/* Sağ: Görsel */}
                 <div className="lg:col-span-4 space-y-8">
-                    <div className="bg-card border border-border rounded-notebook p-8 space-y-6 shadow-sm sticky top-8">
+                    <div className="glass-card rounded-notebook p-8 space-y-6 shadow-sm sticky top-8">
                         <div>
                             <h3 className="font-bold text-foreground flex items-center gap-2 text-lg mb-1">
-                                <ImageIcon className="w-5 h-5 text-emerald-500" />
+                                <ImageIcon className="w-5 h-5 text-vogo-blue" />
                                 Proje Görseli
                             </h3>
                             <p className="text-muted-foreground text-sm mb-6">Projenizi en iyi yansıtan ana görseli yükleyin.</p>

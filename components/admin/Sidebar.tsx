@@ -23,7 +23,7 @@ export default function AdminSidebar() {
             {/* Logo Area */}
             <div className="p-6 border-b border-slate-800">
                 <Link href="/admin" className="block">
-                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">
+                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-vogo-aqua to-teal-400">
                         Vogo Admin
                     </span>
                 </Link>
@@ -39,14 +39,14 @@ export default function AdminSidebar() {
                             key={item.id}
                             href={item.href}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isActive
-                                ? "bg-emerald-500/10 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]"
+                                ? "bg-vogo-blue/10 text-vogo-aqua shadow-[0_0_10px_rgba(16,185,129,0.1)]"
                                 : "text-slate-400 hover:bg-slate-800 hover:text-white"
                                 }`}
                         >
-                            <item.icon className={`w-5 h-5 ${isActive ? "text-emerald-400" : "text-slate-500 group-hover:text-white"}`} />
+                            <item.icon className={`w-5 h-5 ${isActive ? "text-vogo-aqua" : "text-slate-500 group-hover:text-white"}`} />
                             <span className="font-medium">{item.label}</span>
                             {item.badge && (
-                                <span className="ml-auto bg-emerald-500 text-slate-950 text-xs font-bold px-2 py-0.5 rounded-full">
+                                <span className="ml-auto bg-vogo-blue text-slate-950 text-xs font-bold px-2 py-0.5 rounded-full">
                                     {item.badge}
                                 </span>
                             )}
@@ -63,7 +63,7 @@ export default function AdminSidebar() {
                 </button>
                 <div className="mt-4 px-4 text-xs text-slate-600 flex justify-between items-center">
                     <span>v2.1.0</span>
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="w-2 h-2 rounded-full bg-vogo-blue animate-pulse"></span>
                 </div>
             </div>
         </aside>

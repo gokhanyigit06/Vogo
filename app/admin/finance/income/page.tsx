@@ -117,7 +117,7 @@ export default function IncomePage() {
     const recurringIncome = income.filter(i => i.is_recurring)
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
 
             {/* Header */}
             <div className="flex items-center justify-between">
@@ -130,14 +130,14 @@ export default function IncomePage() {
                         Finans'a Dön
                     </Link>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <TrendingUp className="w-8 h-8 text-emerald-500" />
+                        <TrendingUp className="w-8 h-8 text-vogo-blue" />
                         Gelir Yönetimi
                     </h1>
                     <p className="text-slate-400 mt-1">Müşteri ödemeleri ve düzenli gelirleri kaydedin</p>
                 </div>
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20"
+                    className="px-6 py-3 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20"
                 >
                     {showForm ? 'Formu Gizle' : '+ Yeni Gelir'}
                 </button>
@@ -145,19 +145,19 @@ export default function IncomePage() {
 
             {/* Stats */}
             <div className="grid md:grid-cols-4 gap-4">
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Tahsil Edilen</p>
-                    <p className="text-2xl font-bold text-emerald-400 mt-1">{formatCurrency(totalCollectedIncome)}</p>
+                    <p className="text-2xl font-bold text-vogo-aqua mt-1">{formatCurrency(totalCollectedIncome)}</p>
                 </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Bekleyen (Alacak)</p>
                     <p className="text-2xl font-bold text-amber-500 mt-1">{formatCurrency(pendingIncome)}</p>
                 </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Kayıt Sayısı</p>
                     <p className="text-2xl font-bold text-foreground mt-1">{income.length}</p>
                 </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Düzenli Gelir</p>
                     <p className="text-2xl font-bold text-purple-400 mt-1">{recurringIncome.length} kayıt</p>
                 </div>
@@ -165,7 +165,7 @@ export default function IncomePage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="glass-card rounded-notebook p-6 space-y-6">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Gelir Kaydı</h2>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -174,7 +174,7 @@ export default function IncomePage() {
                             <select
                                 value={formData.client_id}
                                 onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
                                 {clients.map(client => (
@@ -193,7 +193,7 @@ export default function IncomePage() {
                                 step="0.01"
                                 value={formData.amount}
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="0.00"
                             />
                         </div>
@@ -205,7 +205,7 @@ export default function IncomePage() {
                                 required
                                 value={formData.date}
                                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -214,7 +214,7 @@ export default function IncomePage() {
                             <select
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="paid">Tahsil Edildi (Kasa)</option>
                                 <option value="pending">Bekliyor (Alacak)</option>
@@ -226,7 +226,7 @@ export default function IncomePage() {
                             <select
                                 value={formData.payment_method}
                                 onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="bank_transfer">Havale/EFT</option>
                                 <option value="cash">Nakit</option>
@@ -240,7 +240,7 @@ export default function IncomePage() {
                                 type="text"
                                 value={formData.invoice_number}
                                 onChange={(e) => setFormData({ ...formData, invoice_number: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="FA-2024-001"
                             />
                         </div>
@@ -251,7 +251,7 @@ export default function IncomePage() {
                                 type="text"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="Web tasarım projesi ödemesi"
                             />
                         </div>
@@ -264,7 +264,7 @@ export default function IncomePage() {
                                 type="checkbox"
                                 checked={formData.is_recurring}
                                 onChange={(e) => setFormData({ ...formData, is_recurring: e.target.checked })}
-                                className="w-5 h-5 bg-background border-border rounded text-emerald-500 focus:ring-emerald-500"
+                                className="w-5 h-5 bg-background border-border rounded text-vogo-blue focus:ring-vogo-blue"
                             />
                             <div>
                                 <span className="text-foreground font-medium flex items-center gap-2">
@@ -282,7 +282,7 @@ export default function IncomePage() {
                                     <select
                                         value={formData.recurrence_frequency}
                                         onChange={(e) => setFormData({ ...formData, recurrence_frequency: e.target.value })}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                     >
                                         <option value="monthly">Aylık</option>
                                         <option value="quarterly">3 Ayda Bir</option>
@@ -297,7 +297,7 @@ export default function IncomePage() {
                                         max="31"
                                         value={formData.recurrence_day}
                                         onChange={(e) => setFormData({ ...formData, recurrence_day: parseInt(e.target.value) })}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                     />
                                 </div>
                             </div>
@@ -308,7 +308,7 @@ export default function IncomePage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                            className="flex-1 px-6 py-3 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center justify-center gap-2"
                         >
                             <Save className="w-5 h-5" />
                             {loading ? 'Kaydediliyor...' : 'Geliri Kaydet'}
@@ -318,7 +318,7 @@ export default function IncomePage() {
             )}
 
             {/* Income List */}
-            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+            <div className="glass-card rounded-notebook overflow-hidden">
                 <div className="p-4 border-b border-border">
                     <h3 className="text-lg font-bold text-foreground">Gelir Kayıtları</h3>
                 </div>
@@ -341,7 +341,7 @@ export default function IncomePage() {
                                                 Bekliyor
                                             </span>
                                         ) : (
-                                            <span className="text-xs px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-md border border-emerald-500/20 flex items-center gap-1">
+                                            <span className="text-xs px-2 py-1 bg-vogo-blue/10 text-vogo-blue rounded-md border border-vogo-blue/20 flex items-center gap-1">
                                                 <CheckCircle2 className="w-3 h-3" />
                                                 Tahsil Edildi
                                             </span>
@@ -359,7 +359,7 @@ export default function IncomePage() {
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <p className={`font-bold text-lg ${item.status === 'pending' || item.is_paid === false ? 'text-amber-500' : 'text-emerald-400'}`}>
+                                    <p className={`font-bold text-lg ${item.status === 'pending' || item.is_paid === false ? 'text-amber-500' : 'text-vogo-aqua'}`}>
                                         {formatCurrency(item.amount)}
                                     </p>
                                     <button

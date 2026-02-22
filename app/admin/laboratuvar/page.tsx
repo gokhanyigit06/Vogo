@@ -58,7 +58,7 @@ function SortableLabProject({ project, viewMode, handleDelete }: any) {
             <div
                 ref={setNodeRef}
                 style={style}
-                className="group relative bg-card border border-border rounded-3xl p-4 transition-all hover:border-emerald-500/30 hover:shadow-xl flex flex-col h-full overflow-hidden"
+                className="group relative glass-card rounded-2xl p-4 transition-all hover:border-vogo-blue/30 hover:shadow-xl flex flex-col h-full overflow-hidden"
             >
                 {/* Drag Handle */}
                 <div className="absolute top-4 right-4 z-20 cursor-grab active:cursor-grabbing p-2 bg-black/20 hover:bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" {...attributes} {...listeners}>
@@ -78,7 +78,7 @@ function SortableLabProject({ project, viewMode, handleDelete }: any) {
 
                 <div className="flex-1 space-y-2">
                     {/* Internal Name */}
-                    <div className="text-xs text-emerald-500 font-bold uppercase tracking-wider">
+                    <div className="text-xs text-vogo-blue font-bold uppercase tracking-wider">
                         {project.internalName || 'İsimsiz'}
                     </div>
                     {/* Public Title */}
@@ -107,7 +107,7 @@ function SortableLabProject({ project, viewMode, handleDelete }: any) {
                 <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
                     <Link
                         href={`/admin/laboratuvar/edit/${project.id}`}
-                        className="text-sm font-medium text-emerald-500 hover:text-emerald-400 transition-colors"
+                        className="text-sm font-medium text-vogo-blue hover:text-vogo-aqua transition-colors"
                     >
                         Düzenle
                     </Link>
@@ -148,7 +148,7 @@ function SortableLabProject({ project, viewMode, handleDelete }: any) {
                 <div className="flex items-center justify-end gap-2">
                     <Link
                         href={`/admin/laboratuvar/edit/${project.id}`}
-                        className="p-2 hover:bg-muted rounded-lg text-emerald-500 transition-colors"
+                        className="p-2 hover:bg-muted rounded-lg text-vogo-blue transition-colors"
                     >
                         Düzenle
                     </Link>
@@ -238,7 +238,7 @@ export default function LabProjectsPage() {
     if (loading) return <div className="p-20 text-center animate-pulse">Laboratuvar verileri yükleniyor...</div>
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
             {/* Header */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div>
@@ -260,7 +260,7 @@ export default function LabProjectsPage() {
                     )}
                     <Link
                         href="/admin/laboratuvar/new"
-                        className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2"
+                        className="px-6 py-3 bg-vogo-teal hover:bg-vogo-blue text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2"
                     >
                         <Plus className="w-5 h-5" />
                         Yeni Proje Ekle
@@ -270,7 +270,7 @@ export default function LabProjectsPage() {
 
             {/* Toolbar */}
             <div className="flex justify-end mb-4">
-                <div className="flex bg-card border border-border rounded-lg p-1">
+                <div className="flex glass-card rounded-lg p-1">
                     <button onClick={() => setViewMode('grid')} className={cn("p-2 rounded", viewMode === 'grid' && "bg-muted shadow")}><LayoutGrid className="w-4 h-4" /></button>
                     <button onClick={() => setViewMode('list')} className={cn("p-2 rounded", viewMode === 'list' && "bg-muted shadow")}><ListIcon className="w-4 h-4" /></button>
                 </div>
@@ -286,7 +286,7 @@ export default function LabProjectsPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-card border border-border rounded-3xl overflow-hidden">
+                        <div className="glass-card rounded-2xl overflow-hidden">
                             <table className="w-full text-left">
                                 <tbody className="divide-y divide-border">
                                     {projects.map(project => (

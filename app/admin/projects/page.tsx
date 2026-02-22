@@ -67,7 +67,7 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
             <div
                 ref={setNodeRef}
                 style={style}
-                className="group relative bg-card border border-border rounded-3xl p-6 transition-all hover:border-emerald-500/30 hover:shadow-xl flex flex-col h-full"
+                className="group relative glass-card rounded-2xl p-6 transition-all duration-300 flex flex-col h-full"
             >
                 {/* Drag Handle */}
                 <div className="absolute top-4 right-4 cursor-grab active:cursor-grabbing p-2 hover:bg-muted rounded-full opacity-0 group-hover:opacity-100 transition-opacity" {...attributes} {...listeners}>
@@ -83,7 +83,7 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
 
                 <div className="flex-1">
                     {/* Internal Name (Admin) */}
-                    <div className="text-xs text-emerald-500 font-bold uppercase tracking-wider mb-1">
+                    <div className="text-xs text-vogo-blue font-bold uppercase tracking-wider mb-1">
                         {project.internalName || project.name || 'İsimsiz'}
                     </div>
                     {/* Public Title */}
@@ -108,7 +108,7 @@ function SortableProjectItem({ project, viewMode, statusConfig, formatCurrency, 
                     </div>
                     <Link
                         href={`/admin/projects/edit/${project.id}`}
-                        className="text-sm font-medium text-emerald-500 hover:underline"
+                        className="text-sm font-medium text-vogo-blue hover:underline"
                     >
                         Düzenle
                     </Link>
@@ -289,7 +289,7 @@ export default function ProjectsPage() {
     })
 
     const statusConfig: any = {
-        completed: { color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', label: 'Tamamlandı', icon: '✅' },
+        completed: { color: 'bg-vogo-blue/10 text-vogo-aqua border-vogo-blue/20', label: 'Tamamlandı', icon: '✅' },
         in_progress: { color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', label: 'Devam Ediyor', icon: '🚀' },
         quote: { color: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', label: 'Teklif', icon: '📝' },
         cancelled: { color: 'bg-slate-700/50 text-muted-foreground border-border', label: 'İptal', icon: '❌' },
@@ -298,13 +298,13 @@ export default function ProjectsPage() {
     if (loading) return <div className="p-20 text-center">Yükleniyor...</div>
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto space-y-8 gradient-mesh">
             {/* Header */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div>
                     <h1 className="text-3xl font-bold flex items-center gap-3">
-                        <Briefcase className="w-8 h-8 text-emerald-500" />
-                        Projeler
+                        <Briefcase className="w-8 h-8 text-vogo-blue" />
+                        <span className="text-gradient-vogo">Projeler</span>
                     </h1>
                     <p className="text-muted-foreground mt-2">Dilediğiniz gibi sürükleyip sıralayın.</p>
                 </div>
@@ -322,16 +322,16 @@ export default function ProjectsPage() {
                         </Button>
                     )}
                     <Link href="/admin/projects/new">
-                        <Button size="lg">
-                            <Plus className="w-5 h-5 mr-2" />
-                            Yeni Proje
-                        </Button>
+                        <button className="btn-vogo px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+                            <Plus className="w-5 h-5 relative z-10" />
+                            <span className="relative z-10">Yeni Proje</span>
+                        </button>
                     </Link>
                 </div>
             </div>
 
             {/* Filter Bar */}
-            <Card className="p-4 rounded-xl border border-border shadow-sm flex flex-col md:flex-row gap-4 mb-6">
+            <div className="glass-card p-4 rounded-2xl flex flex-col md:flex-row gap-4 mb-6">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
@@ -380,7 +380,7 @@ export default function ProjectsPage() {
                         </Button>
                     </div>
                 </div>
-            </Card>
+            </div>
 
             {/* Content */}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -399,7 +399,7 @@ export default function ProjectsPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-card border border-border rounded-3xl overflow-hidden">
+                        <div className="glass-card rounded-2xl overflow-hidden">
                             <table className="w-full text-left">
                                 <tbody className="divide-y divide-border">
                                     {filteredProjects.map(project => (

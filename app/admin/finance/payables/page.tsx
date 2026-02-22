@@ -70,13 +70,13 @@ export default function PayablesPage() {
     const getStatusBadge = (status: string, date: string) => {
         const isOverdue = new Date(date) < new Date() && status === 'pending'
 
-        if (status === 'paid') return <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-xs font-bold border border-emerald-500/20">Ödendi</span>
+        if (status === 'paid') return <span className="px-3 py-1 bg-vogo-blue/10 text-vogo-blue rounded-full text-xs font-bold border border-vogo-blue/20">Ödendi</span>
         if (isOverdue) return <span className="px-3 py-1 bg-red-500/10 text-red-500 rounded-full text-xs font-bold border border-red-500/20">Gecikmiş</span>
         return <span className="px-3 py-1 bg-amber-500/10 text-amber-500 rounded-full text-xs font-bold border border-amber-500/20">Bekliyor</span>
     }
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
@@ -100,7 +100,7 @@ export default function PayablesPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6 animate-in slide-in-from-top-4">
+                <form onSubmit={handleSubmit} className="glass-card rounded-notebook p-6 space-y-6 animate-in slide-in-from-top-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Borç/Ödeme Kaydı</h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div>
@@ -179,7 +179,7 @@ export default function PayablesPage() {
             )}
 
             {/* List */}
-            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+            <div className="glass-card rounded-notebook overflow-hidden">
                 <table className="w-full">
                     <thead>
                         <tr className="bg-slate-800/50 border-b border-border text-left">
@@ -217,7 +217,7 @@ export default function PayablesPage() {
                                             {payable.status !== 'paid' && (
                                                 <button
                                                     onClick={() => {/* Ödeme yapıldı işaretle logic */ }}
-                                                    className="p-2 hover:bg-emerald-500/10 text-emerald-500 rounded-lg transition-colors"
+                                                    className="p-2 hover:bg-vogo-blue/10 text-vogo-blue rounded-lg transition-colors"
                                                     title="Ödendi İşaretle"
                                                 >
                                                     <CheckCircle className="w-4 h-4" />

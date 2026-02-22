@@ -98,7 +98,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                            <UserCheck className="w-8 h-8 text-emerald-500" />
+                            <UserCheck className="w-8 h-8 text-vogo-blue" />
                             Müşteriyi Düzenle
                         </h1>
                         <p className="text-slate-400 mt-1">{formData.name || 'Müşteri'} bilgilerini güncelleyin</p>
@@ -108,7 +108,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Temel Bilgiler */}
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <div className="glass-card rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Temel Bilgiler
                     </h2>
@@ -131,7 +131,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -143,7 +143,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                                 type="text"
                                 value={formData.company}
                                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
                     </div>
@@ -157,7 +157,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -169,7 +169,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
                     </div>
@@ -182,7 +182,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                             type="url"
                             value={formData.website}
                             onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                         />
                     </div>
 
@@ -193,13 +193,13 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                         <textarea
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-20 resize-none"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-20 resize-none"
                         />
                     </div>
                 </div>
 
                 {/* Durum */}
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <div className="glass-card rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Durum
                     </h2>
@@ -211,7 +211,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                         <select
                             value={formData.status}
                             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                         >
                             <option value="potential">Potansiyel</option>
                             <option value="active">Aktif</option>
@@ -226,7 +226,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                         <textarea
                             value={formData.notes}
                             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-32 resize-none"
                         />
                     </div>
                 </div>
@@ -236,7 +236,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                     <button
                         type="submit"
                         disabled={saving}
-                        className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                        className="flex-1 px-6 py-3 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center justify-center gap-2"
                     >
                         <Save className="w-5 h-5" />
                         {saving ? 'Güncelleniyor...' : 'Değişiklikleri Kaydet'}

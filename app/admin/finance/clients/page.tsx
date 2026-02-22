@@ -36,7 +36,7 @@ export default function ClientsFinancePage() {
     )
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
             <div className="flex items-center justify-between">
                 <div>
                     <Link href="/admin/finance" className="text-muted-foreground hover:text-foreground flex items-center gap-2 mb-2 transition-colors">
@@ -53,7 +53,7 @@ export default function ClientsFinancePage() {
                     <input
                         type="text"
                         placeholder="Müşteri ara..."
-                        className="w-full bg-card border border-border rounded-xl pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-blue-500"
+                        className="w-full glass-card rounded-xl pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-blue-500"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
@@ -68,13 +68,13 @@ export default function ClientsFinancePage() {
                 ) : (
                     filteredClients.map(client => (
                         <Link href={`/admin/finance/clients/${client.id}`} key={client.id}>
-                            <div className="bg-card border border-border hover:border-blue-500/50 p-6 rounded-notebook transition-all group h-full flex flex-col justify-between">
+                            <div className="glass-card hover:border-blue-500/50 p-6 rounded-notebook transition-all group h-full flex flex-col justify-between">
                                 <div>
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-lg font-bold">
                                             {client.name?.[0]?.toUpperCase()}
                                         </div>
-                                        <div className={`px-3 py-1 rounded-full text-xs font-bold border ${(client.balance || 0) > 0 ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                                        <div className={`px-3 py-1 rounded-full text-xs font-bold border ${(client.balance || 0) > 0 ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-vogo-blue/10 text-vogo-blue border-vogo-blue/20'
                                             }`}>
                                             {(client.balance || 0) > 0 ? 'Borçlu' : 'Dengede'}
                                         </div>
@@ -86,7 +86,7 @@ export default function ClientsFinancePage() {
                                 <div className="pt-4 border-t border-border mt-2">
                                     <div className="flex justify-between items-center mb-1">
                                         <span className="text-sm text-muted-foreground">Şu anki Bakiye</span>
-                                        <span className={`font-bold text-lg ${(client.balance || 0) > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                                        <span className={`font-bold text-lg ${(client.balance || 0) > 0 ? 'text-red-500' : 'text-vogo-blue'}`}>
                                             {formatCurrency(client.balance)}
                                         </span>
                                     </div>

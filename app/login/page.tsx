@@ -34,7 +34,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center relative overflow-hidden font-sans selection:bg-emerald-500/30">
+        <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center relative overflow-hidden font-sans selection:bg-vogo-blue/30">
 
             {/* --- Arkaplan Efektleri --- */}
 
@@ -42,7 +42,7 @@ export default function LoginPage() {
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#10b98110_1px,transparent_1px),linear-gradient(to_bottom,#10b98110_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
             {/* Köşe Işıkları (Spotlights) */}
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-[128px] pointer-events-none animate-pulse" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-vogo-blue/20 rounded-full blur-[128px] pointer-events-none animate-pulse" />
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px] pointer-events-none" />
 
 
@@ -54,7 +54,7 @@ export default function LoginPage() {
                 className="w-full max-w-md mx-4 relative z-10"
             >
                 {/* Kartın Kendisi */}
-                <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl shadow-emerald-500/5 ring-1 ring-white/5">
+                <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl shadow-vogo-blue/5 ring-1 ring-white/5">
 
                     {/* Header: Logo & Title */}
                     <div className="text-center mb-10">
@@ -62,7 +62,7 @@ export default function LoginPage() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
-                            className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/20"
+                            className="w-16 h-16 bg-gradient-to-br from-vogo-blue to-vogo-teal rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-lg shadow-vogo-blue/20"
                         >
                             <span className="text-white text-3xl font-bold">V</span>
                         </motion.div>
@@ -87,12 +87,12 @@ export default function LoginPage() {
                         <div className="space-y-1.5">
                             <label className="text-xs font-semibold text-slate-400 ml-1 uppercase tracking-wider">E-posta</label>
                             <div className="relative group">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-500 transition-colors" />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-vogo-blue transition-colors" />
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
+                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-vogo-blue focus:ring-1 focus:ring-vogo-blue transition-all font-medium"
                                     placeholder="admin@vogo.com"
                                     required
                                 />
@@ -102,12 +102,12 @@ export default function LoginPage() {
                         <div className="space-y-1.5">
                             <label className="text-xs font-semibold text-slate-400 ml-1 uppercase tracking-wider">Şifre</label>
                             <div className="relative group">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-500 transition-colors" />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-vogo-blue transition-colors" />
                                 <input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
+                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-vogo-blue focus:ring-1 focus:ring-vogo-blue transition-all font-medium"
                                     placeholder="••••••••"
                                     required
                                 />
@@ -117,7 +117,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-500/25 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group mt-2"
+                            className="w-full bg-vogo-blue hover:bg-vogo-teal text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-vogo-blue/25 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group mt-2"
                         >
                             {loading ? (
                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -139,7 +139,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Arka plan süsü (Kartın arkasında Glow) */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-[2rem] opacity-20 blur-2xl -z-10" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-vogo-blue to-blue-600 rounded-[2rem] opacity-20 blur-2xl -z-10" />
 
             </motion.div>
         </div>

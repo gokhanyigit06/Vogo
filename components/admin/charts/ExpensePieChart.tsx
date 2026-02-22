@@ -36,7 +36,7 @@ export default function ExpensePieChart({ expenses }: PieChartProps) {
     const data = processData()
 
     return (
-        <div className="bg-card border border-border p-6 rounded-notebook h-[400px]">
+        <div className="glass-card p-6 rounded-notebook h-[400px]">
             <h3 className="text-lg font-bold text-foreground mb-6">Gider Dağılımı</h3>
             <div className="w-full h-[300px]">
                 {expenses.length > 0 ? (

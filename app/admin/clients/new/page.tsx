@@ -59,7 +59,7 @@ export default function NewClientPage() {
                     Müşterilere Dön
                 </Link>
                 <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                    <UserPlus className="w-8 h-8 text-emerald-500" />
+                    <UserPlus className="w-8 h-8 text-vogo-blue" />
                     Yeni Müşteri Ekle
                 </h1>
                 <p className="text-slate-400 mt-1">CRM'e yeni müşteri kaydedin</p>
@@ -67,7 +67,7 @@ export default function NewClientPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Temel Bilgiler */}
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <div className="glass-card rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Temel Bilgiler
                     </h2>
@@ -90,7 +90,7 @@ export default function NewClientPage() {
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="Ahmet Yılmaz"
                             />
                         </div>
@@ -103,7 +103,7 @@ export default function NewClientPage() {
                                 type="text"
                                 value={formData.company}
                                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="Örnek Ltd. Şti."
                             />
                         </div>
@@ -118,7 +118,7 @@ export default function NewClientPage() {
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="ahmet@firma.com"
                             />
                         </div>
@@ -131,7 +131,7 @@ export default function NewClientPage() {
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="+90 555 123 4567"
                             />
                         </div>
@@ -145,7 +145,7 @@ export default function NewClientPage() {
                             type="url"
                             value={formData.website}
                             onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             placeholder="https://firma.com"
                         />
                     </div>
@@ -157,14 +157,14 @@ export default function NewClientPage() {
                         <textarea
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-20 resize-none"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-20 resize-none"
                             placeholder="Tam adres..."
                         />
                     </div>
                 </div>
 
                 {/* Durum */}
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <div className="glass-card rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Durum
                     </h2>
@@ -176,7 +176,7 @@ export default function NewClientPage() {
                         <select
                             value={formData.status}
                             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                         >
                             <option value="potential">Potansiyel</option>
                             <option value="active">Aktif</option>
@@ -191,7 +191,7 @@ export default function NewClientPage() {
                         <textarea
                             value={formData.notes}
                             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-32 resize-none"
                             placeholder="Müşteri hakkında notlar..."
                         />
                     </div>
@@ -202,7 +202,7 @@ export default function NewClientPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                        className="flex-1 px-6 py-3 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center justify-center gap-2"
                     >
                         <Save className="w-5 h-5" />
                         {loading ? 'Kaydediliyor...' : 'Müşteriyi Kaydet'}

@@ -282,7 +282,7 @@ export default function ProjectDetailPage() {
     const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8 print:p-0 print:bg-white print:text-black">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8 print:p-0 print:bg-white print:text-black">
             {/* Header */}
             <div className="flex items-center gap-4 print:hidden">
                 <Link href="/admin/projects" className="p-2 bg-muted rounded-lg hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors">
@@ -291,7 +291,7 @@ export default function ProjectDetailPage() {
                 <div>
                     <div className="flex items-center gap-3">
                         <h1 className="text-3xl font-bold text-foreground">{project.name}</h1>
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${project.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${project.status === 'completed' ? 'bg-vogo-blue/10 text-vogo-aqua border-vogo-blue/20' :
                             project.status === 'in_progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                                 'bg-slate-800 text-slate-400 border-slate-700'
                             }`}>
@@ -319,9 +319,9 @@ export default function ProjectDetailPage() {
                 <div className="lg:col-span-2 space-y-8">
 
                     {/* Açıklama Kartı */}
-                    <div className="bg-card border border-border rounded-notebook p-6 print:border-gray-200 print:bg-white print:p-0">
+                    <div className="glass-card rounded-notebook p-6 print:border-gray-200 print:bg-white print:p-0">
                         <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2 print:text-black">
-                            <Briefcase className="w-5 h-5 text-emerald-500 print:text-black" />
+                            <Briefcase className="w-5 h-5 text-vogo-blue print:text-black" />
                             Proje Detayları
                         </h2>
                         <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap print:text-gray-700">
@@ -330,7 +330,7 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {/* Notlar Bölümü */}
-                    <div className="bg-card border border-border rounded-notebook p-6 print:hidden">
+                    <div className="glass-card rounded-notebook p-6 print:hidden">
                         <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                             <StickyNote className="w-5 h-5 text-yellow-500" />
                             Proje Notları
@@ -343,12 +343,12 @@ export default function ProjectDetailPage() {
                                 value={newNote}
                                 onChange={(e) => setNewNote(e.target.value)}
                                 placeholder="Proje ile ilgili not ekle..."
-                                className="flex-1 bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="flex-1 bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                             <button
                                 type="submit"
                                 disabled={addingNote || !newNote.trim()}
-                                className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-xl disabled:opacity-50 transition-colors"
+                                className="bg-vogo-teal hover:bg-vogo-blue text-white p-2 rounded-xl disabled:opacity-50 transition-colors"
                             >
                                 <Plus className="w-5 h-5" />
                             </button>
@@ -380,13 +380,13 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {/* Görevler Listesi */}
-                    <div className="bg-card border border-border rounded-notebook p-6 print:hidden">
+                    <div className="glass-card rounded-notebook p-6 print:hidden">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                                 <CheckCircle2 className="w-5 h-5 text-blue-500" />
                                 Proje Görevleri
                             </h2>
-                            <Link href="/admin/tasks" className="text-sm text-emerald-500 hover:text-emerald-400 font-medium flex items-center gap-1 transition-colors">
+                            <Link href="/admin/tasks" className="text-sm text-vogo-blue hover:text-vogo-aqua font-medium flex items-center gap-1 transition-colors">
                                 Tüm Görevleri Yönet
                             </Link>
                         </div>
@@ -398,7 +398,7 @@ export default function ProjectDetailPage() {
                                 value={newTaskTitle}
                                 onChange={(e) => setNewTaskTitle(e.target.value)}
                                 placeholder="Yeni görev ekle... (Enter)"
-                                className="flex-1 bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-all placeholder:text-muted-foreground"
+                                className="flex-1 bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue transition-all placeholder:text-muted-foreground"
                             />
                             <button
                                 type="submit"
@@ -419,7 +419,7 @@ export default function ProjectDetailPage() {
                                     <div
                                         key={task.id}
                                         className={`group flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer ${task.status === 'done'
-                                            ? 'bg-emerald-500/5 border-emerald-500/20 opacity-70'
+                                            ? 'bg-vogo-blue/5 border-vogo-blue/20 opacity-70'
                                             : 'bg-card hover:bg-muted/50 border-border hover:border-blue-500/30 hover:shadow-md'
                                             }`}
                                         onClick={() => setSelectedTask(task)}
@@ -428,14 +428,14 @@ export default function ProjectDetailPage() {
                                             <button
                                                 onClick={(e) => toggleTaskStatus(task, e)}
                                                 className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${task.status === 'done'
-                                                    ? 'bg-emerald-500 text-white scale-110'
-                                                    : 'border-2 border-slate-400 text-transparent hover:border-emerald-500'
+                                                    ? 'bg-vogo-blue text-white scale-110'
+                                                    : 'border-2 border-slate-400 text-transparent hover:border-vogo-blue'
                                                     }`}>
                                                 <CheckCircle2 className="w-4 h-4" />
                                             </button>
 
                                             <span className={`font-medium transition-all ${task.status === 'done'
-                                                ? 'text-muted-foreground line-through decoration-emerald-500/50'
+                                                ? 'text-muted-foreground line-through decoration-vogo-blue/50'
                                                 : 'text-foreground'
                                                 }`}>
                                                 {task.title}
@@ -467,25 +467,25 @@ export default function ProjectDetailPage() {
                 <div className="space-y-6 print:hidden">
 
                     {/* İlerleme Durumu */}
-                    <div className="bg-card border border-border rounded-notebook p-6">
+                    <div className="glass-card rounded-notebook p-6">
                         <h3 className="text-sm font-bold text-muted-foreground uppercase mb-4">İlerleme</h3>
                         <div className="flex items-end justify-between mb-2">
                             <span className="text-3xl font-bold text-foreground">%{progress}</span>
                             <span className="text-sm text-muted-foreground">{completedTasks}/{totalTasks} Görev</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                            <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+                            <div className="h-full bg-vogo-blue transition-all duration-500" style={{ width: `${progress}%` }} />
                         </div>
                     </div>
 
                     {/* Finansal Özet */}
-                    <div className="bg-card border border-border rounded-notebook p-6">
+                    <div className="glass-card rounded-notebook p-6">
                         <h3 className="text-sm font-bold text-muted-foreground uppercase mb-4">Finansal</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="text-xs text-slate-500 block mb-1">Toplam Bütçe</label>
                                 <div className="text-xl font-bold text-foreground flex items-center gap-1">
-                                    <DollarSign className="w-5 h-5 text-emerald-500" />
+                                    <DollarSign className="w-5 h-5 text-vogo-blue" />
                                     {project.budget ? project.budget.toLocaleString('tr-TR') : '0'} ₺
                                 </div>
                             </div>
@@ -500,10 +500,10 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {/* Aksiyonlar */}
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-3">
+                    <div className="glass-card rounded-notebook p-6 space-y-3">
                         <Link
                             href={`/admin/projects/edit/${project.id}`}
-                            className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-colors"
+                            className="w-full flex items-center justify-center gap-2 py-3 bg-vogo-teal hover:bg-vogo-blue text-white rounded-xl font-bold transition-colors"
                         >
                             <Edit2 className="w-4 h-4" />
                             Projeyi Düzenle

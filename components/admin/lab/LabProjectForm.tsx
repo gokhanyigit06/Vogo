@@ -172,16 +172,16 @@ export default function LabProjectForm({ initialData, onSubmit, loading }: { ini
             {/* Top Section: Basic Info */}
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                    <div className="bg-card border border-border p-6 rounded-2xl space-y-4">
+                    <div className="glass-card p-6 rounded-2xl space-y-4">
                         <h3 className="font-bold text-lg">Temel Bilgiler</h3>
                         <div>
                             <label className="block text-sm font-medium mb-1">Admin İsmi (Internal)</label>
-                            <input type="text" className="w-full bg-background border border-border rounded-lg p-3 outline-none focus:border-emerald-500"
+                            <input type="text" className="w-full bg-background border border-border rounded-lg p-3 outline-none focus:border-vogo-blue"
                                 value={formData.internalName} onChange={e => setFormData({ ...formData, internalName: e.target.value })} required />
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1">Public Başlık (Sitede Görünen)</label>
-                            <input type="text" className="w-full bg-background border border-border rounded-lg p-3 outline-none focus:border-emerald-500"
+                            <input type="text" className="w-full bg-background border border-border rounded-lg p-3 outline-none focus:border-vogo-blue"
                                 value={formData.publicTitle} onChange={e => setFormData({ ...formData, publicTitle: e.target.value })} required />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -205,7 +205,7 @@ export default function LabProjectForm({ initialData, onSubmit, loading }: { ini
                 </div>
 
                 <div className="space-y-6">
-                    <div className="bg-card border border-border p-6 rounded-2xl space-y-4">
+                    <div className="glass-card p-6 rounded-2xl space-y-4">
                         <h3 className="font-bold text-lg">Medyalar</h3>
                         <div>
                             <label className="block text-sm font-medium mb-2">Liste Görseli (Thumbnail)</label>
@@ -217,7 +217,7 @@ export default function LabProjectForm({ initialData, onSubmit, loading }: { ini
                         </div>
                     </div>
 
-                    <div className="bg-card border border-border p-6 rounded-2xl space-y-4">
+                    <div className="glass-card p-6 rounded-2xl space-y-4">
                         <h3 className="font-bold text-lg">Etiketler</h3>
                         <div className="flex gap-2">
                             <input
@@ -232,7 +232,7 @@ export default function LabProjectForm({ initialData, onSubmit, loading }: { ini
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {formData.tags.map(tag => (
-                                <span key={tag} className="px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded text-xs flex items-center gap-1">
+                                <span key={tag} className="px-2 py-1 bg-vogo-blue/10 text-vogo-blue rounded text-xs flex items-center gap-1">
                                     {tag}
                                     <button type="button" onClick={() => setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }))} className="hover:text-red-500">×</button>
                                 </span>
@@ -243,7 +243,7 @@ export default function LabProjectForm({ initialData, onSubmit, loading }: { ini
             </div>
 
             {/* Content Blocks Editor */}
-            <div className="bg-card border border-border p-8 rounded-3xl min-h-[400px]">
+            <div className="glass-card p-8 rounded-3xl min-h-[400px]">
                 <h3 className="font-bold text-2xl mb-6">İçerik Blokları</h3>
 
                 <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -277,7 +277,7 @@ export default function LabProjectForm({ initialData, onSubmit, loading }: { ini
 
             {/* Sticky Action Bar */}
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur border-t border-border z-50 flex justify-end gap-4 max-w-7xl mx-auto w-full">
-                <button type="submit" disabled={loading} className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold shadow-lg transition-all disabled:opacity-50">
+                <button type="submit" disabled={loading} className="px-8 py-3 bg-vogo-teal hover:bg-vogo-blue text-white rounded-xl font-bold shadow-lg transition-all disabled:opacity-50">
                     {loading ? 'Kaydediliyor...' : 'Projeyi Yayınla'}
                 </button>
             </div>

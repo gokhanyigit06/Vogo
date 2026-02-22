@@ -43,14 +43,14 @@ export default function TagsInput({ value = [], onChange, placeholder = "Hizmet 
     }
 
     return (
-        <div className="w-full bg-background border border-border rounded-xl px-2 py-2 flex flex-wrap gap-2 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500 transition-all">
+        <div className="w-full bg-background border border-border rounded-xl px-2 py-2 flex flex-wrap gap-2 focus-within:ring-2 focus-within:ring-vogo-blue/20 focus-within:border-vogo-blue transition-all">
             {value.map((tag, index) => (
-                <span key={index} className="bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 px-2 py-1 rounded-lg text-sm font-medium flex items-center gap-1">
+                <span key={index} className="bg-vogo-blue/10 text-vogo-teal border border-vogo-blue/20 px-2 py-1 rounded-lg text-sm font-medium flex items-center gap-1">
                     {tag}
                     <button
                         type="button"
                         onClick={() => removeTag(index)}
-                        className="hover:bg-emerald-500/20 rounded-full p-0.5 transition-colors"
+                        className="hover:bg-vogo-blue/20 rounded-full p-0.5 transition-colors"
                     >
                         <X className="w-3 h-3" />
                     </button>

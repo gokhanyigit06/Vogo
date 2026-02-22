@@ -121,7 +121,7 @@ export default function ExpensesPage() {
     }
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
 
             {/* Header */}
             <div className="flex items-center justify-between">
@@ -149,15 +149,15 @@ export default function ExpensesPage() {
 
             {/* Stats */}
             <div className="grid md:grid-cols-3 gap-4">
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Toplam Gider</p>
                     <p className="text-2xl font-bold text-red-400 mt-1">{formatCurrency(totalExpenses)}</p>
                 </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Kayıt Sayısı</p>
                     <p className="text-2xl font-bold text-foreground mt-1">{expenses.length}</p>
                 </div>
-                <div className="bg-card border border-border p-4 rounded-xl">
+                <div className="glass-card p-4 rounded-xl">
                     <p className="text-slate-400 text-sm">Düzenli Gider</p>
                     <p className="text-2xl font-bold text-purple-400 mt-1">{recurringExpenses.length} kayıt</p>
                 </div>
@@ -165,7 +165,7 @@ export default function ExpensesPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="glass-card rounded-notebook p-6 space-y-6">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">Yeni Gider Kaydı</h2>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -322,7 +322,7 @@ export default function ExpensesPage() {
             )}
 
             {/* Expenses List */}
-            <div className="bg-card border border-border rounded-notebook overflow-hidden">
+            <div className="glass-card rounded-notebook overflow-hidden">
                 <div className="p-4 border-b border-border">
                     <h3 className="text-lg font-bold text-foreground">Gider Kayıtları</h3>
                 </div>

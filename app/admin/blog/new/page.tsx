@@ -89,7 +89,7 @@ export default function NewBlogPostPage() {
                     <button
                         onClick={handlePublish}
                         disabled={isSubmitting}
-                        className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                        className="px-6 py-2.5 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center gap-2 active:scale-95"
                     >
                         {isSubmitting ? <span className="animate-pulse">Yayınlanıyor...</span> : <><Send className="w-4 h-4" /> Yayınla</>}
                     </button>
@@ -103,13 +103,13 @@ export default function NewBlogPostPage() {
                 <div className="lg:col-span-8 space-y-8">
 
                     {/* Title Input */}
-                    <div className="bg-card border border-border rounded-notebook p-8 shadow-sm space-y-4">
+                    <div className="glass-card rounded-notebook p-8 shadow-sm space-y-4">
                         <div className="space-y-2">
                             <label className="block text-foreground text-sm font-bold ml-1">Yazı Başlığı</label>
                             <input
                                 type="text"
                                 placeholder="Müşterileri Etkileyecek 10 Web Tasarım İpucu..."
-                                className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-5 py-4 text-foreground text-lg font-bold placeholder:font-normal focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-muted-foreground"
+                                className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-5 py-4 text-foreground text-lg font-bold placeholder:font-normal focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all placeholder:text-muted-foreground"
                                 value={formData.title}
                                 onChange={(e) => {
                                     const newTitle = e.target.value
@@ -126,7 +126,7 @@ export default function NewBlogPostPage() {
                             {formData.slug ? (
                                 <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-lg border border-border">
                                     <span className="font-semibold">URL:</span>
-                                    <span className="font-mono text-emerald-500">vogo.com/blog/{formData.slug}</span>
+                                    <span className="font-mono text-vogo-blue">vogo.com/blog/{formData.slug}</span>
                                 </div>
                             ) : <span></span>}
                             <span>{formData.title.length} / 60 karakter</span>
@@ -148,9 +148,9 @@ export default function NewBlogPostPage() {
                 <div className="lg:col-span-4 space-y-8">
 
                     {/* Category & Status */}
-                    <div className="bg-card border border-border rounded-notebook p-6 space-y-6 shadow-sm sticky top-8">
+                    <div className="glass-card rounded-notebook p-6 space-y-6 shadow-sm sticky top-8">
                         <h3 className="font-bold text-foreground flex items-center gap-2 text-lg">
-                            <Tag className="w-5 h-5 text-emerald-500" />
+                            <Tag className="w-5 h-5 text-vogo-blue" />
                             Yayın Ayarları
                         </h3>
 
@@ -158,7 +158,7 @@ export default function NewBlogPostPage() {
                             <div className="space-y-2">
                                 <label className="block text-foreground text-sm font-semibold">Kategori</label>
                                 <select
-                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all appearance-none cursor-pointer"
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                 >
@@ -173,7 +173,7 @@ export default function NewBlogPostPage() {
                             <div className="space-y-2">
                                 <label className="block text-foreground text-sm font-semibold">Durum</label>
                                 <select
-                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 transition-all appearance-none cursor-pointer"
                                     value={formData.status}
                                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                                 >
@@ -186,7 +186,7 @@ export default function NewBlogPostPage() {
 
                         <div className="pt-6 border-t border-border">
                             <h3 className="font-bold text-foreground flex items-center gap-2 text-lg mb-4">
-                                <ImageIcon className="w-5 h-5 text-emerald-500" />
+                                <ImageIcon className="w-5 h-5 text-vogo-blue" />
                                 Kapak Görseli
                             </h3>
                             <ImageUploader
@@ -197,12 +197,12 @@ export default function NewBlogPostPage() {
 
                         <div className="pt-6 border-t border-border space-y-4">
                             <h3 className="font-bold text-foreground flex items-center gap-2 text-lg">
-                                <FileText className="w-5 h-5 text-emerald-500" />
+                                <FileText className="w-5 h-5 text-vogo-blue" />
                                 Özet (SEO)
                             </h3>
                             <textarea
                                 placeholder="Yazının kısa bir özeti..."
-                                className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground text-sm focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-32 resize-none placeholder:text-muted-foreground transition-all"
+                                className="w-full bg-white dark:bg-slate-900/50 border border-border rounded-xl px-4 py-3 text-foreground text-sm focus:outline-none focus:border-vogo-blue focus:ring-4 focus:ring-vogo-blue/10 h-32 resize-none placeholder:text-muted-foreground transition-all"
                                 value={formData.excerpt}
                                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                             />

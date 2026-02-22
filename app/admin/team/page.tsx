@@ -85,7 +85,7 @@ export default function TeamPage() {
     const getRoleBadge = (role: string) => {
         const r = role?.toLowerCase()
         switch (r) {
-            case 'admin': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+            case 'admin': return 'bg-vogo-blue/10 text-vogo-aqua border-vogo-blue/20'
             case 'manager': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
             default: return 'bg-slate-700/50 text-muted-foreground border-border'
         }
@@ -101,13 +101,13 @@ export default function TeamPage() {
     }
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
 
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <UsersRound className="w-8 h-8 text-emerald-500" />
+                        <UsersRound className="w-8 h-8 text-vogo-blue" />
                         Ekip Yönetimi
                     </h1>
                     <p className="text-muted-foreground mt-1">Sisteme giriş yapabilecek kullanıcıları yönetin</p>
@@ -118,7 +118,7 @@ export default function TeamPage() {
                         setSelectedMember(null)
                         setFormData({ name: "", email: "", password: "", role: "user", avatar_url: "" })
                     }}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+                    className="px-6 py-3 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center gap-2"
                 >
                     <UserPlus className="w-5 h-5" />
                     {showForm ? 'Formu Gizle' : 'Kullanıcı Ekle'}
@@ -127,7 +127,7 @@ export default function TeamPage() {
 
             {/* Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-notebook p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="glass-card rounded-notebook p-6 space-y-6">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         {selectedMember ? 'Kullanıcıyı Düzenle' : 'Yeni Kullanıcı'}
                     </h2>
@@ -149,7 +149,7 @@ export default function TeamPage() {
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="Ahmet Yılmaz"
                             />
                         </div>
@@ -161,7 +161,7 @@ export default function TeamPage() {
                                 required
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="ahmet@firma.com"
                             />
                         </div>
@@ -176,7 +176,7 @@ export default function TeamPage() {
                                 required={!selectedMember}
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder={selectedMember ? "Değiştirmek için yeni şifre girin" : "Güçlü bir şifre girin"}
                             />
                         </div>
@@ -186,7 +186,7 @@ export default function TeamPage() {
                             <select
                                 value={formData.role}
                                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="user">Kullanıcı</option>
                                 <option value="manager">Müdür</option>
@@ -198,7 +198,7 @@ export default function TeamPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all"
+                        className="px-6 py-3 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 text-white rounded-xl font-bold transition-all"
                     >
                         {loading ? (selectedMember ? 'Güncelleniyor...' : 'Ekleniyor...') : (selectedMember ? 'Güncelle' : 'Kullanıcı Ekle')}
                     </button>
@@ -208,7 +208,7 @@ export default function TeamPage() {
             {/* Team List */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {team.length === 0 ? (
-                    <div className="col-span-full p-12 text-center bg-card border border-border rounded-notebook">
+                    <div className="col-span-full p-12 text-center glass-card rounded-notebook">
                         <UsersRound className="w-16 h-16 text-slate-700 mx-auto mb-4" />
                         <p className="text-muted-foreground">Henüz kullanıcı eklenmemiş</p>
                     </div>
@@ -216,7 +216,7 @@ export default function TeamPage() {
                     team.map((member) => (
                         <div
                             key={member.id}
-                            className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all group relative cursor-pointer"
+                            className="glass-card rounded-notebook p-6 hover:border-vogo-blue/30 transition-all group relative cursor-pointer"
                             onClick={() => {
                                 setSelectedMember(member)
                                 setFormData({

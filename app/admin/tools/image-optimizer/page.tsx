@@ -82,7 +82,7 @@ export default function ImageOptimizerPage() {
             {/* Header */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold flex items-center gap-3 text-foreground">
-                    <Zap className="w-8 h-8 text-emerald-500" />
+                    <Zap className="w-8 h-8 text-vogo-blue" />
                     Image Optimizer
                 </h1>
                 <p className="text-muted-foreground mt-2">
@@ -92,7 +92,7 @@ export default function ImageOptimizerPage() {
 
             {/* Upload Area */}
             <div
-                className="border-2 border-dashed border-border rounded-xl p-12 text-center mb-8 hover:border-emerald-500 transition-colors"
+                className="border-2 border-dashed border-border rounded-xl p-12 text-center mb-8 hover:border-vogo-blue transition-colors"
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
             >
@@ -125,7 +125,7 @@ export default function ImageOptimizerPage() {
                         {files.map((file, i) => (
                             <div key={i} className="flex items-center justify-between p-3 bg-card rounded-lg border border-border">
                                 <div className="flex items-center gap-3">
-                                    <ImageIcon className="w-5 h-5 text-emerald-500" />
+                                    <ImageIcon className="w-5 h-5 text-vogo-blue" />
                                     <span className="text-sm text-foreground">{file.name}</span>
                                 </div>
                                 <span className="text-xs text-muted-foreground">
@@ -138,7 +138,7 @@ export default function ImageOptimizerPage() {
                     <button
                         onClick={optimizeImages}
                         disabled={processing}
-                        className="mt-4 w-full py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                        className="mt-4 w-full py-3 bg-vogo-blue text-white rounded-lg font-semibold hover:bg-vogo-teal disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                     >
                         {processing ? (
                             <>
@@ -162,7 +162,7 @@ export default function ImageOptimizerPage() {
                         <h3 className="font-semibold text-foreground">Sonuçlar</h3>
                         <div className="text-sm">
                             <span className="text-muted-foreground">Toplam Tasarruf: </span>
-                            <span className="font-bold text-emerald-500">
+                            <span className="font-bold text-vogo-blue">
                                 {(totalSavings / 1024).toFixed(1)} KB
                             </span>
                         </div>
@@ -170,18 +170,18 @@ export default function ImageOptimizerPage() {
 
                     <div className="space-y-4 max-h-96 overflow-y-auto">
                         {optimized.map((result, i) => (
-                            <div key={i} className="p-4 bg-card rounded-lg border border-border hover:border-emerald-500 transition-colors">
+                            <div key={i} className="p-4 bg-card rounded-lg border border-border hover:border-vogo-blue transition-colors">
                                 <div className="flex items-start justify-between mb-3">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <CheckCircle className="w-4 h-4 text-emerald-500" />
+                                            <CheckCircle className="w-4 h-4 text-vogo-blue" />
                                             <span className="font-medium text-foreground">{result.original}</span>
                                         </div>
                                         <div className="text-xs text-muted-foreground">
                                             {result.width} × {result.height}px
                                         </div>
                                     </div>
-                                    <span className="text-emerald-500 font-bold text-lg">
+                                    <span className="text-vogo-blue font-bold text-lg">
                                         {result.savings}
                                     </span>
                                 </div>
@@ -193,7 +193,7 @@ export default function ImageOptimizerPage() {
                                     <a
                                         href={result.optimized}
                                         download
-                                        className="flex items-center gap-2 text-emerald-500 hover:text-emerald-600 text-sm font-medium transition-colors"
+                                        className="flex items-center gap-2 text-vogo-blue hover:text-vogo-teal text-sm font-medium transition-colors"
                                     >
                                         <Download className="w-4 h-4" />
                                         İndir

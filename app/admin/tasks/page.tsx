@@ -35,7 +35,7 @@ interface Task {
 const COLUMNS = [
     { id: 'todo', title: 'Yapılacaklar', color: 'bg-white0/10 border-slate-500/20 text-muted-foreground' },
     { id: 'in_progress', title: 'Sürüyor', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
-    { id: 'done', title: 'Tamamlandı', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' }
+    { id: 'done', title: 'Tamamlandı', color: 'bg-vogo-blue/10 border-vogo-blue/20 text-vogo-aqua' }
 ]
 
 // --- Visual Component (Pure UI) ---
@@ -61,7 +61,7 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
     return (
         <div
             onClick={onClick}
-            className={`bg-card border border-border p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-border transition-colors shadow-sm group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-emerald-500/50 z-50 cursor-grabbing' : ''}`}
+            className={`glass-card p-4 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-300 group ${isOverlay ? 'rotate-2 scale-105 shadow-xl border-vogo-blue/50 z-50 cursor-grabbing' : ''}`}
         >
             <div className="flex justify-between items-start mb-2">
                 <span className={`text-xs px-2 py-0.5 rounded font-medium ${priorityColor}`}>
@@ -81,7 +81,7 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
                 </div>
             )}
 
-            <h4 className="font-bold text-foreground mb-2 group-hover:text-emerald-400 transition-colors">{task.title}</h4>
+            <h4 className="font-bold text-foreground mb-2 group-hover:text-vogo-aqua transition-colors">{task.title}</h4>
 
             <div className="flex items-center gap-4 text-muted-foreground text-xs mt-3">
                 <div className="flex items-center gap-1.5">
@@ -95,7 +95,7 @@ function TaskCardView({ task, team = [], isOverlay = false, onClick }: { task: T
                 </div>
 
                 {checklistCount > 0 && (
-                    <div className={`flex items-center gap-1 ${completedChecklist === checklistCount ? 'text-emerald-500' : ''}`}>
+                    <div className={`flex items-center gap-1 ${completedChecklist === checklistCount ? 'text-vogo-blue' : ''}`}>
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>{completedChecklist}/{checklistCount}</span>
                     </div>
@@ -136,7 +136,7 @@ function KanbanColumn({ id, title, tasks, team, color, onTaskClick }: { id: stri
     const { setNodeRef } = useDroppable({ id })
 
     return (
-        <div ref={setNodeRef} className="flex flex-col h-full bg-white dark:bg-slate-900 rounded-notebook p-5 border border-border min-h-[500px] shadow-sm">
+        <div ref={setNodeRef} className="flex flex-col h-full glass-card rounded-2xl p-5 min-h-[500px]">
             <div className={`flex items-center justify-between border-b border-border pb-3 mb-4 ${color.replace('bg-', 'text-')}`}>
                 <h3 className="font-bold flex items-center gap-2">
                     {id === 'todo' && <AlertCircle className="w-5 h-5" />}
@@ -331,16 +331,16 @@ export default function TasksPage() {
         <div className="p-8 max-w-7xl mx-auto h-[calc(100vh-2rem)] flex flex-col">
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-                        Görev Yönetimi
+                    <h1 className="text-3xl font-bold flex items-center gap-3">
+                        <CheckCircle2 className="w-8 h-8 text-vogo-blue" />
+                        <span className="text-gradient-vogo">Görev Yönetimi</span>
                     </h1>
                     <p className="text-muted-foreground mt-1">Ekip iş takibi ve süreç yönetimi.</p>
                 </div>
 
                 <div className="flex gap-3">
                     <select
-                        className="bg-card border border-border text-foreground text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 shadow-sm"
+                        className="glass-card text-foreground text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-vogo-blue shadow-sm"
                         value={selectedProjectId}
                         onChange={(e) => setSelectedProjectId(e.target.value)}
                     >
@@ -355,7 +355,7 @@ export default function TasksPage() {
                             setFormData({ title: '', description: '', status: 'todo', priority: 'medium', assigned_to: '', project_id: '', due_date: '' })
                             setShowModal(true)
                         }}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+                        className="btn-vogo px-6 py-3 rounded-xl font-bold flex items-center gap-2"
                     >
                         <Plus className="w-5 h-5" />
                         Yeni Görev
@@ -400,7 +400,7 @@ export default function TasksPage() {
 
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-                    <div className="bg-card border border-border rounded-notebook p-6 w-full max-w-md shadow-2xl">
+                    <div className="glass-card rounded-notebook p-6 w-full max-w-md shadow-2xl">
                         <div className="flex justify-between items-center mb-6 border-b border-border pb-4">
                             <h2 className="text-xl font-bold text-foreground">Yeni Görev Ekle</h2>
                             <button onClick={() => setShowModal(false)} className="text-muted-foreground hover:text-foreground transition-colors">
@@ -413,7 +413,7 @@ export default function TasksPage() {
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all font-medium"
+                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-2 focus:ring-vogo-blue/10 transition-all font-medium"
                                     placeholder="Görev başlığı..."
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
@@ -423,7 +423,7 @@ export default function TasksPage() {
                             <div>
                                 <label className="block text-sm font-bold text-foreground mb-1.5">Proje</label>
                                 <select
-                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all cursor-pointer"
+                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-2 focus:ring-vogo-blue/10 transition-all cursor-pointer"
                                     value={formData.project_id}
                                     onChange={e => setFormData({ ...formData, project_id: e.target.value })}
                                 >
@@ -438,7 +438,7 @@ export default function TasksPage() {
                                 <div>
                                     <label className="block text-sm font-bold text-foreground mb-1.5">Atanan Kişi</label>
                                     <select
-                                        className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all cursor-pointer"
+                                        className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-2 focus:ring-vogo-blue/10 transition-all cursor-pointer"
                                         value={formData.assigned_to}
                                         onChange={e => setFormData({ ...formData, assigned_to: e.target.value })}
                                     >
@@ -451,7 +451,7 @@ export default function TasksPage() {
                                 <div>
                                     <label className="block text-sm font-bold text-foreground mb-1.5">Öncelik</label>
                                     <select
-                                        className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all cursor-pointer"
+                                        className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-2 focus:ring-vogo-blue/10 transition-all cursor-pointer"
                                         value={formData.priority}
                                         onChange={e => setFormData({ ...formData, priority: e.target.value })}
                                     >
@@ -465,7 +465,7 @@ export default function TasksPage() {
                                 <label className="block text-sm font-bold text-foreground mb-1.5">Bitiş Tarihi</label>
                                 <input
                                     type="date"
-                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all"
+                                    className="w-full bg-muted/30 border border-border rounded-xl p-3 text-foreground focus:outline-none focus:border-vogo-blue focus:ring-2 focus:ring-vogo-blue/10 transition-all"
                                     value={formData.due_date}
                                     onChange={e => setFormData({ ...formData, due_date: e.target.value })}
                                 />
@@ -473,7 +473,7 @@ export default function TasksPage() {
                             <div className="pt-4 border-t border-border mt-4">
                                 <button
                                     type="submit"
-                                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex items-center justify-center gap-2"
+                                    className="w-full bg-vogo-blue hover:bg-vogo-teal text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-vogo-blue/20 active:scale-95 flex items-center justify-center gap-2"
                                 >
                                     <Plus className="w-5 h-5" />
                                     Görevi Oluştur

@@ -89,7 +89,7 @@ export default function MultiImageUploader({ value = [], onChange }: MultiImageU
             {/* Upload Area */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* File Upload */}
-                <div className="relative h-32 border-2 border-dashed border-border rounded-xl hover:border-emerald-500/50 hover:bg-muted/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
+                <div className="relative h-32 border-2 border-dashed border-border rounded-xl hover:border-vogo-blue/50 hover:bg-muted/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
                     <input
                         type="file"
                         accept="image/*"
@@ -100,15 +100,15 @@ export default function MultiImageUploader({ value = [], onChange }: MultiImageU
                     />
                     {uploading ? (
                         <>
-                            <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+                            <Loader2 className="w-8 h-8 text-vogo-blue animate-spin" />
                             <span className="text-sm text-muted-foreground">Yükleniyor...</span>
                         </>
                     ) : (
                         <>
                             <div className="p-3 bg-muted rounded-full group-hover:scale-110 transition-transform">
-                                <Upload className="w-6 h-6 text-emerald-500" />
+                                <Upload className="w-6 h-6 text-vogo-blue" />
                             </div>
-                            <span className="text-sm text-muted-foreground font-medium group-hover:text-emerald-400 transition-colors">Resim Seç (Çoklu)</span>
+                            <span className="text-sm text-muted-foreground font-medium group-hover:text-vogo-aqua transition-colors">Resim Seç (Çoklu)</span>
                         </>
                     )}
                 </div>
@@ -125,13 +125,13 @@ export default function MultiImageUploader({ value = [], onChange }: MultiImageU
                             value={urlInput}
                             onChange={(e) => setUrlInput(e.target.value)}
                             placeholder="https://..."
-                            className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                            className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-vogo-blue"
                             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddUrl())}
                         />
                         <button
                             type="button"
                             onClick={handleAddUrl}
-                            className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm font-bold disabled:opacity-50"
+                            className="bg-vogo-blue hover:bg-vogo-teal text-white px-3 py-2 rounded-lg text-sm font-bold disabled:opacity-50"
                             disabled={!urlInput.trim()}
                         >
                             Ekle

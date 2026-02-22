@@ -36,7 +36,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
     const { client, projects, incomes, transactions } = data
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
             <Link href="/admin/finance/clients" className="text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors">
                 <ArrowLeft className="w-4 h-4" /> Cari Listesine Dön
             </Link>
@@ -44,7 +44,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Sol Kolon: Müşteri Bilgisi */}
                 <div className="space-y-6">
-                    <div className="bg-card border border-border p-6 rounded-notebook">
+                    <div className="glass-card p-6 rounded-notebook">
                         <div className="w-20 h-20 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-3xl font-bold mb-4">
                             {client.name?.[0]?.toUpperCase()}
                         </div>
@@ -73,7 +73,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                         </div>
                     </div>
 
-                    <div className="bg-card border border-border p-6 rounded-notebook">
+                    <div className="glass-card p-6 rounded-notebook">
                         <h3 className="font-bold text-foreground mb-4">Finansal Özet</h3>
                         <div className="space-y-4">
                             {/* CSS FIX: bg-slate-800 yerine bg-muted/50 kullanıldı, border eklendi */}
@@ -83,12 +83,12 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 border border-border rounded-xl">
                                 <span className="text-sm text-muted-foreground">Toplam Ödenen</span>
-                                <span className="font-bold text-emerald-500">{formatCurrency(client.total_paid)}</span>
+                                <span className="font-bold text-vogo-blue">{formatCurrency(client.total_paid)}</span>
                             </div>
                             <div className="pt-2 border-t border-border mt-2">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm font-bold text-foreground">Güncel Bakiye (Kalan)</span>
-                                    <span className={`text-xl font-bold ${(client.balance || 0) > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
+                                    <span className={`text-xl font-bold ${(client.balance || 0) > 0 ? 'text-amber-500' : 'text-vogo-blue'}`}>
                                         {formatCurrency(client.balance)}
                                     </span>
                                 </div>
@@ -101,7 +101,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                 <div className="lg:col-span-2 space-y-8">
 
                     {/* Transactions / Timeline */}
-                    <div className="bg-card border border-border p-6 rounded-notebook">
+                    <div className="glass-card p-6 rounded-notebook">
                         <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
                             <Clock className="w-5 h-5 text-blue-500" />
                             İşlem Geçmişi
@@ -111,10 +111,10 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                             {/* Eğer Transaction tablosu boşsa projelere ve ödemelere göre sanal bir timeline oluştur */}
                             {incomes?.map((inc: any) => (
                                 <div key={inc.id} className="relative">
-                                    <div className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-4 border-card ${inc.status === 'pending' || !inc.is_paid ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
-                                    <div className={`p-4 rounded-xl border ${inc.status === 'pending' || !inc.is_paid ? 'bg-amber-500/10 border-amber-500/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
+                                    <div className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-4 border-card ${inc.status === 'pending' || !inc.is_paid ? 'bg-amber-500' : 'bg-vogo-blue'}`}></div>
+                                    <div className={`p-4 rounded-xl border ${inc.status === 'pending' || !inc.is_paid ? 'bg-amber-500/10 border-amber-500/20' : 'bg-vogo-blue/10 border-vogo-blue/20'}`}>
                                         <div className="flex justify-between items-start mb-1">
-                                            <span className={`font-bold ${inc.status === 'pending' || !inc.is_paid ? 'text-amber-500' : 'text-emerald-500'}`}>
+                                            <span className={`font-bold ${inc.status === 'pending' || !inc.is_paid ? 'text-amber-500' : 'text-vogo-blue'}`}>
                                                 {inc.status === 'pending' || !inc.is_paid ? 'Bekleyen Ödeme (Alacak)' : 'Tahsilat / Ödeme Alındı'}
                                             </span>
                                             <span className="text-xs text-muted-foreground">{new Date(inc.date).toLocaleDateString('tr-TR')}</span>

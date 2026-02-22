@@ -42,7 +42,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
     const remainingBalance = totalProjectBudget - totalPaid
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
 
             {/* Navigation */}
             <Link
@@ -54,9 +54,9 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
             </Link>
 
             {/* Profile Header */}
-            <div className="bg-card border border-border rounded-2xl p-8">
+            <div className="glass-card rounded-2xl p-8">
                 <div className="flex flex-col md:flex-row gap-8 items-start">
-                    <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl font-bold text-white shadow-lg shadow-emerald-500/20">
+                    <div className="w-24 h-24 bg-gradient-to-br from-vogo-blue to-teal-600 rounded-2xl flex items-center justify-center text-3xl font-bold text-white shadow-lg shadow-vogo-blue/20">
                         {client.name?.[0].toUpperCase()}
                     </div>
 
@@ -78,7 +78,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                                 >
                                     Profili Düzenle
                                 </Link>
-                                <button className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-colors shadow-lg shadow-emerald-500/20">
+                                <button className="px-4 py-2 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-medium transition-colors shadow-lg shadow-vogo-blue/20">
                                     Yeni Proje
                                 </button>
                             </div>
@@ -88,7 +88,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                             {client.email && (
                                 <div className="flex items-center gap-3 text-muted-foreground">
                                     <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-                                        <Mail className="w-4 h-4 text-emerald-400" />
+                                        <Mail className="w-4 h-4 text-vogo-aqua" />
                                     </div>
                                     {client.email}
                                 </div>
@@ -114,17 +114,17 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
 
             {/* Financial Summary */}
             <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-card border border-border p-6 rounded-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform" />
+                <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-vogo-blue/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform" />
                     <p className="text-muted-foreground text-sm mb-1">Toplam İş Hacmi</p>
                     <h3 className="text-3xl font-bold text-foreground">{formatCurrency(totalProjectBudget)}</h3>
-                    <div className="mt-4 flex items-center gap-2 text-sm text-emerald-400">
+                    <div className="mt-4 flex items-center gap-2 text-sm text-vogo-aqua">
                         <Briefcase className="w-4 h-4" />
                         {client.projects?.length} Proje
                     </div>
                 </div>
 
-                <div className="bg-card border border-border p-6 rounded-2xl relative overflow-hidden group">
+                <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform" />
                     <p className="text-muted-foreground text-sm mb-1">Tahsil Edilen</p>
                     <h3 className="text-3xl font-bold text-blue-400">{formatCurrency(totalPaid)}</h3>
@@ -134,7 +134,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                     </div>
                 </div>
 
-                <div className="bg-card border border-border p-6 rounded-2xl relative overflow-hidden group">
+                <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform" />
                     <p className="text-muted-foreground text-sm mb-1">Kalan Bakiye (Alacak)</p>
                     <h3 className={`text-3xl font-bold ${remainingBalance > 0 ? 'text-red-400' : 'text-foreground'}`}>
@@ -151,11 +151,11 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                            <Briefcase className="w-5 h-5 text-emerald-500" />
+                            <Briefcase className="w-5 h-5 text-vogo-blue" />
                             Projeler
                         </h2>
                     </div>
-                    <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                    <div className="glass-card rounded-2xl overflow-hidden">
                         {client.projects?.length === 0 ? (
                             <div className="p-8 text-center text-muted-foreground">Proje bulunamadı</div>
                         ) : (
@@ -164,14 +164,14 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                                     <div key={project.id} className="p-4 hover:bg-muted/50 transition-colors">
                                         <div className="flex items-center justify-between mb-2">
                                             <h4 className="font-bold text-foreground">{project.name}</h4>
-                                            <span className={`text-xs px-2 py-1 rounded-full ${project.status === 'done' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'
+                                            <span className={`text-xs px-2 py-1 rounded-full ${project.status === 'done' ? 'bg-vogo-blue/20 text-vogo-aqua' : 'bg-blue-500/20 text-blue-400'
                                                 }`}>
                                                 {project.status === 'done' ? 'Tamamlandı' : 'Devam Ediyor'}
                                             </span>
                                         </div>
                                         <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
                                         <div className="mt-3 flex items-center justify-between text-sm">
-                                            <span className="text-emerald-400 font-mono">{formatCurrency(project.budget || 0)}</span>
+                                            <span className="text-vogo-aqua font-mono">{formatCurrency(project.budget || 0)}</span>
                                             <span className="text-muted-foreground">{new Date(project.created_at).toLocaleDateString('tr-TR')}</span>
                                         </div>
                                     </div>
@@ -189,7 +189,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                             Ödeme Geçmişi
                         </h2>
                     </div>
-                    <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                    <div className="glass-card rounded-2xl overflow-hidden">
                         {client.income?.length === 0 ? (
                             <div className="p-8 text-center text-muted-foreground">Ödeme kaydı yok</div>
                         ) : (

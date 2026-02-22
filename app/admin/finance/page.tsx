@@ -96,13 +96,13 @@ export default function FinancePage() {
     ] as const
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-6">
+        <div className="p-8 max-w-7xl mx-auto space-y-6 gradient-mesh">
             {/* Header & Filter */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <DollarSign className="w-8 h-8 text-emerald-500" />
-                        Finans Yönetimi
+                    <h1 className="text-3xl font-bold flex items-center gap-3">
+                        <DollarSign className="w-8 h-8 text-vogo-blue" />
+                        <span className="text-gradient-vogo">Finans Yönetimi</span>
                     </h1>
                     <p className="text-muted-foreground mt-1">
                         {dateFilter === 'thisMonth' && 'Bu Ayın Finansal Özeti'}
@@ -112,28 +112,28 @@ export default function FinancePage() {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2 bg-card border border-border p-1 rounded-xl self-start overflow-x-auto max-w-full">
+                <div className="flex items-center gap-2 glass-card p-1.5 rounded-xl self-start overflow-x-auto max-w-full">
                     <button
                         onClick={() => setDateFilter('thisMonth')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'thisMonth' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'thisMonth' ? 'bg-vogo-blue text-white shadow-lg shadow-vogo-blue/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
                     >
                         Bu Ay
                     </button>
                     <button
                         onClick={() => setDateFilter('lastMonth')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'lastMonth' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'lastMonth' ? 'bg-vogo-blue text-white shadow-lg shadow-vogo-blue/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
                     >
                         Geçen Ay
                     </button>
                     <button
                         onClick={() => setDateFilter('thisYear')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'thisYear' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'thisYear' ? 'bg-vogo-blue text-white shadow-lg shadow-vogo-blue/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
                     >
                         Bu Yıl
                     </button>
                     <button
                         onClick={() => setDateFilter('allTime')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'allTime' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${dateFilter === 'allTime' ? 'bg-vogo-blue text-white shadow-lg shadow-vogo-blue/20' : 'text-slate-400 hover:text-foreground hover:bg-slate-800/50'}`}
                     >
                         Tümü
                     </button>
@@ -150,8 +150,8 @@ export default function FinancePage() {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as TabType)}
                                 className={`flex items-center gap-2 px-6 py-3 font-medium transition-all whitespace-nowrap ${activeTab === tab.id
-                                        ? 'text-emerald-500 border-b-2 border-emerald-500'
-                                        : 'text-muted-foreground hover:text-foreground'
+                                    ? 'text-vogo-blue border-b-2 border-vogo-blue'
+                                    : 'text-muted-foreground hover:text-foreground'
                                     }`}
                             >
                                 <Icon className="w-4 h-4" />
@@ -167,10 +167,10 @@ export default function FinancePage() {
                 <div className="space-y-6">
                     {/* KPI Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div className="bg-card border border-emerald-500/20 p-6 rounded-xl">
+                        <div className="kpi-card group" style={{ '--kpi-gradient': 'linear-gradient(135deg, #0099DD, #00ABBD)' } as React.CSSProperties}>
                             <div className="flex justify-between items-start mb-3">
-                                <TrendingUp className="w-8 h-8 text-emerald-500" />
-                                <span className="text-xs font-mono text-emerald-500/50 bg-emerald-500/5 px-2 py-1 rounded">
+                                <TrendingUp className="w-8 h-8 text-vogo-blue" />
+                                <span className="text-xs font-mono text-vogo-blue/50 bg-vogo-blue/5 px-2 py-1 rounded">
                                     {dateFilter === 'allTime' ? 'TÜMÜ' : 'DÖNEMSEL'}
                                 </span>
                             </div>
@@ -178,7 +178,7 @@ export default function FinancePage() {
                             <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalCollectedIncome)}</h3>
                         </div>
 
-                        <div className="bg-card border border-red-500/20 p-6 rounded-xl">
+                        <div className="kpi-card group" style={{ '--kpi-gradient': 'linear-gradient(135deg, #ef4444, #f87171)' } as React.CSSProperties}>
                             <div className="flex justify-between items-start mb-3">
                                 <TrendingDown className="w-8 h-8 text-slate-500" />
                                 <span className="text-xs font-mono text-slate-500/50 bg-white0/5 px-2 py-1 rounded">
@@ -189,7 +189,7 @@ export default function FinancePage() {
                             <h3 className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalPaidExpenses)}</h3>
                         </div>
 
-                        <div className="bg-card border border-blue-500/20 p-6 rounded-xl">
+                        <div className="kpi-card group" style={{ '--kpi-gradient': 'linear-gradient(135deg, #026E81, #00ABBD)' } as React.CSSProperties}>
                             <div className="flex justify-between items-start mb-3">
                                 <DollarSign className="w-8 h-8 text-blue-500" />
                                 <span className="text-xs font-mono text-blue-500/50 bg-blue-500/5 px-2 py-1 rounded">
@@ -202,7 +202,7 @@ export default function FinancePage() {
                             </h3>
                         </div>
 
-                        <div className="bg-card border border-amber-500/20 p-6 rounded-xl">
+                        <div className="kpi-card group" style={{ '--kpi-gradient': 'linear-gradient(135deg, #FF9933, #FF7733)' } as React.CSSProperties}>
                             <div className="flex justify-between items-start mb-3">
                                 <Calendar className="w-8 h-8 text-amber-500" />
                                 <span className="text-xs font-mono text-amber-500/50 bg-amber-500/5 px-2 py-1 rounded">TOPLAM</span>
@@ -213,7 +213,7 @@ export default function FinancePage() {
                             </h3>
                         </div>
 
-                        <div className="bg-card border border-red-500/20 p-6 rounded-xl">
+                        <div className="kpi-card group" style={{ '--kpi-gradient': 'linear-gradient(135deg, #ef4444, #dc2626)' } as React.CSSProperties}>
                             <div className="flex justify-between items-start mb-3">
                                 <Calendar className="w-8 h-8 text-red-500" />
                                 <span className="text-xs font-mono text-red-500/50 bg-red-500/5 px-2 py-1 rounded">TOPLAM</span>
@@ -237,25 +237,25 @@ export default function FinancePage() {
 
                     {/* Quick Actions */}
                     <div className="grid md:grid-cols-4 gap-4">
-                        <Link href="/admin/finance/clients" className="bg-card border border-border hover:border-blue-500/50 p-4 rounded-xl transition-all group">
+                        <Link href="/admin/finance/clients" className="glass-card hover:border-vogo-blue/30 p-4 rounded-xl transition-all group">
                             <div className="flex items-center gap-3">
                                 <Users className="w-5 h-5 text-blue-400" />
                                 <span className="font-medium text-foreground">Müşteri Carileri</span>
                             </div>
                         </Link>
-                        <Link href="/admin/finance/income" className="bg-card border border-border hover:border-emerald-500/50 p-4 rounded-xl transition-all group">
+                        <Link href="/admin/finance/income" className="glass-card hover:border-vogo-blue/30 p-4 rounded-xl transition-all group">
                             <div className="flex items-center gap-3">
-                                <Plus className="w-5 h-5 text-emerald-400" />
+                                <Plus className="w-5 h-5 text-vogo-aqua" />
                                 <span className="font-medium text-foreground">Gelir Ekle</span>
                             </div>
                         </Link>
-                        <Link href="/admin/finance/expenses" className="bg-card border border-border hover:border-red-500/50 p-4 rounded-xl transition-all group">
+                        <Link href="/admin/finance/expenses" className="glass-card hover:border-red-500/30 p-4 rounded-xl transition-all group">
                             <div className="flex items-center gap-3">
                                 <Plus className="w-5 h-5 text-red-500" />
                                 <span className="font-medium text-foreground">Gider Ekle</span>
                             </div>
                         </Link>
-                        <Link href="/admin/finance/payables" className="bg-card border border-border hover:border-amber-500/50 p-4 rounded-xl transition-all group">
+                        <Link href="/admin/finance/payables" className="glass-card hover:border-vogo-orange/30 p-4 rounded-xl transition-all group">
                             <div className="flex items-center gap-3">
                                 <FileText className="w-5 h-5 text-amber-500" />
                                 <span className="font-medium text-foreground">Borçlar</span>
@@ -277,7 +277,7 @@ export default function FinancePage() {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-muted-foreground text-sm mb-2">Düzenli Gelirler</p>
-                                    <p className="text-emerald-400 text-xl font-bold">{formatCurrency(monthlyRecurringIncome)}/ay</p>
+                                    <p className="text-vogo-aqua text-xl font-bold">{formatCurrency(monthlyRecurringIncome)}/ay</p>
                                 </div>
                                 <div>
                                     <p className="text-muted-foreground text-sm mb-2">Düzenli Giderler</p>
@@ -289,10 +289,10 @@ export default function FinancePage() {
 
                     <div className="grid md:grid-cols-2 gap-6">
                         {/* Income List */}
-                        <div className="bg-card border border-border rounded-xl p-6">
+                        <div className="glass-card rounded-2xl p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-bold text-foreground">Son Gelirler</h3>
-                                <Link href="/admin/finance/income" className="text-sm text-emerald-500 hover:text-emerald-400">
+                                <Link href="/admin/finance/income" className="text-sm text-vogo-blue hover:text-vogo-aqua">
                                     Tümünü Gör →
                                 </Link>
                             </div>
@@ -303,14 +303,14 @@ export default function FinancePage() {
                                             <p className="font-medium text-foreground text-sm">{item.description || 'Gelir'}</p>
                                             <p className="text-xs text-muted-foreground">{new Date(item.date).toLocaleDateString('tr-TR')}</p>
                                         </div>
-                                        <span className="text-emerald-500 font-bold">{formatCurrency(item.amount)}</span>
+                                        <span className="text-vogo-blue font-bold">{formatCurrency(item.amount)}</span>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         {/* Expense List */}
-                        <div className="bg-card border border-border rounded-xl p-6">
+                        <div className="glass-card rounded-2xl p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-bold text-foreground">Son Giderler</h3>
                                 <Link href="/admin/finance/expenses" className="text-sm text-red-500 hover:text-red-400">
@@ -337,7 +337,7 @@ export default function FinancePage() {
                 <div className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-6">
                         {/* Receivables */}
-                        <div className="bg-card border border-border rounded-xl p-6">
+                        <div className="glass-card rounded-2xl p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-bold text-foreground">Bekleyen Alacaklar</h3>
                                 <Link href="/admin/finance/clients" className="text-sm text-amber-500 hover:text-amber-400">
@@ -358,7 +358,7 @@ export default function FinancePage() {
                         </div>
 
                         {/* Payables */}
-                        <div className="bg-card border border-border rounded-xl p-6">
+                        <div className="glass-card rounded-2xl p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-bold text-foreground">Ödenecek Borçlar</h3>
                                 <Link href="/admin/finance/payables" className="text-sm text-red-500 hover:text-red-400">
@@ -381,7 +381,7 @@ export default function FinancePage() {
 
                     {/* Partner Balances */}
                     {expenses.some(e => e.paid_by) && (
-                        <div className="bg-card border border-border p-6 rounded-xl">
+                        <div className="glass-card rounded-2xl p-6">
                             <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
                                 <DollarSign className="w-5 h-5 text-blue-400" />
                                 Ortak Cari Hesapları

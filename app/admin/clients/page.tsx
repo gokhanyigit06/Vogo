@@ -78,7 +78,7 @@ export default function ClientsPage() {
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'active': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+            case 'active': return 'bg-vogo-blue/10 text-vogo-aqua border-vogo-blue/20'
             case 'potential': return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
             case 'inactive': return 'bg-slate-700/50 text-muted-foreground border-border'
             default: return 'bg-slate-700/50 text-muted-foreground'
@@ -103,7 +103,7 @@ export default function ClientsPage() {
     }
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

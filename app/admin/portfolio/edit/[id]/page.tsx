@@ -116,7 +116,7 @@ export default function EditProjectPage() {
                     <button
                         onClick={handleUpdate}
                         disabled={saving}
-                        className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95"
+                        className="px-6 py-2 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center gap-2 active:scale-95"
                     >
                         <Save className="w-4 h-4" /> {saving ? 'Kaydediliyor...' : 'Kaydet'}
                     </button>
@@ -131,7 +131,7 @@ export default function EditProjectPage() {
                             <label className="block text-slate-400 text-sm font-medium mb-2">Proje Başlığı</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue"
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                             />
@@ -140,7 +140,7 @@ export default function EditProjectPage() {
                             <label className="block text-slate-400 text-sm font-medium mb-2">Müşteri Adı</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue"
                                 value={formData.client}
                                 onChange={(e) => setFormData({ ...formData, client: e.target.value })}
                             />
@@ -148,7 +148,7 @@ export default function EditProjectPage() {
                         <div>
                             <label className="block text-slate-400 text-sm font-medium mb-2">Kategori</label>
                             <select
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue"
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                             >
@@ -162,7 +162,7 @@ export default function EditProjectPage() {
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                         <label className="block text-slate-400 text-sm font-medium mb-2">Açıklama (Kısa)</label>
                         <textarea
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 h-32 resize-none"
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-vogo-blue h-32 resize-none"
                             value={formData.desc || formData.description}
                             onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
                         />
@@ -173,7 +173,7 @@ export default function EditProjectPage() {
                 <div className="space-y-6">
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                         <h3 className="font-bold text-white flex items-center gap-2 text-sm border-b border-slate-800 pb-3">
-                            <ImageIcon className="w-4 h-4 text-emerald-500" />
+                            <ImageIcon className="w-4 h-4 text-vogo-blue" />
                             Proje Görseli
                         </h3>
                         <ImageUploader

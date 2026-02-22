@@ -24,17 +24,17 @@ export default function ServicesAdminPage() {
     if (loading) {
         return (
             <div className="flex h-screen items-center justify-center bg-transparent">
-                <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-16 h-16 border-4 border-vogo-blue border-t-transparent rounded-full animate-spin"></div>
             </div>
         )
     }
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <Layers className="w-8 h-8 text-emerald-500" />
+                        <Layers className="w-8 h-8 text-vogo-blue" />
                         Hizmet Yönetimi
                     </h1>
                     <p className="text-slate-400 mt-1">Sitede listelenen hizmetleri buradan yönetebilirsiniz.</p>
@@ -46,9 +46,9 @@ export default function ServicesAdminPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {services.map((service) => (
-                    <div key={service.id} className="bg-card border border-border rounded-notebook p-6 hover:border-emerald-500/30 transition-all group relative overflow-hidden">
+                    <div key={service.id} className="glass-card rounded-notebook p-6 hover:border-vogo-blue/30 transition-all group relative overflow-hidden">
                         <div className="flex justify-between items-start mb-4">
-                            <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-emerald-500 font-bold text-lg">
+                            <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-vogo-blue font-bold text-lg">
                                 {service.title ? service.title.charAt(0) : '?'}
                             </div>
                             <button className="p-2 hover:bg-muted rounded-lg text-slate-500 hover:text-foreground">
@@ -56,7 +56,7 @@ export default function ServicesAdminPage() {
                             </button>
                         </div>
 
-                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-emerald-400 transition-colors">{service.title}</h3>
+                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-vogo-aqua transition-colors">{service.title}</h3>
 
                         <div className="flex items-center gap-4 text-sm text-slate-400 mb-6">
                             <span className="flex items-center gap-1">
@@ -67,14 +67,14 @@ export default function ServicesAdminPage() {
                         </div>
 
                         <div className="flex items-center justify-between pt-4 border-t border-border">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${service.status === 'Aktif' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${service.status === 'Aktif' ? 'bg-vogo-blue/10 text-vogo-aqua border-vogo-blue/20' :
                                 service.status === 'Beta' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                                     'bg-muted text-slate-500 border-border'
                                 }`}>
                                 {service.status || 'Pasif'}
                             </span>
                             <Link href={`/admin/services/edit/${service.id}`}>
-                                <button className="flex items-center gap-2 text-sm font-bold text-foreground hover:text-emerald-400 transition-colors">
+                                <button className="flex items-center gap-2 text-sm font-bold text-foreground hover:text-vogo-aqua transition-colors">
                                     <Edit className="w-4 h-4" /> Düzenle
                                 </button>
                             </Link>

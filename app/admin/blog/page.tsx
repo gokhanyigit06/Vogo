@@ -25,18 +25,18 @@ export default function BlogManagementPage() {
     )
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
+        <div className="p-8 max-w-7xl mx-auto gradient-mesh space-y-8">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <FileText className="w-8 h-8 text-emerald-500" />
+                        <FileText className="w-8 h-8 text-vogo-blue" />
                         Blog Yönetimi
                     </h1>
                     <p className="text-muted-foreground mt-1">Tüm blog yazılarınızı buradan yönetebilir, düzenleyebilir veya silebilirsiniz.</p>
                 </div>
                 <Link href="/admin/blog/new">
-                    <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-3xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 active:scale-95">
+                    <button className="bg-vogo-blue hover:bg-vogo-teal text-white px-6 py-3 rounded-3xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center gap-2 active:scale-95">
                         <Plus className="w-5 h-5" /> Yeni Yazı Ekle
                     </button>
                 </Link>
@@ -49,7 +49,7 @@ export default function BlogManagementPage() {
                     <input
                         type="text"
                         placeholder="Yazı başlığı veya kategori ara..."
-                        className="w-full bg-background border border-border rounded-notebook pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-muted-foreground"
+                        className="w-full bg-background border border-border rounded-notebook pl-10 pr-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue transition-colors placeholder:text-muted-foreground"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -57,9 +57,9 @@ export default function BlogManagementPage() {
             </div>
 
             {/* Content Table */}
-            <div className="bg-card border border-border rounded-notebook overflow-hidden shadow-xl card-light-shadow">
+            <div className="glass-card rounded-notebook overflow-hidden shadow-xl card-light-shadow">
                 {loading ? (
-                    <div className="p-12 flex justify-center text-emerald-500"><Loader2 className="animate-spin w-8 h-8" /></div>
+                    <div className="p-12 flex justify-center text-vogo-blue"><Loader2 className="animate-spin w-8 h-8" /></div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm text-muted-foreground">
@@ -76,11 +76,11 @@ export default function BlogManagementPage() {
                                 {filteredPosts.map((post) => (
                                     <tr key={post.id} className="hover:bg-muted/30 transition-colors group">
                                         <td className="px-6 py-4">
-                                            <p className="font-bold text-foreground text-base group-hover:text-emerald-500 transition-colors line-clamp-1">{post.title}</p>
+                                            <p className="font-bold text-foreground text-base group-hover:text-vogo-blue transition-colors line-clamp-1">{post.title}</p>
                                         </td>
                                         <td className="px-6 py-4 text-muted-foreground">{post.category}</td>
                                         <td className="px-6 py-4">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${post.status === 'published' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-muted text-muted-foreground border-border'
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${post.status === 'published' ? 'bg-vogo-blue/10 text-vogo-blue border-vogo-blue/20' : 'bg-muted text-muted-foreground border-border'
                                                 }`}>
                                                 {post.status || 'Taslak'}
                                             </span>

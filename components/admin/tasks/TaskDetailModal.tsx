@@ -142,7 +142,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             <div className="relative">
                                 {isEditing ? (
                                     <select
-                                        className="appearance-none pl-3 pr-8 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-background border border-border cursor-pointer hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        className="appearance-none pl-3 pr-8 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-background border border-border cursor-pointer hover:border-vogo-blue focus:ring-2 focus:ring-vogo-blue/20 outline-none transition-all"
                                         value={editForm.status}
                                         onChange={e => setEditForm({ ...editForm, status: e.target.value })}
                                     >
@@ -151,7 +151,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                         <option value="done">Tamamlandı</option>
                                     </select>
                                 ) : (
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${task.status === 'done' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${task.status === 'done' ? 'bg-vogo-blue/10 text-vogo-blue border-vogo-blue/20' :
                                         task.status === 'in_progress' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
                                             'bg-white0/10 text-slate-500 border-slate-500/20'
                                         }`}>
@@ -165,7 +165,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                         {/* Title Input/Display */}
                         {isEditing ? (
                             <input
-                                className="text-2xl font-bold bg-background border border-border rounded-lg px-3 py-2 w-full text-foreground focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                                className="text-2xl font-bold bg-background border border-border rounded-lg px-3 py-2 w-full text-foreground focus:ring-2 focus:ring-vogo-blue/20 outline-none"
                                 value={editForm.title}
                                 onChange={e => setEditForm({ ...editForm, title: e.target.value })}
                                 placeholder="Görev başlığı"
@@ -180,7 +180,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                     {/* Action Buttons */}
                     <div className="flex-none flex items-center gap-2">
                         {isEditing ? (
-                            <button onClick={handleSaveEdit} className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 font-bold transition-all shadow-sm active:scale-95">
+                            <button onClick={handleSaveEdit} className="flex items-center gap-2 px-4 py-2 bg-vogo-blue text-white rounded-lg hover:bg-vogo-teal font-bold transition-all shadow-sm active:scale-95">
                                 <Save className="w-4 h-4" /> Kaydet
                             </button>
                         ) : (
@@ -212,12 +212,12 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                         {/* Description */}
                         <div className="group">
                             <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                                <MessageSquare className="w-4 h-4 text-emerald-500" />
+                                <MessageSquare className="w-4 h-4 text-vogo-blue" />
                                 Açıklama
                             </h3>
                             {isEditing ? (
                                 <textarea
-                                    className="w-full h-40 bg-white border border-border rounded-xl p-4 text-foreground focus:ring-2 focus:ring-emerald-500/20 outline-none resize-none leading-relaxed"
+                                    className="w-full h-40 bg-white border border-border rounded-xl p-4 text-foreground focus:ring-2 focus:ring-vogo-blue/20 outline-none resize-none leading-relaxed"
                                     value={editForm.description}
                                     onChange={e => setEditForm({ ...editForm, description: e.target.value })}
                                     placeholder="Detaylı bir açıklama ekleyin..."
@@ -233,7 +233,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                         <div>
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                    <CheckSquare className="w-4 h-4 text-emerald-500" />
+                                    <CheckSquare className="w-4 h-4 text-vogo-blue" />
                                     Kontrol Listesi
                                     <span className="text-xs font-normal text-muted-foreground ml-1">
                                         ({checklists.filter((i: any) => i.checked).length}/{checklists.length || 0})
@@ -245,7 +245,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             {checklists.length > 0 && (
                                 <div className="h-1.5 bg-muted rounded-full mb-4 overflow-hidden">
                                     <div
-                                        className="h-full bg-emerald-500 transition-all duration-300 ease-out"
+                                        className="h-full bg-vogo-blue transition-all duration-300 ease-out"
                                         style={{ width: `${Math.round((checklists.filter((i: any) => i.checked).length / (checklists.length || 1)) * 100)}%` }}
                                     />
                                 </div>
@@ -258,7 +258,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                             type="checkbox"
                                             checked={item.checked}
                                             onChange={() => toggleChecklist(item.id)}
-                                            className="mt-0.5 w-5 h-5 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer"
+                                            className="mt-0.5 w-5 h-5 rounded border-gray-300 text-vogo-blue focus:ring-vogo-blue cursor-pointer"
                                         />
                                         <span className={`flex-1 text-sm leading-snug break-words ${item.checked ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
                                             {item.text}
@@ -266,7 +266,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                     </div>
                                 ))}
 
-                                <form onSubmit={handleAddChecklistItem} className="mt-3 flex items-center gap-2 group focus-within:ring-2 ring-emerald-500/20 rounded-lg">
+                                <form onSubmit={handleAddChecklistItem} className="mt-3 flex items-center gap-2 group focus-within:ring-2 ring-vogo-blue/20 rounded-lg">
                                     <div className="w-8 h-8 flex items-center justify-center text-muted-foreground">
                                         <Plus className="w-5 h-5" />
                                     </div>
@@ -278,7 +278,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                                         className="flex-1 bg-transparent border-none outline-none text-sm py-2 text-foreground placeholder:text-muted-foreground"
                                     />
                                     {newChecklistItem && (
-                                        <button type="submit" className="px-3 py-1 text-xs font-bold bg-emerald-100 text-emerald-700 rounded-md mr-2">
+                                        <button type="submit" className="px-3 py-1 text-xs font-bold bg-emerald-100 text-vogo-teal rounded-md mr-2">
                                             EKLE
                                         </button>
                                     )}
@@ -289,22 +289,22 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                         {/* Attachments */}
                         <div>
                             <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                                <Paperclip className="w-4 h-4 text-emerald-500" />
+                                <Paperclip className="w-4 h-4 text-vogo-blue" />
                                 Dosyalar & Ekler
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label className="border-2 border-dashed border-border rounded-xl p-4 flex flex-col items-center justify-center text-muted-foreground hover:text-emerald-500 hover:border-emerald-500/50 hover:bg-emerald-50 transition-all cursor-pointer h-20 min-h-[80px]">
-                                    {uploading ? <Loader2 className="w-6 h-6 animate-spin text-emerald-500" /> : <><Plus className="w-6 h-6 mb-1" /><span className="text-xs font-semibold">Dosya Yükle</span></>}
+                                <label className="border-2 border-dashed border-border rounded-xl p-4 flex flex-col items-center justify-center text-muted-foreground hover:text-vogo-blue hover:border-vogo-blue/50 hover:bg-emerald-50 transition-all cursor-pointer h-20 min-h-[80px]">
+                                    {uploading ? <Loader2 className="w-6 h-6 animate-spin text-vogo-blue" /> : <><Plus className="w-6 h-6 mb-1" /><span className="text-xs font-semibold">Dosya Yükle</span></>}
                                     <input type="file" className="hidden" onChange={handleFileUpload} disabled={uploading} />
                                 </label>
 
                                 {attachments.map((file: any, i: number) => (
-                                    <div key={file.id || i} className="bg-card border border-border rounded-xl p-3 flex items-center gap-3 group hover:border-emerald-500/30 transition-colors relative pr-8">
+                                    <div key={file.id || i} className="glass-card rounded-xl p-3 flex items-center gap-3 group hover:border-vogo-blue/30 transition-colors relative pr-8">
                                         <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-slate-600 font-bold text-xs uppercase flex-none">
                                             {file.file_name?.split('.').pop() || 'FILE'}
                                         </div>
                                         <a href={file.file_url} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-0">
-                                            <p className="text-sm text-foreground font-medium truncate hover:text-emerald-600 transition-colors">{file.file_name}</p>
+                                            <p className="text-sm text-foreground font-medium truncate hover:text-vogo-teal transition-colors">{file.file_name}</p>
                                         </a>
                                         <button onClick={() => deleteAttachment(file.id)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all">
                                             <X className="w-4 h-4" />
@@ -324,7 +324,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             <label className="text-xs font-bold text-muted-foreground uppercase mb-2 block tracking-wider">Proje</label>
                             {isEditing ? (
                                 <select
-                                    className="w-full bg-white border border-border rounded-lg p-2.5 text-sm text-foreground focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                                    className="w-full bg-white border border-border rounded-lg p-2.5 text-sm text-foreground focus:ring-2 focus:ring-vogo-blue/20 outline-none"
                                     value={editForm.project_id || ''}
                                     onChange={e => setEditForm({ ...editForm, project_id: e.target.value })}
                                 >
@@ -350,7 +350,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
                             <label className="text-xs font-bold text-muted-foreground uppercase mb-2 block tracking-wider">Atanan Kişi</label>
                             {isEditing ? (
                                 <select
-                                    className="w-full bg-white border border-border rounded-lg p-2.5 text-sm text-foreground focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                                    className="w-full bg-white border border-border rounded-lg p-2.5 text-sm text-foreground focus:ring-2 focus:ring-vogo-blue/20 outline-none"
                                     value={editForm.assigned_to || ''}
                                     onChange={e => setEditForm({ ...editForm, assigned_to: e.target.value ? e.target.value : null })}
                                 >
@@ -371,7 +371,7 @@ export default function TaskDetailModal({ task, onClose, onUpdate, onDelete, pro
 
                                         return (
                                             <>
-                                                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-emerald-500/10 overflow-hidden">
+                                                <div className="w-10 h-10 rounded-full bg-emerald-100 text-vogo-teal flex items-center justify-center text-sm font-bold border-2 border-white shadow-sm ring-1 ring-vogo-blue/10 overflow-hidden">
                                                     {assignedUser?.image || assignedUser?.avatar_url ? (
                                                         <img src={assignedUser.image || assignedUser.avatar_url} alt={assignedUser.name} className="w-full h-full object-cover" />
                                                     ) : (

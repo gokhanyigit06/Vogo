@@ -91,13 +91,13 @@ export default function NewProjectPage() {
                     Projelere Dön
                 </Link>
                 <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                    <Briefcase className="w-8 h-8 text-emerald-500" />
+                    <Briefcase className="w-8 h-8 text-vogo-blue" />
                     Yeni Proje Ekle
                 </h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <div className="glass-card rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3">
                         Temel Bilgiler
                     </h2>
@@ -113,7 +113,7 @@ export default function NewProjectPage() {
                                 required
                                 value={formData.internalName}
                                 onChange={(e) => setFormData({ ...formData, internalName: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 font-mono text-sm"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue font-mono text-sm"
                                 placeholder="Örn: 2026_Revize_VogoAgency"
                             />
                             <p className="text-xs text-slate-500 mt-1">Bu isim sadece yönetim panelinde görünür.</p>
@@ -121,7 +121,7 @@ export default function NewProjectPage() {
 
                         {/* Public Title */}
                         <div className="md:col-span-2 bg-white/5 p-4 rounded-xl border border-dashed border-border">
-                            <label className="block text-emerald-400 text-sm font-bold mb-2 flex items-center gap-2">
+                            <label className="block text-vogo-aqua text-sm font-bold mb-2 flex items-center gap-2">
                                 <Globe className="w-4 h-4" />
                                 Site Başlığı (Müşteri Görür) *
                             </label>
@@ -130,7 +130,7 @@ export default function NewProjectPage() {
                                 required
                                 value={formData.publicTitle}
                                 onChange={(e) => setFormData({ ...formData, publicTitle: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-xl font-bold text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-xl font-bold text-foreground focus:outline-none focus:border-vogo-blue"
                                 placeholder="Örn: Profesyonel E-Ticaret Çözümü"
                             />
                             <p className="text-xs text-slate-500 mt-1">Sitede yayınlanacak ana başlık budur.</p>
@@ -141,7 +141,7 @@ export default function NewProjectPage() {
                             <select
                                 value={formData.clientId}
                                 onChange={(e) => setFormData({ ...formData, clientId: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="">Seçiniz (Opsiyonel)</option>
                                 {clients.map(client => (
@@ -157,7 +157,7 @@ export default function NewProjectPage() {
                             <select
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             >
                                 <option value="quote">Teklif Aşamasında</option>
                                 <option value="in_progress">Devam Ediyor</option>
@@ -172,7 +172,7 @@ export default function NewProjectPage() {
                                 type="date"
                                 value={formData.start_date}
                                 onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
 
@@ -182,13 +182,13 @@ export default function NewProjectPage() {
                                 type="date"
                                 value={formData.end_date}
                                 onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-card border border-border rounded-notebook p-6 space-y-4">
+                <div className="glass-card rounded-notebook p-6 space-y-4">
                     <h2 className="text-lg font-bold text-foreground border-b border-border pb-3 flex items-center gap-2">
                         <FileText className="w-5 h-5 text-blue-400" />
                         İçerik Detayları
@@ -199,7 +199,7 @@ export default function NewProjectPage() {
                             <textarea
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-24 resize-none"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-24 resize-none"
                                 placeholder="Projenin 1-2 cümlelik özeti..."
                             />
                         </div>
@@ -251,7 +251,7 @@ export default function NewProjectPage() {
                                     type="text"
                                     value={formData.year}
                                     onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                     placeholder="2024"
                                 />
                             </div>
@@ -261,7 +261,7 @@ export default function NewProjectPage() {
                                     type="text"
                                     value={formData.market}
                                     onChange={(e) => setFormData({ ...formData, market: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                     placeholder="Global, Turkey, Europe..."
                                 />
                             </div>
@@ -274,7 +274,7 @@ export default function NewProjectPage() {
                                     type="text"
                                     value={formData.clientType}
                                     onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                     placeholder="Food & Beverage, Technology..."
                                 />
                             </div>
@@ -284,7 +284,7 @@ export default function NewProjectPage() {
                                     type="url"
                                     value={formData.websiteUrl}
                                     onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue"
                                     placeholder="example.com"
                                 />
                             </div>
@@ -312,7 +312,7 @@ export default function NewProjectPage() {
                             <textarea
                                 value={formData.content}
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-emerald-500 h-64 font-mono text-sm"
+                                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-64 font-mono text-sm"
                                 placeholder="<p>Proje detayları buraya HTML formatında gelebilir veya düz metin yazabilirsiniz.</p>"
                             />
                             <p className="text-xs text-slate-500 mt-2">İleriki aşamada buraya Rich Text Editor eklenecek.</p>
@@ -324,7 +324,7 @@ export default function NewProjectPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                        className="flex-1 px-6 py-3 bg-vogo-blue hover:bg-vogo-teal disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-vogo-blue/20 flex items-center justify-center gap-2"
                     >
                         <Save className="w-5 h-5" />
                         {loading ? 'Kaydediliyor...' : 'Projeyi Kaydet'}

@@ -109,7 +109,7 @@ export default function SettingsPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                        <Settings className="w-8 h-8 text-emerald-500" />
+                        <Settings className="w-8 h-8 text-vogo-blue" />
                         Kaptan Köşkü
                     </h1>
                     <p className="text-muted-foreground mt-1">Sitenizin tüm global ayarlarını buradan yönetin.</p>
@@ -117,7 +117,7 @@ export default function SettingsPage() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20 flex items-center gap-2 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="px-8 py-3 bg-vogo-blue hover:bg-vogo-teal text-white rounded-xl font-bold shadow-lg shadow-vogo-blue/20 flex items-center gap-2 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                     {saving ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> : <Save className="w-5 h-5" />}
                     {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
@@ -128,13 +128,13 @@ export default function SettingsPage() {
 
                 {/* Sidebar / Tabs */}
                 <div className="w-full lg:w-64 flex-shrink-0">
-                    <div className="bg-card border border-border rounded-2xl p-2 flex lg:flex-col gap-1 overflow-x-auto">
+                    <div className="glass-card rounded-2xl p-2 flex lg:flex-col gap-1 overflow-x-auto">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm whitespace-nowrap ${activeTab === tab.id
-                                    ? 'bg-emerald-500 text-white shadow-md'
+                                    ? 'bg-vogo-blue text-white shadow-md'
                                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                                     }`}
                             >
@@ -145,7 +145,7 @@ export default function SettingsPage() {
                     </div>
 
                     {/* Maintenance Mode Toggle */}
-                    <div className="mt-6 bg-card border border-border rounded-2xl p-4">
+                    <div className="mt-6 glass-card rounded-2xl p-4">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-sm font-bold text-foreground">Bakım Modu</span>
                             <div
@@ -162,13 +162,13 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Content Area */}
-                <div className="flex-1 bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-sm">
+                <div className="flex-1 glass-card rounded-2xl p-6 lg:p-8 shadow-sm">
 
                     {/* --- GENERAL TAB --- */}
                     {activeTab === "general" && (
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                                <Globe className="w-5 h-5 text-emerald-500" /> Genel Ayarlar
+                                <Globe className="w-5 h-5 text-vogo-blue" /> Genel Ayarlar
                             </h2>
 
                             <div className="grid gap-6">
@@ -176,14 +176,14 @@ export default function SettingsPage() {
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Site Başlığı (Title)</label>
                                     <input
                                         type="text" name="siteTitle" value={settings.siteTitle} onChange={handleChange}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Site Açıklaması (Description)</label>
                                     <textarea
                                         name="siteDescription" value={settings.siteDescription} onChange={handleChange} rows={3}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all resize-none"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all resize-none"
                                     />
                                     <p className="text-xs text-muted-foreground mt-2">SEO için 160 karakteri geçmemeye özen gösterin.</p>
                                 </div>
@@ -211,7 +211,7 @@ export default function SettingsPage() {
                     {activeTab === "contact" && (
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                                <Smartphone className="w-5 h-5 text-emerald-500" /> İletişim Bilgileri
+                                <Smartphone className="w-5 h-5 text-vogo-blue" /> İletişim Bilgileri
                             </h2>
 
                             <div className="grid md:grid-cols-2 gap-6">
@@ -219,35 +219,35 @@ export default function SettingsPage() {
                                     <label className="block text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2"><Mail className="w-4 h-4" /> E-Posta</label>
                                     <input
                                         type="email" name="email" value={settings.email} onChange={handleChange}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2"><Phone className="w-4 h-4" /> Telefon</label>
                                     <input
                                         type="text" name="phone" value={settings.phone} onChange={handleChange}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2"><MessageCircle className="w-4 h-4 text-emerald-500" /> WhatsApp</label>
+                                    <label className="block text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2"><MessageCircle className="w-4 h-4 text-vogo-blue" /> WhatsApp</label>
                                     <input
                                         type="text" name="whatsapp" value={settings.whatsapp} onChange={handleChange} placeholder="+90..."
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2"><MapPin className="w-4 h-4" /> Adres</label>
                                     <input
                                         type="text" name="address" value={settings.address} onChange={handleChange}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Google Maps Embed Linki</label>
                                     <input
                                         type="text" name="mapUrl" value={settings.mapUrl} onChange={handleChange} placeholder="https://www.google.com/maps/embed?..."
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-xs font-mono"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all text-xs font-mono"
                                     />
                                 </div>
                             </div>
@@ -258,7 +258,7 @@ export default function SettingsPage() {
                     {activeTab === "social" && (
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                                <Share2 className="w-5 h-5 text-emerald-500" /> Sosyal Medya Hesapları
+                                <Share2 className="w-5 h-5 text-vogo-blue" /> Sosyal Medya Hesapları
                             </h2>
 
                             <div className="grid gap-4">
@@ -305,7 +305,7 @@ export default function SettingsPage() {
                     {activeTab === "marketing" && (
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                                <BarChart className="w-5 h-5 text-emerald-500" /> Pazarlama & Takip Kodları
+                                <BarChart className="w-5 h-5 text-vogo-blue" /> Pazarlama & Takip Kodları
                             </h2>
 
                             <div className="grid md:grid-cols-2 gap-6">
@@ -313,7 +313,7 @@ export default function SettingsPage() {
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Google Analytics ID</label>
                                     <input
                                         type="text" name="googleAnalytics" value={settings.googleAnalytics} onChange={handleChange} placeholder="G-XXXXXXXXXX"
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-sm"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all font-mono text-sm"
                                     />
                                     <p className="text-xs text-muted-foreground mt-1">Örn: G-1234567890</p>
                                 </div>
@@ -321,7 +321,7 @@ export default function SettingsPage() {
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Google Search Console (Doğrulama Kodu)</label>
                                     <input
                                         type="text" name="googleVerification" value={settings.googleVerification} onChange={handleChange} placeholder="Verfication Code (HTML Tag content)"
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-sm"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all font-mono text-sm"
                                     />
                                     <p className="text-xs text-muted-foreground mt-1">Meta tag içindeki 'content' değerini giriniz.</p>
                                 </div>
@@ -329,14 +329,14 @@ export default function SettingsPage() {
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Facebook Pixel ID</label>
                                     <input
                                         type="text" name="facebookPixel" value={settings.facebookPixel} onChange={handleChange} placeholder="1234567890123456"
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-sm"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all font-mono text-sm"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-muted-foreground mb-2">Google Tag Manager ID</label>
                                     <input
                                         type="text" name="googleTagManager" value={settings.googleTagManager} onChange={handleChange} placeholder="GTM-XXXXXX"
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-sm"
+                                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all font-mono text-sm"
                                     />
                                 </div>
                             </div>
@@ -350,7 +350,7 @@ export default function SettingsPage() {
                                     </label>
                                     <textarea
                                         name="customHeadScripts" value={settings.customHeadScripts} onChange={handleChange} rows={5} placeholder="<script>...</script>"
-                                        className="w-full bg-slate-950 text-emerald-400 border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-xs"
+                                        className="w-full bg-slate-950 text-vogo-aqua border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all font-mono text-xs"
                                     />
                                     <p className="text-xs text-muted-foreground mt-1">Bu kodlar {`<head>`} etiketinin içine eklenir.</p>
                                 </div>
@@ -360,7 +360,7 @@ export default function SettingsPage() {
                                     </label>
                                     <textarea
                                         name="customBodyScripts" value={settings.customBodyScripts} onChange={handleChange} rows={3} placeholder="<script>...</script>"
-                                        className="w-full bg-slate-950 text-emerald-400 border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-mono text-xs"
+                                        className="w-full bg-slate-950 text-vogo-aqua border border-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-vogo-blue/20 focus:border-vogo-blue outline-none transition-all font-mono text-xs"
                                     />
                                     <p className="text-xs text-muted-foreground mt-1">Bu kodlar {`<body>`} etiketinin sonuna eklenir.</p>
                                 </div>
