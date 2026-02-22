@@ -107,9 +107,9 @@ export default function AdminSidebar() {
             <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                    ? 'bg-sidebar-accent text-sidebar-primary border border-sidebar-border shadow-sm'
-                    : 'text-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50'
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive(item.href)
+                    ? 'bg-gradient-to-r from-vogo-blue/15 to-vogo-aqua/10 text-vogo-blue dark:text-vogo-aqua border border-vogo-blue/20 dark:border-vogo-aqua/20 shadow-sm shadow-vogo-blue/5'
+                    : 'text-foreground hover:text-vogo-blue dark:hover:text-vogo-aqua hover:bg-vogo-blue/5 dark:hover:bg-vogo-aqua/5 hover:translate-x-1'
                     }`}
             >
                 <item.icon className="w-5 h-5" />
@@ -121,28 +121,28 @@ export default function AdminSidebar() {
     return (
         <>
             {/* Sidebar - Desktop */}
-            <aside className="hidden lg:flex flex-col w-64 bg-sidebar border-r border-sidebar-border fixed h-screen transition-colors duration-300">
+            <aside className="hidden lg:flex flex-col w-64 glass-sidebar fixed h-screen transition-all duration-300">
                 <div className="p-6 border-b border-sidebar-border">
-                    <Link href="/admin" className="text-xl font-bold flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-primary to-teal-500 rounded-lg flex items-center justify-center">
-                            <span className="text-primary-foreground font-bold text-sm">V</span>
+                    <Link href="/admin" className="text-xl font-bold flex items-center gap-3">
+                        <div className="w-9 h-9 bg-gradient-to-br from-vogo-blue via-vogo-aqua to-vogo-teal rounded-xl flex items-center justify-center shadow-lg shadow-vogo-blue/20">
+                            <span className="text-white font-bold text-sm">V</span>
                         </div>
                         <div>
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">Vogo</span>
-                            <span className="text-foreground"> Admin</span>
+                            <span className="text-gradient-vogo font-bold">Vogo</span>
+                            <span className="text-foreground font-light"> Admin</span>
                         </div>
                     </Link>
                 </div>
 
-                <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
+                <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
                     {menuItems.map(renderMenuItem)}
                 </nav>
 
                 {/* User Profile Section */}
                 <div className="p-4 border-t border-sidebar-border">
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-sidebar-accent/30 border border-sidebar-border/50">
-                        <div className="w-10 h-10 rounded-full bg-sidebar-accent border border-sidebar-border flex items-center justify-center overflow-hidden shrink-0">
-                            <span className="text-lg font-bold text-sidebar-primary">
+                    <div className="flex items-center gap-3 p-3 rounded-xl glass-card">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-vogo-blue to-vogo-aqua flex items-center justify-center overflow-hidden shrink-0 shadow-md shadow-vogo-blue/20">
+                            <span className="text-lg font-bold text-white">
                                 {userProfile.name?.charAt(0).toUpperCase() || '?'}
                             </span>
                         </div>
@@ -152,7 +152,7 @@ export default function AdminSidebar() {
                         </div>
                         <button
                             onClick={handleSignOut}
-                            className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                            className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all duration-200 hover:scale-110"
                             title="Çıkış Yap"
                         >
                             <LogOut className="w-4 h-4" />
