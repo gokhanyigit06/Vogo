@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Quicksand, Gochi_Hand } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import parse from "html-react-parser";
 
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -162,7 +163,7 @@ export default async function RootLayout({
 
         {/* Custom Head Scripts */}
         {settings.customHeadScripts && (
-          <div dangerouslySetInnerHTML={{ __html: settings.customHeadScripts }} />
+          parse(settings.customHeadScripts)
         )}
       </head>
 
@@ -205,7 +206,7 @@ export default async function RootLayout({
 
           {/* Custom Body Scripts */}
           {settings.customBodyScripts && (
-            <div dangerouslySetInnerHTML={{ __html: settings.customBodyScripts }} />
+            parse(settings.customBodyScripts)
           )}
 
         </Providers>
