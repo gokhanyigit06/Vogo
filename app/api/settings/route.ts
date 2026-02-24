@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import prisma from '@/lib/prisma'
 
 // Varsayılan Ayarlar
@@ -54,6 +55,9 @@ export async function POST(request: Request) {
             update: { value: newSettings },
             create: { key: 'site_settings', value: newSettings }
         })
+
+        // Sitenin arayüzündeki tüm önbelleği (cache) temizle, böylece anasayfa ve layout (head) verisi güncellenir
+        revalidatePath('/', 'layout')
 
         return NextResponse.json(newSettings)
     } catch (error: unknown) {
