@@ -166,7 +166,7 @@ export default function TasksPage() {
     const [selectedProjectId, setSelectedProjectId] = useState<string>("")
     const [activeId, setActiveId] = useState<string | null>(null)
     const [showModal, setShowModal] = useState(false)
-    const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
+    const [selectedTaskId, setSelectedTaskId] = useState<number | string | null>(null)
     const [mounted, setMounted] = useState(false)
 
     const sensors = useSensors(
@@ -263,13 +263,13 @@ export default function TasksPage() {
 
         if (!over) return
 
-        const taskId = parseInt(active.id as string)
+        const taskId = active.id
         const newStatus = over.id as Task['status']
-        const currentTask = tasks.find(t => t.id === taskId)
+        const currentTask = tasks.find(t => t.id.toString() === taskId.toString())
 
         if (currentTask && currentTask.status !== newStatus) {
             setTasks(tasks.map(t =>
-                t.id === taskId ? { ...t, status: newStatus } : t
+                t.id.toString() === taskId.toString() ? { ...t, status: newStatus } : t
             ))
 
             await fetch('/api/tasks', {
@@ -318,11 +318,11 @@ export default function TasksPage() {
         }
     }
 
-    const activeTask = activeId ? tasks.find(t => t.id.toString() === activeId) : null
-    const selectedTask = selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null
+    const activeTask = activeId ? tasks.find(t => t.id.toString() === activeId.toString()) : null
+    const selectedTask = selectedTaskId ? tasks.find(t => t.id.toString() === selectedTaskId.toString()) : null
 
     const filteredTasks = selectedProjectId
-        ? tasks.filter(t => (t.projectId || t.project_id) === Number(selectedProjectId))
+        ? tasks.filter(t => (t.projectId?.toString() || t.project_id?.toString()) === selectedProjectId.toString())
         : tasks
 
     if (!mounted) return <div className="p-8 text-muted-foreground">Yükleniyor...</div>
