@@ -5,17 +5,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
-interface Project {
-    id: number
-    title: string
-    slug: string
-    heroImage?: string
-    image?: string
-    categories: string[]
-}
+import { Project } from "@/types/firebase"
 
 interface RelatedProjectsProps {
-    currentId: number
+    currentId: string | number
     currentCategories: string[]
 }
 
@@ -33,7 +26,7 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
                 const allProjects: Project[] = await res.json()
 
                 // Filter out current project
-                const others = allProjects.filter(p => p.id !== currentId)
+                const others = allProjects.filter(p => p.id?.toString() !== currentId.toString())
 
                 // Sort by relevance (shared categories)
                 const scored = others.map(p => {
@@ -80,15 +73,15 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
                 <div className="grid md:grid-cols-3 gap-8">
                     {projects.map((project) => (
                         <Link
-                            key={project.id}
-                            href={`/projeler/${project.slug}`}
+                            key={project.id || Math.random()}
+                            href={`/projeler/${project.slug || project.id}`}
                             className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 z-10 hover:z-20"
                         >
                             <div className="relative aspect-[4/3] overflow-hidden bg-white">
                                 {(project.image || project.heroImage) ? (
                                     <Image
-                                        src={project.image || project.heroImage!}
-                                        alt={project.title}
+                                        src={project.image || project.heroImage || ''}
+                                        alt={project.title || ''}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         sizes="(max-width: 768px) 100vw, 33vw"

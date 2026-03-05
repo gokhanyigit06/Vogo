@@ -5,16 +5,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight, ArrowUpRight, FolderOpen } from "lucide-react"
 
-type Project = {
-    id: number | string
-    title: string
-    category?: string
-    categories?: string[]
-    image?: string
-    heroImage?: string
-    description?: string
-    slug?: string
-}
+import { Project } from "@/types/firebase"
 
 export default function FeaturedProjects() {
     const [projects, setProjects] = useState<Project[]>([])
