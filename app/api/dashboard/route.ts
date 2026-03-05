@@ -1,75 +1,69 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, getDocs, query, where, orderBy, limit, Timestamp } from 'firebase/firestore'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
     try {
-        // 1. Toplam gelir
-        const incomeData = await prisma.income.findMany({
-            select: { amount: true }
-        })
-        const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0)
-
-        // 2. Toplam gider
-        const expenseData = await prisma.expense.findMany({
-            select: { amount: true }
-        })
-        const totalExpenses = expenseData.reduce((sum, item) => sum + Number(item.amount), 0)
-
-        // 3. Aktif proje sayısı
-        const activeProjects = await prisma.project.count({
-            where: { status: 'in_progress' }
-        })
-
-        // 4. Toplam müşteri sayısı
-        const totalClients = await prisma.client.count()
-
-        // 5. Bu ayki gelir (son 30 gün)
+        const now = new Date()
         const thirtyDaysAgo = new Date()
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-        const recentIncomeData = await prisma.income.findMany({
-            where: {
-                date: { gte: thirtyDaysAgo }
-            },
-            select: { amount: true }
-        })
-        const monthlyIncome = recentIncomeData.reduce((sum, item) => sum + Number(item.amount), 0)
+        // 1. Toplam gelir (Hala tümünü çekiyoruz ama idealde bir 'stats' dokümanı olmalı)
+        // Eğer koleksiyon çok büyükse bu maliyetli olur.
+        const incomeSnapshot = await getDocs(collection(db, "income"))
+        const incomeData = incomeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }))
+        const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount || 0), 0)
 
-        // 6. Yaklaşan deadline'lar (gelecek 7 gün)
-        const today = new Date()
+        // 2. Toplam gider
+        const expenseSnapshot = await getDocs(collection(db, "expenses"))
+        const totalExpenses = expenseSnapshot.docs.reduce((sum, doc) => sum + Number(doc.data().amount || 0), 0)
+
+        // 3. Aktif proje sayısı
+        const activeProjectsQ = query(collection(db, "projects"), where("status", "==", "in_progress"))
+        const activeProjectsSnapshot = await getDocs(activeProjectsQ)
+        const activeProjects = activeProjectsSnapshot.size
+
+        // 4. Toplam müşteri sayısı
+        const clientsSnapshot = await getDocs(collection(db, "clients"))
+        const totalClients = clientsSnapshot.size
+
+        // 5. Bu ayki gelir (Sunucuda filtreleme)
+        const monthlyIncomeQ = query(
+            collection(db, "income"),
+            where("date", ">=", thirtyDaysAgo.toISOString())
+        )
+        const monthlyIncomeSnapshot = await getDocs(monthlyIncomeQ)
+        const monthlyIncome = monthlyIncomeSnapshot.docs.reduce((sum, doc) => sum + Number(doc.data().amount || 0), 0)
+
+        // 6. Yaklaşan deadline'lar (Gelecek 7 gün)
         const sevenDaysLater = new Date()
         sevenDaysLater.setDate(sevenDaysLater.getDate() + 7)
 
-        const upcomingDeadlines = await prisma.project.findMany({
-            where: {
-                endDate: {
-                    gte: today,
-                    lte: sevenDaysLater
-                }
-            },
-            select: {
-                id: true,
-                name: true,
-                title: true,
-                endDate: true,
-                clientId: true
-            },
-            orderBy: { endDate: 'asc' },
-            take: 5
-        })
+        const deadlineQ = query(
+            collection(db, "projects"),
+            where("endDate", ">=", now.toISOString()),
+            where("endDate", "<=", sevenDaysLater.toISOString()),
+            limit(5)
+        )
+        const deadlineSnapshot = await getDocs(deadlineQ)
+        const upcomingDeadlines = deadlineSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data() as any
+        }))
 
-        // 7. Son gelir hareketleri
-        const recentTransactions = await prisma.income.findMany({
-            select: {
-                id: true,
-                amount: true,
-                date: true,
-                description: true,
-                clientId: true
-            },
-            orderBy: { date: 'desc' },
-            take: 5
-        })
+        // 7. Son gelir hareketleri (Query ile sıralı çekim)
+        const recentTxQ = query(
+            collection(db, "income"),
+            orderBy("date", "desc"),
+            limit(5)
+        )
+        const recentTxSnapshot = await getDocs(recentTxQ)
+        const recentTransactions = recentTxSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data() as any
+        }))
 
         return NextResponse.json({
             totalIncome,
@@ -80,7 +74,7 @@ export async function GET() {
             monthlyIncome,
             upcomingDeadlines: upcomingDeadlines.map(d => ({
                 id: d.id,
-                name: d.name || d.title,
+                name: d.name || d.title || d.publicTitle || d.internalName,
                 end_date: d.endDate,
                 client_id: d.clientId
             })),

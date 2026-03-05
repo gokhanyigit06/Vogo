@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
 
 export async function GET(
     request: Request,
@@ -9,15 +10,24 @@ export async function GET(
         const { slug } = await params
 
         // Önce slug ile dene
-        let post = await prisma.post.findUnique({
-            where: { slug }
-        })
+        const q = query(collection(db, "posts"), where("slug", "==", slug))
+        const querySnapshot = await getDocs(q)
 
-        // Slug bulunamazsa ID ile dene (backward compatibility)
-        if (!post && !isNaN(Number(slug))) {
-            post = await prisma.post.findUnique({
-                where: { id: Number(slug) }
-            })
+        let post = null
+
+        if (!querySnapshot.empty) {
+            post = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() }
+        } else {
+            // Slug bulunamazsa ID ile dene
+            try {
+                const docRef = doc(db, "posts", slug)
+                const docSnap = await getDoc(docRef)
+                if (docSnap.exists()) {
+                    post = { id: docSnap.id, ...docSnap.data() }
+                }
+            } catch (e) {
+                // Ignore format error if slug is not a valid doc ID string
+            }
         }
 
         if (post) {

@@ -1,14 +1,19 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Tüm mesajları getir
 export async function GET() {
     try {
-        const messages = await prisma.message.findMany({
-            orderBy: { createdAt: 'desc' }
-        })
+        const q = query(collection(db, "messages"), orderBy("createdAt", "desc"))
+        const snapshot = await getDocs(q)
+
+        const messages = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
 
         console.log(`✅ Fetched ${messages.length} messages`)
         return NextResponse.json(messages)
@@ -24,16 +29,18 @@ export async function POST(request: Request) {
     try {
         const body = await request.json()
 
-        const message = await prisma.message.create({
-            data: {
-                name: body.name,
-                email: body.email,
-                subject: body.subject,
-                message: body.message,
-            }
-        })
+        const newMessage = {
+            name: body.name || null,
+            email: body.email || null,
+            subject: body.subject || null,
+            message: body.message || null,
+            isRead: false,
+            createdAt: new Date().toISOString()
+        }
 
-        return NextResponse.json(message)
+        const docRef = await addDoc(collection(db, "messages"), newMessage)
+
+        return NextResponse.json({ id: docRef.id, ...newMessage })
 
     } catch (error) {
         console.error('💥 API error:', error)
@@ -46,12 +53,17 @@ export async function PATCH(request: Request) {
     try {
         const { id, is_read } = await request.json()
 
-        const message = await prisma.message.update({
-            where: { id: parseInt(id) },
-            data: { isRead: is_read }
+        if (!id) {
+            return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        }
+
+        const msgRef = doc(db, "messages", id)
+        await updateDoc(msgRef, {
+            isRead: is_read,
+            updatedAt: new Date().toISOString()
         })
 
-        return NextResponse.json({ success: true, message })
+        return NextResponse.json({ success: true, id, isRead: is_read })
 
     } catch (error) {
         console.error('💥 API error:', error)
@@ -64,9 +76,11 @@ export async function DELETE(request: Request) {
     try {
         const { id } = await request.json()
 
-        await prisma.message.delete({
-            where: { id: parseInt(id) }
-        })
+        if (!id) {
+            return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        }
+
+        await deleteDoc(doc(db, "messages", id))
 
         return NextResponse.json({ success: true })
 

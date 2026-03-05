@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper: Is user authenticated?
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper: Get user role from 'team' collection
+    function getRole() {
+       return get(/databases/$(database)/documents/team/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (getRole() == 'ADMIN' || getRole() == 'MANAGER');
+    }
+
+    // --- COLLECTIONS ---
+
+    // Team (Users) Profile
+    match /team/{userId} {
+      allow read: if true; // Public can see team members
+      allow write: if isAdmin(); // Only admins can create/edit team
+    }
+
+    // Public Collections (Services, Projects, Posts, Clients, Testimonials)
+    match /services/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /projects/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /posts/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /clients/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Internal Collections (Finance, Tasks, Messages, Settings)
+    match /income/{id} {
+      allow read, write: if isAdmin();
+    }
+    match /expenses/{id} {
+      allow read, write: if isAdmin();
+    }
+    match /payables/{id} {
+      allow read, write: if isAdmin();
+    }
+    match /tasks/{id} {
+      allow read, write: if isAuthenticated();
+    }
+    match /messages/{id} {
+      allow create: if true; // Public can send messages (Contact form)
+      allow read, write: if isAdmin();
+    }
+    match /settings/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

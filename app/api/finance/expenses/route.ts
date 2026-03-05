@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 
 // GET - Tüm giderleri getir
 export async function GET() {
     try {
-        const expenses = await prisma.expense.findMany({
-            orderBy: { date: 'desc' }
-        })
+        const q = query(collection(db, "expenses"), orderBy("date", "desc"))
+        const querySnapshot = await getDocs(q)
+
+        const expenses = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
 
         return NextResponse.json(expenses)
     } catch (error: unknown) {
@@ -21,18 +26,20 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
-        const expense = await prisma.expense.create({
-            data: {
-                amount: parseFloat(body.amount),
-                date: new Date(body.date),
-                category: body.category,
-                description: body.description,
-                invoiceNumber: body.invoice_number || body.invoiceNumber,
-                vendor: body.vendor,
-            }
-        })
+        const newExpense = {
+            amount: parseFloat(body.amount),
+            date: new Date(body.date).toISOString(),
+            category: body.category || 'other',
+            description: body.description || null,
+            invoiceNumber: body.invoice_number || body.invoiceNumber || null,
+            vendor: body.vendor || null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
 
-        return NextResponse.json(expense)
+        const docRef = await addDoc(collection(db, "expenses"), newExpense)
+
+        return NextResponse.json({ id: docRef.id, ...newExpense })
     } catch (error: unknown) {
         console.error('Expenses POST error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -46,17 +53,23 @@ export async function PUT(request: NextRequest) {
         const body = await request.json()
         const { id, invoice_number, ...rest } = body
 
-        const expense = await prisma.expense.update({
-            where: { id: parseInt(id) },
-            data: {
-                ...rest,
-                amount: rest.amount ? parseFloat(rest.amount) : undefined,
-                date: rest.date ? new Date(rest.date) : undefined,
-                invoiceNumber: invoice_number,
-            }
-        })
+        if (!id) {
+            return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
+        }
 
-        return NextResponse.json(expense)
+        const updateData: any = {
+            ...rest,
+            updatedAt: new Date().toISOString()
+        }
+
+        if (rest.amount) updateData.amount = parseFloat(rest.amount)
+        if (rest.date) updateData.date = new Date(rest.date).toISOString()
+        if (invoice_number !== undefined) updateData.invoiceNumber = invoice_number
+
+        const expenseRef = doc(db, "expenses", id)
+        await updateDoc(expenseRef, updateData)
+
+        return NextResponse.json({ id, ...updateData })
     } catch (error: unknown) {
         console.error('Expenses PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -74,9 +87,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.expense.delete({
-            where: { id: parseInt(id) }
-        })
+        await deleteDoc(doc(db, "expenses", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

@@ -1,0 +1,210 @@
+{
+    "Hero": {
+        "titlePrefix": "Leave Your Mark",
+        "titleHighlight": "In The",
+        "titleSuffix": " Digital World",
+        "description": "Elevate your brand with Vogo Lab. We build the future today with web design, SEO, and digital marketing solutions.",
+        "startNow": "Start Now",
+        "services": "Our Services",
+        "stats": {
+            "projects": "Projects",
+            "satisfaction": "Satisfaction",
+            "support": "Support"
+        }
+    },
+    "HeroModern": {
+        "highlightedText": "Unlimited",
+        "afterHighlightText": " design",
+        "secondLineText": "for your startup",
+        "description": "Get exceptional, unlimited design tailored for your startup\u2019s needs. We focus on quality and speed to help your business stand out.",
+        "ctaPrimary": "Get in touch",
+        "ctaSecondary": "Browse all services"
+    },
+    "Header": {
+        "work": "Work",
+        "services": "Services",
+        "about": "About",
+        "blog": "Blog",
+        "lab": "Lab",
+        "contactUs": "Contact us"
+    },
+    "ServiceGridModern": {
+        "titlePrefix": "We offer a wide range",
+        "titleHighlight": "design",
+        "titleSuffix": "services",
+        "description": "From branding and web design to mobile apps and marketing materials, discover our comprehensive suite of creative solutions tailored for you.",
+        "services": {
+            "digitalAds": {
+                "title": "Digital advertising",
+                "desc": "We create compelling ad creatives for various digital platforms to boost your campaign performance and overall reach effectively."
+            },
+            "seoGrowth": {
+                "title": "SEO & Growth",
+                "desc": "We increase your brand's organic traffic and visibility with search engine optimization and data-driven growth strategies."
+            },
+            "webDesign": {
+                "title": "Web design",
+                "desc": "We design beautiful, user-friendly websites and landing pages that effectively communicate your brand's unique message."
+            },
+            "mobileDesign": {
+                "title": "Mobile Design",
+                "desc": "Crafting intuitive and engaging mobile app interfaces optimized for seamless user experiences across all devices."
+            }
+        }
+    },
+    "LatestProjectsModern": {
+        "titlePrefix": "Our",
+        "titleHighlight": "latest",
+        "titleSuffix": "projects",
+        "description": "Check out some examples of our recent design work. We've helped startups across various industries achieve their visual communication goals."
+    },
+    "ModernFooter": {
+        "ctaTitlePrefix": "Have an",
+        "ctaTitleHighlight": "idea?",
+        "ctaTitleSuffix": "Let's work together!",
+        "viewPricing": "View pricing",
+        "mainPages": "Main pages",
+        "utilityPages": "Utility pages",
+        "home": "Home",
+        "work": "Work",
+        "services": "Services",
+        "about": "About",
+        "blog": "Blog",
+        "notFound": "404 not found",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Use",
+        "contact": "Contact",
+        "lab": "Lab",
+        "comingSoon": "Coming soon",
+        "newsletterTitle": "Subscribe to our newsletter",
+        "newsletterDesc": "Stay updated with design tips, industry news, and exclusive offers from our team.",
+        "newsletterPlaceholder": "Enter your email",
+        "newsletterButton": "Subscribe"
+    },
+    "AboutPage": {
+        "title": "About Us",
+        "titlePrefix": "More",
+        "titleHighlight": "about",
+        "description": "Discover our agency's story, our dedicated team, core values, and the expertise we bring to every design project we undertake for you.",
+        "stats": {
+            "clients": "Happy clients",
+            "projects": "Amazing projects",
+            "team": "Team members",
+            "satisfaction": "Client satisfaction"
+        },
+        "skillsTitlePrefix": "A glimpse at the skills",
+        "skillsTitleHighlight": "expertise",
+        "skillsTitleSuffix": "we offer",
+        "skillsDesc": "Explore our team's diverse design skills and the cutting-edge tech we leverage daily to bring your creative visions powerfully to life.",
+        "valuesTitlePrefix": "The core",
+        "valuesTitleHighlight": "values",
+        "valuesDesc": "Our agency is built on core values guiding every decision, project, and interaction. This foundation ensures we consistently deliver exceptional results.",
+        "socialTitlePrefix": "Follow our work",
+        "socialTitleHighlight": "social media",
+        "socialTitleSuffix": "",
+        "socialDesc": "Stay connected and see our latest projects, design tips, and behind-the-scenes content by following us on your favorite social platforms.",
+        "instagramPosts": "Posts",
+        "viewMore": "View more",
+        "onInstagram": "On our Instagram profile"
+    },
+    "PortfolioPage": {
+        "title": "Work",
+        "subtitle": "we offer the diversity of skills",
+        "all": "All",
+        "soon": "Soon!",
+        "noProjects": "No projects added in this category yet.",
+        "industry": "Industry"
+    },
+    "ServicesPage": {
+        "title": "Services",
+        "titlePrefix": "We offer a wide range",
+        "titleHighlight": "design",
+        "titleSuffix": "services",
+        "description": "From branding and web design to mobile apps and marketing materials, discover our comprehensive suite of creative solutions tailored for you."
+    },
+    "ContactPage": {
+        "title": "Contact",
+        "titlePrefix": "Get in touch",
+        "titleHighlight": "with us today",
+        "description": "Reach out to our team using the form below or explore other contact methods. We're eager to discuss your project needs and provide tailored solutions.",
+        "form": {
+            "fullName": "Full name",
+            "email": "Email address",
+            "phone": "Phone number",
+            "subject": "Subject",
+            "message": "Tell us more about your project...",
+            "submit": "Send Message"
+        },
+        "success": "Your message has been sent successfully!",
+        "error": "An error occurred. Please try again.",
+        "serverError": "Could not connect to server."
+    },
+    "LogoMarquee": {
+        "items": [
+            "Agency",
+            "Venture",
+            "Startup",
+            "Institute",
+            "Enterprise",
+            "Company"
+        ]
+    },
+    "TestimonialsMarquee": {
+        "titlePrefix": "Take a look at what",
+        "titleHighlight": "clients",
+        "titleSuffix": "say",
+        "description": "Don't just take our word for it - see what our satisfied clients have to say about their experience working with our dedicated design team.",
+        "testimonials": [
+            {
+                "title": "Design brilliance that exceeds expectations.!",
+                "text": "We were amazed by the results. They understood our vision and delivered perfectly."
+            },
+            {
+                "title": "Elevates our brand with unmatched creativity!",
+                "text": "Their unique approach brought fresh ideas and truly captured our brand's essence."
+            },
+            {
+                "title": "Design mastery that outshines the rest!",
+                "text": "The quality and speed are impressive. This team consistently delivers top-tier results."
+            },
+            {
+                "title": "Simply the best design partner!",
+                "text": "Working with Vogo has been a game-changer for our startup. Highly recommended."
+            }
+        ]
+    },
+    "ProcessSectionModern": {
+        "titlePrefix": "Our design",
+        "titleHighlight": "process",
+        "description": "A streamlined three-step process designed to transform your vision into reality with efficiency and creative excellence.",
+        "steps": {
+            "step01": {
+                "title": "Research",
+                "desc": "We dive deep into your industry, audience, and competitors to understand what makes your brand unique and to inform our creative strategy."
+            },
+            "step02": {
+                "title": "Design",
+                "desc": "Our expert designers craft pixel-perfect mockups and prototypes, iterating with your feedback until every detail is just right."
+            },
+            "step03": {
+                "title": "Launch",
+                "desc": "We deliver production-ready assets and provide support to ensure a smooth launch. Your brand goes live, looking its absolute best."
+            }
+        },
+        "stepLabel": "STEP"
+    },
+    "ClientsSection": {
+        "title": "Clients",
+        "clients": {
+            "HUAWEI": "App icons of EMUI 10, animated clock skins for P50 Pocket, design and graphics for OS",
+            "designmodo": "Homepage design for a webpage and email template builder",
+            "HEINEKEN": "Branding and product design for a delivery app",
+            "United Nations": "Illustrations for social awareness campaigns",
+            "Opera": "Animated promos, UX expertise, and graphic design support for the marketing department",
+            "awwwards": "User experience and interaction design for annual awwwards website",
+            "uMake": "Branding and web design for a 3D editor",
+            "LUMEN": "Web design and development for a museum website",
+            "NOVA POST": "Redesign for the user interfaces and graphic content across the company\u2019s products"
+        }
+    }
+}

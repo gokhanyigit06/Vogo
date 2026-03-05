@@ -3,7 +3,8 @@
 import { motion } from "framer-motion"
 import { Twitter, Linkedin, Instagram, Facebook, Youtube, Mail, ArrowUpRight } from "lucide-react"
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 interface Settings {
     siteTitle?: string
@@ -18,6 +19,7 @@ interface Settings {
 
 export default function ModernFooter() {
     const [settings, setSettings] = useState<Settings | null>(null)
+    const t = useTranslations("ModernFooter")
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -42,9 +44,9 @@ export default function ModernFooter() {
             <section className="py-10 md:py-12 border-b border-white/10">
                 <div className="w-full px-4 md:px-8 text-center">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-5 md:mb-6 tracking-tight">
-                        Have an <span className="inline-block bg-[#FFD600] text-black px-3 py-1 rounded-lg transform -rotate-2">idea?</span>
+                        {t('ctaTitlePrefix')} <span className="inline-block bg-[#FFD600] text-black px-3 py-1 rounded-lg transform -rotate-2">{t('ctaTitleHighlight')}</span>
                         <br />
-                        Let's work together!
+                        {t('ctaTitleSuffix')}
                     </h2>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -52,7 +54,7 @@ export default function ModernFooter() {
                             href="/contact"
                             className="w-full sm:w-auto bg-white text-black px-6 py-2.5 rounded-full text-base font-semibold hover:scale-105 transition-transform duration-300 text-center"
                         >
-                            View pricing
+                            {t('viewPricing')}
                         </Link>
                         <a
                             href="mailto:contact@vogolab.com"
@@ -76,22 +78,23 @@ export default function ModernFooter() {
                         <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
                             {/* Main Pages */}
                             <div>
-                                <h4 className="font-bold mb-3 uppercase tracking-widest text-white/50 text-xs">Main pages</h4>
+                                <h4 className="font-bold mb-3 uppercase tracking-widest text-white/50 text-xs">{t('mainPages')}</h4>
                                 <ul className="space-y-2">
-                                    <li><Link href="/" className="text-sm hover:text-[#FFD600] transition-colors">Home</Link></li>
-                                    <li><Link href="/portfolio" className="text-sm hover:text-[#FFD600] transition-colors">Work</Link></li>
-                                    <li><Link href="/services" className="text-sm hover:text-[#FFD600] transition-colors">Services</Link></li>
-                                    <li><Link href="/about" className="text-sm hover:text-[#FFD600] transition-colors">About</Link></li>
-                                    <li><Link href="/blog" className="text-sm hover:text-[#FFD600] transition-colors">Blog</Link></li>
+                                    <li><Link href="/" className="text-sm hover:text-[#FFD600] transition-colors">{t('home')}</Link></li>
+                                    <li><Link href="/portfolio" className="text-sm hover:text-[#FFD600] transition-colors">{t('work')}</Link></li>
+                                    <li><Link href="/services" className="text-sm hover:text-[#FFD600] transition-colors">{t('services')}</Link></li>
+                                    <li><Link href="/about" className="text-sm hover:text-[#FFD600] transition-colors">{t('about')}</Link></li>
+                                    <li><Link href="/blog" className="text-sm hover:text-[#FFD600] transition-colors">{t('blog')}</Link></li>
                                 </ul>
                             </div>
 
                             {/* Utility Pages */}
                             <div>
-                                <h4 className="font-bold mb-3 uppercase tracking-widest text-white/50 text-xs">Utility pages</h4>
+                                <h4 className="font-bold mb-3 uppercase tracking-widest text-white/50 text-xs">{t('utilityPages')}</h4>
                                 <ul className="space-y-2">
-                                    <li><Link href="/404" className="text-sm hover:text-[#FFD600] transition-colors">404 not found</Link></li>
-                                    <li><Link href="/privacy" className="text-sm hover:text-[#FFD600] transition-colors">Privacy Policy</Link></li>
+                                    <li><Link href="/404" className="text-sm hover:text-[#FFD600] transition-colors">{t('notFound')}</Link></li>
+                                    <li><Link href="/privacy" className="text-sm hover:text-[#FFD600] transition-colors">{t('privacy')}</Link></li>
+                                    <li><Link href="/terms" className="text-sm hover:text-[#FFD600] transition-colors">{t('terms')}licy</Link></li>
                                     <li><Link href="/terms" className="text-sm hover:text-[#FFD600] transition-colors">Terms of Use</Link></li>
                                 </ul>
                             </div>
@@ -99,9 +102,9 @@ export default function ModernFooter() {
                             {/* Extra */}
                             <div className="col-span-2 sm:col-span-1 sm:pt-6">
                                 <ul className="space-y-2">
-                                    <li><Link href="/contact" className="text-sm hover:text-[#FFD600] transition-colors">Contact</Link></li>
-                                    <li><Link href="/lab" className="text-sm hover:text-[#FFD600] transition-colors">Lab</Link></li>
-                                    <li className="text-white/30 text-sm italic">Coming soon</li>
+                                    <li><Link href="/contact" className="text-sm hover:text-[#FFD600] transition-colors">{t('contact')}</Link></li>
+                                    <li><Link href="/laboratuvar" className="text-sm hover:text-[#FFD600] transition-colors">{t('lab')}</Link></li>
+                                    <li className="text-white/30 text-sm italic">{t('comingSoon')}</li>
                                 </ul>
                             </div>
                         </div>
@@ -117,23 +120,23 @@ export default function ModernFooter() {
                                     </div>
                                 </div>
 
-                                <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 pr-10">Subscribe to our newsletter</h3>
+                                <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 pr-10">{t('newsletterTitle')}</h3>
                                 <p className="text-white/60 text-xs mb-3 sm:mb-4 leading-relaxed">
-                                    Stay updated with design tips, industry news, and exclusive offers from our team.
+                                    {t('newsletterDesc')}
                                 </p>
 
                                 {/* Mobile: stacked layout, Desktop: inline pill */}
                                 <form className="hidden sm:flex gap-2 p-1.5 bg-white rounded-full" onSubmit={(e) => e.preventDefault()}>
                                     <input
                                         type="email"
-                                        placeholder="Enter your email"
+                                        placeholder={t('newsletterPlaceholder')}
                                         className="flex-1 bg-transparent px-4 py-2 text-black focus:outline-none placeholder:text-black/40 text-sm"
                                     />
                                     <button
                                         type="submit"
                                         className="bg-black text-white px-5 py-2 rounded-full font-semibold hover:scale-[1.02] transition-transform text-sm"
                                     >
-                                        Subscribe
+                                        {t('newsletterButton')}
                                     </button>
                                 </form>
 
@@ -141,14 +144,14 @@ export default function ModernFooter() {
                                 <form className="flex sm:hidden flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
                                     <input
                                         type="email"
-                                        placeholder="Enter your email"
+                                        placeholder={t('newsletterPlaceholder')}
                                         className="w-full bg-white/10 border border-white/20 px-4 py-3 text-white rounded-xl focus:outline-none focus:border-white/40 placeholder:text-white/40 text-sm"
                                     />
                                     <button
                                         type="submit"
                                         className="w-full bg-white text-black px-5 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors text-sm"
                                     >
-                                        Subscribe
+                                        {t('newsletterButton')}
                                     </button>
                                 </form>
                             </div>

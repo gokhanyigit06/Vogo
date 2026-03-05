@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore'
 
 // Varsayılan Sayfa İçerikleri (Fallback)
 const defaultPages: Record<string, unknown> = {
@@ -42,13 +43,12 @@ export async function GET(request: Request) {
     try {
         if (slug) {
             // Tek sayfa
-            const page = await prisma.page.findUnique({
-                where: { slug }
-            })
+            const docRef = doc(db, "pages", slug)
+            const docSnap = await getDoc(docRef)
 
-            if (page && page.content) {
+            if (docSnap.exists() && docSnap.data().content) {
                 try {
-                    const content = JSON.parse(page.content)
+                    const content = JSON.parse(docSnap.data().content)
                     return NextResponse.json({ ...(defaultPages[slug] as object || {}), ...content })
                 } catch {
                     return NextResponse.json(defaultPages[slug] || {})
@@ -59,13 +59,15 @@ export async function GET(request: Request) {
         }
 
         // Tüm sayfalar
-        const pages = await prisma.page.findMany()
+        const pagesSnapshot = await getDocs(collection(db, "pages"))
 
-        pages.forEach((page: { slug: string; content: string | null }) => {
-            if (page.content) {
+        pagesSnapshot.forEach((pageDoc) => {
+            const pageId = pageDoc.id
+            const pData = pageDoc.data()
+            if (pData.content) {
                 try {
-                    const content = JSON.parse(page.content)
-                    pagesData[page.slug] = { ...(defaultPages[page.slug] as object || {}), ...content }
+                    const content = JSON.parse(pData.content)
+                    pagesData[pageId] = { ...(defaultPages[pageId] as object || {}), ...content }
                 } catch {
                     // JSON parse hatası, varsayılanı kullan
                 }
@@ -75,7 +77,7 @@ export async function GET(request: Request) {
         return NextResponse.json(pagesData)
     } catch (error: unknown) {
         console.error('Pages GET error:', error)
-        return NextResponse.json(slug ? (defaultPages[slug] || {}) : pagesData)
+        return NextResponse.json(slug ? (defaultPages[slug as string] || {}) : pagesData)
     }
 }
 
@@ -89,18 +91,14 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Slug ve Content gerekli' }, { status: 400 })
         }
 
-        // Prisma'ya kaydet (upsert)
-        await prisma.page.upsert({
-            where: { slug },
-            update: {
-                content: JSON.stringify(content),
-            },
-            create: {
-                slug,
-                title: slug.charAt(0).toUpperCase() + slug.slice(1),
-                content: JSON.stringify(content),
-            }
-        })
+        // Firebase'e kaydet (setDoc with merge: true acts like upsert)
+        const docRef = doc(db, "pages", slug)
+        await setDoc(docRef, {
+            slug,
+            title: slug.charAt(0).toUpperCase() + slug.slice(1),
+            content: JSON.stringify(content),
+            updatedAt: new Date().toISOString()
+        }, { merge: true })
 
         return NextResponse.json({ success: true, data: content })
     } catch (error: unknown) {

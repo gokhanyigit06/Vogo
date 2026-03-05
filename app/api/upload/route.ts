@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { storage } from '@/lib/firebase'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export async function POST(request: NextRequest) {
     try {
@@ -19,16 +19,11 @@ export async function POST(request: NextRequest) {
         const timestamp = Date.now()
         const randomStr = Math.random().toString(36).substring(7)
 
-        // Upload directory (root level)
-        const uploadDir = path.join(process.cwd(), 'uploads', 'images')
-        await mkdir(uploadDir, { recursive: true })
-
         // Convert File to Buffer
         const bytes = await file.arrayBuffer()
         const buffer = Buffer.from(bytes)
 
         let finalBuffer = buffer
-        let filename = file.name
         let fileExt = (file.name.split('.').pop() || 'jpg').toLowerCase()
         if (fileExt === 'jfif') fileExt = 'jpg'
 
@@ -39,9 +34,10 @@ export async function POST(request: NextRequest) {
             savings: '0%'
         }
 
+        let filename = `${timestamp}_${randomStr}.${fileExt}`
+
         // Try Sharp processing (WebP conversion)
         try {
-            // Lazy import sharp to avoid hard crashes if missing
             const { processImage } = await import('@/lib/imageProcessor')
 
             const processed = await processImage(buffer, {
@@ -62,20 +58,23 @@ export async function POST(request: NextRequest) {
             }
 
         } catch (sharpError) {
-            console.warn('Sharp processing failed, falling back to original file. If this is a JFIF file, ensuring extension is jpg might help.', sharpError)
-            // Fallback: Use original filename and buffer
-            filename = `${timestamp}_${randomStr}.${fileExt}`
+            console.warn('Sharp processing failed, falling back to original file.', sharpError)
         }
 
-        // Save the file (optimized or original)
-        const filePath = path.join(uploadDir, filename)
-        await writeFile(filePath, finalBuffer)
+        // --- Firebase Storage Upload ---
+        const storageRef = ref(storage, `images/${filename}`)
 
-        // Return URL
-        const url = `/uploads/images/${filename}`
+        // uploadBytes handles Uint8Array or Buffer in some environments, usually Uint8Array is safer in Edge/Node
+        // finalBuffer is a Buffer (which is a Uint8Array)
+        await uploadBytes(storageRef, finalBuffer, {
+            contentType: `image/${fileExt}`
+        })
+
+        // Get public URL
+        const downloadUrl = await getDownloadURL(storageRef)
 
         return NextResponse.json({
-            url,
+            url: downloadUrl,
             success: true,
             metadata
         })

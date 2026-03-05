@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 
 // GET - Tüm blog yazılarını getir
 export async function GET() {
     try {
-        const posts = await prisma.post.findMany({
-            orderBy: { createdAt: 'desc' }
-        })
+        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"))
+        const querySnapshot = await getDocs(q)
+
+        const posts = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
 
         return NextResponse.json(posts)
     } catch (error: unknown) {
@@ -31,20 +36,23 @@ export async function POST(request: Request) {
             .replace(/ö/g, 'o')
             .replace(/ç/g, 'c')
 
-        const post = await prisma.post.create({
-            data: {
-                title: body.title,
-                slug,
-                content: body.content,
-                excerpt: body.excerpt,
-                category: body.category,
-                image: body.image,
-                status: body.status || 'published',
-                readTime: body.readTime || '5 dk'
-            }
-        })
+        const newPost = {
+            title: body.title,
+            slug,
+            content: body.content || null,
+            excerpt: body.excerpt || null,
+            category: body.category || null,
+            image: body.image || null,
+            status: body.status || 'published',
+            readTime: body.readTime || '5 dk',
+            views: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
 
-        return NextResponse.json(post)
+        const docRef = await addDoc(collection(db, "posts"), newPost)
+
+        return NextResponse.json({ id: docRef.id, ...newPost })
     } catch (error: unknown) {
         console.error('Posts POST error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -62,12 +70,12 @@ export async function PUT(request: Request) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        const post = await prisma.post.update({
-            where: { id: parseInt(id) },
-            data: updates
-        })
+        updates.updatedAt = new Date().toISOString()
 
-        return NextResponse.json(post)
+        const postRef = doc(db, "posts", id)
+        await updateDoc(postRef, updates)
+
+        return NextResponse.json({ id, ...updates })
     } catch (error: unknown) {
         console.error('Posts PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -85,9 +93,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.post.delete({
-            where: { id: parseInt(id) }
-        })
+        await deleteDoc(doc(db, "posts", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

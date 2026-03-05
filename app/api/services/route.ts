@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore'
 
 // GET - Tüm hizmetleri getir
 export async function GET() {
     try {
-        const services = await prisma.service.findMany({
-            orderBy: { id: 'asc' }
-        })
+        const q = query(collection(db, "services"), orderBy("createdAt", "asc"))
+        const querySnapshot = await getDocs(q)
+
+        const services = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
 
         return NextResponse.json(services)
     } catch (error: unknown) {
@@ -31,19 +36,18 @@ export async function POST(request: Request) {
             .replace(/ö/g, 'o')
             .replace(/ç/g, 'c')
 
-        const service = await prisma.service.create({
-            data: {
-                title: body.title,
-                slug,
-                description: body.desc || body.description,
-                icon: body.icon || 'Layers',
-                status: body.status || 'Pasif',
-                views: 0,
-                projectsCount: 0
-            }
+        const docRef = await addDoc(collection(db, "services"), {
+            title: body.title,
+            slug,
+            description: body.desc || body.description,
+            icon: body.icon || 'Layers',
+            status: body.status || 'Pasif',
+            views: 0,
+            projectsCount: 0,
+            createdAt: new Date().toISOString()
         })
 
-        return NextResponse.json(service)
+        return NextResponse.json({ id: docRef.id, ...body, slug })
     } catch (error: unknown) {
         console.error('Services POST error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -61,17 +65,17 @@ export async function PUT(request: Request) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        // Map 'desc' to 'description' for Prisma
+        // Map 'desc' to 'description' for Firebase consistent mapping if needed
         if (desc !== undefined) {
             updates.description = desc
         }
 
-        const service = await prisma.service.update({
-            where: { id: parseInt(id) },
-            data: updates
-        })
+        updates.updatedAt = new Date().toISOString()
 
-        return NextResponse.json(service)
+        const serviceRef = doc(db, "services", id)
+        await updateDoc(serviceRef, updates)
+
+        return NextResponse.json({ id, ...updates })
     } catch (error: unknown) {
         console.error('Services PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -89,9 +93,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.service.delete({
-            where: { id: parseInt(id) }
-        })
+        await deleteDoc(doc(db, "services", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

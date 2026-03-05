@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { db, storage } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, deleteDoc, query, where } from 'firebase/firestore'
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,9 +13,10 @@ export async function GET(request: NextRequest) {
     if (!taskId) return NextResponse.json([])
 
     try {
-        const attachments = await prisma.taskAttachment.findMany({
-            where: { taskId: parseInt(taskId) }
-        })
+        const q = query(collection(db, "taskAttachments"), where("taskId", "==", taskId))
+        const snapshot = await getDocs(q)
+
+        const attachments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
         return NextResponse.json(attachments)
     } catch (error: unknown) {
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
 }
 
-// POST - Yeni attachment yükle
+// POST - Yeni attachment yükle (Firebase Storage)
 export async function POST(request: NextRequest) {
     try {
         const formData = await request.formData()
@@ -37,32 +38,38 @@ export async function POST(request: NextRequest) {
 
         // Dosya bilgilerini al
         const fileExt = file.name.split('.').pop() || 'bin'
-        const fileName = `${taskId}_${Math.random().toString(36).substring(7)}.${fileExt}`
+        const timestamp = Date.now()
+        const randomStr = Math.random().toString(36).substring(7)
+        const fileName = `${taskId}/${timestamp}_${randomStr}_${file.name}`
 
-        // Upload dizini oluştur
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'tasks')
-        await mkdir(uploadDir, { recursive: true })
-
-        // Dosyayı kaydet
-        const filePath = path.join(uploadDir, fileName)
+        // Uint8Array'e dönüştür (Server side Node.js context)
         const bytes = await file.arrayBuffer()
-        await writeFile(filePath, Buffer.from(bytes))
+        const buffer = Buffer.from(bytes)
 
-        // URL oluştur
-        const fileUrl = `/uploads/tasks/${fileName}`
+        // --- Firebase Storage Upload ---
+        const storageRef = ref(storage, `tasks/attachments/${fileName}`)
 
-        // DB'ye kaydet
-        const attachment = await prisma.taskAttachment.create({
-            data: {
-                taskId: parseInt(taskId),
-                name: file.name,
-                url: fileUrl,
-                type: fileExt,
-                size: file.size
-            }
+        await uploadBytes(storageRef, buffer, {
+            contentType: file.type || 'application/octet-stream'
         })
 
-        return NextResponse.json(attachment)
+        // Get public URL
+        const downloadUrl = await getDownloadURL(storageRef)
+
+        // Firestore'a kaydet
+        const newAttachment = {
+            taskId: taskId,
+            name: file.name,
+            url: downloadUrl,
+            storagePath: `tasks/attachments/${fileName}`, // Silmek için yolu saklayalım
+            type: fileExt,
+            size: file.size,
+            createdAt: new Date().toISOString()
+        }
+
+        const docRef = await addDoc(collection(db, "taskAttachments"), newAttachment)
+
+        return NextResponse.json({ id: docRef.id, ...newAttachment })
 
     } catch (error: unknown) {
         console.error('Attachment save error:', error)
@@ -76,14 +83,24 @@ export async function DELETE(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
+        const deleteFile = searchParams.get('deleteFile') === 'true'
+        const storagePath = searchParams.get('storagePath') // İsteğe bağlı olarak folder yolu or url
 
         if (!id) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.taskAttachment.delete({
-            where: { id: parseInt(id) }
-        })
+        // Eğer storage üzerinden de silmek istiyorsak
+        if (deleteFile && storagePath) {
+            try {
+                const fileRef = ref(storage, storagePath)
+                await deleteObject(fileRef)
+            } catch (e) {
+                console.warn('File deletion failed in Storage, may not exist:', e)
+            }
+        }
+
+        await deleteDoc(doc(db, "taskAttachments", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

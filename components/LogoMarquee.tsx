@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 
 const StarIcon = () => (
     <svg viewBox="0 0 24 24" className="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 fill-white">
@@ -8,11 +9,10 @@ const StarIcon = () => (
     </svg>
 )
 
-const marqueeItems = [
-    "Agency", "Venture", "Startup", "Institute", "Enterprise", "Company"
-]
-
 export default function LogoMarquee() {
+    const t = useTranslations("LogoMarquee")
+    const marqueeItems = t.raw("items") as string[]
+
     // Silinmez bir döngü için öğeleri çoğaltıyoruz
     const displayItems = [...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems]
 

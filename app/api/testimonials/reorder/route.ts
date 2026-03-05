@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { doc, writeBatch } from 'firebase/firestore'
 
 export async function POST(request: Request) {
     try {
@@ -9,14 +10,16 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invalid data format' }, { status: 400 })
         }
 
-        await prisma.$transaction(
-            items.map((item: any) =>
-                prisma.testimonial.update({
-                    where: { id: parseInt(item.id) },
-                    data: { order: parseInt(item.order) }
-                })
-            )
-        )
+        const batch = writeBatch(db)
+
+        items.forEach((item: any) => {
+            if (item.id) {
+                const docRef = doc(db, "testimonials", item.id)
+                batch.update(docRef, { order: parseInt(item.order) })
+            }
+        })
+
+        await batch.commit()
 
         return NextResponse.json({ success: true })
     } catch (error) {

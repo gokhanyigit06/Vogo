@@ -1,27 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Tüm görevleri getir
 export async function GET() {
     try {
-        const tasks = await prisma.task.findMany({
-            orderBy: { id: 'desc' },
-            include: {
-                project: {
-                    select: { id: true, title: true, name: true }
-                },
-                teamMember: { // Keep legacy
-                    select: { id: true, name: true }
-                },
-                user: { // New relation
-                    select: { id: true, name: true, image: true, email: true }
-                }
-            }
-        })
+        const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"))
+        const querySnapshot = await getDocs(q)
 
-        return NextResponse.json(tasks)
+        const tasksData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }))
+
+        if (tasksData.length === 0) return NextResponse.json([])
+
+        // Unique IDs to fetch
+        const projectIds = Array.from(new Set(tasksData.map(t => t.projectId).filter(Boolean)))
+        const userIds = Array.from(new Set(tasksData.map(t => t.userId).filter(Boolean)))
+
+        const projectCache: Record<string, any> = {}
+        const userCache: Record<string, any> = {}
+
+        // Fetch projects in parallel (up to 10 at a time if using 'in', but let's use caching for simplicity or simple parallel gets)
+        await Promise.all([
+            ...projectIds.map(async (pid) => {
+                const pDoc = await getDoc(doc(db, "projects", pid as string))
+                if (pDoc.exists()) {
+                    const data = pDoc.data()
+                    projectCache[pid as string] = {
+                        id: pid,
+                        title: data.title || data.publicTitle,
+                        name: data.name || data.internalName
+                    }
+                }
+            }),
+            ...userIds.map(async (uid) => {
+                const uDoc = await getDoc(doc(db, "team", uid as string))
+                if (uDoc.exists()) {
+                    const data = uDoc.data()
+                    userCache[uid as string] = {
+                        id: uid,
+                        name: data.name,
+                        image: data.image || data.image_url,
+                        email: data.email
+                    }
+                }
+            })
+        ])
+
+        // Merge data
+        const enrichedTasks = tasksData.map(task => ({
+            ...task,
+            project: task.projectId ? projectCache[task.projectId] : null,
+            user: task.userId ? userCache[task.userId] : null
+        }))
+
+        return NextResponse.json(enrichedTasks)
     } catch (error: unknown) {
         console.error('Error fetching tasks:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -38,22 +72,21 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Title is required' }, { status: 400 })
         }
 
-        console.log('Creating task with body:', body); // Debug log
+        const newTask = {
+            title: body.title,
+            description: body.description || null,
+            status: body.status || 'todo',
+            priority: body.priority || 'medium',
+            userId: body.assigned_to ? String(body.assigned_to) : null,
+            projectId: body.project_id ? String(body.project_id) : null,
+            dueDate: body.due_date ? new Date(body.due_date).toISOString() : null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
 
-        const task = await prisma.task.create({
-            data: {
-                title: body.title,
-                description: body.description,
-                status: body.status || 'todo',
-                priority: body.priority || 'medium',
-                userId: body.assigned_to ? String(body.assigned_to) : null, // Store in new userId field
-                // Legacy: assignedTo will be null for new string-based assignments
-                projectId: body.project_id ? parseInt(String(body.project_id)) : null,
-                dueDate: body.due_date ? new Date(body.due_date) : null,
-            }
-        })
+        const docRef = await addDoc(collection(db, "tasks"), newTask)
 
-        return NextResponse.json(task)
+        return NextResponse.json({ id: docRef.id, ...newTask })
     } catch (error: unknown) {
         console.error('Error creating task:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -65,29 +98,31 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
     try {
         const body = await request.json()
+        const { id, assigned_to, project_id, due_date, ...rest } = body
 
-        if (!body.id) {
+        if (!id) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 })
         }
 
-        console.log('Updating task with body:', body); // Debug log
+        const updateData: any = {
+            title: body.title,
+            description: body.description || null,
+            status: body.status,
+            priority: body.priority,
+            updatedAt: new Date().toISOString()
+        }
 
-        const task = await prisma.task.update({
-            where: { id: parseInt(String(body.id)) },
-            data: {
-                title: body.title,
-                description: body.description,
-                status: body.status,
-                priority: body.priority,
-                userId: body.assigned_to ? String(body.assigned_to) : null, // Store in new userId field
-                // assignedTo: null, // Don't clear legacy field automatically, just switch to userId
-                projectId: body.project_id ? parseInt(String(body.project_id)) : null,
-                dueDate: body.due_date ? new Date(body.due_date) : null,
-                completedAt: body.status === 'done' ? new Date() : null,
-            }
-        })
+        if (assigned_to !== undefined) updateData.userId = assigned_to ? String(assigned_to) : null
+        if (project_id !== undefined) updateData.projectId = project_id ? String(project_id) : null
+        if (due_date !== undefined) updateData.dueDate = due_date ? new Date(due_date).toISOString() : null
+        if (body.status === 'done') {
+            updateData.completedAt = new Date().toISOString()
+        }
 
-        return NextResponse.json(task)
+        const taskRef = doc(db, "tasks", id)
+        await updateDoc(taskRef, updateData)
+
+        return NextResponse.json({ id, ...updateData })
     } catch (error: unknown) {
         console.error('Error updating task:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -105,9 +140,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 })
         }
 
-        await prisma.task.delete({
-            where: { id: parseInt(id) }
-        })
+        await deleteDoc(doc(db, "tasks", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

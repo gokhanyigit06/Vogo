@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 // Varsayılan Ayarlar
 const defaultSettings = {
@@ -28,13 +29,12 @@ const defaultSettings = {
 
 export async function GET() {
     try {
-        // Prisma'dan ayarları al
-        const setting = await prisma.setting.findUnique({
-            where: { key: 'site_settings' }
-        })
+        // Firebase'den ayarları al
+        const docRef = doc(db, "settings", "site_settings")
+        const docSnap = await getDoc(docRef)
 
-        if (setting) {
-            return NextResponse.json({ ...defaultSettings, ...(setting.value as object) })
+        if (docSnap.exists()) {
+            return NextResponse.json({ ...defaultSettings, ...docSnap.data() })
         }
 
         return NextResponse.json(defaultSettings)
@@ -49,12 +49,9 @@ export async function POST(request: Request) {
         const body = await request.json()
         const newSettings = { ...defaultSettings, ...body }
 
-        // Prisma'ya kaydet (upsert)
-        await prisma.setting.upsert({
-            where: { key: 'site_settings' },
-            update: { value: newSettings },
-            create: { key: 'site_settings', value: newSettings }
-        })
+        // Firebase'e kaydet (setDoc with merge acts like upsert)
+        const docRef = doc(db, "settings", "site_settings")
+        await setDoc(docRef, { ...newSettings, updatedAt: new Date().toISOString() }, { merge: true })
 
         // Sitenin arayüzündeki tüm önbelleği (cache) temizle, böylece anasayfa ve layout (head) verisi güncellenir
         revalidatePath('/', 'layout')

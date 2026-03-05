@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, updateDoc, query, orderBy } from 'firebase/firestore'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Müşterileri ve cari bakiyelerini getir
 export async function GET() {
     try {
-        const clients = await prisma.client.findMany({
-            orderBy: { name: 'asc' }
-        })
+        const q = query(collection(db, "clients"), orderBy("name", "asc"))
+        const snapshot = await getDocs(q)
+
+        const clients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
         return NextResponse.json(clients)
     } catch (error: unknown) {
@@ -18,7 +20,7 @@ export async function GET() {
     }
 }
 
-// PUT - Müşteri bilgilerini güncelle (Cari verisi dahil olabilir)
+// PUT - Müşteri bilgilerini güncelle
 export async function PUT(request: NextRequest) {
     try {
         const body = await request.json()
@@ -28,12 +30,10 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'ID required' }, { status: 400 })
         }
 
-        const client = await prisma.client.update({
-            where: { id: parseInt(id) },
-            data: updates
-        })
+        const docRef = doc(db, "clients", id)
+        await updateDoc(docRef, updates)
 
-        return NextResponse.json(client)
+        return NextResponse.json({ id, ...updates })
     } catch (error: unknown) {
         console.error('Clients PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'

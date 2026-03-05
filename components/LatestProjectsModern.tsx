@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 const projects = [
     {
@@ -20,6 +21,7 @@ const projects = [
 ]
 
 export default function LatestProjectsModern() {
+    const t = useTranslations("LatestProjectsModern")
     return (
         <section className="py-16 sm:py-20 md:py-24 bg-white overflow-hidden">
             <div className="container mx-auto px-4 md:px-8 max-w-[95%] w-full">
@@ -32,10 +34,10 @@ export default function LatestProjectsModern() {
                         viewport={{ once: true }}
                         className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-medium text-black leading-tight"
                     >
-                        Our <span className="relative inline-block mx-1 sm:mx-2">
+                        {t('titlePrefix')} <span className="relative inline-block mx-1 sm:mx-2">
                             <span className="absolute -inset-1 sm:-inset-2 bg-[#4D45FF] rounded-xl sm:rounded-2xl transform -rotate-2 shadow-lg" />
-                            <span className="relative text-white px-1 sm:px-2">latest</span>
-                        </span> projects
+                            <span className="relative text-white px-1 sm:px-2">{t('titleHighlight')}</span>
+                        </span> {t('titleSuffix')}
                     </motion.h2>
 
                     <motion.p
@@ -45,7 +47,7 @@ export default function LatestProjectsModern() {
                         transition={{ delay: 0.1 }}
                         className="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed font-medium px-2"
                     >
-                        Check out some examples of our recent design work. We've helped startups across various industries achieve their visual communication goals.
+                        {t('description')}
                     </motion.p>
                 </div>
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma"
+import { db } from '@/lib/firebase'
+import { doc, writeBatch } from 'firebase/firestore'
 import { auth } from "@/lib/auth"
 
 export async function POST(req: NextRequest) {
@@ -16,15 +17,16 @@ export async function POST(req: NextRequest) {
             return new NextResponse("Invalid data", { status: 400 })
         }
 
-        // Transaction to update all orders
-        await prisma.$transaction(
-            projects.map((p: any) =>
-                prisma.project.update({
-                    where: { id: p.id },
-                    data: { order: p.order }
-                })
-            )
-        )
+        const batch = writeBatch(db);
+
+        projects.forEach((p: any) => {
+            if (p.id) {
+                const projectRef = doc(db, "projects", p.id);
+                batch.update(projectRef, { order: p.order });
+            }
+        });
+
+        await batch.commit();
 
         return NextResponse.json({ success: true })
     } catch (error) {

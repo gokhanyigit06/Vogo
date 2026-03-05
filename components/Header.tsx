@@ -1,12 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ThemeToggle } from "@/components/ThemeToggle"
+import { Link, usePathname } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 export default function Header() {
+    const t = useTranslations("Header")
+    const pathname = usePathname()
     const [menuOpen, setMenuOpen] = useState(false)
     const [settings, setSettings] = useState<any>(null)
 
@@ -16,6 +19,7 @@ export default function Header() {
             .then(data => setSettings(data))
             .catch(err => console.error('Settings fetch error:', err))
     }, [])
+
 
     // Prevent body scroll when menu is open
     useEffect(() => {
@@ -30,11 +34,11 @@ export default function Header() {
     }, [menuOpen])
 
     const navItems = [
-        { name: "work", href: "/portfolio" },
-        { name: "services", href: "/services" },
-        { name: "about", href: "/about" },
-        { name: "blog", href: "/blog" },
-        { name: "lab", href: "/laboratuvar" },
+        { name: t("work"), href: "/portfolio" },
+        { name: t("services"), href: "/services" },
+        { name: t("about"), href: "/about" },
+        { name: t("blog"), href: "/blog" },
+        { name: t("lab"), href: "/laboratuvar" },
     ]
 
     return (
@@ -66,14 +70,15 @@ export default function Header() {
                     <div className="flex items-center gap-3 sm:gap-4">
                         {/* Desktop Contact Button */}
                         <div className="hidden md:flex items-center gap-4 lg:gap-6">
-                            <span className="text-lg lg:text-2xl font-medium border border-black/20 px-3 lg:px-4 py-1 rounded-full uppercase text-black">
-                                TR
-                            </span>
+                            <Link href="/" locale="tr" className="text-sm font-medium hover:text-primary transition-colors">TR</Link>
+                            <span className="text-black/20">|</span>
+                            <Link href="/" locale="en" className="text-sm font-medium hover:text-primary transition-colors">EN</Link>
+                            
                             <Link
                                 href="/contact"
                                 className="text-lg lg:text-2xl font-medium text-black hover:text-primary transition-colors"
                             >
-                                contact us
+                                {t("contactUs")}
                             </Link>
                         </div>
 

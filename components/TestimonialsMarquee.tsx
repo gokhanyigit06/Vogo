@@ -2,44 +2,40 @@
 
 import { motion } from "framer-motion"
 import { Quote } from "lucide-react"
-import Link from "next/link"
-
-const testimonials = [
-    {
-        name: "Sophie Moore",
-        location: "San Francisco, CA",
-        title: "Design brilliance that exceeds expectations.!",
-        text: "We were amazed by the results. They understood our vision and delivered perfectly.",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
-        quoteColor: "text-amber-400"
-    },
-    {
-        name: "Matt Cannon",
-        location: "London, UK",
-        title: "Elevates our brand with unmatched creativity!",
-        text: "Their unique approach brought fresh ideas and truly captured our brand's essence.",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Matt",
-        quoteColor: "text-blue-600"
-    },
-    {
-        name: "John Carter",
-        location: "New York, NY",
-        title: "Design mastery that outshines the rest!",
-        text: "The quality and speed are impressive. This team consistently delivers top-tier results.",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-        quoteColor: "text-rose-500"
-    },
-    {
-        name: "Emily Chen",
-        location: "Singapore",
-        title: "Simply the best design partner!",
-        text: "Working with Vogo has been a game-changer for our startup. Highly recommended.",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-        quoteColor: "text-emerald-500"
-    }
-]
+import { Link } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 export default function TestimonialsMarquee() {
+    const t = useTranslations("TestimonialsMarquee")
+    const commonT = useTranslations("Header") // For "contactUs" or similar if needed, but we'll use a direct label
+
+    const testimonials = [
+        {
+            name: "Sophie Moore",
+            location: "San Francisco, CA",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
+            quoteColor: "text-amber-400"
+        },
+        {
+            name: "Matt Cannon",
+            location: "London, UK",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Matt",
+            quoteColor: "text-blue-600"
+        },
+        {
+            name: "John Carter",
+            location: "New York, NY",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+            quoteColor: "text-rose-500"
+        },
+        {
+            name: "Emily Chen",
+            location: "Singapore",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+            quoteColor: "text-emerald-500"
+        }
+    ]
+
     // Duplicate for seamless loop
     const displayTestimonials = [...testimonials, ...testimonials, ...testimonials]
 
@@ -53,11 +49,12 @@ export default function TestimonialsMarquee() {
                         viewport={{ once: true }}
                         className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-medium text-black leading-tight max-w-4xl mx-auto"
                     >
-                        Take a look at what <br className="hidden sm:block" />
-                        our <span className="relative inline-block mx-1 sm:mx-2">
+                        {t('titlePrefix')} <br className="hidden sm:block" />
+                        {t('titleHighlight') === "clients" ? "our " : ""}
+                        <span className="relative inline-block mx-1 sm:mx-2">
                             <span className="absolute -inset-1 sm:-inset-2 bg-[#FFD600] rounded-xl sm:rounded-2xl transform rotate-3 shadow-lg" />
-                            <span className="relative text-white px-1 sm:px-2">clients</span>
-                        </span> say
+                            <span className="relative text-white px-1 sm:px-2">{t('titleHighlight')}</span>
+                        </span> {t('titleSuffix')}
                     </motion.h2>
 
                     <motion.p
@@ -67,7 +64,7 @@ export default function TestimonialsMarquee() {
                         transition={{ delay: 0.1 }}
                         className="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed font-medium px-2"
                     >
-                        Don't just take our word for it - see what our satisfied clients have to say about their experience working with our dedicated design team.
+                        {t('description')}
                     </motion.p>
 
                     <motion.div
@@ -81,11 +78,12 @@ export default function TestimonialsMarquee() {
                             href="/contact"
                             className="inline-block px-6 sm:px-10 py-3 sm:py-5 bg-black text-white rounded-xl sm:rounded-2xl text-base sm:text-xl font-bold hover:scale-[1.05] transition-all shadow-xl"
                         >
-                            Get in touch
+                            {commonT("contactUs")}
                         </Link>
                     </motion.div>
                 </div>
             </div>
+
 
             {/* Infinite Marquee */}
             <div className="relative">
@@ -106,10 +104,10 @@ export default function TestimonialsMarquee() {
                             <div className="space-y-3 sm:space-y-6">
                                 <Quote className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 ${item.quoteColor} fill-current transform -rotate-12`} />
                                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-black leading-tight">
-                                    {item.title}
+                                    {t(`testimonials.${index % 4}.title`)}
                                 </h3>
                                 <p className="text-sm sm:text-base md:text-xl text-black/60 leading-relaxed font-medium">
-                                    {item.text}
+                                    {t(`testimonials.${index % 4}.text`)}
                                 </p>
                             </div>
 

@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 
 // GET - Tüm müşterileri getir
 export async function GET() {
     try {
-        const clients = await prisma.client.findMany({
-            orderBy: { createdAt: 'desc' }
-        })
+        const q = query(collection(db, "clients"), orderBy("createdAt", "desc"))
+        const querySnapshot = await getDocs(q)
+
+        const clients = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
 
         return NextResponse.json(clients)
     } catch (error: unknown) {
@@ -21,21 +26,27 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
-        const client = await prisma.client.create({
-            data: {
-                name: body.name,
-                company: body.company,
-                email: body.email,
-                phone: body.phone,
-                address: body.address,
-                website: body.website,
-                status: body.status || 'active',
-                tags: body.tags || [],
-                notes: body.notes,
-            }
-        })
+        const newClient = {
+            name: body.name || null,
+            company: body.company || null,
+            email: body.email || null,
+            phone: body.phone || null,
+            address: body.address || null,
+            website: body.website || null,
+            status: body.status || 'active',
+            tags: body.tags || [],
+            notes: body.notes || null,
+            totalRevenue: 0,
+            totalPaid: 0,
+            balance: 0,
+            order: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
 
-        return NextResponse.json(client)
+        const docRef = await addDoc(collection(db, "clients"), newClient)
+
+        return NextResponse.json({ id: docRef.id, ...newClient })
     } catch (error: unknown) {
         console.error('Clients POST error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -49,6 +60,10 @@ export async function PUT(request: NextRequest) {
         const body = await request.json()
         const { id, ...updateData } = body
 
+        if (!id) {
+            return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
+        }
+
         // Boş stringleri null'a çevir
         Object.keys(updateData).forEach(key => {
             if (updateData[key] === '') {
@@ -56,12 +71,12 @@ export async function PUT(request: NextRequest) {
             }
         })
 
-        const client = await prisma.client.update({
-            where: { id: parseInt(id) },
-            data: updateData
-        })
+        updateData.updatedAt = new Date().toISOString()
 
-        return NextResponse.json(client)
+        const clientRef = doc(db, "clients", id)
+        await updateDoc(clientRef, updateData)
+
+        return NextResponse.json({ id, ...updateData })
     } catch (error: unknown) {
         console.error('Clients PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -79,9 +94,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.client.delete({
-            where: { id: parseInt(id) }
-        })
+        await deleteDoc(doc(db, "clients", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

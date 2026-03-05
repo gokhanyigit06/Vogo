@@ -1,6 +1,6 @@
-
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { db } from "@/lib/firebase"
+import { doc, writeBatch } from "firebase/firestore"
 import { auth } from "@/lib/auth"
 
 export async function POST(req: Request) {
@@ -19,15 +19,16 @@ export async function POST(req: Request) {
             return new NextResponse("Invalid data format", { status: 400 })
         }
 
-        // Transaction to update all items safely
-        await prisma.$transaction(
-            items.map((item: { id: number; order: number }) =>
-                prisma.client.update({
-                    where: { id: item.id },
-                    data: { order: item.order },
-                })
-            )
-        )
+        const batch = writeBatch(db)
+
+        items.forEach((item: { id: string; order: number }) => {
+            if (item.id) {
+                const docRef = doc(db, "clients", item.id)
+                batch.update(docRef, { order: Number(item.order) })
+            }
+        })
+
+        await batch.commit()
 
         return NextResponse.json({ success: true })
     } catch (error) {

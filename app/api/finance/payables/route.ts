@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Borçları getir
 export async function GET() {
     try {
-        const payables = await prisma.payable.findMany({
-            orderBy: { dueDate: 'asc' }
-        })
+        const q = query(collection(db, "payables"), orderBy("dueDate", "asc"))
+        const querySnapshot = await getDocs(q)
+
+        const payables = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
 
         return NextResponse.json(payables)
     } catch (error: unknown) {
@@ -23,19 +28,20 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
 
-        const payable = await prisma.payable.create({
-            data: {
-                vendorName: body.vendor_name || body.vendorName,
-                amount: parseFloat(body.amount),
-                dueDate: body.due_date ? new Date(body.due_date) : null,
-                status: body.status || 'pending',
-                category: body.category,
-                description: body.description,
-                paidDate: body.paid_date ? new Date(body.paid_date) : null,
-            }
-        })
+        const newPayable = {
+            vendorName: body.vendor_name || body.vendorName || null,
+            amount: parseFloat(body.amount),
+            dueDate: body.due_date ? new Date(body.due_date).toISOString() : null,
+            status: body.status || 'pending',
+            category: body.category || null,
+            description: body.description || null,
+            paidDate: body.paid_date ? new Date(body.paid_date).toISOString() : null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
 
-        return NextResponse.json(payable)
+        const docRef = await addDoc(collection(db, "payables"), newPayable)
+        return NextResponse.json({ id: docRef.id, ...newPayable })
     } catch (error: unknown) {
         console.error('Payables POST error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -53,18 +59,17 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'ID required' }, { status: 400 })
         }
 
-        const payable = await prisma.payable.update({
-            where: { id: parseInt(id) },
-            data: {
-                ...rest,
-                vendorName: vendor_name,
-                amount: rest.amount ? parseFloat(rest.amount) : undefined,
-                dueDate: due_date ? new Date(due_date) : undefined,
-                paidDate: paid_date ? new Date(paid_date) : undefined,
-            }
-        })
+        const updateData: any = { ...rest, updatedAt: new Date().toISOString() }
 
-        return NextResponse.json(payable)
+        if (vendor_name !== undefined) updateData.vendorName = vendor_name
+        if (rest.amount) updateData.amount = parseFloat(rest.amount)
+        if (due_date !== undefined) updateData.dueDate = due_date ? new Date(due_date).toISOString() : null
+        if (paid_date !== undefined) updateData.paidDate = paid_date ? new Date(paid_date).toISOString() : null
+
+        const payableRef = doc(db, "payables", id)
+        await updateDoc(payableRef, updateData)
+
+        return NextResponse.json({ id, ...updateData })
     } catch (error: unknown) {
         console.error('Payables PUT error:', error)
         const message = error instanceof Error ? error.message : 'Unknown error'
@@ -82,9 +87,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID required' }, { status: 400 })
         }
 
-        await prisma.payable.delete({
-            where: { id: parseInt(id) }
-        })
+        await deleteDoc(doc(db, "payables", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

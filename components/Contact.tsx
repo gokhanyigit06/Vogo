@@ -3,8 +3,10 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Mail, Phone, ArrowUpRight, Facebook, Instagram, Linkedin, Youtube, Loader2, CheckCircle, AlertCircle } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function Contact() {
+    const t = useTranslations("ContactPage")
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -30,19 +32,19 @@ export default function Contact() {
             if (res.ok) {
                 setResult({
                     success: true,
-                    message: "Mesajınız başarıyla gönderildi!"
+                    message: t("success")
                 })
                 setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
             } else {
                 setResult({
                     success: false,
-                    message: "Bir hata oluştu. Lütfen tekrar deneyin."
+                    message: t("error")
                 })
             }
         } catch (error) {
             setResult({
                 success: false,
-                message: "Sunucuya bağlanılamadı."
+                message: t("serverError")
             })
         } finally {
             setLoading(false)
@@ -62,15 +64,14 @@ export default function Contact() {
                 {/* Header Section */}
                 <div className="text-center mb-10 md:mb-16 px-2 md:px-4">
                     <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-5 md:mb-8 tracking-tight leading-tight">
-                        Get in touch
+                        {t("title")}
                         <div className="relative inline-block ml-2 sm:ml-4 md:ml-6 mt-2 sm:mt-0">
-                            <span className="relative z-10 text-white px-3 sm:px-6 py-1 sm:py-2 text-2xl sm:text-4xl md:text-5xl lg:text-7xl">with us today</span>
+                            <span className="relative z-10 text-white px-3 sm:px-6 py-1 sm:py-2 text-2xl sm:text-4xl md:text-5xl lg:text-7xl">{t("titleHighlight")}</span>
                             <div className="absolute inset-0 bg-[#4F46E5] -rotate-2 rounded-lg sm:rounded-xl z-0 scale-110"></div>
                         </div>
                     </h2>
                     <p className="max-w-2xl mx-auto text-gray-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed">
-                        Reach out to our team using the form below or explore other contact methods.
-                        We're eager to discuss your project needs and provide tailored solutions.
+                        {t("description")}
                     </p>
                 </div>
 
@@ -91,7 +92,7 @@ export default function Contact() {
                         <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 text-white">
                                 <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">Full name</label>
+                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.fullName")}</label>
                                     <input
                                         type="text"
                                         name="name"
@@ -103,7 +104,7 @@ export default function Contact() {
                                     />
                                 </div>
                                 <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">Email address</label>
+                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.email")}</label>
                                     <input
                                         type="email"
                                         name="email"
@@ -118,7 +119,7 @@ export default function Contact() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 text-white">
                                 <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">Phone number</label>
+                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.phone")}</label>
                                     <input
                                         type="tel"
                                         name="phone"
@@ -129,7 +130,7 @@ export default function Contact() {
                                     />
                                 </div>
                                 <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">Subject</label>
+                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.subject")}</label>
                                     <input
                                         type="text"
                                         name="subject"
@@ -143,7 +144,7 @@ export default function Contact() {
                             </div>
 
                             <div className="space-y-2 sm:space-y-3 text-white">
-                                <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">Tell us more about your project...</label>
+                                <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.message")}</label>
                                 <textarea
                                     name="message"
                                     value={formData.message}
@@ -160,7 +161,7 @@ export default function Contact() {
                                 disabled={loading}
                                 className="w-full bg-white text-black font-bold py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-3 text-base sm:text-lg"
                             >
-                                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Send message"}
+                                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : t("form.submit")}
                             </button>
                         </form>
                     </div>
@@ -183,8 +184,8 @@ export default function Contact() {
                                             <Mail className="w-5 h-5 sm:w-7 sm:h-7 text-yellow-600" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">Send us an email</p>
-                                            <p className="text-base sm:text-xl font-bold truncate">info@unlimited.com</p>
+                                            <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">{t("form.email")}</p>
+                                            <p className="text-base sm:text-xl font-bold truncate">info@vogolab.com</p>
                                         </div>
                                     </div>
                                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center group-hover:bg-black group-hover:text-white group-hover:border-black transition-all shrink-0 ml-2">
@@ -198,8 +199,8 @@ export default function Contact() {
                                             <Phone className="w-5 h-5 sm:w-7 sm:h-7 text-red-600" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">Give us a call</p>
-                                            <p className="text-base sm:text-xl font-bold truncate">(123) 456 - 7890</p>
+                                            <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">{t("form.phone")}</p>
+                                            <p className="text-base sm:text-xl font-bold truncate">+90 (555) 000 00 00</p>
                                         </div>
                                     </div>
                                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center group-hover:bg-black group-hover:text-white group-hover:border-black transition-all shrink-0 ml-2">

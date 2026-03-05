@@ -1,12 +1,10 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import prisma from "@/lib/prisma"
-import bcrypt from "bcryptjs"
+import { auth as firebaseAuth, db } from "@/lib/firebase"
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { collection, query, where, getDocs } from "firebase/firestore"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const { handlers, signIn, signOut, auth } = NextAuth({
-    adapter: PrismaAdapter(prisma) as any,
     session: {
         strategy: "jwt",
     },
@@ -28,46 +26,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     return null
                 }
 
-                const user = await prisma.user.findUnique({
-                    where: { email: credentials.email as string }
-                })
+                try {
+                    // Firebase Auth ile giriş yap
+                    const userCredential = await signInWithEmailAndPassword(
+                        firebaseAuth,
+                        credentials.email as string,
+                        credentials.password as string
+                    );
+                    const firebaseUser = userCredential.user;
 
-                if (!user) {
-                    console.log("User not found");
+                    // Firestore'dan "team" koleksiyonunu sorgulayıp rol/resim çekelim
+                    // Sizin Prisma şemanızda kullanıcılar "team" (@@map("team")) isimli tablodaydı.
+                    const q = query(
+                        collection(db, "team"),
+                        where("email", "==", firebaseUser.email)
+                    );
+                    const querySnapshot = await getDocs(q);
+
+                    let role = "ADMIN";
+                    let name = firebaseUser.displayName || credentials.email as string;
+                    let image = firebaseUser.photoURL || "";
+
+                    if (!querySnapshot.empty) {
+                        const userData = querySnapshot.docs[0].data();
+                        role = userData.role || "ADMIN";
+                        if (userData.name) name = userData.name;
+                        if (userData.image_url) image = userData.image_url;
+                    }
+
+                    console.log("Login successful:", firebaseUser.email);
+
+                    // NextAuth Session'ına veriyi gönder
+                    return {
+                        id: firebaseUser.uid,
+                        email: firebaseUser.email,
+                        name: name,
+                        role: role,
+                        image: image,
+                    }
+                } catch (error) {
+                    console.error("Firebase Login Error:", error);
                     return null;
-                }
-
-                if (!user.password) {
-                    console.log("User has no password set");
-                    return null;
-                }
-
-                const isPasswordValid = await bcrypt.compare(
-                    credentials.password as string,
-                    user.password
-                )
-
-                if (!isPasswordValid) {
-                    console.log("Password invalid");
-                    return null
-                }
-
-                console.log("Login successful:", user.email);
-
-                // Kullanıcı nesnesini döndür
-                return {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    role: user.role,
-                    image: user.image, // Avatar için önemli
                 }
             }
         })
     ],
     callbacks: {
         async jwt({ token, user, trigger, session }) {
-            // İlk login anı
             if (user) {
                 token.id = user.id ?? ''
                 token.role = (user as any).role
@@ -75,7 +80,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 token.name = user.name
             }
 
-            // Session update tetiklenirse (örn: profil güncelleme)
             if (trigger === "update" && session) {
                 token.name = session.name
                 token.picture = session.image

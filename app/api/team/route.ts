@@ -1,33 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
-import bcrypt from 'bcryptjs'
+import { db } from '@/lib/firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Tüm kullanıcıları (admin/manager/member) getir
 export async function GET() {
     try {
-        const users = await prisma.user.findMany({
-            orderBy: { createdAt: 'desc' },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                role: true,
-                image: true,
-                createdAt: true
+        const q = query(collection(db, "team"), orderBy("createdAt", "desc"))
+        const snapshot = await getDocs(q)
+
+        const formattedUsers = snapshot.docs.map(doc => {
+            const user = doc.data()
+            return {
+                id: doc.id,
+                name: user.name,
+                email: user.email,
+                role: user.role || 'USER',
+                avatar_url: user.image || user.image_url,
+                active: true
             }
         })
-
-        // Frontend mock data yapısıyla uyumlu hale getir
-        const formattedUsers = users.map(user => ({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role, // ADMIN, EDITOR, USER
-            avatar_url: user.image,
-            active: true // User tablosunda active kolonu olmadığı için varsayılan true
-        }))
 
         return NextResponse.json(formattedUsers)
     } catch (error: unknown) {
@@ -41,40 +34,33 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
-        const { name, email, password, role, avatar_url } = body
+        const { name, email, role, avatar_url } = body
 
-        if (!email || !password || !name) {
-            return NextResponse.json({ error: 'İsim, E-posta ve Şifre zorunludur' }, { status: 400 })
+        if (!email || !name) {
+            return NextResponse.json({ error: 'İsim ve E-posta zorunludur' }, { status: 400 })
         }
 
-        // E-posta kullanımda mı kontrol et
-        const existingUser = await prisma.user.findUnique({
-            where: { email }
-        })
+        const emailQuery = query(collection(db, "team"), where("email", "==", email))
+        const emailCheck = await getDocs(emailQuery)
 
-        if (existingUser) {
+        if (!emailCheck.empty) {
             return NextResponse.json({ error: 'Bu e-posta adresi zaten kullanımda' }, { status: 400 })
         }
 
-        // Şifreyi hashle
-        const hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = {
+            name,
+            email,
+            role: role || 'USER',
+            image_url: avatar_url || null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
 
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password: hashedPassword,
-                role: role || 'USER',
-                image: avatar_url
-            }
-        })
+        const docRef = await addDoc(collection(db, "team"), newUser)
 
         return NextResponse.json({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            avatar_url: user.image
+            id: docRef.id,
+            ...newUser
         })
 
     } catch (error: unknown) {
@@ -88,7 +74,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
     try {
         const body = await request.json()
-        const { id, name, email, password, role, avatar_url } = body
+        const { id, name, email, role, avatar_url } = body
 
         if (!id) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
@@ -98,26 +84,14 @@ export async function PUT(request: NextRequest) {
             name,
             email,
             role,
-            image: avatar_url
+            image_url: avatar_url || null,
+            updatedAt: new Date().toISOString()
         }
 
-        // Eğer yeni şifre girildiyse hashle ve güncelle
-        if (password && password.trim() !== '') {
-            updateData.password = await bcrypt.hash(password, 10)
-        }
+        const docRef = doc(db, "team", id)
+        await updateDoc(docRef, updateData)
 
-        const user = await prisma.user.update({
-            where: { id: String(id) }, // User ID string (cuid)
-            data: updateData
-        })
-
-        return NextResponse.json({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            avatar_url: user.image
-        })
+        return NextResponse.json({ id, ...updateData, avatar_url: updateData.image_url })
 
     } catch (error: unknown) {
         console.error('Team PUT error:', error)
@@ -136,9 +110,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'ID gerekli' }, { status: 400 })
         }
 
-        await prisma.user.delete({
-            where: { id: String(id) }
-        })
+        await deleteDoc(doc(db, "team", id))
 
         return NextResponse.json({ success: true })
     } catch (error: unknown) {

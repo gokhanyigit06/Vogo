@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper: Is user authenticated?
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Publicly readable images (used in website)
+    match /images/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated(); // Only logged in users can upload images
+    }
+
+    // Task attachments (might need more restriction)
+    match /attachments/{allPaths=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

@@ -1,13 +1,19 @@
 import { MetadataRoute } from 'next'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 
 async function getBlogPosts() {
     try {
-        const posts = await prisma.post.findMany({
-            where: { status: 'published' },
-            select: { slug: true, createdAt: true, updatedAt: true }
+        const q = query(collection(db, "posts"), where("status", "==", "published"))
+        const snapshot = await getDocs(q)
+        return snapshot.docs.map(doc => {
+            const data = doc.data()
+            return {
+                slug: data.slug,
+                createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
+                updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date()
+            }
         })
-        return posts
     } catch (error) {
         console.error('Error fetching posts for sitemap:', error)
         return []

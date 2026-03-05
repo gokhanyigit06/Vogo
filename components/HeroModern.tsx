@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion"
 import { ArrowUpRight, Megaphone } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 export default function HeroModern() {
+    const t = useTranslations("HeroModern")
     return (
         <section className="relative min-h-screen bg-[#F5F5F5] pt-24 sm:pt-32 pb-8 sm:pb-20 overflow-hidden selection:bg-blue-600 selection:text-white">
             <div className="container mx-auto px-4 md:px-8 max-w-7xl w-full h-full">
@@ -24,15 +26,15 @@ export default function HeroModern() {
                                     <span className="absolute -inset-1 sm:-inset-2 bg-[#5B4EFF] rounded-xl sm:rounded-2xl transform -rotate-2 -z-10 shadow-lg" />
                                     <span className="relative text-white px-2 sm:px-4 inline-flex items-center gap-1 sm:gap-2">
                                         <Megaphone className="w-5 h-5 sm:w-7 sm:h-7 lg:hidden inline-block -rotate-12" />
-                                        Unlimited
+                                        {t('highlightedText')}
                                     </span>
                                 </span>
-                                <span className="inline sm:inline"> design</span>
-                                <span className="block mt-2">for your startup</span>
+                                <span className="inline sm:inline"> {t('afterHighlightText')}</span>
+                                <span className="block mt-2">{t('secondLineText')}</span>
                             </h1>
 
                             <p className="text-base sm:text-lg md:text-xl text-black/60 max-w-xl leading-relaxed mx-auto lg:mx-0">
-                                Get exceptional, unlimited design tailored for your startup's needs. We focus on quality and speed to help your business stand out.
+                                {t('description')}
                             </p>
                         </motion.div>
 
@@ -46,14 +48,14 @@ export default function HeroModern() {
                                 href="/contact"
                                 className="px-6 sm:px-8 py-3 sm:py-4 bg-black text-white rounded-full text-sm sm:text-base font-semibold hover:scale-[1.02] transition-transform shadow-lg"
                             >
-                                Get in touch
+                                {t('ctaPrimary')}
                             </Link>
 
                             <Link
                                 href="/services"
                                 className="group flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold text-black hover:opacity-70 transition-all"
                             >
-                                Browse all services
+                                {t('ctaSecondary')}
                                 <div className="w-7 h-7 sm:w-8 sm:h-8 border-2 border-black rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
                                     <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 </div>
