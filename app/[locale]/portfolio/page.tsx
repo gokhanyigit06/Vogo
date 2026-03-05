@@ -18,9 +18,12 @@ type Project = {
     desc?: string
     description?: string
     image?: string
+    thumbnail?: string
     heroImage?: string
     client?: string
     slug?: string
+    publicTitle?: string
+    status?: string
 }
 
 // ... types ...
