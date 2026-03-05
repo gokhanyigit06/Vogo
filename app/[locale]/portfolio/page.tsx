@@ -9,22 +9,7 @@ import ModernFooter from "@/components/ModernFooter"
 import ModernCTA from "@/components/ModernCTA"
 import { ArrowUpRight, FolderOpen, Loader2 } from "lucide-react"
 
-// Types
-type Project = {
-    id: number | string
-    title: string
-    category?: string
-    categories?: string[]
-    desc?: string
-    description?: string
-    image?: string
-    thumbnail?: string
-    heroImage?: string
-    client?: string
-    slug?: string
-    publicTitle?: string
-    status?: string
-}
+import { Project } from "@/types/firebase"
 
 // ... types ...
 const categories = ["Hepsi"] // Base categories, will be extended

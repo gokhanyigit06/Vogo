@@ -47,12 +47,13 @@ export interface Client {
 }
 
 export interface Project {
-    id?: string;
+    id?: string | number;
     clientId?: string;
     internalName?: string;
     publicTitle?: string;
     slug?: string;
     description?: string;
+    desc?: string; // compatibility
     content?: string;
 
     name?: string; // deprecated
