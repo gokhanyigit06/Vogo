@@ -1,91 +1,40 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/firebase'
-import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
+import fs from 'fs'
+import path from 'path'
 
-export const dynamic = 'force-dynamic'
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url)
+    const locale = searchParams.get('locale') || 'en'
 
-// GET - Tüm mesajları getir
-export async function GET() {
     try {
-        const q = query(collection(db, "messages"), orderBy("createdAt", "desc"))
-        const snapshot = await getDocs(q)
-
-        const messages = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }))
-
-        console.log(`✅ Fetched ${messages.length} messages`)
-        return NextResponse.json(messages)
-
+        const filePath = path.join(process.cwd(), 'messages', `${locale}.json`)
+        const fileContent = fs.readFileSync(filePath, 'utf8')
+        return NextResponse.json(JSON.parse(fileContent))
     } catch (error) {
-        console.error('💥 API error:', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+        return NextResponse.json({ error: 'File not found' }, { status: 404 })
     }
 }
 
-// POST - Yeni mesaj ekle (Contact form)
 export async function POST(request: Request) {
-    try {
-        const body = await request.json()
+    const body = await request.json()
+    const { locale, messages } = body
 
-        const newMessage = {
-            name: body.name || null,
-            email: body.email || null,
-            subject: body.subject || null,
-            message: body.message || null,
-            isRead: false,
-            createdAt: new Date().toISOString()
-        }
-
-        const docRef = await addDoc(collection(db, "messages"), newMessage)
-
-        return NextResponse.json({ id: docRef.id, ...newMessage })
-
-    } catch (error) {
-        console.error('💥 API error:', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    if (!locale || !messages) {
+        return NextResponse.json({ error: 'Missing locale or messages' }, { status: 400 })
     }
-}
 
-// PATCH - Mesajı okundu olarak işaretle
-export async function PATCH(request: Request) {
     try {
-        const { id, is_read } = await request.json()
-
-        if (!id) {
-            return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        const filePath = path.join(process.cwd(), 'messages', `${locale}.json`)
+        // Ensure directory exists
+        const dirPath = path.join(process.cwd(), 'messages')
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath)
         }
 
-        const msgRef = doc(db, "messages", id)
-        await updateDoc(msgRef, {
-            isRead: is_read,
-            updatedAt: new Date().toISOString()
-        })
-
-        return NextResponse.json({ success: true, id, isRead: is_read })
-
-    } catch (error) {
-        console.error('💥 API error:', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-    }
-}
-
-// DELETE - Mesaj sil
-export async function DELETE(request: Request) {
-    try {
-        const { id } = await request.json()
-
-        if (!id) {
-            return NextResponse.json({ error: 'ID is required' }, { status: 400 })
-        }
-
-        await deleteDoc(doc(db, "messages", id))
-
+        fs.writeFileSync(filePath, JSON.stringify(messages, null, 4), 'utf8')
         return NextResponse.json({ success: true })
-
     } catch (error) {
-        console.error('💥 API error:', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+        console.error('Error saving messages:', error)
+        return NextResponse.json({ error: 'Failed to save' }, { status: 500 })
     }
 }

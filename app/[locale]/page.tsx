@@ -11,12 +11,12 @@ const References = dynamic(() => import("@/components/References"), { ssr: true 
 const LabSection = dynamic(() => import("@/components/LabSection"), { ssr: true })
 const ModernCTA = dynamic(() => import("@/components/ModernCTA"), { ssr: true })
 const ModernFooter = dynamic(() => import("@/components/ModernFooter"), { ssr: true })
-const LogoMarquee = dynamic(() => import("@/components/LogoMarquee"), { ssr: true })
-const ServiceGridModern = dynamic(() => import("@/components/ServiceGridModern"), { ssr: true })
-const LatestProjectsModern = dynamic(() => import("@/components/LatestProjectsModern"), { ssr: true })
+const ServicesHoverAccordion = dynamic(() => import("@/components/ServicesHoverAccordion"), { ssr: true })
+const HowWeWorkModern = dynamic(() => import("@/components/HowWeWorkModern"), { ssr: true })
+const OurClientsSay = dynamic(() => import("@/components/OurClientsSay"), { ssr: true })
+const FeaturedWorkAccordion = dynamic(() => import("@/components/FeaturedWorkAccordion"), { ssr: true })
+const TechnologiesTabs = dynamic(() => import("@/components/TechnologiesTabs"), { ssr: true })
 const ProcessSectionModern = dynamic(() => import("@/components/ProcessSectionModern"), { ssr: true })
-const TestimonialsMarquee = dynamic(() => import("@/components/TestimonialsMarquee"), { ssr: true })
-const ClientsSection = dynamic(() => import("@/components/ClientsSection"), { ssr: true })
 
 export default function Home() {
   return (
@@ -24,11 +24,11 @@ export default function Home() {
       <Header />
       <main className="overflow-hidden">
         <HeroModern />
-        <LogoMarquee />
-        <ServiceGridModern />
-        <LatestProjectsModern />
-        <ClientsSection />
-        <TestimonialsMarquee />
+        <FeaturedWorkAccordion />
+        <TechnologiesTabs />
+        <ServicesHoverAccordion />
+        <HowWeWorkModern />
+        <OurClientsSay />
       </main>
       <ModernFooter />
     </>

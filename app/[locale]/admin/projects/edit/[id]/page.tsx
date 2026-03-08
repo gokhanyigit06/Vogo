@@ -10,6 +10,9 @@ import ImageUploader from "@/components/admin/ImageUploader"
 import MultiImageUploader from "@/components/admin/MultiImageUploader"
 import TagsInput from "@/components/admin/TagsInput"
 import CategorySelect from "@/components/admin/CategorySelect"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { ContentSection } from "@/types/firebase"
 
 export default function EditProjectPage() {
     const router = useRouter()
@@ -40,6 +43,7 @@ export default function EditProjectPage() {
         clientType: "",
         websiteUrl: "",
         gallery: [] as string[],
+        contentBlocks: [] as ContentSection[],
     })
 
     useEffect(() => {
@@ -94,6 +98,7 @@ export default function EditProjectPage() {
                     clientType: projectData.clientType || "",
                     websiteUrl: projectData.websiteUrl || "",
                     gallery: Array.isArray(projectData.gallery) ? projectData.gallery : [],
+                    contentBlocks: Array.isArray(projectData.contentBlocks) ? projectData.contentBlocks : [],
                 })
                 setLoading(false)
 
@@ -381,6 +386,85 @@ export default function EditProjectPage() {
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-vogo-blue h-64 font-mono text-sm"
                             />
+                        </div>
+
+                        {/* CASE STUDY BUILDER */}
+                        <div className="md:col-span-2 space-y-6 pt-6 border-t border-border">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-xl font-bold text-vogo-blue">Case Study Builder</h2>
+                                <div className="flex gap-2">
+                                    {(['2-square', '3-square', '3-vertical-9-16'] as const).map(type => (
+                                        <Button
+                                            key={type}
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => {
+                                                const newBlock: ContentSection = {
+                                                    type,
+                                                    media: Array(type === '2-square' ? 2 : 3).fill(0).map(() => ({ url: "", type: "image" }))
+                                                }
+                                                setFormData({ ...formData, contentBlocks: [...formData.contentBlocks, newBlock] })
+                                            }}
+                                        >
+                                            + {type}
+                                        </Button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="space-y-8">
+                                {formData.contentBlocks.map((block, blockIndex) => (
+                                    <Card key={blockIndex} className="p-6 border-vogo-blue/20 bg-vogo-blue/5 relative group">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            className="absolute top-2 right-2 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            onClick={() => {
+                                                const newBlocks = [...formData.contentBlocks]
+                                                newBlocks.splice(blockIndex, 1)
+                                                setFormData({ ...formData, contentBlocks: newBlocks })
+                                            }}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+
+                                        <div className="text-xs font-bold text-vogo-blue uppercase mb-4 opacity-50">
+                                            {block.type} Grid
+                                        </div>
+
+                                        <div className={`grid gap-4 ${block.type === '2-square' ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                                            {block.media.map((item: { url: string, type: string }, mediaIndex: number) => (
+                                                <div key={mediaIndex} className="space-y-2">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <select
+                                                            value={item.type}
+                                                            onChange={(e) => {
+                                                                const newBlocks = [...formData.contentBlocks]
+                                                                newBlocks[blockIndex].media[mediaIndex].type = e.target.value as any
+                                                                setFormData({ ...formData, contentBlocks: newBlocks })
+                                                            }}
+                                                            className="text-[10px] bg-background border border-border px-1 rounded flex-1 uppercase font-bold"
+                                                        >
+                                                            <option value="image">IMG</option>
+                                                            <option value="video">VID</option>
+                                                        </select>
+                                                    </div>
+                                                    <ImageUploader
+                                                        value={item.url}
+                                                        onChange={(url) => {
+                                                            const newBlocks = [...formData.contentBlocks]
+                                                            newBlocks[blockIndex].media[mediaIndex].url = url
+                                                            setFormData({ ...formData, contentBlocks: newBlocks })
+                                                        }}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,22 +4,67 @@ import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import Header from "@/components/Header"
-import ModernFooter from "@/components/ModernFooter"
-import ModernCTA from "@/components/ModernCTA"
-import { ArrowUpRight, FolderOpen, Loader2 } from "lucide-react"
+import { FolderOpen, Loader2 } from "lucide-react"
 
 import { Project } from "@/types/firebase"
 
-// ... types ...
-const categories = ["Hepsi"] // Base categories, will be extended
+const TechnologiesTabs = dynamic(() => import("@/components/TechnologiesTabs"), { ssr: true })
+const OurClientsSay = dynamic(() => import("@/components/OurClientsSay"), { ssr: true })
+const ModernFooter = dynamic(() => import("@/components/ModernFooter"), { ssr: true })
+
+const STATIC_TABS = ["All Projects", "Headless CMS", "Headless eCommerce", "Next.JS", "AI Integrations", "Next.JS Audit"]
 
 export default function PortfolioPage() {
     const t = useTranslations("PortfolioPage")
-    const [selectedCategory, setSelectedCategory] = useState("Hepsi")
+    const [selectedCategory, setSelectedCategory] = useState("All Projects")
     const [projects, setProjects] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
-    const [dynamicCategories, setDynamicCategories] = useState<string[]>([])
+
+    // Dummy projects to use as a fallback if Firebase is empty, to mimic the screenshots
+    const dummyProjects = [
+        {
+            id: "easypark",
+            slug: "easypark",
+            title: "EasyPark",
+            publicTitle: "EasyPark",
+            desc: "We built a massive multi-site platform on Storyblok and Next.js—35 domains, 18 languages—empowering a 3-person marketing team to manage global content efficiently with speed, scalability, and SEO in mind.",
+            image: "https://images.unsplash.com/photo-1549421263-606ec5135111?q=80&w=1200&auto=format&fit=crop",
+            categories: ["Headless CMS", "Next.JS"],
+            industry: "Parking & Mobility"
+        },
+        {
+            id: "caleffi",
+            slug: "caleffi",
+            title: "Caleffi",
+            publicTitle: "Caleffi",
+            desc: "Discover how we helped Caleffi migrate 24k+ SKUs from Magento to Shopify Plus, integrated IBM AS/400 ERP, and built a scalable content platform using Sanity. Full localization, B2B support, and custom Shopify apps included.",
+            image: "https://images.unsplash.com/photo-1574635925348-115fbc752fd3?q=80&w=1200&auto=format&fit=crop",
+            categories: ["Headless eCommerce", "Headless CMS"],
+            industry: "Textile Manufacturing"
+        },
+        {
+            id: "not-so-ape",
+            slug: "not-so-ape",
+            title: "Not So Ape",
+            publicTitle: "Not So Ape",
+            desc: "We built a Next.js app using Crystallize for headless eCommerce, with SSG and GraphQL for fast, dynamic UX.",
+            image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop",
+            categories: ["Headless eCommerce", "Next.JS"],
+            industry: "Apparel & Fashion"
+        },
+        {
+            id: "arrive",
+            slug: "arrive",
+            title: "Arrive",
+            publicTitle: "Arrive",
+            desc: "Headless eCommerce migration combining Shopify Plus, Sanity CMS, and Next.js for a lighting-fast online platform.",
+            image: "https://images.unsplash.com/photo-1628126235206-5260b9ea6441?q=80&w=1200&auto=format&fit=crop",
+            categories: ["Next.JS", "Headless CMS"],
+            industry: "Parking & Mobility" // Using the screenshot tag as dummy
+        }
+    ]
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -27,20 +72,13 @@ export default function PortfolioPage() {
                 const res = await fetch('/api/projects?type=work')
                 if (!res.ok) throw new Error('Projeler çekilemedi')
                 const data = await res.json()
-                setProjects(data)
 
-                // Extract unique categories
-                const allCats = new Set<string>()
-                data.forEach((p: Project) => {
-                    if (p.categories && Array.isArray(p.categories)) {
-                        p.categories.forEach(c => allCats.add(c))
-                    } else if (p.category) {
-                        allCats.add(p.category)
-                    }
-                })
-                setDynamicCategories(Array.from(allCats))
+                // If API returns empty, fill with dummy data to match the new design showcase
+                setProjects(data.length > 0 ? data : dummyProjects)
             } catch (error) {
                 console.error("Projeler yüklenirken hata:", error)
+                // Fallback to dummy data
+                setProjects(dummyProjects as any)
             } finally {
                 setLoading(false)
             }
@@ -49,167 +87,153 @@ export default function PortfolioPage() {
     }, [])
 
     const filteredProjects = projects.filter(project => {
-        if (selectedCategory === "Hepsi") {
-            // Show all EXCEPT those explicitly marked as 'Yakında' (if we had a flag)
-            // For now, show all completed projects usually. 
-            // Assuming 'status' field exists on project type, filter could be refined.
-            // But based on current data structure, 'Hepsi' shows everything.
-            return true
-        }
+        if (selectedCategory === "All Projects") return true
 
-        if (selectedCategory === "Yakında!") {
-            // Filter logic for 'Yakında!' - e.g. status is NOT completed
-            // If project type has status, use it. Otherwise placeholder logic.
-            // As per current type definition in file, adding status check.
-            return (project as any).status === 'in_progress' || (project as any).status === 'quote'
-        }
-
-        // Check if categories array includes the selected category
-        if (project.categories && Array.isArray(project.categories)) {
-            return project.categories.includes(selectedCategory)
-        }
-        // Fallback for legacy data
-        return project.category === selectedCategory
+        const projCats = project.categories || (project.category ? [project.category] : [])
+        // Simple inclusive match 
+        return projCats.some(c => c.toLowerCase().includes(selectedCategory.toLowerCase()))
     })
-
-    const allTabs = ["Yakında!", "Hepsi", ...dynamicCategories]
 
     return (
         <>
             <Header />
-            <main className="bg-background min-h-screen pt-24 pb-20 overflow-hidden transition-colors duration-300">
+            <main className="bg-white min-h-screen pt-24 pb-0 overflow-hidden text-black transition-colors duration-300">
 
                 {/* Hero Section */}
-                <section className="w-full px-4 md:px-8 mb-10 md:mb-16">
-                    {/* Large "work" title */}
-                    <div className="mb-4 sm:mb-6 md:mb-8">
-                        <h1 className="text-[60px] sm:text-[90px] md:text-[140px] lg:text-[180px] xl:text-[220px] font-black leading-none tracking-tight text-gray-200 opacity-40">
-                            work
-                        </h1>
+                <section className="w-full pt-16 md:pt-24 lg:pt-32 pb-16 lg:pb-24">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+                        <motion.h1
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            className="text-[4rem] sm:text-[6.5rem] md:text-[8rem] lg:text-[11rem] xl:text-[13rem] font-bold leading-[0.8] tracking-tighter uppercase text-black"
+                        >
+                            CLIENT<br />
+                            PROJECTS
+                        </motion.h1>
                     </div>
+                </section>
 
-                    {/* Main heading */}
-                    <div className="mb-6 sm:mb-8 md:mb-12">
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight">
-                            we offer the diversity of skills
-                        </h2>
-                    </div>
-
-                    {/* Filter Buttons */}
-                    <div className="flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
-                        {/* Category Buttons */}
-                        {allTabs.map((category, index) => {
-                            // Colorful pastel backgrounds for each button
-                            const colors = [
-                                'bg-pink-100 hover:bg-pink-200',      // Yakında!
-                                'bg-purple-100 hover:bg-purple-200',  // Hepsi
-                                'bg-blue-100 hover:bg-blue-200',      // Category 1
-                                'bg-green-100 hover:bg-green-200',    // Category 2
-                                'bg-yellow-100 hover:bg-yellow-200',  // Category 3
-                                'bg-orange-100 hover:bg-orange-200',  // Category 4
-                                'bg-teal-100 hover:bg-teal-200',      // Category 5
-                                'bg-indigo-100 hover:bg-indigo-200',  // Category 6
-                                'bg-rose-100 hover:bg-rose-200',      // Category 7
-                                'bg-cyan-100 hover:bg-cyan-200',      // Category 8
-                            ];
-                            const colorClass = colors[index % colors.length];
-
-                            return (
-                                <button
-                                    key={category}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${selectedCategory === category
-                                        ? 'bg-foreground text-background'
-                                        : `${colorClass} text-foreground`
-                                        }`}
-                                >
-                                    {category}
-                                </button>
-                            );
-                        })}
-
-                        {/* Industry Dropdown - positioned on the right */}
-                        <div className="sm:ml-auto shrink-0">
-                            <button className="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium bg-amber-100 hover:bg-amber-200 text-foreground transition-all flex items-center gap-2">
-                                {t("industry")}
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+                {/* Tabs Row */}
+                <section className="w-full border-y border-black/10 flex overflow-x-auto no-scrollbar mb-16 lg:mb-32 select-none">
+                    {STATIC_TABS.map((tab) => {
+                        const isActive = selectedCategory === tab;
+                        return (
+                            <div
+                                key={tab}
+                                onClick={() => setSelectedCategory(tab)}
+                                className="flex-1 min-w-[180px] lg:min-w-0 border-r border-black/10 last:border-r-0 flex items-center justify-center py-6 px-4 cursor-pointer hover:bg-black/5 transition-colors"
+                            >
+                                <span className={`text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 ${isActive
+                                        ? 'bg-black text-white px-6 py-2.5 rounded-full'
+                                        : 'text-black/50'
+                                    }`}>
+                                    {tab}
+                                </span>
+                            </div>
+                        )
+                    })}
                 </section>
 
                 {/* Projects Grid */}
-                <section className="w-full px-4 md:px-8 mb-16 md:mb-32">
-                    {loading ? (
-                        <div className="flex justify-center items-center py-12 sm:py-20">
-                            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-                            <AnimatePresence mode="popLayout">
-                                {filteredProjects.map((project, index) => {
-                                    const displayImage = project.heroImage || project.image || project.thumbnail;
-                                    const displayDesc = project.description || project.desc;
-                                    const displayTitle = project.publicTitle || project.title;
+                <section className="w-full mb-32 lg:mb-48">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+                        {loading ? (
+                            <div className="flex justify-center items-center py-32">
+                                <Loader2 className="w-8 h-8 animate-spin text-black/40" />
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                                <AnimatePresence mode="popLayout">
+                                    {filteredProjects.map((project, index) => {
+                                        const displayImage = project.heroImage || project.image || project.thumbnail;
+                                        const displayDesc = project.description || project.desc;
+                                        const displayTitle = project.publicTitle || project.title;
+                                        // Some projects might have an industry field, or fallback
+                                        const industry = (project as any).industry || "Digital Experience";
+                                        const projCats = project.categories || (project.category ? [project.category] : []);
 
-                                    return (
-                                        <motion.div
-                                            key={project.id || index}
-                                            layout
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: 20 }}
-                                            transition={{ duration: 0.4, delay: index * 0.1 }}
-                                            className="group"
-                                        >
-                                            <Link href={`/projeler/${project.slug || project.id}`} className="block">
-                                                {/* Image Container */}
-                                                <div className="relative aspect-[16/10] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden mb-3 sm:mb-4 md:mb-6 bg-muted">
-                                                    {displayImage ? (
-                                                        <img
-                                                            src={displayImage}
-                                                            alt={displayTitle}
-                                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center">
-                                                            <FolderOpen className="w-16 h-16 text-muted-foreground opacity-20" />
+                                        return (
+                                            <motion.div
+                                                key={project.id || index}
+                                                layout
+                                                initial={{ opacity: 0, y: 50 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 50 }}
+                                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                                // Staggered look on desktop: even indexed items (2nd column) shift down
+                                                className={`group ${index % 2 !== 0 ? 'md:mt-32' : ''}`}
+                                            >
+                                                <Link href={`/projeler/${project.slug || project.id}`} className="block">
+                                                    {/* Image Container */}
+                                                    <div className="relative aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden mb-6 lg:mb-8 bg-[#FAFAFA] border border-black/5">
+                                                        {displayImage ? (
+                                                            <img
+                                                                src={displayImage}
+                                                                alt={displayTitle}
+                                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center">
+                                                                <FolderOpen className="w-16 h-16 text-black/10" />
+                                                            </div>
+                                                        )}
+
+                                                        {/* Floating Top Left Pill */}
+                                                        <div className="absolute top-6 left-6 bg-black/30 backdrop-blur-md text-white border border-white/20 px-5 py-2 rounded-full text-[11px] font-bold tracking-wider uppercase">
+                                                            {industry}
                                                         </div>
-                                                    )}
-                                                </div>
+                                                    </div>
 
-                                                {/* Project Info */}
-                                                <div className="space-y-1 sm:space-y-2">
-                                                    <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground group-hover:opacity-70 transition-opacity">
-                                                        {displayTitle}
-                                                    </h3>
-                                                    {displayDesc && (
-                                                        <p className="text-base text-muted-foreground">
-                                                            {displayDesc}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </Link>
-                                        </motion.div>
-                                    );
-                                })}
-                            </AnimatePresence>
+                                                    {/* Info Section */}
+                                                    <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
+                                                        {/* Title and Desc */}
+                                                        <div className="flex-1 max-w-lg">
+                                                            <h3 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 text-black group-hover:opacity-70 transition-opacity">
+                                                                {displayTitle}
+                                                            </h3>
+                                                            {displayDesc && (
+                                                                <p className="text-sm md:text-base font-medium text-black/60 leading-relaxed">
+                                                                    {displayDesc}
+                                                                </p>
+                                                            )}
+                                                        </div>
 
-                            {filteredProjects.length === 0 && !loading && (
-                                <div className="col-span-full text-center py-20">
-                                    <div className="inline-block p-4 rounded-full bg-muted mb-4">
-                                        <FolderOpen className="w-8 h-8 text-muted-foreground" />
+                                                        {/* Tech Pills Bottom Right */}
+                                                        {projCats.length > 0 && (
+                                                            <div className="flex flex-wrap gap-2 shrink-0">
+                                                                {projCats.slice(0, 2).map((cat: string, i: number) => (
+                                                                    <span key={i} className="px-5 py-2 rounded-full border border-black/10 text-[10px] md:text-xs font-bold uppercase tracking-widest text-black/60">
+                                                                        {cat}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </Link>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </AnimatePresence>
+
+                                {filteredProjects.length === 0 && !loading && (
+                                    <div className="col-span-full text-center py-32">
+                                        <p className="text-black/40 font-medium text-lg">No projects found for this category.</p>
                                     </div>
-                                    <p className="text-muted-foreground font-medium">{t("noProjects")}</p>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </section>
 
-                <ModernCTA />
+                {/* Additional Sections added sequentially */}
+
+                {/* 1. Technologies Tab Container (already has a dark theme style natively maybe, wait, our created TechnologiesTabs is white/offwhite) */}
+                <TechnologiesTabs />
+
+                {/* 2. Client Quotes */}
+                <OurClientsSay />
+
             </main>
             <ModernFooter />
         </>

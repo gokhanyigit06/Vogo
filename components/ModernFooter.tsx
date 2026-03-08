@@ -1,181 +1,100 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Twitter, Linkedin, Instagram, Facebook, Youtube, Mail, ArrowUpRight } from "lucide-react"
-import { useState, useEffect } from "react"
 import { Link } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
 
-interface Settings {
-    siteTitle?: string
-    siteDescription?: string
-    twitter?: string
-    linkedin?: string
-    instagram?: string
-    facebook?: string
-    youtube?: string
-    address?: string
-}
-
 export default function ModernFooter() {
-    const [settings, setSettings] = useState<Settings | null>(null)
     const t = useTranslations("ModernFooter")
-
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const res = await fetch('/api/settings')
-                if (res.ok) {
-                    const data = await res.json()
-                    setSettings(data)
-                }
-            } catch (e) {
-                console.error('Failed to fetch settings:', e)
-            }
-        }
-        fetchSettings()
-    }, [])
-
     const currentYear = new Date().getFullYear()
 
     return (
-        <footer className="bg-black text-white selection:bg-white selection:text-black">
-            {/* 1. Top CTA Section */}
-            <section className="py-10 md:py-12 border-b border-white/10">
-                <div className="w-full px-4 md:px-8 text-center">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-5 md:mb-6 tracking-tight">
-                        {t('ctaTitlePrefix')} <span className="inline-block bg-[#FFD600] text-black px-3 py-1 rounded-lg transform -rotate-2">{t('ctaTitleHighlight')}</span>
-                        <br />
-                        {t('ctaTitleSuffix')}
-                    </h2>
+        <footer className="bg-black text-white selection:bg-white selection:text-black pt-16 lg:pt-20 pb-8 overflow-hidden">
+            <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                        <Link
-                            href="/contact"
-                            className="w-full sm:w-auto bg-white text-black px-6 py-2.5 rounded-full text-base font-semibold hover:scale-105 transition-transform duration-300 text-center"
-                        >
-                            {t('viewPricing')}
-                        </Link>
-                        <a
-                            href="mailto:contact@vogolab.com"
-                            className="text-sm sm:text-base font-medium flex items-center gap-2 hover:opacity-70 transition-opacity"
-                        >
-                            contact@vogolab.com
-                            <div className="w-8 h-8 border border-white/30 rounded-full flex items-center justify-center">
-                                <ArrowUpRight className="w-4 h-4" />
-                            </div>
+                {/* Main Content Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-12 lg:mb-16">
+
+                    {/* Left Column: Giant Typography & Subtext */}
+                    <div className="lg:col-span-7 flex flex-col justify-between">
+                        <h2 className="text-[4rem] sm:text-[6rem] md:text-[7.5rem] lg:text-[9rem] leading-[0.85] font-bold tracking-tighter uppercase mb-12 lg:mb-0">
+                            VOGO<br />
+                            LAB.
+                        </h2>
+
+                        <div className="mt-8 lg:mt-12">
+                            <p className="max-w-sm text-sm md:text-base font-medium text-white/80 leading-relaxed">
+                                {t("tagline")}<br />
+                                {t("subtext")}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Links */}
+                    <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:pt-[1rem]">
+
+                        {/* Company Links */}
+                        <div className="flex flex-col gap-3 lg:gap-4">
+                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">{t("company")}</h3>
+                            <Link href="/about" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
+                                {t("about")}
+                                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                            <Link href="/portfolio" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
+                                {t("portfolio")}
+                                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                            <Link href="/contact" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
+                                {t("contact")}
+                                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                        </div>
+
+                        {/* Services Links */}
+                        <div className="flex flex-col gap-3 lg:gap-4">
+                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">{t("services")}</h3>
+                            <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
+                                Headless CMS
+                                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                            <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
+                                Headless eCommerce
+                                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                            <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
+                                Next.JS
+                                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                        </div>
+
+                    </div>
+                </div>
+
+                {/* Bottom Row: Copyright + Socials */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pt-8 border-t border-white/10">
+
+                    {/* Left Bottom */}
+                    <div className="lg:col-span-7 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 text-white/40 text-[10px] md:text-xs font-medium">
+                        <p>© {currentYear} VOGOLAB</p>
+                        <p className="hidden sm:block">•</p>
+                        <p>{t("locations")}</p>
+                    </div>
+
+                    {/* Right Bottom: Socials (X, LI, etc) */}
+                    <div className="lg:col-span-5 flex items-center justify-start lg:justify-start gap-2">
+                        <a href="#" aria-label="X / Twitter" className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center text-[9px] md:text-[10px] font-bold tracking-widest hover:bg-white hover:text-black transition-colors duration-300">
+                            X
+                        </a>
+                        <a href="#" aria-label="LinkedIn" className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center text-[9px] md:text-[10px] font-bold tracking-widest hover:bg-white hover:text-black transition-colors duration-300">
+                            LI
+                        </a>
+                        <a href="#" aria-label="Instagram" className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center text-[9px] md:text-[10px] font-bold tracking-widest hover:bg-white hover:text-black transition-colors duration-300">
+                            IN
                         </a>
                     </div>
+
                 </div>
-            </section>
 
-            {/* 2. Main Footer Content */}
-            <section className="py-10 md:py-12">
-                <div className="w-full px-4 md:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
-
-                        {/* Links Columns */}
-                        <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
-                            {/* Main Pages */}
-                            <div>
-                                <h4 className="font-bold mb-3 uppercase tracking-widest text-white/50 text-xs">{t('mainPages')}</h4>
-                                <ul className="space-y-2">
-                                    <li><Link href="/" className="text-sm hover:text-[#FFD600] transition-colors">{t('home')}</Link></li>
-                                    <li><Link href="/portfolio" className="text-sm hover:text-[#FFD600] transition-colors">{t('work')}</Link></li>
-                                    <li><Link href="/services" className="text-sm hover:text-[#FFD600] transition-colors">{t('services')}</Link></li>
-                                    <li><Link href="/about" className="text-sm hover:text-[#FFD600] transition-colors">{t('about')}</Link></li>
-                                    <li><Link href="/blog" className="text-sm hover:text-[#FFD600] transition-colors">{t('blog')}</Link></li>
-                                </ul>
-                            </div>
-
-                            {/* Utility Pages */}
-                            <div>
-                                <h4 className="font-bold mb-3 uppercase tracking-widest text-white/50 text-xs">{t('utilityPages')}</h4>
-                                <ul className="space-y-2">
-                                    <li><Link href="/404" className="text-sm hover:text-[#FFD600] transition-colors">{t('notFound')}</Link></li>
-                                    <li><Link href="/privacy" className="text-sm hover:text-[#FFD600] transition-colors">{t('privacy')}</Link></li>
-                                    <li><Link href="/terms" className="text-sm hover:text-[#FFD600] transition-colors">{t('terms')}licy</Link></li>
-                                    <li><Link href="/terms" className="text-sm hover:text-[#FFD600] transition-colors">Terms of Use</Link></li>
-                                </ul>
-                            </div>
-
-                            {/* Extra */}
-                            <div className="col-span-2 sm:col-span-1 sm:pt-6">
-                                <ul className="space-y-2">
-                                    <li><Link href="/contact" className="text-sm hover:text-[#FFD600] transition-colors">{t('contact')}</Link></li>
-                                    <li><Link href="/laboratuvar" className="text-sm hover:text-[#FFD600] transition-colors">{t('lab')}</Link></li>
-                                    <li className="text-white/30 text-sm italic">{t('comingSoon')}</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        {/* Newsletter Card */}
-                        <div className="lg:col-span-5">
-                            <div className="relative border border-white/20 rounded-2xl p-5 sm:p-6 overflow-visible">
-                                {/* Floating Email Icon */}
-                                <div className="absolute -top-5 -right-2 sm:-top-6 sm:-right-3 w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center border-4 border-black shadow-2xl">
-                                    <div className="relative">
-                                        <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
-                                        <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#FFD600] rounded-full" />
-                                    </div>
-                                </div>
-
-                                <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 pr-10">{t('newsletterTitle')}</h3>
-                                <p className="text-white/60 text-xs mb-3 sm:mb-4 leading-relaxed">
-                                    {t('newsletterDesc')}
-                                </p>
-
-                                {/* Mobile: stacked layout, Desktop: inline pill */}
-                                <form className="hidden sm:flex gap-2 p-1.5 bg-white rounded-full" onSubmit={(e) => e.preventDefault()}>
-                                    <input
-                                        type="email"
-                                        placeholder={t('newsletterPlaceholder')}
-                                        className="flex-1 bg-transparent px-4 py-2 text-black focus:outline-none placeholder:text-black/40 text-sm"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="bg-black text-white px-5 py-2 rounded-full font-semibold hover:scale-[1.02] transition-transform text-sm"
-                                    >
-                                        {t('newsletterButton')}
-                                    </button>
-                                </form>
-
-                                {/* Mobile only: clean stacked form */}
-                                <form className="flex sm:hidden flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-                                    <input
-                                        type="email"
-                                        placeholder={t('newsletterPlaceholder')}
-                                        className="w-full bg-white/10 border border-white/20 px-4 py-3 text-white rounded-xl focus:outline-none focus:border-white/40 placeholder:text-white/40 text-sm"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="w-full bg-white text-black px-5 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors text-sm"
-                                    >
-                                        {t('newsletterButton')}
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. Bottom Bar */}
-            <section className="py-5 md:py-6 border-t border-white/10">
-                <div className="w-full px-4 md:px-8">
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
-                        {/* Logo */}
-                        <div className="text-lg sm:text-2xl font-bold tracking-tighter">
-                            VOGOLAB.
-                        </div>
-
-                        {/* Copyright */}
-                        <div className="text-white/40 text-[10px] sm:text-sm md:text-base font-medium text-center leading-tight">
-                            © {currentYear} VOGOLAB. | Powered by Vogo
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
         </footer>
     )
 }

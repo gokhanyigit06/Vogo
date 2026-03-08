@@ -1,4 +1,22 @@
 {
+    "ProjectDetail": {
+        "projectLabel": "PROJE",
+        "clientLabel": "MÜŞTERİ",
+        "marketLabel": "MARKET",
+        "typeLabel": "MÜŞTERİ TİPİ",
+        "servicesLabel": "HİZMETLER",
+        "caseLabel": "VAKA ANALİZİ"
+    },
+    "ModernFooter": {
+        "tagline": "Composable İçerik Sistemleri kuruyoruz.",
+        "subtext": "Hızlı ve Ölçeklenebilir.",
+        "company": "ŞİRKET",
+        "about": "Hakkımızda",
+        "portfolio": "Portfolyo",
+        "contact": "İletişim",
+        "services": "HİZMETLER",
+        "locations": "İstanbul, Amsterdam, Remote."
+    },
     "Hero": {
         "titlePrefix": "Dijital D\u00fcnyada",
         "titleHighlight": "\u0130zinizi",
@@ -13,20 +31,18 @@
         }
     },
     "HeroModern": {
-        "highlightedText": "S\u0131n\u0131rs\u0131z",
-        "afterHighlightText": " tasar\u0131m",
-        "secondLineText": "giri\u015fiminiz i\u00e7in",
-        "description": "Giri\u015fiminizin ihtiya\u00e7lar\u0131na \u00f6zel, ola\u011fan\u00fcst\u00fc ve s\u0131n\u0131rs\u0131z tasar\u0131m hizmeti al\u0131n. \u0130\u015finizin \u00f6ne \u00e7\u0131kmas\u0131 i\u00e7in kalite ve h\u0131za odaklan\u0131yoruz.",
-        "ctaPrimary": "\u0130leti\u015fime Ge\u00e7in",
-        "ctaSecondary": "T\u00fcm Hizmetleri \u0130nceleyin"
+        "subtitle": "B\u0130R TASARIM ST\u00dcDYOSUYUZ",
+        "titleLine1": "\u00dcst d\u00fczey",
+        "titleLine2": "dijital deneyimler",
+        "titleLine3": "in\u015fa ediyoruz",
+        "practiceText": "UYGULAMA, M\u00dcKEMMELL\u0130K, TANINMA"
     },
     "Header": {
-        "work": "\u00c7al\u0131\u015fmalar",
+        "home": "Anasayfa",
+        "work": "Projeler",
         "services": "Hizmetler",
-        "about": "Hakk\u0131m\u0131zda",
-        "blog": "Blog",
-        "lab": "Laboratuvar",
-        "contactUs": "\u0130leti\u015fim"
+        "about": "Hakkımızda",
+        "contactUs": "İletişim"
     },
     "ServiceGridModern": {
         "titlePrefix": "Geni\u015f yelpazede",
@@ -57,29 +73,6 @@
         "titleHighlight": "En son",
         "titleSuffix": "projelerimiz",
         "description": "Son tasar\u0131m \u00e7al\u0131\u015fmalar\u0131m\u0131zdan baz\u0131 \u00f6rneklere g\u00f6z at\u0131n. \u00c7e\u015fitli sekt\u00f6rlerdeki giri\u015fimlerin g\u00f6rsel ileti\u015fim hedeflerine ula\u015fmalar\u0131na yard\u0131mc\u0131 olduk."
-    },
-    "ModernFooter": {
-        "ctaTitlePrefix": "Bir",
-        "ctaTitleHighlight": "fikriniz mi var?",
-        "ctaTitleSuffix": "Birlikte \u00e7al\u0131\u015fal\u0131m!",
-        "viewPricing": "Fiyatlar\u0131 G\u00f6r",
-        "mainPages": "Ana Sayfalar",
-        "utilityPages": "Di\u011fer Sayfalar",
-        "home": "Ana Sayfa",
-        "work": "\u00c7al\u0131\u015fmalar",
-        "services": "Hizmetler",
-        "about": "Hakk\u0131m\u0131zda",
-        "blog": "Blog",
-        "notFound": "404 Sayfa Bulunamad\u0131",
-        "privacy": "Gizlilik Politikas\u0131",
-        "terms": "Kullan\u0131m \u015eartlar\u0131",
-        "contact": "\u0130leti\u015fim",
-        "lab": "Laboratuvar",
-        "comingSoon": "Yak\u0131nda",
-        "newsletterTitle": "B\u00fcltenimize abone olun",
-        "newsletterDesc": "Tasar\u0131m ipu\u00e7lar\u0131, sekt\u00f6r haberleri ve ekibimizden \u00f6zel tekliflerle g\u00fcncel kal\u0131n.",
-        "newsletterPlaceholder": "E-posta adresinizi girin",
-        "newsletterButton": "Abone Ol"
     },
     "AboutPage": {
         "title": "Hakk\u0131m\u0131zda",

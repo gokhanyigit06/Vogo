@@ -46,6 +46,14 @@ export interface Client {
     updatedAt?: Date | any;
 }
 
+export interface ContentSection {
+    type: "2-square" | "3-square" | "3-vertical-9-16";
+    media: {
+        url: string;
+        type: "image" | "video";
+    }[];
+}
+
 export interface Project {
     id?: string | number;
     clientId?: string;
@@ -79,9 +87,12 @@ export interface Project {
     heroVideo?: string;
     year?: string;
     services: any[];
-    contentBlocks: any[];
+    contentBlocks: ContentSection[]; // Updated type
 
+    client?: string; // For case study page
+    clientInfo?: any;
     market?: string;
+    industry?: string;
     clientType?: string;
     websiteUrl?: string;
     notes?: string;

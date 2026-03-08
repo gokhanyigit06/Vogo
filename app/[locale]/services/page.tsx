@@ -1,165 +1,352 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import Header from "@/components/Header"
 import ModernFooter from "@/components/ModernFooter"
-import ModernCTA from "@/components/ModernCTA"
-import { Link } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
-import { Globe, Megaphone, Share2, Search, QrCode, Code, ArrowUpRight, Monitor, Layers } from "lucide-react"
+import { ArrowUpRight, ArrowRight } from "lucide-react"
 
-// Color & Icon Mapping for the new design
-const serviceMeta: any = {
-    "web-tasarim": { color: "bg-[#FFBC11]", icon: Monitor },
-    "e-ticaret": { color: "bg-[#4F46E5]", icon: Globe },
-    "seo": { color: "bg-[#FF6B35]", icon: Search },
-    "sosyal-medya": { color: "bg-[#4F46E5]", icon: Share2 },
-    "reklam-yonetimi": { color: "bg-[#FF6B35]", icon: Megaphone },
-    "qr-menu": { color: "bg-[#FFBC11]", icon: QrCode },
-    "ozel-yazilim": { color: "bg-[#4F46E5]", icon: Code },
-}
+export default function ServicesPage() {
 
-export default function ServicesIndexPage() {
-    const t = useTranslations("ServicesPage")
-    const commonT = useTranslations("ServiceGridModern")
-
-    const services = [
+    const expertiseBoxes = [
         {
-            id: 1,
-            title: commonT("services.webDesign.title"),
-            slug: "web-tasarim",
-            desc: commonT("services.webDesign.desc"),
-            link: "/services/web-tasarim"
+            title: "Headless CMS\nDevelopment",
+            link: "#headless-cms",
+            icon: (
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                    <polyline points="2 12 12 17 22 12" />
+                    <polyline points="2 17 12 22 22 17" />
+                </svg>
+            )
         },
         {
-            id: 2,
-            title: "E-Ticaret Çözümleri",
-            slug: "e-ticaret",
-            desc: "Satışlarınızı artıracak kullanıcı dostu e-ticaret siteleri. Güvenli ödeme altyapısı ve kolay yönetim paneli.",
-            link: "/services/e-ticaret"
+            title: "Headless eCommerce\nDevelopment",
+            link: "#headless-ecommerce",
+            icon: (
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+            )
         },
         {
-            id: 3,
-            title: commonT("services.seoGrowth.title"),
-            slug: "seo",
-            desc: commonT("services.seoGrowth.desc"),
-            link: "/services/seo"
+            title: "AI & Advanced\nIntegrations",
+            link: "#ai-integrations",
+            icon: (
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                    <path d="M12 2v20" />
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+            )
         },
         {
-            id: 4,
-            title: "Sosyal Medya Yönetimi",
-            slug: "sosyal-medya",
-            desc: "Markanızın sosyal medyadaki sesi oluyoruz. İçerik üretimi, topluluk yönetimi ve etkileşim artırıcı stratejiler.",
-            link: "/services/sosyal-medya"
-        },
-        {
-            id: 5,
-            title: commonT("services.digitalAds.title"),
-            slug: "reklam-yonetimi",
-            desc: commonT("services.digitalAds.desc"),
-            link: "/services/reklam-yonetimi"
-        },
-        {
-            id: 6,
-            title: "QR Menü Sistemleri",
-            slug: "qr-menu",
-            desc: "Restoran ve kafeler için temassız, hızlı ve yönetilebilir dijital menü çözümleri.",
-            link: "/services/qr-menu"
-        },
-        {
-            id: 7,
-            title: "Özel Yazılım Çözümleri",
-            slug: "ozel-yazilim",
-            desc: "İş süreçlerinizi optimize edecek, size özel web tabanlı yazılımlar, CRM ve ERP entegrasyonları.",
-            link: "/services/ozel-yazilim"
+            title: "Design",
+            link: "#design",
+            icon: (
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+            )
         }
     ]
+
+    const cmsTools = ["Payload", "Storyblok", "Sanity", "Directus", "Contentful", "Dato CMS"]
+    const commerceTools = ["Shopify Hydrogen", "Swell", "Crystallize", "Medusa", "Commerce Layer"]
 
     return (
         <>
             <Header />
-            <main className="bg-[#F9F9F9] min-h-screen pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 text-black font-sans">
+            <main className="bg-white min-h-screen pt-24 pb-0 text-black selection:bg-black selection:text-white overflow-hidden">
 
                 {/* Hero Section */}
-                <section className="container mx-auto px-4 md:px-6 mb-12 sm:mb-16 md:mb-24">
-                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 sm:gap-8">
-                        <div className="max-w-3xl">
-                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
-                                {t("titlePrefix")} <br className="hidden sm:block" />
-                                <span className="relative inline-block mx-2 sm:mx-4">
-                                    <span className="relative z-10 text-white px-3 sm:px-6">{t("titleHighlight")}</span>
-                                    <div className="absolute inset-0 bg-[#FFD600] -rotate-2 rounded-lg sm:rounded-xl z-0 scale-110"></div>
+                <section className="w-full pt-16 md:pt-24 lg:pt-32 pb-16 lg:pb-24 border-b border-black/10">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+                        <motion.h1
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            className="text-[4.5rem] sm:text-[7rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] font-bold leading-[0.85] tracking-tighter uppercase text-black"
+                        >
+                            OUR<br />
+                            EXPERTISE
+                        </motion.h1>
+                    </div>
+                </section>
+
+                {/* The 4 Grid Boxes */}
+                <section className="w-full border-b border-black/10 flex flex-col md:flex-row">
+                    {expertiseBoxes.map((box, idx) => (
+                        <Link
+                            key={idx}
+                            href={box.link}
+                            className={`group relative flex-1 min-h-[300px] lg:min-h-[400px] border-b md:border-b-0 md:border-r border-black/10 last:border-r-0 last:border-b-0 p-8 lg:p-10 flex flex-col justify-between overflow-hidden bg-white hover:bg-[#FAFAFA] transition-colors duration-500`}
+                        >
+                            {/* Title */}
+                            <h3 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight whitespace-pre-line relative z-10 transition-transform duration-500 group-hover:translate-y-2">
+                                {box.title}
+                            </h3>
+
+                            {/* Go to section pill (hidden by default, slides down) */}
+                            <div className="absolute top-1/2 left-8 -translate-y-1/2 opacity-0 -mt-10 group-hover:opacity-100 group-hover:mt-0 transition-all duration-500 z-10">
+                                <span className="bg-black/5 backdrop-blur-sm border border-black/10 text-black px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                                    Go to Section
+                                    <ArrowRight size={14} />
                                 </span>
-                                {t("titleSuffix")}
-                            </h1>
-                        </div>
-                        <div className="max-w-sm">
-                            <p className="text-gray-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed">
-                                {t("description")}
-                            </p>
-                        </div>
-                    </div>
+                            </div>
+
+                            {/* Icon at bottom right */}
+                            <div className="self-end mt-12 transform transition-transform duration-700 group-hover:scale-110 group-hover:-translate-y-2 opacity-50 group-hover:opacity-100">
+                                {box.icon}
+                            </div>
+                        </Link>
+                    ))}
                 </section>
 
-                {/* Services List */}
-                <section className="container mx-auto px-4 md:px-6">
-                    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 md:space-y-12">
-                        {services.map((service, idx) => {
-                            const meta = serviceMeta[service.slug] || { color: "bg-gray-200", icon: Layers }
-                            const Icon = meta.icon
-                            const number = (idx + 1).toString().padStart(2, '0')
+                {/* Headless CMS Section */}
+                <section id="headless-cms" className="w-full pt-20 lg:pt-32 pb-20 border-b border-black/10">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
 
-                            return (
-                                <div key={service.id} className="group">
-                                    <Link href={service.link}>
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 20 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 py-6 sm:py-8 md:py-12 group-hover:bg-white/50 rounded-xl sm:rounded-2xl md:rounded-3xl transition-all duration-500 px-3 sm:px-0"
-                                        >
-                                            {/* Number */}
-                                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm sm:text-lg shrink-0">
-                                                {number}
-                                            </div>
+                        {/* Top Header Row */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 gap-8">
+                            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05]">
+                                Headless CMS<br />Development
+                            </h2>
+                            <Link href="/contact" className="px-8 py-3 rounded-full border border-black text-black font-semibold hover:bg-black hover:text-white transition-colors duration-300 text-sm tracking-wide shrink-0">
+                                About Service
+                            </Link>
+                        </div>
 
-                                            {/* Illustration Box */}
-                                            <div className={`${meta.color} w-full sm:w-[280px] md:w-[350px] lg:w-[400px] h-[160px] sm:h-[180px] md:h-[220px] rounded-2xl sm:rounded-[2.5rem] flex items-center justify-center relative overflow-hidden shrink-0 shadow-lg group-hover:scale-[1.02] transition-transform duration-500`}>
-                                                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,_rgba(255,255,255,0.8)_0%,_transparent_50%)]"></div>
-                                                <div className="relative z-10 p-4 sm:p-6 md:p-8 transform group-hover:scale-110 transition-transform duration-500 text-white drop-shadow-2xl">
-                                                    <Icon size={60} strokeWidth={1.5} className="sm:w-20 sm:h-20 md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px]" />
-                                                </div>
-                                            </div>
-
-                                            {/* Text Content */}
-                                            <div className="flex-1 space-y-2 sm:space-y-3 md:space-y-4 text-center sm:text-left">
-                                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight group-hover:text-[#4F46E5] transition-colors">
-                                                    {service.title}
-                                                </h3>
-                                                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-500 leading-relaxed max-w-2xl font-medium">
-                                                    {service.desc}
-                                                </p>
-                                            </div>
-
-                                            {/* Arrow Action */}
-                                            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full border-2 border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:border-black group-hover:text-white transition-all duration-300 shrink-0">
-                                                <ArrowUpRight size={20} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                                            </div>
-                                        </motion.div>
-                                    </Link>
-                                    {/* Separator */}
-                                    {idx !== services.length - 1 && (
-                                        <div className="h-[2px] bg-gray-200 w-full"></div>
-                                    )}
+                        {/* Content Row */}
+                        <div className="border-t border-black/10 pt-16">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                                {/* Left Side: Description */}
+                                <div className="lg:col-span-5">
+                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">CMS Implementation</h3>
+                                    <p className="text-base md:text-lg font-medium text-black/60 max-w-sm leading-relaxed">
+                                        Expert CMS implementations for dynamic content delivery
+                                    </p>
                                 </div>
-                            )
-                        })}
+
+                                {/* Right Side: List */}
+                                <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
+                                    {cmsTools.map((tool, idx) => (
+                                        <div key={idx} className="group cursor-default flex items-center justify-between py-6 border-b border-black/10 hover:bg-black transition-colors px-4 -mx-4 sm:mx-0 sm:px-4 rounded-lg">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-black/30 group-hover:text-white/30 font-mono text-xs md:text-sm transition-colors duration-300">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <span className="text-xl md:text-3xl font-medium tracking-tight text-black group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{tool}</span>
+                                            </div>
+                                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-white border-b-[5px] border-b-transparent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
-                <div className="mt-16 sm:mt-24 md:mt-32">
-                    <ModernCTA />
-                </div>
+                {/* Headless eCommerce Section */}
+                <section id="headless-ecommerce" className="w-full pt-20 lg:pt-32 pb-32 border-b border-black/10">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+
+                        {/* Top Header Row */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 gap-8">
+                            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05]">
+                                Headless<br />eCommerce<br />Development
+                            </h2>
+                            <Link href="/contact" className="px-8 py-3 rounded-full border border-black text-black font-semibold hover:bg-black hover:text-white transition-colors duration-300 text-sm tracking-wide shrink-0">
+                                About Service
+                            </Link>
+                        </div>
+
+                        {/* Content Row */}
+                        <div className="border-t border-black/10 pt-16">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                                {/* Left Side: Description */}
+                                <div className="lg:col-span-5">
+                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">eCommerce Architecture</h3>
+                                    <p className="text-base md:text-lg font-medium text-black/60 max-w-sm leading-relaxed">
+                                        Tailored eCommerce systems for cutting-edge Online Retail
+                                    </p>
+                                </div>
+
+                                {/* Right Side: List */}
+                                <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
+                                    {commerceTools.map((tool, idx) => (
+                                        <div key={idx} className="group cursor-default flex items-center justify-between py-6 border-b border-black/10 hover:bg-black transition-colors px-4 -mx-4 sm:mx-0 sm:px-4 rounded-lg">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-black/30 group-hover:text-white/30 font-mono text-xs md:text-sm transition-colors duration-300">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <span className="text-xl md:text-3xl font-medium tracking-tight text-black group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{tool}</span>
+                                            </div>
+                                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-white border-b-[5px] border-b-transparent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                {/* Modern Web & Jamstack Development */}
+                <section id="modern-web" className="w-full pt-20 lg:pt-32 pb-20 border-b border-black/10">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+
+                        {/* Top Header Row */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 gap-8">
+                            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05]">
+                                Modern Web &<br />Jamstack Development
+                            </h2>
+                            <Link href="/contact" className="px-8 py-3 rounded-full border border-black text-black font-semibold hover:bg-black hover:text-white transition-colors duration-300 text-sm tracking-wide shrink-0">
+                                About Service
+                            </Link>
+                        </div>
+
+                        {/* Content Rows */}
+                        <div className="border-t border-black/10 pt-16">
+
+                            {/* Sub-section 1 */}
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-black/10 mb-16">
+                                {/* Left Side: Description */}
+                                <div className="lg:col-span-5">
+                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Modern Web Development</h3>
+                                    <p className="text-base md:text-lg font-medium text-black/60 max-w-sm leading-relaxed">
+                                        Pioneering Web solutions<br />with a modern Agile approach
+                                    </p>
+                                </div>
+
+                                {/* Right Side: List */}
+                                <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
+                                    {["Jamstack Architecture", "Next.JS Development", "Self-Hosted Next.JS", "Next.JS App Router"].map((tool, idx) => (
+                                        <div key={idx} className="group cursor-default flex items-center justify-between py-6 border-b border-black/10 hover:bg-black transition-colors px-4 -mx-4 sm:mx-0 sm:px-4 rounded-lg">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-black/30 group-hover:text-white/30 font-mono text-xs md:text-sm transition-colors duration-300">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <span className="text-xl md:text-3xl font-medium tracking-tight text-black group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{tool}</span>
+                                            </div>
+                                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-white border-b-[5px] border-b-transparent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Sub-section 2 */}
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                                {/* Left Side: Description */}
+                                <div className="lg:col-span-5">
+                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Next.JS Audits</h3>
+                                    <p className="text-base md:text-lg font-medium text-black/60 max-w-sm leading-relaxed">
+                                        Next.JS website's performance<br />and architectural audit services
+                                    </p>
+                                </div>
+
+                                {/* Right Side: List */}
+                                <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
+                                    {["Next.JS AI SEO Audit", "Next.JS Performance Audit"].map((tool, idx) => (
+                                        <div key={`audit-${idx}`} className="group cursor-default flex items-center justify-between py-6 border-b border-black/10 hover:bg-black transition-colors px-4 -mx-4 sm:mx-0 sm:px-4 rounded-lg">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-black/30 group-hover:text-white/30 font-mono text-xs md:text-sm transition-colors duration-300">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <span className="text-xl md:text-3xl font-medium tracking-tight text-black group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{tool}</span>
+                                            </div>
+                                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-white border-b-[5px] border-b-transparent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                {/* AI & Advanced Integrations Section */}
+                <section id="ai-integrations" className="w-full pt-20 lg:pt-32 pb-20 border-b border-black/10">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+
+                        {/* Top Header Row */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 gap-8">
+                            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05]">
+                                AI & Advanced<br />Integrations
+                            </h2>
+                            <Link href="/contact" className="px-8 py-3 rounded-full border border-black text-black font-semibold hover:bg-black hover:text-white transition-colors duration-300 text-sm tracking-wide shrink-0">
+                                About Service
+                            </Link>
+                        </div>
+
+                        {/* Content Row */}
+                        <div className="border-t border-black/10 pt-16">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                                {/* Left Side: Description */}
+                                <div className="lg:col-span-5">
+                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">AI Integration Services</h3>
+                                    <p className="text-base md:text-lg font-medium text-black/60 max-w-sm leading-relaxed">
+                                        Developing advanced integrations<br />using AI tools and frameworks
+                                    </p>
+                                </div>
+
+                                {/* Right Side: List */}
+                                <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
+                                    {["ChatGPT & AI Integrations", "AI KIT", "Custom ChatGPT Shopping Apps For ECommerce", "MedusaJS ChatGPT App"].map((tool, idx) => (
+                                        <div key={idx} className="group cursor-default flex items-center justify-between py-6 border-b border-black/10 hover:bg-black transition-colors px-4 -mx-4 sm:mx-0 sm:px-4 rounded-lg">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-black/30 group-hover:text-white/30 font-mono text-xs md:text-sm transition-colors duration-300">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <span className="text-xl md:text-3xl font-medium tracking-tight text-black group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{tool}</span>
+                                            </div>
+                                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-white border-b-[5px] border-b-transparent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                {/* Design Section */}
+                <section id="design" className="w-full pt-20 lg:pt-32 pb-32 border-b border-black/10">
+                    <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+
+                        {/* Top Header Row */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 gap-8">
+                            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05]">
+                                Design
+                            </h2>
+                            <Link href="/contact" className="px-8 py-3 rounded-full border border-black text-black font-semibold hover:bg-black hover:text-white transition-colors duration-300 text-sm tracking-wide shrink-0">
+                                About Service
+                            </Link>
+                        </div>
+
+                        {/* Content Row */}
+                        <div className="border-t border-black/10 pt-16">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                                {/* Left Side: Description */}
+                                <div className="lg:col-span-5">
+                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Digital Design</h3>
+                                    <p className="text-base md:text-lg font-medium text-black/60 max-w-sm leading-relaxed">
+                                        All creative work is delivered by FocusReactive<br />in collaboration with our sister agency<br />Habitat — from first sketch to final interface.
+                                    </p>
+                                </div>
+
+                                {/* Right Side: List */}
+                                <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
+                                    {["UI/UX Design", "Branding", "Motion & Animations"].map((tool, idx) => (
+                                        <div key={idx} className="group cursor-default flex items-center justify-between py-6 border-b border-black/10 hover:bg-black transition-colors px-4 -mx-4 sm:mx-0 sm:px-4 rounded-lg">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-black/30 group-hover:text-white/30 font-mono text-xs md:text-sm transition-colors duration-300">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <span className="text-xl md:text-3xl font-medium tracking-tight text-black group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{tool}</span>
+                                            </div>
+                                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-white border-b-[5px] border-b-transparent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
             </main>
             <ModernFooter />
         </>

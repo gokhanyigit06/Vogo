@@ -1,4 +1,22 @@
 {
+    "ProjectDetail": {
+        "projectLabel": "PROJECT",
+        "clientLabel": "CLIENT",
+        "marketLabel": "MARKET",
+        "typeLabel": "CLIENT TYPE",
+        "servicesLabel": "SERVICES",
+        "caseLabel": "THE CASE"
+    },
+    "ModernFooter": {
+        "tagline": "We build Composable Content Systems.",
+        "subtext": "Fast and Scalable.",
+        "company": "COMPANY",
+        "about": "About",
+        "portfolio": "Portfolio",
+        "contact": "Contact Us",
+        "services": "SERVICES",
+        "locations": "Istanbul, Amsterdam, Remote."
+    },
     "Hero": {
         "titlePrefix": "Leave Your Mark",
         "titleHighlight": "In The",
@@ -13,19 +31,17 @@
         }
     },
     "HeroModern": {
-        "highlightedText": "Unlimited",
-        "afterHighlightText": " design",
-        "secondLineText": "for your startup",
-        "description": "Get exceptional, unlimited design tailored for your startup\u2019s needs. We focus on quality and speed to help your business stand out.",
-        "ctaPrimary": "Get in touch",
-        "ctaSecondary": "Browse all services"
+        "subtitle": "WE ARE A DESIGN STUDIO",
+        "titleLine1": "Engineering",
+        "titleLine2": "high-end digital",
+        "titleLine3": "experiences",
+        "practiceText": "PRACTICE, EXCELLENCE, RECOGNITION"
     },
     "Header": {
+        "home": "Home",
         "work": "Work",
         "services": "Services",
         "about": "About",
-        "blog": "Blog",
-        "lab": "Lab",
         "contactUs": "Contact us"
     },
     "ServiceGridModern": {
@@ -57,29 +73,6 @@
         "titleHighlight": "latest",
         "titleSuffix": "projects",
         "description": "Check out some examples of our recent design work. We've helped startups across various industries achieve their visual communication goals."
-    },
-    "ModernFooter": {
-        "ctaTitlePrefix": "Have an",
-        "ctaTitleHighlight": "idea?",
-        "ctaTitleSuffix": "Let's work together!",
-        "viewPricing": "View pricing",
-        "mainPages": "Main pages",
-        "utilityPages": "Utility pages",
-        "home": "Home",
-        "work": "Work",
-        "services": "Services",
-        "about": "About",
-        "blog": "Blog",
-        "notFound": "404 not found",
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Use",
-        "contact": "Contact",
-        "lab": "Lab",
-        "comingSoon": "Coming soon",
-        "newsletterTitle": "Subscribe to our newsletter",
-        "newsletterDesc": "Stay updated with design tips, industry news, and exclusive offers from our team.",
-        "newsletterPlaceholder": "Enter your email",
-        "newsletterButton": "Subscribe"
     },
     "AboutPage": {
         "title": "About Us",

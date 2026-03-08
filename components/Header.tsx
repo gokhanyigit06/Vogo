@@ -34,11 +34,10 @@ export default function Header() {
     }, [menuOpen])
 
     const navItems = [
+        { name: "Home", href: "/" },
         { name: t("work"), href: "/portfolio" },
         { name: t("services"), href: "/services" },
         { name: t("about"), href: "/about" },
-        { name: t("blog"), href: "/blog" },
-        { name: t("lab"), href: "/laboratuvar" },
     ]
 
     return (
@@ -73,7 +72,7 @@ export default function Header() {
                             <Link href="/" locale="tr" className="text-sm font-medium hover:text-primary transition-colors">TR</Link>
                             <span className="text-black/20">|</span>
                             <Link href="/" locale="en" className="text-sm font-medium hover:text-primary transition-colors">EN</Link>
-                            
+
                             <Link
                                 href="/contact"
                                 className="text-lg lg:text-2xl font-medium text-black hover:text-primary transition-colors"
