@@ -4,11 +4,10 @@ import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ThemeToggle } from "@/components/ThemeToggle"
-import { Link, usePathname } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function Header() {
-    const t = useTranslations("Header")
     const pathname = usePathname()
     const [menuOpen, setMenuOpen] = useState(false)
     const [settings, setSettings] = useState<any>(null)
@@ -34,10 +33,10 @@ export default function Header() {
     }, [menuOpen])
 
     const navItems = [
-        { name: "Home", href: "/" },
-        { name: t("work"), href: "/portfolio" },
-        { name: t("services"), href: "/services" },
-        { name: t("about"), href: "/about" },
+        { name: "Anasayfa", href: "/" },
+        { name: "Projeler", href: "/portfolio" },
+        { name: "Hizmetler", href: "/services" },
+        { name: "Hakkımızda", href: "/about" },
     ]
 
     return (
@@ -69,15 +68,11 @@ export default function Header() {
                     <div className="flex items-center gap-3 sm:gap-4">
                         {/* Desktop Contact Button */}
                         <div className="hidden md:flex items-center gap-4 lg:gap-6">
-                            <Link href="/" locale="tr" className="text-sm font-medium hover:text-primary transition-colors">TR</Link>
-                            <span className="text-black/20">|</span>
-                            <Link href="/" locale="en" className="text-sm font-medium hover:text-primary transition-colors">EN</Link>
-
                             <Link
                                 href="/contact"
                                 className="text-lg lg:text-2xl font-medium text-black hover:text-primary transition-colors"
                             >
-                                {t("contactUs")}
+                                İletişime Geç
                             </Link>
                         </div>
 
@@ -147,7 +142,7 @@ export default function Header() {
                                         onClick={() => setMenuOpen(false)}
                                         className="text-2xl sm:text-3xl font-bold text-primary hover:text-teal-400 transition-colors mt-6 sm:mt-8 block"
                                     >
-                                        contact us
+                                        İletişime Geç
                                     </Link>
                                 </motion.div>
                             </nav>

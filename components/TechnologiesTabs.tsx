@@ -1,16 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
-const categories = [
+const defaultCategories = [
     { id: "headless", label: "Headless CMS" },
-    { id: "ecommerce", label: "eCommerce" },
-    { id: "tech", label: "Technologies" },
-    { id: "hosting", label: "Hosting Platforms" },
+    { id: "ecommerce", label: "E-Ticaret" },
+    { id: "tech", label: "Teknolojiler" },
+    { id: "hosting", label: "Hosting Platformları" },
 ]
 
-const technologies = {
+const defaultTechnologies = {
     headless: [
         { name: "Sanity", isPartner: true },
         { name: "Storyblok", isPartner: true },
@@ -50,8 +50,37 @@ const technologies = {
 }
 
 export default function TechnologiesTabs() {
-    const [activeTab, setActiveTab] = useState(categories[0].id)
-    const activeTechs = technologies[activeTab as keyof typeof technologies]
+    const [categories, setCategories] = useState(defaultCategories)
+    const [technologies, setTechnologies] = useState<Record<string, {name: string, isPartner: boolean}[]>>(defaultTechnologies)
+    const [activeTab, setActiveTab] = useState(defaultCategories[0].id)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetch("/api/settings")
+            .then(r => r.json())
+            .then(data => {
+                if (data.technologiesSettings) {
+                    const loadedCats = data.technologiesSettings.categories || defaultCategories;
+                    setCategories(loadedCats);
+                    setTechnologies(data.technologiesSettings.technologies || defaultTechnologies);
+                    if (loadedCats.length > 0) {
+                        setActiveTab(loadedCats[0].id);
+                    }
+                }
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
+    }, [])
+
+    const activeTechs = technologies[activeTab] || []
+
+    if (loading) {
+        return (
+            <section className="bg-[#FAFAFA] py-20 lg:py-32 flex items-center justify-center min-h-[600px]">
+                <div className="w-8 h-8 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+            </section>
+        )
+    }
 
     return (
         <section className="bg-[#FAFAFA] py-20 lg:py-32 text-black">
@@ -59,7 +88,7 @@ export default function TechnologiesTabs() {
                 {/* Header */}
                 <div className="mb-12 lg:mb-20">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium">
-                        Technologies
+                        Teknolojiler
                     </h2>
                 </div>
 

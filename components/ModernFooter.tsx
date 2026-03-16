@@ -1,10 +1,8 @@
 "use client"
 
-import { Link } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
+import Link from "next/link"
 
 export default function ModernFooter() {
-    const t = useTranslations("ModernFooter")
     const currentYear = new Date().getFullYear()
 
     return (
@@ -23,8 +21,8 @@ export default function ModernFooter() {
 
                         <div className="mt-8 lg:mt-12">
                             <p className="max-w-sm text-sm md:text-base font-medium text-white/80 leading-relaxed">
-                                {t("tagline")}<br />
-                                {t("subtext")}
+                                Güçlü fikirler,<br />
+                                mükemmel uygulamalar.
                             </p>
                         </div>
                     </div>
@@ -34,24 +32,24 @@ export default function ModernFooter() {
 
                         {/* Company Links */}
                         <div className="flex flex-col gap-3 lg:gap-4">
-                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">{t("company")}</h3>
+                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">ŞİRKET</h3>
                             <Link href="/about" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                {t("about")}
+                                Hakkımızda
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/portfolio" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                {t("portfolio")}
+                                Projeler
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/contact" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                {t("contact")}
+                                İletişim
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         </div>
 
                         {/* Services Links */}
                         <div className="flex flex-col gap-3 lg:gap-4">
-                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">{t("services")}</h3>
+                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">HİZMETLER</h3>
                             <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
                                 Headless CMS
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
@@ -76,7 +74,7 @@ export default function ModernFooter() {
                     <div className="lg:col-span-7 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 text-white/40 text-[10px] md:text-xs font-medium">
                         <p>© {currentYear} VOGOLAB</p>
                         <p className="hidden sm:block">•</p>
-                        <p>{t("locations")}</p>
+                        <p>İSTANBUL, TR</p>
                     </div>
 
                     {/* Right Bottom: Socials (X, LI, etc) */}

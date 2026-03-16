@@ -1,12 +1,75 @@
 "use client"
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Mail, Phone, ArrowUpRight, Facebook, Instagram, Linkedin, Youtube, Loader2, CheckCircle, AlertCircle } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Mail, Phone, ArrowUpRight, Instagram, Linkedin, Loader2, CheckCircle, AlertCircle, Plus, Minus, Youtube } from "lucide-react"
+
+interface FaqItem {
+    q: string
+    a: string
+}
+
+interface SocialLink {
+    label: string
+    href: string
+    iconType: string
+}
+
+interface ContactPageSettings {
+    heroTitle: string
+    heroSubtitle: string
+    email: string
+    phone: string
+    locationText: string
+    socialLinks: SocialLink[]
+    faqTitle: string
+    faqSubtitle: string
+    faqItems: FaqItem[]
+}
+
+const defaultData: ContactPageSettings = {
+    heroTitle: "Birlikte\nçalışalım.",
+    heroSubtitle: "Yeni bir projen mi var? Fikirlerini duymak isteriz. Hemen iletişime geç, 24 saat içinde geri döneceğiz.",
+    email: "info@vogolab.com",
+    phone: "+90 (555) 000 00 00",
+    locationText: "İstanbul, TR — GMT+3",
+    socialLinks: [
+        { label: "Instagram", href: "https://instagram.com/vogolab", iconType: "instagram" },
+        { label: "LinkedIn", href: "https://linkedin.com/company/vogolab", iconType: "linkedin" },
+        { label: "YouTube", href: "https://youtube.com/@vogolab", iconType: "youtube" },
+    ],
+    faqTitle: "Sık sorulan\nsorular",
+    faqSubtitle: "Aklına takılan başka bir soru varsa formu kullanarak bize ulaşabilirsin.",
+    faqItems: [
+        {
+            q: "Çalışma süreciniz nasıl işliyor?",
+            a: "Önce keşif görüşmesi yapıyoruz, ardından strateji ve konsept geliştiriyoruz. Tasarım ve geliştirme aşamalarını paralel yürütüp lansmanla tamamlıyoruz."
+        },
+        {
+            q: "Bir proje ne kadar sürer?",
+            a: "Projeye göre değişir. Basit bir landing page 2–3 haftada, kurumsal bir web sitesi 6–10 haftada, tam kapsamlı bir ürün ise 3–6 ayda teslim edilir."
+        },
+        {
+            q: "Fiyatlandırma nasıl yapılıyor?",
+            a: "Her proje için özel teklif hazırlıyoruz. Kapsam, süre ve kaynak ihtiyacına göre sabit proje bedeli ya da aylık retainer seçenekleri sunuyoruz."
+        },
+        {
+            q: "Başlangıç için ne yapmam gerekiyor?",
+            a: "Formu doldurmak yeterli. 24 saat içinde sizi arayıp ihtiyaçlarınızı dinliyoruz. Sonrasında teklif ve zaman çizelgesi hazırlıyoruz."
+        }
+    ]
+}
+
+const getSocialIcon = (type: string) => {
+    switch (type) {
+        case 'instagram': return <Instagram className="w-4 h-4" />
+        case 'linkedin': return <Linkedin className="w-4 h-4" />
+        case 'youtube': return <Youtube className="w-4 h-4" />
+        default: return <ArrowUpRight className="w-4 h-4" />
+    }
+}
 
 export default function Contact() {
-    const t = useTranslations("ContactPage")
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -14,298 +77,393 @@ export default function Contact() {
         subject: "",
         message: ""
     })
-    const [loading, setLoading] = useState(false)
+    const [loadingForm, setLoadingForm] = useState(false)
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
+    const [openFaq, setOpenFaq] = useState<number | null>(0)
+
+    const [data, setData] = useState<ContactPageSettings>(defaultData)
+    const [loadingSettings, setLoadingSettings] = useState(true)
+
+    useEffect(() => {
+        fetch("/api/settings")
+            .then(r => r.json())
+            .then(res => {
+                if (res.contactPageSettings) setData(res.contactPageSettings)
+            })
+            .catch(() => setData(defaultData))
+            .finally(() => setLoadingSettings(false))
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
+        setLoadingForm(true)
         setResult(null)
-
         try {
             const res = await fetch('/api/messages', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             })
-
             if (res.ok) {
-                setResult({
-                    success: true,
-                    message: t("success")
-                })
+                setResult({ success: true, message: "Mesajınız başarıyla gönderildi." })
                 setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
             } else {
-                setResult({
-                    success: false,
-                    message: t("error")
-                })
+                setResult({ success: false, message: "Mesaj gönderilirken bir hata oluştu." })
             }
-        } catch (error) {
-            setResult({
-                success: false,
-                message: t("serverError")
-            })
+        } catch {
+            setResult({ success: false, message: "Sunucu hatası oluştu." })
         } finally {
-            setLoading(false)
+            setLoadingForm(false)
         }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData(prev => ({
-            ...prev,
-            [e.target.name]: e.target.value
-        }))
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    }
+
+    if (loadingSettings) {
+        return (
+            <div className="bg-[#F4F4F4] min-h-[80vh] flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+            </div>
+        )
     }
 
     return (
-        <section id="contact" className="py-16 md:py-32 bg-[#F9F9F9] relative overflow-hidden text-black font-sans">
-            <div className="container mx-auto px-4 md:px-6 relative z-10">
-                {/* Header Section */}
-                <div className="text-center mb-10 md:mb-16 px-2 md:px-4">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-5 md:mb-8 tracking-tight leading-tight">
-                        {t("title")}
-                        <div className="relative inline-block ml-2 sm:ml-4 md:ml-6 mt-2 sm:mt-0">
-                            <span className="relative z-10 text-white px-3 sm:px-6 py-1 sm:py-2 text-2xl sm:text-4xl md:text-5xl lg:text-7xl">{t("titleHighlight")}</span>
-                            <div className="absolute inset-0 bg-[#4F46E5] -rotate-2 rounded-lg sm:rounded-xl z-0 scale-110"></div>
-                        </div>
-                    </h2>
-                    <p className="max-w-2xl mx-auto text-gray-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed">
-                        {t("description")}
+        <div className="bg-[#F4F4F4] min-h-screen text-black">
+
+            {/* ── HERO ── */}
+            <section className="pt-36 pb-20 md:pt-44 md:pb-28 max-w-[1400px] mx-auto px-6 md:px-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                >
+                    <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-black/35 mb-7">
+                        İLETİŞİM
                     </p>
-                </div>
+                    <h1 className="text-[3.5rem] sm:text-[5.5rem] md:text-[7.5rem] lg:text-[9rem] xl:text-[10.5rem] leading-[0.85] tracking-[-0.04em] font-medium text-black max-w-5xl whitespace-pre-line">
+                        {data.heroTitle}
+                    </h1>
+                </motion.div>
 
-                <div className="grid lg:grid-cols-12 gap-8 md:gap-12 items-start mt-8 md:mt-12">
-                    {/* Left Side: Dark Form Card */}
-                    <div className="lg:col-span-7 bg-[#111111] rounded-2xl sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 shadow-2xl">
-                        {result && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={`mb-6 md:mb-8 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex items-center gap-3 ${result.success ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}
-                            >
-                                {result.success ? <CheckCircle className="w-5 h-5 shrink-0" /> : <AlertCircle className="w-5 h-5 shrink-0" />}
-                                <p className="text-sm sm:text-base">{result.message}</p>
-                            </motion.div>
-                        )}
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="mt-10 text-black/50 text-lg md:text-xl max-w-xl leading-relaxed whitespace-pre-line"
+                >
+                    {data.heroSubtitle}
+                </motion.p>
+            </section>
 
-                        <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 text-white">
-                                <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.fullName")}</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        placeholder="John Carter"
-                                        className="w-full bg-transparent border-b border-gray-700 py-2.5 sm:py-3 focus:border-white outline-none transition-colors text-base sm:text-lg"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.email")}</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        placeholder="example@email.com"
-                                        className="w-full bg-transparent border-b border-gray-700 py-2.5 sm:py-3 focus:border-white outline-none transition-colors text-base sm:text-lg"
-                                        required
-                                    />
-                                </div>
-                            </div>
+            {/* ── DIVIDER ── */}
+            <div className="border-t border-black/10 max-w-[1400px] mx-auto px-6 md:px-10" />
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 text-white">
-                                <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.phone")}</label>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        placeholder="(123) 456 - 7890"
-                                        className="w-full bg-transparent border-b border-gray-700 py-2.5 sm:py-3 focus:border-white outline-none transition-colors text-base sm:text-lg"
-                                    />
-                                </div>
-                                <div className="space-y-2 sm:space-y-3">
-                                    <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.subject")}</label>
-                                    <input
-                                        type="text"
-                                        name="subject"
-                                        value={formData.subject}
-                                        onChange={handleChange}
-                                        placeholder="ex. Web design"
-                                        className="w-full bg-transparent border-b border-gray-700 py-2.5 sm:py-3 focus:border-white outline-none transition-colors text-base sm:text-lg"
-                                        required
-                                    />
-                                </div>
-                            </div>
+            {/* ── MAIN GRID ── */}
+            <section className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
 
-                            <div className="space-y-2 sm:space-y-3 text-white">
-                                <label className="text-xs sm:text-sm font-semibold tracking-wide uppercase opacity-80">{t("form.message")}</label>
-                                <textarea
-                                    name="message"
-                                    value={formData.message}
+                    {/* ── FORM ── */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                        className="lg:col-span-7"
+                    >
+                        <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/35 mb-10">
+                            FORM
+                        </p>
+
+                        {/* Result message */}
+                        <AnimatePresence>
+                            {result && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    className={`mb-10 px-6 py-4 rounded-2xl flex items-center gap-3 text-sm font-medium ${result.success
+                                        ? "bg-black text-white"
+                                        : "bg-red-50 border border-red-100 text-red-600"
+                                        }`}
+                                >
+                                    {result.success
+                                        ? <CheckCircle className="w-4 h-4 shrink-0" />
+                                        : <AlertCircle className="w-4 h-4 shrink-0" />}
+                                    {result.message}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <form onSubmit={handleSubmit} className="space-y-0">
+                            {/* Name + Email */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                                <FormField
+                                    label="Ad Soyad"
+                                    name="name"
+                                    type="text"
+                                    value={formData.name}
                                     onChange={handleChange}
-                                    placeholder="Briefly describe your goals..."
-                                    rows={4}
-                                    className="w-full bg-transparent border-b border-gray-700 py-2.5 sm:py-3 focus:border-white outline-none transition-colors text-base sm:text-lg resize-none"
+                                    placeholder="Ad Soyad"
+                                    required
+                                />
+                                <FormField
+                                    label="E-Posta"
+                                    name="email"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="ornek@email.com"
                                     required
                                 />
                             </div>
 
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full bg-white text-black font-bold py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-3 text-base sm:text-lg"
-                            >
-                                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : t("form.submit")}
-                            </button>
+                            {/* Phone + Subject */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                                <FormField
+                                    label="Telefon"
+                                    name="phone"
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="+90 555 000 00 00"
+                                />
+                                <FormField
+                                    label="Konu"
+                                    name="subject"
+                                    type="text"
+                                    value={formData.subject}
+                                    onChange={handleChange}
+                                    placeholder="Web Tasarım"
+                                    required
+                                />
+                            </div>
+
+                            {/* Message */}
+                            <div className="pt-8 pb-2 border-b border-black/15 group focus-within:border-black transition-colors">
+                                <label className="block text-[10px] font-bold tracking-[0.2em] uppercase text-black/35 mb-3 group-focus-within:text-black/70 transition-colors">
+                                    Mesaj
+                                </label>
+                                <textarea
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder="Projen hakkında kısaca anlat..."
+                                    rows={5}
+                                    required
+                                    className="w-full bg-transparent text-black text-lg font-medium placeholder:text-black/25 focus:outline-none resize-none leading-relaxed"
+                                />
+                            </div>
+
+                            {/* Submit */}
+                            <div className="pt-12">
+                                <button
+                                    type="submit"
+                                    disabled={loadingForm}
+                                    className="group flex items-center gap-4 px-8 py-4 bg-black text-white rounded-full font-bold text-base hover:bg-black/80 disabled:opacity-50 transition-all"
+                                >
+                                    {loadingForm ? (
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                    ) : (
+                                        <>
+                                            Gönder
+                                            <div className="w-8 h-8 border border-white/30 rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+                                                <ArrowUpRight className="w-4 h-4" />
+                                            </div>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
                         </form>
-                    </div>
+                    </motion.div>
 
-                    {/* Right Side: Contact Info & Social */}
-                    <div className="lg:col-span-5 space-y-8 md:space-y-12 pl-0 lg:pl-10">
-                        {/* More Contact Info */}
-                        <div className="space-y-6 md:space-y-8">
-                            <div>
-                                <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">More contact information</h3>
-                                <p className="text-gray-500 text-base sm:text-lg leading-relaxed">
-                                    Find alternative ways to connect with us, including direct email and phone numbers for our offices.
-                                </p>
-                            </div>
-
-                            <div className="space-y-3 sm:space-y-4">
-                                <div className="group border border-gray-300 rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex items-center justify-between hover:bg-white hover:border-black transition-all cursor-pointer">
-                                    <div className="flex items-center gap-3 sm:gap-6 min-w-0">
-                                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-yellow-100 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
-                                            <Mail className="w-5 h-5 sm:w-7 sm:h-7 text-yellow-600" />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">{t("form.email")}</p>
-                                            <p className="text-base sm:text-xl font-bold truncate">info@vogolab.com</p>
-                                        </div>
-                                    </div>
-                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center group-hover:bg-black group-hover:text-white group-hover:border-black transition-all shrink-0 ml-2">
-                                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                                    </div>
-                                </div>
-
-                                <div className="group border border-gray-300 rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex items-center justify-between hover:bg-white hover:border-black transition-all cursor-pointer">
-                                    <div className="flex items-center gap-3 sm:gap-6 min-w-0">
-                                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-red-100 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
-                                            <Phone className="w-5 h-5 sm:w-7 sm:h-7 text-red-600" />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">{t("form.phone")}</p>
-                                            <p className="text-base sm:text-xl font-bold truncate">+90 (555) 000 00 00</p>
-                                        </div>
-                                    </div>
-                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center group-hover:bg-black group-hover:text-white group-hover:border-black transition-all shrink-0 ml-2">
-                                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Social Media */}
-                        <div className="space-y-4 sm:space-y-6">
-                            <h3 className="text-xl sm:text-2xl font-bold">Follow us on social media</h3>
-                            <p className="text-gray-500 text-base sm:text-lg">
-                                Connect with us on your favorite platforms to see our latest work, company updates, and insights.
+                    {/* ── INFO PANEL ── */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="lg:col-span-5 space-y-14"
+                    >
+                        {/* Contact Details */}
+                        <div>
+                            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/35 mb-8">
+                                İLETİŞİM BİLGİLERİ
                             </p>
-                            <div className="flex gap-4 sm:gap-6 mt-3 sm:mt-4">
-                                <a href="#" className="hover:scale-110 transition-transform"><Facebook className="w-6 h-6 sm:w-8 sm:h-8" /></a>
-                                <a href="#" className="hover:scale-110 transition-transform text-black"><span className="text-2xl sm:text-3xl font-bold font-sans">X</span></a>
-                                <a href="#" className="hover:scale-110 transition-transform"><Instagram className="w-6 h-6 sm:w-8 sm:h-8" /></a>
-                                <a href="#" className="hover:scale-110 transition-transform"><Linkedin className="w-6 h-6 sm:w-8 sm:h-8" /></a>
-                                <a href="#" className="hover:scale-110 transition-transform"><Youtube className="w-6 h-6 sm:w-8 sm:h-8" /></a>
+                            <div className="space-y-6">
+                                <ContactRow
+                                    icon={<Mail className="w-4 h-4" />}
+                                    label="E-posta"
+                                    value={data.email}
+                                    href={`mailto:${data.email}`}
+                                />
+                                <ContactRow
+                                    icon={<Phone className="w-4 h-4" />}
+                                    label="Telefon"
+                                    value={data.phone}
+                                    href={`tel:${data.phone.replace(/[^0-9+]/g, '')}`}
+                                />
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            {/* FAQ Section */}
-            <div className="container mx-auto px-4 md:px-6 relative z-10 mt-20 md:mt-32 mb-16 md:mb-24">
-                <div className="text-center mb-10 md:mb-16 px-2 md:px-4">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-5 md:mb-8 tracking-tight leading-tight">
-                        <div className="relative inline-block mr-2 sm:mr-4 md:mr-6">
-                            <span className="relative z-10 text-white px-3 sm:px-6 py-1 sm:py-2 text-3xl sm:text-4xl md:text-5xl lg:text-7xl">Frequently</span>
-                            <div className="absolute inset-0 bg-[#FFD600] -rotate-2 rounded-lg sm:rounded-xl z-0 scale-110"></div>
+                        {/* Divider */}
+                        <div className="border-t border-black/10" />
+
+                        {/* Social */}
+                        <div>
+                            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/35 mb-8">
+                                SOSYAL MEDYA
+                            </p>
+                            <div className="flex flex-col gap-4">
+                                {data.socialLinks.map((s, idx) => (
+                                    <a
+                                        key={idx}
+                                        href={s.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group flex items-center justify-between py-3 border-b border-black/10 hover:border-black/30 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-3 text-black/60 group-hover:text-black transition-colors">
+                                            {getSocialIcon(s.iconType)}
+                                            <span className="font-medium text-sm">{s.label}</span>
+                                        </div>
+                                        <ArrowUpRight className="w-4 h-4 text-black/20 group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                                    </a>
+                                ))}
+                            </div>
                         </div>
-                        <span className="block sm:inline mt-2 sm:mt-0">asked questions</span>
-                    </h2>
-                    <p className="max-w-2xl mx-auto text-gray-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed">
-                        Find answers to common questions about our design Unlimited service,
-                        workflow, and how we can help elevate your startup's brand identity.
-                    </p>
-                </div>
 
-                <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
-                    <FAQItem
-                        number="01"
-                        question="Are the requests really unlimited?"
-                        answer="Yes! Submit as many design requests as you need. We'll work through them one by one (or two by two on Premium) based on your queue priority."
-                        isOpen={true}
-                    />
-                    <FAQItem
-                        number="02"
-                        question="How does it work?"
-                        answer="Subscribe to a plan, submit requests via our dashboard, provide feedback, and receive designs typically within 48 hours (24 for Premium). It's simple!"
-                        isOpen={false}
-                    />
-                    <FAQItem
-                        number="03"
-                        question="How to submit a design request?"
-                        answer="You can submit requests directly through our platform's dashboard using Trello, Slack, or our custom portal depending on your preference."
-                        isOpen={false}
-                    />
-                    <FAQItem
-                        number="04"
-                        question="What software do you use?"
-                        answer="We primarily use Figma for UI/UX design, Adobe Creative Cloud (Photoshop, Illustrator, After Effects) for branding and motion design."
-                        isOpen={false}
-                    />
+                        {/* Location tag */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-full text-xs font-bold tracking-wider uppercase">
+                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                            {data.locationText}
+                        </div>
+                    </motion.div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            {/* ── DIVIDER ── */}
+            <div className="border-t border-black/10 max-w-[1400px] mx-auto px-6 md:px-10" />
+
+            {/* ── FAQ ── */}
+            <section className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col md:flex-row md:items-end gap-10 md:gap-20 mb-16"
+                >
+                    <div>
+                        <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/35 mb-5">SSS</p>
+                        <h2 className="text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[0.88] tracking-[-0.04em] font-medium text-black whitespace-pre-line">
+                            {data.faqTitle}
+                        </h2>
+                    </div>
+                    <p className="text-black/50 text-base md:text-lg max-w-xs leading-relaxed md:mb-3 whitespace-pre-line">
+                        {data.faqSubtitle}
+                    </p>
+                </motion.div>
+
+                <div className="space-y-0">
+                    {data.faqItems.map((item, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 15 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                            <button
+                                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                                className="w-full flex items-center justify-between py-7 border-t border-black/10 text-left group hover:border-black/25 transition-colors"
+                            >
+                                <div className="flex items-center gap-6 flex-1 pr-8">
+                                    <span className="text-xs font-bold tracking-widest text-black/25 flex-shrink-0 w-6">
+                                        {String(i + 1).padStart(2, "0")}
+                                    </span>
+                                    <span className={`text-lg md:text-xl font-medium transition-colors ${openFaq === i ? "text-black" : "text-black/70 group-hover:text-black"}`}>
+                                        {item.q}
+                                    </span>
+                                </div>
+                                <div className={`w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0 transition-all ${openFaq === i ? "bg-black border-black text-white" : "border-black/15 text-black/40 group-hover:border-black/30"}`}>
+                                    {openFaq === i
+                                        ? <Minus className="w-4 h-4" />
+                                        : <Plus className="w-4 h-4" />}
+                                </div>
+                            </button>
+
+                            <AnimatePresence>
+                                {openFaq === i && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="pb-8 pl-[3.75rem] pr-14">
+                                            <p className="text-black/55 text-base md:text-lg leading-relaxed font-medium whitespace-pre-line">
+                                                {item.a}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+                    ))}
+                    {/* Last border */}
+                    <div className="border-t border-black/10" />
+                </div>
+            </section>
+        </div>
     )
 }
 
-function FAQItem({ number, question, answer, isOpen: initialOpen }: { number: string, question: string, answer: string, isOpen: boolean }) {
-    const [isOpen, setIsOpen] = useState(initialOpen)
+/* ── Sub-components ── */
 
+function FormField({
+    label, name, type, value, onChange, placeholder, required
+}: {
+    label: string
+    name: string
+    type: string
+    value: string
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    placeholder: string
+    required?: boolean
+}) {
     return (
-        <div
-            className={`group relative bg-white border-2 border-black rounded-xl sm:rounded-[2rem] transition-all duration-300 ${isOpen ? 'pb-4 sm:pb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] translate-y-[-2px] sm:translate-y-[-4px]' : 'hover:translate-y-[-2px] sm:hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'}`}
-        >
-            <div
-                className="flex items-center gap-3 sm:gap-6 p-4 sm:p-6 md:p-8 cursor-pointer"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                <div className="w-9 h-9 sm:w-12 sm:h-12 bg-black text-white shrink-0 rounded-full flex items-center justify-center font-bold text-sm sm:text-lg">
-                    {number}
-                </div>
-                <h3 className="text-lg sm:text-2xl md:text-3xl font-bold flex-1 leading-tight">{question}</h3>
-                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-black flex items-center justify-center transition-all shrink-0 ${isOpen ? 'bg-black text-white rotate-180' : ''}`}>
-                    <ArrowUpRight className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${isOpen ? 'rotate-90' : 'rotate-45'}`} />
-                </div>
-            </div>
-
-            <motion.div
-                initial={false}
-                animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-                className="overflow-hidden"
-            >
-                <div className="px-6 sm:px-12 md:px-24 pb-2 sm:pb-4">
-                    <p className="text-base sm:text-lg md:text-xl text-gray-600 font-medium leading-relaxed max-w-3xl">
-                        {answer}
-                    </p>
-                </div>
-            </motion.div>
+        <div className="pt-8 pb-2 border-b border-black/15 group focus-within:border-black transition-colors">
+            <label className="block text-[10px] font-bold tracking-[0.2em] uppercase text-black/35 mb-3 group-focus-within:text-black/70 transition-colors">
+                {label}
+                {required && <span className="ml-1 text-black/40">*</span>}
+            </label>
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                required={required}
+                className="w-full bg-transparent text-black text-lg font-medium placeholder:text-black/25 focus:outline-none pb-1 leading-relaxed"
+            />
         </div>
+    )
+}
+
+function ContactRow({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href: string }) {
+    return (
+        <a
+            href={href}
+            className="group flex items-center gap-4"
+        >
+            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black/50 group-hover:bg-black group-hover:text-white transition-all shrink-0 shadow-sm">
+                {icon}
+            </div>
+            <div>
+                <p className="text-[10px] font-bold tracking-widest uppercase text-black/35 mb-0.5">{label}</p>
+                <p className="text-base font-bold text-black group-hover:text-black/70 transition-colors">{value}</p>
+            </div>
+        </a>
     )
 }

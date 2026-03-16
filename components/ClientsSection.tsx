@@ -1,10 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useTranslations } from "next-intl"
-
 export default function ClientsSection() {
-    const t = useTranslations("ClientsSection")
 
     const clients = [
         { name: "HUAWEI" },
@@ -24,7 +21,7 @@ export default function ClientsSection() {
                 {/* Header */}
                 <div className="mb-10 sm:mb-12 md:mb-16">
                     <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none tracking-tight text-black mb-2">
-                        {t('title')}
+                        Birlikte Çalıştığımız Markalar
                     </h2>
                 </div>
 
@@ -46,7 +43,7 @@ export default function ClientsSection() {
 
                             {/* Description */}
                             <p className="text-xs sm:text-sm text-black/60 leading-relaxed">
-                                {t(`clients.${client.name}`)}
+                                Sektöründe öncü global markalarla inovatif çözümler üretiyoruz.
                             </p>
                         </motion.div>
                     ))}

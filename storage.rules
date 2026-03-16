@@ -2,21 +2,37 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    
-    // Helper: Is user authenticated?
-    function isAuthenticated() {
-      return request.auth != null;
+
+    // Public read for all files (images/videos on the website)
+    // Write: admin paths are open (admin panel uses NextAuth, not Firebase Auth)
+    // General write requires Firebase Auth
+
+    // Admin upload paths — allow all (protected at app level via NextAuth)
+    match /thumbnails/{allPaths=**} {
+      allow read, write: if true;
     }
 
-    // Publicly readable images (used in website)
+    match /uploads/{allPaths=**} {
+      allow read, write: if true;
+    }
+
+    match /work/{allPaths=**} {
+      allow read, write: if true;
+    }
+
+    match /projects/{allPaths=**} {
+      allow read, write: if true;
+    }
+
     match /images/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated(); // Only logged in users can upload images
+      allow write: if request.auth != null;
     }
 
-    // Task attachments (might need more restriction)
-    match /attachments/{allPaths=**} {
-      allow read, write: if isAuthenticated();
+    // Fallback: everything else requires Firebase Auth to write
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
   }
 }

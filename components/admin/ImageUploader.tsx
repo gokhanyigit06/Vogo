@@ -49,16 +49,32 @@ export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
         onChange('')
     }
 
+    const isVideo = (url: string) => {
+        if (!url) return false
+        return /\.(mp4|mov|webm|ogg|m4v|avi)($|\?)/i.test(url) || url.includes('video') || url.includes('mp4')
+    }
+
     return (
         <div className="space-y-4">
             {/* Önizleme Alanı */}
             {preview ? (
                 <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-border group">
-                    <img
-                        src={preview}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                    />
+                    {isVideo(preview) ? (
+                        <video
+                            src={preview}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <img
+                            src={preview}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <button
                             onClick={handleRemove}
@@ -73,7 +89,7 @@ export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
                 <div className="relative aspect-video w-full border-2 border-dashed border-border rounded-xl hover:border-vogo-blue/50 hover:bg-muted/50 transition-all group cursor-pointer flex flex-col items-center justify-center gap-2">
                     <input
                         type="file"
-                        accept="image/*"
+                        accept="image/*,video/*"
                         onChange={handleUpload}
                         disabled={uploading}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
@@ -88,8 +104,8 @@ export default function ImageUploader({ value, onChange }: ImageUploaderProps) {
                             <div className="p-3 bg-muted rounded-full group-hover:scale-110 transition-transform">
                                 <Upload className="w-6 h-6 text-vogo-blue" />
                             </div>
-                            <span className="text-sm text-muted-foreground font-medium group-hover:text-vogo-aqua transition-colors">Resim Yüklemek İçin Tıklayın</span>
-                            <span className="text-xs text-muted-foreground/60">JPG, PNG, WEBP (Max 2MB)</span>
+                            <span className="text-sm text-muted-foreground font-medium group-hover:text-vogo-aqua transition-colors">Resim veya Video Yüklemek İçin Tıklayın</span>
+                            <span className="text-xs text-muted-foreground/60">Görsel (Max 5MB), Video (Max 200MB)</span>
                         </>
                     )}
                 </div>

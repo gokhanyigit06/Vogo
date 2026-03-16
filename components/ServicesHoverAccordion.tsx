@@ -1,38 +1,60 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
-const services = [
+const defaultServices = [
     {
         id: "01",
-        title: "Content Marketing Platforms",
-        description: "Custom built CMS solutions tailored for high-volume content operations and editorial teams. We ensure scalable architecture and headless flexibility.",
+        title: "İçerik Pazarlama Platformları",
+        description: "Yüksek hacimli içerik operasyonları ve editör ekipleri için özel olarak oluşturulmuş CMS çözümleri. Ölçeklenebilir mimari ve headless esnekliği sağlıyoruz.",
     },
     {
         id: "02",
-        title: "Content-Rich Ecommerce",
-        description: "Seamlessly blending commerce and content. We build high-performance storefronts that tell your brand's unique story and drive conversions.",
+        title: "İçerik Odaklı E-Ticaret",
+        description: "Ticaret ve içeriği kusursuz bir şekilde harmanlıyor, markanızın hikayesini anlatan ve dönüşümleri artıran yüksek performanslı vitrinler oluşturuyoruz.",
     },
     {
         id: "03",
-        title: "NextJS SEO & Performance Audits",
-        description: "Technical audits focused on NextJS performance, accessibility, Core Web Vitals, and structured SEO — actionable and dev-ready.",
+        title: "NextJS SEO ve Performans Denetimleri",
+        description: "NextJS performansı, erişilebilirlik, Core Web Vitals ve yapılandırılmış SEO üzerine odaklanan, eyleme geçirilebilir teknik denetimler.",
     },
     {
         id: "04",
-        title: "AI & Advanced Integrations",
-        description: "Connecting your business to the future. We integrate cutting-edge AI features, specialized APIs, and complex backend systems flawlessly.",
+        title: "Yapay Zeka ve Gelişmiş Entegrasyonlar",
+        description: "İşletmenizi geleceğe bağlıyoruz. En yeni yapay zeka özelliklerini, özel API'leri ve karmaşık arka plan sistemlerini kusursuz bir şekilde entegre ediyoruz.",
     },
     {
         id: "05",
-        title: "Web Design",
-        description: "Strategic, user-centric, and wildly aesthetic. We design digital experiences that elevate your brand and engage your audience profoundly.",
+        title: "Web Tasarım",
+        description: "Stratejik, kullanıcı odaklı ve son derece estetik. Markanızı yücelten ve hedef kitlenizi derinden etkileyen dijital deneyimler tasarlıyoruz.",
     }
 ]
 
 export default function ServicesHoverAccordion() {
     const [hoveredService, setHoveredService] = useState<string | null>(null)
+    const [services, setServices] = useState(defaultServices)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetch("/api/settings")
+            .then(r => r.json())
+            .then(data => {
+                if (data.servicesSettings && Array.isArray(data.servicesSettings) && data.servicesSettings.length > 0) {
+                    setServices(data.servicesSettings)
+                }
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false))
+    }, [])
+
+    if (loading) {
+        return (
+            <section className="bg-white py-20 lg:py-32 flex items-center justify-center min-h-[400px]">
+                <div className="w-8 h-8 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+            </section>
+        )
+    }
 
     return (
         <section className="bg-white py-20 lg:py-32 text-black">
@@ -40,7 +62,7 @@ export default function ServicesHoverAccordion() {
                 {/* Header */}
                 <div className="mb-12 lg:mb-20">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium">
-                        Services
+                        Hizmetlerimiz
                     </h2>
                 </div>
 

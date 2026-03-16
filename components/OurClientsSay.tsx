@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
-const testimonials = [
+const defaultTestimonials = [
     {
         id: "01",
         quote: "\"Vogo helped us launch a high-performing website with 20% faster load times and 40% less manual work thanks to seamless integrations. DatoCMS also allowed our team to update content 50% faster, all delivered with clear communication and reliable project management.\"",
@@ -46,21 +46,44 @@ export default function OurClientsSay() {
     const [direction, setDirection] = useState(1) // 1 for right, -1 for left
     const timerRef = useRef<NodeJS.Timeout | null>(null)
 
+    const [testimonials, setTestimonials] = useState(defaultTestimonials)
+    const [loading, setLoading] = useState(true)
+    const testimonialsLengthRef = useRef(testimonials.length)
+
+    useEffect(() => {
+        testimonialsLengthRef.current = testimonials.length
+        // Optionally restart timer if length changes
+    }, [testimonials.length])
+
+    useEffect(() => {
+        fetch("/api/settings")
+            .then(r => r.json())
+            .then(data => {
+                if (data.testimonialsSettings && Array.isArray(data.testimonialsSettings) && data.testimonialsSettings.length > 0) {
+                    setTestimonials(data.testimonialsSettings)
+                }
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false))
+    }, [])
+
     // Auto play functionality
     const startTimer = () => {
         if (timerRef.current) clearInterval(timerRef.current)
         timerRef.current = setInterval(() => {
             setDirection(1)
-            setActiveIndex((prev) => (prev + 1) % testimonials.length)
+            setActiveIndex((prev) => (prev + 1) % testimonialsLengthRef.current)
         }, 6000)
     }
 
     useEffect(() => {
-        startTimer()
+        if (!loading) {
+            startTimer()
+        }
         return () => {
             if (timerRef.current) clearInterval(timerRef.current)
         }
-    }, [])
+    }, [loading])
 
     const handleDotClick = (index: number) => {
         setDirection(index > activeIndex ? 1 : -1)
@@ -86,12 +109,18 @@ export default function OurClientsSay() {
     }
 
     return (
-        <section className="bg-white py-20 lg:py-32 text-black overflow-hidden border-t border-black/10">
-            <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
+        <section className="bg-white py-20 lg:py-32 text-black overflow-hidden border-t border-black/10 relative min-h-[700px]">
+            {loading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
+                    <div className="w-8 h-8 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                </div>
+            )}
+            
+            <div className={`container mx-auto px-4 md:px-8 max-w-[1500px] transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}>
 
                 {/* Header */}
                 <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium mb-12">
-                    Our Clients Say
+                    Müşterilerimiz Ne Diyor
                 </h2>
 
                 {/* Progress Lines Array (Top) */}

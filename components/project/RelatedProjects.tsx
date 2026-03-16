@@ -79,13 +79,21 @@ export default function RelatedProjects({ currentId, currentCategories }: Relate
                         >
                             <div className="relative aspect-[4/3] overflow-hidden bg-white">
                                 {(project.image || project.heroImage) ? (
-                                    <Image
-                                        src={project.image || project.heroImage || ''}
-                                        alt={project.title || ''}
-                                        fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        sizes="(max-width: 768px) 100vw, 33vw"
-                                    />
+                                    ((project.image || project.heroImage) && (/\.(mp4|mov|webm|ogg|m4v|avi)($|\?)/i.test(project.image || project.heroImage || '') || (project.image || '').includes('video') || (project.heroImage || '').includes('video') || (project.image || '').includes('mp4') || (project.heroImage || '').includes('mp4'))) ? (
+                                        <video
+                                            src={project.image || project.heroImage || ''}
+                                            autoPlay muted loop playsInline
+                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <Image
+                                            src={project.image || project.heroImage || ''}
+                                            alt={project.title || ''}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                        />
+                                    )
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-stone-300">
                                         No Image

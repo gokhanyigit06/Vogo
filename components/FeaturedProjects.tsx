@@ -14,14 +14,15 @@ export default function FeaturedProjects() {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                // Fetch all projects (standard projects only)
                 const res = await fetch('/api/projects?type=work')
                 if (!res.ok) throw new Error('Fetch error')
                 const data = await res.json()
 
-                // Take only the first 4 projects for the homepage
                 if (Array.isArray(data)) {
-                    setProjects(data.slice(0, 4))
+                    const published = data.filter((p: Project) => p.status !== "draft")
+                    const homepage = published.filter((p: Project & { showOnHomepage?: boolean }) => p.showOnHomepage === true)
+                    // Prefer explicitly homepage-marked ones, fallback to first 4 published
+                    setProjects((homepage.length > 0 ? homepage : published).slice(0, 4))
                 }
             } catch (error) {
                 console.error("Error loading projects:", error)
@@ -101,11 +102,19 @@ export default function FeaturedProjects() {
                                         {/* Link to project detail page */}
                                         <div className="aspect-[16/10] overflow-hidden relative">
                                             {displayImage ? (
-                                                <img
-                                                    src={displayImage}
-                                                    alt={project.title}
-                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                />
+                                                (displayImage && (/\.(mp4|mov|webm|ogg|m4v|avi)($|\?)/i.test(displayImage) || displayImage.includes('video') || displayImage.includes('mp4') || displayImage.includes('webm'))) ? (
+                                                    <video
+                                                        src={displayImage}
+                                                        autoPlay muted loop playsInline
+                                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src={displayImage}
+                                                        alt={project.title}
+                                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                    />
+                                                )
                                             ) : (
                                                 <div className="absolute inset-0 bg-muted flex items-center justify-center">
                                                     <FolderOpen className="w-16 h-16 text-muted-foreground/30" />

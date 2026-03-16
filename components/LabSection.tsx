@@ -66,11 +66,19 @@ export default function LabSection() {
                             <Link href={`/laboratuvar/${project.slug}`} className="block h-full relative">
                                 <div className="absolute inset-0 bg-zinc-900">
                                     {project.thumbnail || project.heroImage ? (
-                                        <img
-                                            src={project.thumbnail || project.heroImage}
-                                            alt={project.publicTitle || ''}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
-                                        />
+                                        ((project.thumbnail || project.heroImage) && (/\.(mp4|mov|webm|ogg|m4v|avi)($|\?)/i.test(project.thumbnail || project.heroImage || '') || (project.thumbnail || '').includes('video') || (project.heroImage || '').includes('video') || (project.thumbnail || '').includes('mp4') || (project.heroImage || '').includes('mp4'))) ? (
+                                            <video
+                                                src={project.thumbnail || project.heroImage}
+                                                autoPlay muted loop playsInline
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                                            />
+                                        ) : (
+                                            <img
+                                                src={project.thumbnail || project.heroImage}
+                                                alt={project.publicTitle || ''}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                                            />
+                                        )
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
                                             <Beaker className="w-8 h-8 opacity-20" />

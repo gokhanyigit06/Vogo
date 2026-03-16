@@ -2,28 +2,31 @@
 
 import { motion } from "framer-motion"
 import { Search, PenTool, Rocket, ArrowUpRight } from "lucide-react"
-import { Link } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
+import Link from "next/link"
 
 export default function ProcessSectionModern() {
-    const t = useTranslations("ProcessSectionModern")
-    const commonT = useTranslations("Header")
 
     const steps = [
         {
             key: "step01",
+            title: "Keşif ve Strateji",
+            desc: "İhtiyaçlarınızı analiz ediyor, markanız için en uygun dijital rotayı çiziyoruz.",
             icon: <Search className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14" />,
             bgColor: "bg-gradient-to-br from-blue-100 to-blue-200",
             iconColor: "text-blue-600"
         },
         {
             key: "step02",
+            title: "Tasarım ve Geliştirme",
+            desc: "Kullanıcı deneyimi odaklı modern tasarımları güçlü kodlarla buluşturuyoruz.",
             icon: <PenTool className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14" />,
             bgColor: "bg-gradient-to-br from-purple-100 to-purple-200",
             iconColor: "text-purple-600"
         },
         {
             key: "step03",
+            title: "Yayına Alma ve Büyüme",
+            desc: "Projenizi sorunsuz şekilde yayına alıyor, sonrasında büyüme için destek veriyoruz.",
             icon: <Rocket className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14" />,
             bgColor: "bg-gradient-to-br from-green-100 to-green-200",
             iconColor: "text-green-600"
@@ -42,9 +45,9 @@ export default function ProcessSectionModern() {
                         viewport={{ once: true }}
                         className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-medium text-black leading-tight"
                     >
-                        {t('titlePrefix')} <span className="relative inline-block mx-1 sm:mx-2">
+                        Nasıl <span className="relative inline-block mx-1 sm:mx-2">
                             <span className="absolute -inset-1 sm:-inset-2 bg-[#FF5C35] rounded-xl sm:rounded-2xl transform rotate-2 shadow-lg" />
-                            <span className="relative text-white px-1 sm:px-2">{t('titleHighlight')}</span>
+                            <span className="relative text-white px-1 sm:px-2">Çalışıyoruz?</span>
                         </span>
                     </motion.h2>
                     <motion.p
@@ -54,7 +57,7 @@ export default function ProcessSectionModern() {
                         transition={{ delay: 0.1 }}
                         className="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed font-medium px-2"
                     >
-                        {t('description')}
+                        Basit, şeffaf ve sonuç odaklı üç adımlı sürecimizle projenizi hayata geçiriyoruz. 
                     </motion.p>
                 </div>
 
@@ -70,7 +73,7 @@ export default function ProcessSectionModern() {
                             className="group relative bg-white border-[3px] border-black rounded-2xl sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 flex flex-col items-center text-center hover:-translate-y-3 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500"
                         >
                             {/* Step Number */}
-                            <span className="text-xs sm:text-sm font-bold text-black/30 tracking-widest mb-4 sm:mb-6">{t('stepLabel')} 0{index + 1}</span>
+                            <span className="text-xs sm:text-sm font-bold text-black/30 tracking-widest mb-4 sm:mb-6">ADIM 0{index + 1}</span>
 
                             {/* Icon Box */}
                             <div className={`${step.bgColor} w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-6 sm:mb-8 ${step.iconColor} group-hover:scale-110 transition-transform duration-500 shadow-md`}>
@@ -79,12 +82,12 @@ export default function ProcessSectionModern() {
 
                             {/* Title */}
                             <h3 className="text-xl sm:text-2xl md:text-3xl font-black mb-3 sm:mb-4">
-                                {t(`steps.${step.key}.title`)}
+                                {step.title}
                             </h3>
 
                             {/* Description */}
                             <p className="text-sm sm:text-base md:text-lg text-gray-500 font-medium leading-relaxed">
-                                {t(`steps.${step.key}.desc`)}
+                                {step.desc}
                             </p>
                         </motion.div>
                     ))}
@@ -96,7 +99,7 @@ export default function ProcessSectionModern() {
                         href="/contact"
                         className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-black text-white rounded-xl sm:rounded-2xl text-base sm:text-xl font-bold hover:scale-[1.05] transition-all shadow-xl active:scale-95 text-center"
                     >
-                        {commonT("contactUs")}
+                        İletişime Geç
                     </Link>
 
 
@@ -104,7 +107,7 @@ export default function ProcessSectionModern() {
                         href="/services"
                         className="group flex items-center justify-center gap-3 text-base sm:text-xl font-bold text-black hover:opacity-70 transition-all font-sans"
                     >
-                        Browse all services
+                        Tüm hizmetleri incele
                         <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-black rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
                             <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
                         </div>

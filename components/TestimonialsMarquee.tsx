@@ -2,37 +2,41 @@
 
 import { motion } from "framer-motion"
 import { Quote } from "lucide-react"
-import { Link } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
+import Link from "next/link"
 
 export default function TestimonialsMarquee() {
-    const t = useTranslations("TestimonialsMarquee")
-    const commonT = useTranslations("Header") // For "contactUs" or similar if needed, but we'll use a direct label
-
     const testimonials = [
         {
             name: "Sophie Moore",
             location: "San Francisco, CA",
             avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
-            quoteColor: "text-amber-400"
+            quoteColor: "text-amber-400",
+            title: "Mükemmel Bir Deneyim",
+            text: "Ekipleri beklentilerimizi aştı. Hem tasarım hem de geliştirme süreçleri harikaydı."
         },
         {
             name: "Matt Cannon",
             location: "London, UK",
             avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Matt",
-            quoteColor: "text-blue-600"
+            quoteColor: "text-blue-600",
+            title: "Tam Ziyade",
+            text: "Tam olarak ihtiyacımız olan şeyi, tam zamanında teslim ettiler. Güvenilir bir iş ortağı."
         },
         {
             name: "John Carter",
             location: "New York, NY",
             avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-            quoteColor: "text-rose-500"
+            quoteColor: "text-rose-500",
+            title: "Olağanüstü Tasarım",
+            text: "Kullanıcı deneyimine olan bağlılıkları takdire şayan. Sonuçtan çok memnunuz."
         },
         {
             name: "Emily Chen",
             location: "Singapore",
             avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-            quoteColor: "text-emerald-500"
+            quoteColor: "text-emerald-500",
+            title: "Kesinlikle Tavsiye Ederim",
+            text: "Profesyonel yaklaşımları ve detaylara verdikleri önem projeyi başarıya ulaştırdı."
         }
     ]
 
@@ -49,12 +53,11 @@ export default function TestimonialsMarquee() {
                         viewport={{ once: true }}
                         className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-medium text-black leading-tight max-w-4xl mx-auto"
                     >
-                        {t('titlePrefix')} <br className="hidden sm:block" />
-                        {t('titleHighlight') === "clients" ? "our " : ""}
+                        Bizim hakkımızda <br className="hidden sm:block" />
                         <span className="relative inline-block mx-1 sm:mx-2">
                             <span className="absolute -inset-1 sm:-inset-2 bg-[#FFD600] rounded-xl sm:rounded-2xl transform rotate-3 shadow-lg" />
-                            <span className="relative text-white px-1 sm:px-2">{t('titleHighlight')}</span>
-                        </span> {t('titleSuffix')}
+                            <span className="relative text-white px-1 sm:px-2">Müşterilerimiz</span>
+                        </span> Ne Diyor
                     </motion.h2>
 
                     <motion.p
@@ -64,7 +67,7 @@ export default function TestimonialsMarquee() {
                         transition={{ delay: 0.1 }}
                         className="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed font-medium px-2"
                     >
-                        {t('description')}
+                        Sadece iş yapmıyoruz, uzun süreli başarı hikayeleri yaratıyoruz. İş ortaklarımızın bizimle olan deneyimlerine göz atın.
                     </motion.p>
 
                     <motion.div
@@ -78,7 +81,7 @@ export default function TestimonialsMarquee() {
                             href="/contact"
                             className="inline-block px-6 sm:px-10 py-3 sm:py-5 bg-black text-white rounded-xl sm:rounded-2xl text-base sm:text-xl font-bold hover:scale-[1.05] transition-all shadow-xl"
                         >
-                            {commonT("contactUs")}
+                            İletişime Geç
                         </Link>
                     </motion.div>
                 </div>
@@ -104,10 +107,10 @@ export default function TestimonialsMarquee() {
                             <div className="space-y-3 sm:space-y-6">
                                 <Quote className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 ${item.quoteColor} fill-current transform -rotate-12`} />
                                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-black leading-tight">
-                                    {t(`testimonials.${index % 4}.title`)}
+                                    {item.title}
                                 </h3>
                                 <p className="text-sm sm:text-base md:text-xl text-black/60 leading-relaxed font-medium">
-                                    {t(`testimonials.${index % 4}.text`)}
+                                    {item.text}
                                 </p>
                             </div>
 

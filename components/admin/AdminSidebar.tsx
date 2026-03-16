@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, LogOut, FlaskConical, Palette } from "lucide-react"
+import { LayoutDashboard, Users, Briefcase, DollarSign, FileText, MessageSquare, Settings, Menu, X, FolderKanban, CheckCircle2, LogOut, FlaskConical, Globe } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -49,7 +49,7 @@ export default function AdminSidebar() {
         { icon: Users, label: "Ekip", href: "/admin/team" },
         { icon: FileText, label: "Blog", href: "/admin/blog" },
         { icon: Briefcase, label: "Portfolio", href: "/admin/portfolio" },
-        { icon: Palette, label: "UI Panel", href: "/admin/ui-panel" },
+        { icon: Globe, label: "Web Panel", href: "/admin/web" },
         { icon: FlaskConical, label: "Vogo Labs", href: "/admin/laboratuvar" },
         { icon: MessageSquare, label: "Mesajlar", href: "/admin/messages" },
         { icon: Settings, label: "Ayarlar", href: "/admin/settings" },
@@ -123,14 +123,15 @@ export default function AdminSidebar() {
         <>
             {/* Sidebar - Desktop */}
             <aside className="hidden lg:flex flex-col w-64 glass-sidebar fixed h-screen transition-all duration-300">
-                <div className="p-6 border-b border-sidebar-border">
-                    <Link href="/admin" className="text-xl font-bold flex items-center gap-3">
-                        <div className="w-9 h-9 bg-gradient-to-br from-vogo-blue via-vogo-aqua to-vogo-teal rounded-xl flex items-center justify-center shadow-lg shadow-vogo-blue/20">
-                            <span className="text-white font-bold text-sm">V</span>
+                <div className="px-6 py-5 border-b border-sidebar-border">
+                    <Link href="/admin" className="flex items-center gap-3">
+                        {/* Black circle logo */}
+                        <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center shrink-0">
+                            <span className="text-white font-black text-sm tracking-tight">V</span>
                         </div>
-                        <div>
-                            <span className="text-gradient-vogo font-bold">Vogo</span>
-                            <span className="text-foreground font-light"> Admin</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-foreground font-bold text-lg tracking-tight">Vogo</span>
+                            <span className="text-muted-foreground font-semibold text-[10px] tracking-[0.2em] uppercase">Web Panel</span>
                         </div>
                     </Link>
                 </div>
@@ -181,14 +182,14 @@ export default function AdminSidebar() {
                         className="w-64 bg-sidebar h-screen border-r border-sidebar-border"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="p-6 border-b border-sidebar-border">
-                            <Link href="/admin" className="text-xl font-bold flex items-center gap-2">
-                                <div className="w-8 h-8 bg-gradient-to-br from-primary to-teal-500 rounded-lg flex items-center justify-center">
-                                    <span className="text-primary-foreground font-bold text-sm">V</span>
+                        <div className="px-6 py-5 border-b border-sidebar-border">
+                            <Link href="/admin" className="flex items-center gap-3">
+                                <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center shrink-0">
+                                    <span className="text-white font-black text-sm tracking-tight">V</span>
                                 </div>
-                                <div>
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">Vogo</span>
-                                    <span className="text-foreground"> Admin</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-foreground font-bold text-lg tracking-tight">Vogo</span>
+                                    <span className="text-muted-foreground font-semibold text-[10px] tracking-[0.2em] uppercase">Web Panel</span>
                                 </div>
                             </Link>
                         </div>
