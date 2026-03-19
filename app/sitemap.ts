@@ -21,7 +21,7 @@ async function getBlogPosts() {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXTAUTH_URL || 'https://vogo-agency.vercel.app'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vogolab.com'
 
     const posts = await getBlogPosts()
     const blogUrls = posts.map((post: { slug: string; createdAt: Date; updatedAt: Date }) => ({

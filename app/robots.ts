@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/admin/',
         },
-        sitemap: 'https://vogo-agency.vercel.app/sitemap.xml', // Vercel URL'ini buraya koy
+        sitemap: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vogolab.com'}/sitemap.xml`,
     }
 }

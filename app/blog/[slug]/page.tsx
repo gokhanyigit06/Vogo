@@ -118,7 +118,7 @@ export default function BlogPostPage() {
                     title={post.title}
                     description={post.excerpt}
                     image={post.image}
-                    url={`https://vogo-agency.vercel.app/blog/${post.slug || post.id}`}
+                    url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://vogolab.com'}/blog/${post.slug || post.id}`}
                     publishedTime={post.created_at}
                     category={post.category}
                 />

@@ -14,8 +14,8 @@ type SEOProps = {
 export default function BlogSEO({
     title,
     description,
-    image = 'https://vogo-agency.vercel.app/og-default.png',
-    url = 'https://vogo-agency.vercel.app',
+    image = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vogolab.com'}/og-default.png`,
+    url = process.env.NEXT_PUBLIC_SITE_URL || 'https://vogolab.com',
     type = 'article',
     publishedTime,
     author = 'Volkan Yıldırım',
@@ -72,7 +72,7 @@ export default function BlogSEO({
                             name: 'Vogo Agency',
                             logo: {
                                 '@type': 'ImageObject',
-                                url: 'https://vogo-agency.vercel.app/logo.png',
+                                url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vogolab.com'}/logo.png`,
                             },
                         },
                     }),

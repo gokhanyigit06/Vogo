@@ -5,7 +5,6 @@ import HeroModern from "@/components/HeroModern"
 // Lazy Load Components
 const BentoGrid = dynamic(() => import("@/components/BentoGrid"), { ssr: true })
 const ServicesAccordion = dynamic(() => import("@/components/ServicesAccordion"), { ssr: true })
-const AIAnalysisSection = dynamic(() => import("@/components/AIAnalysisSection"), { ssr: true })
 const FeaturedProjects = dynamic(() => import("@/components/FeaturedProjects"), { ssr: true })
 const References = dynamic(() => import("@/components/References"), { ssr: true })
 const LabSection = dynamic(() => import("@/components/LabSection"), { ssr: true })
