@@ -33,32 +33,32 @@ interface ServicesPageSettings {
 }
 
 const defaultData: ServicesPageSettings = {
-    heroTitle: "UZMANLIĞIMIZ",
+    heroTitle: "DİJİTAL UZMANLIĞIMIZ",
     gridBoxes: [
-        { title: "Headless CMS\nGeliştirme", link: "#headless-cms", iconType: "cms" },
-        { title: "Headless E-Ticaret\nGeliştirme", link: "#headless-ecommerce", iconType: "ecommerce" },
-        { title: "Yapay Zeka &\nEntegrasyonlar", link: "#ai-integrations", iconType: "ai" },
-        { title: "Tasarım", link: "#design", iconType: "design" }
+        { title: "Headless CMS Mimarisi", link: "#headless-cms", iconType: "cms" },
+        { title: "Headless E-Ticaret", link: "#headless-ecommerce", iconType: "ecommerce" },
+        { title: "Yapay Zeka Entegrasyonları", link: "#ai-integrations", iconType: "ai" },
+        { title: "UI/UX Tasarım", link: "#design", iconType: "design" }
     ],
     sections: [
         {
             id: "headless-cms",
-            title: "Headless CMS\nGeliştirme",
+            title: "Yeni Nesil İçerik Yönetimi\n(Headless CMS)",
             subsections: [
                 {
-                    subtitle: "CMS Entegrasyonu",
-                    description: "Dinamik içerik dağıtımı için uzman CMS entegrasyonları",
+                    subtitle: "Özgür ve Esnek İçerik Dağıtımı",
+                    description: "İçeriğinizi tek bir yerden yönetip, web'den mobile her platforma ışık hızında dağıtmanız için sektörün en iyi Headless CMS altyapılarını kuruyoruz.",
                     items: ["Payload", "Storyblok", "Sanity", "Directus", "Contentful", "Dato CMS"]
                 }
             ]
         },
         {
             id: "headless-ecommerce",
-            title: "Headless\nE-Ticaret\nGeliştirme",
+            title: "Headless E-Ticaret Mimarisi",
             subsections: [
                 {
-                    subtitle: "E-Ticaret Mimarisi",
-                    description: "En yeni çevrimiçi perakende deneyimleri için özel  E-Ticaret sistemleri",
+                    subtitle: "Sınır Tanımayan Çevrimiçi Alışveriş Deneyimi",
+                    description: "Monolitik e-ticaret altyapılarının hantallığından kurtulun. Hızlı, güvenli ve tamamen size özel tasar lanmış \"composable commerce\" çözümleriyle satışlatınızı katlayın.",
                     items: ["Shopify Hydrogen", "Swell", "Crystallize", "Medusa", "Commerce Layer"]
                 }
             ]
@@ -68,35 +68,35 @@ const defaultData: ServicesPageSettings = {
             title: "Modern Web &\nJamstack Geliştirme",
             subsections: [
                 {
-                    subtitle: "Modern Web Geliştirme",
-                    description: "Modern Çevik yaklaşımla\nöncü Web çözümleri",
+                    subtitle: "Jamstack ve Yeni Nesil Web",
+                    description: "Güvenlik açıklarını minimuma indiren, sunucu maliyetlerini düşüren ve sayfa hızlarını uçuran modern Jamstack mimarisi ile geleceğin web uygulamalarını geliştiriyoruz.",
                     items: ["Jamstack Mimarisi", "Next.JS Geliştirme", "Self-Hosted Next.JS", "Next.JS App Router"]
                 },
                 {
-                    subtitle: "Next.JS Denetimleri",
-                    description: "Next.JS web sitesinin performansı\nve mimari denetim hizmetleri",
+                    subtitle: "Next.js Performans Denetimleri",
+                    description: "Mevcut Next.js projeniz yavaş mı çalışıyor? Kod kalitesinden render stratejilerine kadar derinlemesine teknik denetimler yapıyor ve darboğazları ortadan kaldırıyoruz.",
                     items: ["Next.JS Yapay Zeka SEO Denetimi", "Next.JS Performans Denetimi"]
                 }
             ]
         },
         {
             id: "ai-integrations",
-            title: "Yapay Zeka &\nGelişmiş Entegrasyonlar",
+            title: "Yapay Zeka (AI) &\nGelişmiş Entegrasyonlar",
             subsections: [
                 {
-                    subtitle: "Yapay Zeka Entegrasyon Hizmetleri",
-                    description: "Yapay Zeka araçları ve çerçevelerini kullanarak\ngelişmiş entegrasyonlar geliştirme",
+                    subtitle: "İş Süreçlerinde AI Dönüşümü",
+                    description: "Operasyonlarınızı otomatize eden özel ChatGPT entegrasyonları, e-ticaret asistanları ve işinize özel eğitilmiş yapay zeka modelleriyle rekabette bir adım öne geçin.",
                     items: ["ChatGPT & Yapay Zeka Entegrasyonları", "Yapay Zeka KIT", "E-Ticaret için Özel ChatGPT Uygulamaları", "MedusaJS ChatGPT Uygulaması"]
                 }
             ]
         },
         {
             id: "design",
-            title: "Tasarım",
+            title: "Dijital Tasarım & Arayüz",
             subsections: [
                 {
-                    subtitle: "Dijital Tasarım",
-                    description: "Tüm yaratıcı işler ilk taslaktan son arayüze kadar FocusReactive tarafından sunulur.",
+                    subtitle: "Markanıza Kimlik Kazandıran Arayüzler",
+                    description: "VogoLab yaratıcı ekibiyle, kullanıcı psikolojisini temel alan, estetik ve dönüşüm odaklı UI/UX tasarımları üretiyoruz. İlk tel kafesten (wireframe) son piksele kadar sanat ve veriyi birleştiriyoruz.",
                     items: ["UI/UX Tasarım", "Markalaşma", "Hareketli Grafikler ve Animasyonlar"]
                 }
             ]
@@ -218,7 +218,7 @@ export default function ServicesPage() {
                                     {section.title}
                                 </h2>
                                 <Link href="/contact" className="px-8 py-3 rounded-full border border-black text-black font-semibold hover:bg-black hover:text-white transition-colors duration-300 text-sm tracking-wide shrink-0">
-                                    Hizmet Hakkında
+                                    Projenizi Konuşalim
                                 </Link>
                             </div>
 

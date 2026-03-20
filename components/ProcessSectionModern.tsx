@@ -45,9 +45,9 @@ export default function ProcessSectionModern() {
                         viewport={{ once: true }}
                         className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-medium text-black leading-tight"
                     >
-                        Nasıl <span className="relative inline-block mx-1 sm:mx-2">
+                        Projeleri Nasıl <span className="relative inline-block mx-1 sm:mx-2">
                             <span className="absolute -inset-1 sm:-inset-2 bg-[#FF5C35] rounded-xl sm:rounded-2xl transform rotate-2 shadow-lg" />
-                            <span className="relative text-white px-1 sm:px-2">Çalışıyoruz?</span>
+                            <span className="relative text-white px-1 sm:px-2">İnşa Ediyoruz?</span>
                         </span>
                     </motion.h2>
                     <motion.p
@@ -57,7 +57,7 @@ export default function ProcessSectionModern() {
                         transition={{ delay: 0.1 }}
                         className="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed font-medium px-2"
                     >
-                        Basit, şeffaf ve sonuç odaklı üç adımlı sürecimizle projenizi hayata geçiriyoruz. 
+                        Karmaşık teknolojileri basitleştiriyor, şeffaf ve sonuç odaklı üç adımlı sürecimizle fikirlerinizi gerçeğe dönüştürüyoruz.
                     </motion.p>
                 </div>
 
@@ -99,7 +99,7 @@ export default function ProcessSectionModern() {
                         href="/contact"
                         className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-black text-white rounded-xl sm:rounded-2xl text-base sm:text-xl font-bold hover:scale-[1.05] transition-all shadow-xl active:scale-95 text-center"
                     >
-                        İletişime Geç
+                        Projenizi Konuşalım
                     </Link>
 
 
@@ -107,7 +107,7 @@ export default function ProcessSectionModern() {
                         href="/services"
                         className="group flex items-center justify-center gap-3 text-base sm:text-xl font-bold text-black hover:opacity-70 transition-all font-sans"
                     >
-                        Tüm hizmetleri incele
+                        Tüm uzmanlıklarımızı görün
                         <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-black rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
                             <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
                         </div>

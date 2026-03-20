@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const defaultCategories = [
     { id: "headless", label: "Headless CMS" },
-    { id: "ecommerce", label: "E-Ticaret" },
-    { id: "tech", label: "Teknolojiler" },
-    { id: "hosting", label: "Hosting Platformları" },
+    { id: "ecommerce", label: "Modern E-Ticaret" },
+    { id: "tech", label: "Geliştirme & Mimari" },
+    { id: "hosting", label: "Bulut & Hosting" },
 ]
 
 const defaultTechnologies = {
@@ -51,7 +51,7 @@ const defaultTechnologies = {
 
 export default function TechnologiesTabs() {
     const [categories, setCategories] = useState(defaultCategories)
-    const [technologies, setTechnologies] = useState<Record<string, {name: string, isPartner: boolean}[]>>(defaultTechnologies)
+    const [technologies, setTechnologies] = useState<Record<string, { name: string, isPartner: boolean }[]>>(defaultTechnologies)
     const [activeTab, setActiveTab] = useState(defaultCategories[0].id)
     const [loading, setLoading] = useState(true)
 
@@ -88,7 +88,7 @@ export default function TechnologiesTabs() {
                 {/* Header */}
                 <div className="mb-12 lg:mb-20">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium">
-                        Teknolojiler
+                        Gücümüzü Aldığımız Teknolojiler
                     </h2>
                 </div>
 
@@ -139,7 +139,7 @@ export default function TechnologiesTabs() {
                                     >
                                         {tech.isPartner && (
                                             <span className="absolute top-4 left-6 text-[10px] md:text-[11px] font-bold tracking-[0.05em] text-black">
-                                                Partner
+                                                Resmi Partner
                                             </span>
                                         )}
 

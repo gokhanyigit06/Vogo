@@ -39,7 +39,7 @@ export default function HeroModern() {
                     setClients(data.slice(0, 8))
                 }
             })
-            .catch(() => {/* fallback kalır */})
+            .catch(() => {/* fallback kalır */ })
 
         // Hero Settings
         fetch("/api/settings")
@@ -58,9 +58,9 @@ export default function HeroModern() {
             .catch(() => { })
     }, [])
 
-    const line1 = heroSettings?.titleLine1 || "DİJİTALDE"
-    const line2 = heroSettings?.titleLine2 || "SINIRLARI"
-    const line3 = heroSettings?.titleLine3 || "AŞIN."
+    const line1 = heroSettings?.titleLine1 || "DİJİTALİN"
+    const line2 = heroSettings?.titleLine2 || "KURALLARINI"
+    const line3 = heroSettings?.titleLine3 || "YENİDEN YAZIN."
     const mediaUrl = heroSettings?.heroMediaUrl || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
     const mediaType = heroSettings?.heroMediaType || "image"
 
@@ -111,7 +111,7 @@ export default function HeroModern() {
                             className="mt-10 sm:mt-14 lg:mt-20"
                         >
                             <p className="text-[9px] md:text-[10px] font-bold tracking-[0.22em] uppercase text-black/40 mb-5">
-                                GÜVENENLER
+                                BİZE GÜVENEN MARKALAR
                             </p>
                             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 sm:gap-x-8 md:gap-x-10">
                                 {clients.map((client, index) => (
@@ -164,7 +164,7 @@ export default function HeroModern() {
                                 <svg className="absolute w-full h-full animate-[spin_12s_linear_infinite]" viewBox="0 0 100 100">
                                     <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
                                     <text fontSize="10.5" className="uppercase font-[700] tracking-[0.2em] text-black">
-                                        <textPath href="#circlePath" startOffset="0%">Tanıtımı İzle • Tanıtımı İzle •</textPath>
+                                        <textPath href="#circlePath" startOffset="0%">VİZYONUMUZU İZLEYİN • VİZYONUMUZU İZLEYİN •</textPath>
                                     </text>
                                 </svg>
                             </div>

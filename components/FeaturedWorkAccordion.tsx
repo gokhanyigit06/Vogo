@@ -49,7 +49,7 @@ export default function FeaturedWorkAccordion() {
                     setActiveId(list[0]?.id || "")
                 }
             })
-            .catch(() => {})
+            .catch(() => { })
             .finally(() => setLoading(false))
     }, [])
 
@@ -79,10 +79,10 @@ export default function FeaturedWorkAccordion() {
             <section className="bg-black py-20 lg:py-32 text-white">
                 <div className="container mx-auto px-4 md:px-8 max-w-[1500px]">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium mb-20">
-                        Öne Çıkan İşler
+                        İmza attığımız Projeler
                     </h2>
                     <div className="border-t border-white/10 py-20 text-center">
-                        <p className="text-white/30 text-lg font-medium">Henüz proje eklenmemiş.</p>
+                        <p className="text-white/30 text-lg font-medium">Mükemmel bir proje yolda. Çok yakında burada!</p>
                     </div>
                 </div>
             </section>
@@ -96,13 +96,13 @@ export default function FeaturedWorkAccordion() {
                 {/* Header */}
                 <div className="mb-12 lg:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium">
-                        Öne Çıkan İşler
+                        İmza attığımız Projeler
                     </h2>
                     <Link
                         href="/work"
                         className="group flex items-center gap-2 text-sm font-bold text-white/40 hover:text-white transition-colors mb-3"
                     >
-                        Tüm işleri gör
+                        Tüm Projeleri Keşfet
                         <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </Link>
                 </div>
@@ -219,7 +219,7 @@ export default function FeaturedWorkAccordion() {
                                                         )}
                                                         {displayScope(project).length > 0 && (
                                                             <div className="flex flex-col gap-1">
-                                                                <p className="text-[11px] md:text-xs font-semibold tracking-wide text-white/40 uppercase">Hizmetler</p>
+                                                                <p className="text-[11px] md:text-xs font-semibold tracking-wide text-white/40 uppercase">Çözümler</p>
                                                                 <ul className="flex flex-col gap-0.5">
                                                                     {displayScope(project).map((s, i) => (
                                                                         <li key={i} className="text-base md:text-lg font-bold tracking-tight text-white">{s}</li>
@@ -231,8 +231,8 @@ export default function FeaturedWorkAccordion() {
 
                                                     {/* Big Image Right */}
                                                     <div className="md:col-span-7 lg:col-span-8 xl:col-span-9 relative">
-                                                        <Link 
-                                                            href={projectHref(project)} 
+                                                        <Link
+                                                            href={projectHref(project)}
                                                             className="block w-full aspect-[4/3] md:aspect-video lg:aspect-[16/7] xl:aspect-[21/9] rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden bg-white/5 flex items-center justify-center relative group"
                                                         >
                                                             {/* Floating Badges */}

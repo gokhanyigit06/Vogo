@@ -6,28 +6,28 @@ import { motion, AnimatePresence } from "framer-motion"
 const defaultServices = [
     {
         id: "01",
-        title: "İçerik Pazarlama Platformları",
-        description: "Yüksek hacimli içerik operasyonları ve editör ekipleri için özel olarak oluşturulmuş CMS çözümleri. Ölçeklenebilir mimari ve headless esnekliği sağlıyoruz.",
+        title: "Yeni Nesil İçerik Platformları (Headless CMS)",
+        description: "İçerik operasyonlarınızı özgürleştiriyoruz. Editör ekipleriniz için esnek, markanız için sınırsız ölçeklenebilir headless (başsız) CMS mimarileri kuruyoruz.",
     },
     {
         id: "02",
-        title: "İçerik Odaklı E-Ticaret",
-        description: "Ticaret ve içeriği kusursuz bir şekilde harmanlıyor, markanızın hikayesini anlatan ve dönüşümleri artıran yüksek performanslı vitrinler oluşturuyoruz.",
+        title: "Headless E-Ticaret Çözümleri",
+        description: "Estetik ve performansı birleştiriyoruz. Sadece ürün satmayan, markanızın hikayesini anlatan ve dönüşüm oranlarını zirveye taşıyan ışık hızında vitrinler tasar lıyoruz.",
     },
     {
         id: "03",
-        title: "NextJS SEO ve Performans Denetimleri",
-        description: "NextJS performansı, erişilebilirlik, Core Web Vitals ve yapılandırılmış SEO üzerine odaklanan, eyleme geçirilebilir teknik denetimler.",
+        title: "Next.js Performans & SEO Denetimi",
+        description: "Sitenizin potansiyelini maksimuma çıkarın. Core Web Vitals, erişilebilirlik ve teknik SEO odaklı derinlemesine denetimlerle Next.js mimarinizi kusursuzlaştırıyoruz.",
     },
     {
         id: "04",
-        title: "Yapay Zeka ve Gelişmiş Entegrasyonlar",
-        description: "İşletmenizi geleceğe bağlıyoruz. En yeni yapay zeka özelliklerini, özel API'leri ve karmaşık arka plan sistemlerini kusursuz bir şekilde entegre ediyoruz.",
+        title: "Yapay Zeka (AI) & Karmaşık Entegrasyonlar",
+        description: "İşletmenizi yarına hazırlıyoruz. En modern yapay zeka modellerini, 3. parti API'leri ve kompleks arka plan sistemlerini dijital ürünlerinize pürüzsüzce entegre ediyoruz.",
     },
     {
         id: "05",
-        title: "Web Tasarım",
-        description: "Stratejik, kullanıcı odaklı ve son derece estetik. Markanızı yücelten ve hedef kitlenizi derinden etkileyen dijital deneyimler tasarlıyoruz.",
+        title: "UI/UX & Web Tasarım",
+        description: "Sadece güzel değil, stratejik tasarımlar yapıyoruz. Hedef kitlenizi yakalayan, markanızı yücelten ve kullanıcıyı yormayan akışcı dijital deneyimler kurguluyoruz.",
     }
 ]
 
@@ -62,7 +62,7 @@ export default function ServicesHoverAccordion() {
                 {/* Header */}
                 <div className="mb-12 lg:mb-20">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium">
-                        Hizmetlerimiz
+                        Neler Yapıyoruz?
                     </h2>
                 </div>
 

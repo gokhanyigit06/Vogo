@@ -8,8 +8,8 @@ export default function ServiceGridModern() {
     const services = [
         {
             key: "digitalAds",
-            title: "Dijital Pazarlama",
-            desc: "Sonuç odaklı reklam kampanyaları ve veri odaklı stratejiler.",
+            title: "Performans Pazarlaması",
+            desc: "Veriyle beslenen stratejiler ve dönüşüm oranlarınızı katlayan akıllı kampanyalar.",
             icon: (
                 <svg viewBox="0 0 100 100" className="w-12 h-12 sm:w-16 sm:h-16">
                     <path d="M20,60 L40,60 L60,80 L60,40 L40,60" fill="none" stroke="black" strokeWidth="3" />
@@ -39,8 +39,8 @@ export default function ServiceGridModern() {
         },
         {
             key: "webDesign",
-            title: "Web Tasarım",
-            desc: "Modern, hızlı ve dönüşüm odaklı web deneyimleri.",
+            title: "Modern Web Geliştirme",
+            desc: "ışık hızında yüklenen, Jamstack mimarisine sahip ölçeklenebilir web uygulamaları.",
             icon: (
                 <svg viewBox="0 0 100 100" className="w-12 h-12 sm:w-16 sm:h-16">
                     <rect x="20" y="30" width="60" height="40" rx="5" fill="none" stroke="black" strokeWidth="3" />
@@ -56,8 +56,8 @@ export default function ServiceGridModern() {
         },
         {
             key: "mobileDesign",
-            title: "Mobil Uygulama",
-            desc: "Kullanıcı dostu, yenilikçi ve çarpıcı mobil uygulamalar.",
+            title: "Uygulama Geliştirme",
+            desc: "Kullanıcı alışkanlıklarını yeniden şekillendiren, pürüzsüz mobil ve web uygulamaları.",
             icon: (
                 <svg viewBox="0 0 100 100" className="w-12 h-12 sm:w-16 sm:h-16">
                     <rect x="35" y="20" width="30" height="60" rx="8" fill="none" stroke="black" strokeWidth="3" />
@@ -79,11 +79,11 @@ export default function ServiceGridModern() {
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 sm:gap-8 md:gap-12 mb-12 sm:mb-16 md:mb-20 px-2 sm:px-4">
                     <div className="max-w-3xl">
                         <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold tracking-tight leading-[1.1]">
-                            Neler <br className="hidden sm:block" />
+                            Dijitalde Neler <br className="hidden sm:block" />
                             <span className="relative inline-block mx-1 sm:mx-2">
-                                <span className="relative z-10 text-white px-3 sm:px-6">Yapıyoruz</span>
+                                <span className="relative z-10 text-white px-3 sm:px-6">Değiştiriyoruz?</span>
                                 <div className="absolute inset-0 bg-[#FF5C35] -rotate-3 rounded-xl sm:rounded-2xl z-0 scale-110"></div>
-                            </span> ?
+                            </span>
                         </h2>
                     </div>
                     <div className="max-w-lg">
@@ -135,7 +135,7 @@ export default function ServiceGridModern() {
                         href="/services"
                         className="group flex items-center gap-3 sm:gap-4 text-base sm:text-lg md:text-xl font-bold hover:opacity-70 transition-opacity"
                     >
-                        Tüm hizmetleri incele
+                        Tüm uzmanlıklarımızı görün
                         <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-black rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
                             <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>

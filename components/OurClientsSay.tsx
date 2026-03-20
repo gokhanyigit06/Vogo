@@ -115,12 +115,12 @@ export default function OurClientsSay() {
                     <div className="w-8 h-8 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                 </div>
             )}
-            
+
             <div className={`container mx-auto px-4 md:px-8 max-w-[1500px] transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}>
 
                 {/* Header */}
                 <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium mb-12">
-                    Müşterilerimiz Ne Diyor
+                    Birlikte Büyüdüğümüz Markalar
                 </h2>
 
                 {/* Progress Lines Array (Top) */}

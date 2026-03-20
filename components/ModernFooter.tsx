@@ -21,8 +21,8 @@ export default function ModernFooter() {
 
                         <div className="mt-8 lg:mt-12">
                             <p className="max-w-sm text-sm md:text-base font-medium text-white/80 leading-relaxed">
-                                Güçlü fikirler,<br />
-                                mükemmel uygulamalar.
+                                Büyük fikirler,<br />
+                                kusursuz mimariler.
                             </p>
                         </div>
                     </div>
@@ -32,13 +32,13 @@ export default function ModernFooter() {
 
                         {/* Company Links */}
                         <div className="flex flex-col gap-3 lg:gap-4">
-                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">ŞİRKET</h3>
+                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">VOGOLAB</h3>
                             <Link href="/about" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
                                 Hakkımızda
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/portfolio" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                Projeler
+                                Projelerimiz
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/contact" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
@@ -49,7 +49,7 @@ export default function ModernFooter() {
 
                         {/* Services Links */}
                         <div className="flex flex-col gap-3 lg:gap-4">
-                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">HİZMETLER</h3>
+                            <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">UZMANLIK ALANLARIMIZ</h3>
                             <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
                                 Headless CMS
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
@@ -59,7 +59,7 @@ export default function ModernFooter() {
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                Next.JS
+                                Next.js Mimarisi
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         </div>
@@ -72,7 +72,7 @@ export default function ModernFooter() {
 
                     {/* Left Bottom */}
                     <div className="lg:col-span-7 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 text-white/40 text-[10px] md:text-xs font-medium">
-                        <p>© {currentYear} VOGOLAB</p>
+                        <p>© {currentYear} VOGOLAB – Tüm hakları saklıdır.</p>
                         <p className="hidden sm:block">•</p>
                         <p>İSTANBUL, TR</p>
                     </div>

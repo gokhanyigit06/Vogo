@@ -33,44 +33,44 @@ interface AboutPageSettings {
 }
 
 const defaultData: AboutPageSettings = {
-    heroTitleLine1: "Headless CMS ile",
-    heroTitleLine2: "Gerçek Sonuçlar",
-    heroSubtitle1: "Pazarlama ve geliştirme ekiplerinin kullanmayı sevdiği hızlı, esnek platformlar kuruyoruz.",
-    heroSubtitle2: "Misyonumuz modern web'i ileriye taşımak — Next.js ve piyasadaki en iyi Headless araçlarını kullanarak teknik netlik, performans ve ölçeklenebilir mimariyi birleştirmek.",
-    deliverySectionTitle: "Nasıl Çalışıyoruz?",
-    deliverySectionSubtitle: "İlk görüşmeden son teslimata kadar —\nbirlikte nasıl çalışıyoruz?",
+    heroTitleLine1: "Modern Mimariyle",
+    heroTitleLine2: "Gerçek Performans",
+    heroSubtitle1: "Hem yazılım hem de pazarlama ekiplerinin çalışmaktan keyif aldığı, sınırları ortadan kaldıran esnek platformlar inşa ediyoruz.",
+    heroSubtitle2: "Misyonumuz dijital standartları yukarı çekmek. Next.js ve modern Headless araçlarının gücünü birleştirerek; estetik, hız ve sürdürülebilir mimariyi tek bir potada eritiyoruz.",
+    deliverySectionTitle: "VogoLab Yaklaşımı",
+    deliverySectionSubtitle: "İlk el sıkışmadan son kod satırına kadar —\nsüreci nasıl yönetiyoruz?",
     deliveryCards: [
         {
-            title: "İş İhtiyaçlarını Belirleme",
-            desc: "Biz sadece hizmet süresine değil, çözüm sunmaya odaklanıyoruz. Hedeflerinizi inceleyip, eyleme dönüştürülebilir bir plan oluşturarak başlıyoruz.",
+            title: "Darboğazları Tespit Etme",
+            desc: "Biz sadece kod yazmayız, iş problemlerinizi çözeriz. Mevcut sisteminizin sınırlarını analiz ediyor ve doğrudan ROI (Yatırım Getirisi) odaklı bir eylem planı çıkarıyoruz.",
             iconType: "points"
         },
         {
-            title: "Doğru Çözümleri Seçme",
-            desc: "İşbirlikçi uzmanlığımızdan yararlanarak doğru araç setini seçiyor ve iş hedefleriyle uyumlu hale getiriyoruz.",
+            title: "Doğru Teknolojiyi Seçme",
+            desc: "Trend olanı değil, projenize en uygun olanı seçiyoruz. Ajans tecrübemizle, iş hedeflerinize en iyi hizmet edecek araçları (Sanity, Shopify, Payload vb.) projenize entegre ediyoruz.",
             iconType: "rectangles"
         },
         {
-            title: "Uygulama Süreci",
-            desc: "Süreçlerimizi sizin tercihlerinize göre hizalıyoruz. Şeffaf ve hızlı ilerleyen bir yapıda demolarla geri bildirim seansları düzenliyoruz.",
+            title: "Çevik (Agile) Geliştirme",
+            desc: "Karanlıkta çalışmıyoruz. Sürekli demolar, geri bildirim döngüleri ve şeffaf iletişim ağımızla, ne inşa ettiğimizi her aşamada görerek ilerliyorsunuz.",
             iconType: "triangle"
         },
         {
-            title: "Proje Sonrası Destek",
-            desc: "İster teslimat sonrası molaya ihtiyacınız olsun ister sürekli bakım — çözümlerin sorunsuz çalışması için esnek paketler sunuyoruz.",
+            title: "Lansman ve Bakım",
+            desc: "İşimiz site yayına girince bitmiyor. Yeni özellik geliştirmelerinden periyodik bakım paketlerine kadar, platformunuzun yıllarca sorunsuz çalışması için arkanızdayız.",
             iconType: "cube"
         }
     ],
     whoWeBuildFor: {
-        title: "Kimin İçin Üretiyoruz",
-        description: "Müşterilerimiz, gelişmiş içerik altyapısı, güçlü editör deneyimi ve performans odaklı bir yapı arayan büyüyen markalar ve kurumsal firmalardır.",
-        linkText: "Projelerimiz",
+        title: "Kimlerle Çalışıyoruz?",
+        description: "Hantal altyapılardan kurtulmak isteyen, gelişmiş içerik yönetimi ve yüksek performans arayan vizyoner e-ticaret markaları ve B2B şirketleriyle çalışıyoruz.",
+        linkText: "İşlerimize Göz Atın",
         linkHref: "/portfolio"
     },
     ourServices: {
-        title: "Hizmetlerimiz",
-        description: "Ölçeklenebilir, UX odaklı pazarlama ve içerik platformları inşa etme konusunda uzmanız — her zaman verimli bütçelerle.",
-        linkText: "Hizmetler",
+        title: "Ne Sunuyoruz?",
+        description: "Bütçenizi en verimli şekilde kullanarak; hızlı, güvenli, SEO odaklı ve global ölçekte rekabet edebilecek dijital ürünler tasarlayıp geliştiriyoruz.",
+        linkText: "Çözümlerimizi İnceleyin",
         linkHref: "/services"
     }
 }
