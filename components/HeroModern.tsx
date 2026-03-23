@@ -58,9 +58,9 @@ export default function HeroModern() {
             .catch(() => { })
     }, [])
 
-    const line1 = heroSettings?.titleLine1 || "DİJİTALİN"
-    const line2 = heroSettings?.titleLine2 || "KURALLARINI"
-    const line3 = heroSettings?.titleLine3 || "YENİDEN YAZIN."
+    const line1 = heroSettings?.titleLine1 || "DİJİTALDE"
+    const line2 = heroSettings?.titleLine2 || "REKABETİ"
+    const line3 = heroSettings?.titleLine3 || "GERİDE BIRAKIN"
     const mediaUrl = heroSettings?.heroMediaUrl || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
     const mediaType = heroSettings?.heroMediaType || "image"
 

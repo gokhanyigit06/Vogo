@@ -4,10 +4,10 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const defaultCategories = [
-    { id: "headless", label: "Headless CMS" },
-    { id: "ecommerce", label: "Modern E-Ticaret" },
-    { id: "tech", label: "Geliştirme & Mimari" },
-    { id: "hosting", label: "Bulut & Hosting" },
+    { id: "headless", label: "Yeni Nesil İçerik Yönetimi" },
+    { id: "ecommerce", label: "Kesintisiz Satış Altyapıları" },
+    { id: "tech", label: "Yüksek Performanslı Mimari" },
+    { id: "hosting", label: "Güvenilir Bulut Çözümleri" },
 ]
 
 const defaultTechnologies = {
