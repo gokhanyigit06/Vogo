@@ -6,9 +6,9 @@ import { motion, useScroll, useTransform } from "framer-motion"
 const defaultSteps = [
     {
         id: "01",
-        title: "Modüler ve Hızlı Geliştirme",
-        subtitle: "Test edilmiş, sağlam bir temel.",
-        description: "Tekerlеği yeniden icat etmiyoruz. Sayfa yapıları, çoklu dil desteği ve SEO ayarları gibi temel bileşenleri, onlarca projede kusursuzlaştırdığımız kendi mimarimizle anında ayağa kaldırıyoruz. Projeniz, sıfırdan değil, zirveden başlar.",
+        title: "Hızlı ve Sorunsuz Teslimat",
+        subtitle: "Projeniz, sıfırdan değil zirveden başlar.",
+        description: "Kanıtlanmış altyapılarımız sayesinde projenizi zaman kaybetmeden, en yüksek standartlarda yayına alıyoruz. On larca projede mükemmelleştirdiğimiz çözümlerimizle ilk günden profesyonel bir dijital varlık kuruyoruz.",
         icon: (
             <svg width="48" height="48" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 md:w-12 md:h-12">
                 <path d="M16 40 L16 20 L0 20 Z" fill="black" fillOpacity="0.2" />
@@ -19,9 +19,9 @@ const defaultSteps = [
     },
     {
         id: "02",
-        title: "Performans Odaklı Mimari",
-        subtitle: "İlk günden SEO dostu, ilk günden hızlı.",
-        description: "Hız bir opsiyon değil, standarttır. İçeriğinizin arama motorlarında ve AI destekli aramalarda öne çıkması için SSR/SSG stratejilerini, Core Web Vitals standartlarını ve yapılandırılmış verileri en baştan kurguluyoruz.",
+        title: "Google ve Satış Odaklı Altyapı",
+        subtitle: "Sadece güzel değil, müşteri kazanır.",
+        description: "Yaptığımız web siteleri sadece güzel görünmekle kalmaz; hızlı açılarak Google'da üst sıralara çıkar ve her ziyaretçiyi müşteriye dönüştürmek için tasarlanır. Dijital yatırımınızın karşılığını alırsınız.",
         icon: (
             <svg width="48" height="48" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 md:w-12 md:h-12">
                 <rect x="0" y="26" width="11" height="14" fill="black" fillOpacity="0.2" />
@@ -32,9 +32,9 @@ const defaultSteps = [
     },
     {
         id: "03",
-        title: "Şeffaf ve Kesin Tahminler",
-        subtitle: "Sürpriz maliyetler yok, net teslimat var.",
-        description: "Projelerimizin %90'ı başlangıçta belirlediğimiz bütçe ve takvim içinde tamamlanır. İhtiyaçlarınızı en başta doğru analiz eder, yol haritasını netleştirir ve yolculuk boyunca can sıkıcı sürprizlere yer bırakmayız.",
+        title: "Şeffaf Süreç ve Net Bütçe",
+        subtitle: "Ne söz verdik, onu teslim ediyoruz.",
+        description: "Projelerimizin büyük çoğunluğu başlangıçta belirlediğimiz bütçe ve takvim içinde tamamlanır. İhtiyaçlarınızı en başta doğru analiz eder, yol haritasını sizinle paylaşır, yolculuk boyunca sizi bilgilendiririz. Sürpriz maliyet yok.",
         icon: (
             <svg width="48" height="48" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 md:w-12 md:h-12">
                 <path d="M20 0 L40 10 L20 20 L0 10 Z" fill="black" fillOpacity="0.2" />
@@ -94,7 +94,7 @@ export default function HowWeWorkModern() {
                 {/* Header */}
                 <div className="mb-16 lg:mb-24 flex justify-center">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium text-center">
-                        Kusursuz Teslimat Süreci
+                        Nasıl Çalışıyoruz?
                     </h2>
                 </div>
 

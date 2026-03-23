@@ -120,7 +120,7 @@ export default function OurClientsSay() {
 
                 {/* Header */}
                 <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium mb-12">
-                    Birlikte Büyüdüğümüz Markalar
+                    Birlikte Büyüdüğümüz Global Markalar
                 </h2>
 
                 {/* Progress Lines Array (Top) */}

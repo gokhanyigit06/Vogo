@@ -6,28 +6,28 @@ import { motion, AnimatePresence } from "framer-motion"
 const defaultServices = [
     {
         id: "01",
-        title: "Yeni Nesil İçerik Platformları (Headless CMS)",
-        description: "İçerik operasyonlarınızı özgürleştiriyoruz. Editör ekipleriniz için esnek, markanız için sınırsız ölçeklenebilir headless (başsız) CMS mimarileri kuruyoruz.",
+        title: "Kurumsal Web Tasarım",
+        description: "Markanızı dijitalde güçlü ve güvenilir gösteriyoruz. Hızlı açılan, tüm cihazlara uyumlu ve ziyaretçiyi müşteriye dönüştürmek için tasarlanmış kurumsal web siteleri yapıyoruz.",
     },
     {
         id: "02",
-        title: "Headless E-Ticaret Çözümleri",
-        description: "Estetik ve performansı birleştiriyoruz. Sadece ürün satmayan, markanızın hikayesini anlatan ve dönüşüm oranlarını zirveye taşıyan ışık hızında vitrinler tasar lıyoruz.",
+        title: "E-Ticaret Çözümleri",
+        description: "Satışlarınızı ve dönüşüm oranlarınızı artırın. Müşterilerinize pürüzsüz bir alışveriş deneyimi sunan, yüksek performanslı ve gelire odaklı e-ticaret altyapıları kuruyoruz.",
     },
     {
         id: "03",
-        title: "Next.js Performans & SEO Denetimi",
-        description: "Sitenizin potansiyelini maksimuma çıkarın. Core Web Vitals, erişilebilirlik ve teknik SEO odaklı derinlemesine denetimlerle Next.js mimarinizi kusursuzlaştırıyoruz.",
+        title: "SEO ve Dijital Görünürlük",
+        description: "Google'da rakiplerinizin önüne geçin. Doğru anahtar kelimelerle hedef kitlenizin sizi bulmasını sağlıyor, organik trafik ve müşteri akışınızı kalıcı olarak artırıyoruz.",
     },
     {
         id: "04",
-        title: "Yapay Zeka (AI) & Karmaşık Entegrasyonlar",
-        description: "İşletmenizi yarına hazırlıyoruz. En modern yapay zeka modellerini, 3. parti API'leri ve kompleks arka plan sistemlerini dijital ürünlerinize pürüzsüzce entegre ediyoruz.",
+        title: "Dijital Pazarlama ve Reklam",
+        description: "Doğru kitleye, doğru mesajla ulaşın. Reklam bütçenizi en verimli şekilde kullanarak sosyal medya ve Google reklamlarınızı somut satışa ve müşteri kazanımına dönüştürüyoruz.",
     },
     {
         id: "05",
-        title: "UI/UX & Web Tasarım",
-        description: "Sadece güzel değil, stratejik tasarımlar yapıyoruz. Hedef kitlenizi yakalayan, markanızı yücelten ve kullanıcıyı yormayan akışcı dijital deneyimler kurguluyoruz.",
+        title: "Özel Yazılım ve Entegrasyonlar",
+        description: "İş süreçlerinizi dijitalleştiriyoruz. Markanıza özel, mevcut sisteminizle entegre çalışan yazılım çözümleriyle zaman ve maliyet tasarrufu sağlıyoruz.",
     }
 ]
 

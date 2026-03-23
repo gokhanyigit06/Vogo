@@ -21,8 +21,8 @@ export default function ModernFooter() {
 
                         <div className="mt-8 lg:mt-12">
                             <p className="max-w-sm text-sm md:text-base font-medium text-white/80 leading-relaxed">
-                                Büyük fikirler,<br />
-                                kusursuz mimariler.
+                                Markanızı dijitalde büyüten<br />
+                                stratejik ortağınız.
                             </p>
                         </div>
                     </div>
@@ -51,15 +51,15 @@ export default function ModernFooter() {
                         <div className="flex flex-col gap-3 lg:gap-4">
                             <h3 className="text-white/40 text-[10px] sm:text-xs font-bold tracking-widest uppercase mb-2">UZMANLIK ALANLARIMIZ</h3>
                             <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                Headless CMS
+                                Kurumsal Web Sitesi
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                Headless eCommerce
+                                E-Ticaret Çözümleri
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                             <Link href="/services" className="text-base md:text-lg font-medium tracking-tight text-white/90 hover:text-white transition-colors relative group w-fit">
-                                Next.js Mimarisi
+                                Dijital Pazarlama & SEO
                                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         </div>
