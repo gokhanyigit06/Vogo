@@ -21,62 +21,12 @@ type BlogPost = {
     content?: string
 }
 
-const categories = ["all topics", "web development", "animation", "branding", "business", "case study", "illustration", "expert insights"]
+const categories = ["Tümü", "Performans Reklamları", "E-Ticaret", "SEO", "VogoPOS"]
 
 export default function BlogPage() {
-    const [selectedCategory, setSelectedCategory] = useState("all topics")
+    const [selectedCategory, setSelectedCategory] = useState("Tümü")
     const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
     const [loading, setLoading] = useState(true)
-
-    // Dummy Data
-    const dummyPosts: BlogPost[] = [
-        {
-            id: 'featured-1',
-            title: "Case Study: Orakle. Modern Web Design for Medical Education",
-            excerpt: "A case study on designing a modern, credible website for Orakle—a medical education platform for clinicians. Subtle 3D, modular layouts, and motion built for trust, clarity, and scale.",
-            category: "UI/UX, Illustration",
-            date: "Oct 24, 2024",
-            readTime: "6 min read",
-            image: "https://cdn.dribbble.com/userupload/13004313/file/original-b1846b083395646d51025064eb9856cc.png?resize=1504x1128",
-            featured: true
-        },
-        {
-            id: 'sidebar-1',
-            title: "Case Study: ABUK—Designing Ukraine’s Leading Audiobook Platform",
-            excerpt: "Designing a comprehensive audiobook platform that connects authors and listeners.",
-            category: "Case Study, UI/UX",
-            date: "Oct 20, 2024",
-            readTime: "4 min read",
-            image: "https://tubikstudio.com/wp-content/uploads/2021/05/abuk-audiobook-app-design-tubik-0.png"
-        },
-        {
-            id: 'sidebar-2',
-            title: "EternaCloud Case Study: Calm Design for Complex Systems",
-            excerpt: "How we simplified complex data visualization for a cloud management platform.",
-            category: "Case Study, UI/UX, Web",
-            date: "Oct 18, 2024",
-            readTime: "5 min read",
-            image: "https://tubikstudio.com/wp-content/uploads/2023/11/eternacloud-website-design-tubik-0.jpg"
-        },
-        {
-            id: 'sidebar-3',
-            title: "Netti Case Study: Measuring the Invisible",
-            excerpt: "Brand identity and web design for an innovative analytics tool.",
-            category: "Case Study, UI/UX",
-            date: "Oct 15, 2024",
-            readTime: "3 min read",
-            image: "https://tubikstudio.com/wp-content/uploads/2023/06/netti-identity-design-tubik-0.jpg"
-        },
-        {
-            id: 'sidebar-4',
-            title: "SPYLT Case Study: Delicious by Design",
-            excerpt: "Creating a vibrant and energetic brand for a new energy drink.",
-            category: "Case Study, Branding",
-            date: "Oct 10, 2024",
-            readTime: "7 min read",
-            image: "https://tubikstudio.com/wp-content/uploads/2023/08/spylt-energy-drink-branding-packaging-tubik-0.jpg"
-        }
-    ]
 
     // API'den verileri çek
     useEffect(() => {
@@ -89,13 +39,10 @@ export default function BlogPage() {
                 if (data.length > 0) {
                     setBlogPosts(data)
                 } else {
-                    // Veri yoksa dummy data kullan
-                    setBlogPosts(dummyPosts)
+                    setBlogPosts([])
                 }
             } catch (error) {
                 console.error("Blog yüklenirken hata:", error)
-                // Hata durumunda da dummy data kullan
-                setBlogPosts(dummyPosts)
             } finally {
                 setLoading(false)
             }
@@ -104,7 +51,7 @@ export default function BlogPage() {
         fetchPosts()
     }, [])
 
-    const filteredPosts = selectedCategory === "all topics"
+    const filteredPosts = selectedCategory === "Tümü"
         ? blogPosts
         : blogPosts.filter(post => post.category?.toLowerCase() === selectedCategory.toLowerCase())
 
@@ -254,10 +201,10 @@ export default function BlogPage() {
                         <div className="flex gap-6 px-4 md:px-8 container mx-auto max-w-[95%] w-full min-w-max">
                             {/* Colorful Cards */}
                             {[
-                                { color: "bg-[#FA2E6E]", title: "Web Design: 16 Basic Types of Web Pages", category: "UI/UX", desc: "In this guide, we break down the anatomy and role of 16 must-know web page types.", image: "/illustration-1.png" },
-                                { color: "bg-[#5EACFF]", title: "The Anatomy of a Web Page: 14 Design Elements", category: "UI/UX", desc: "Explore how headers, CTAs, sliders & more shape user behavior.", image: "/illustration-2.png" },
-                                { color: "bg-[#FFBB54]", title: "Mobile UI Design: 15 Basic Types of Screens", category: "Processes and Tools", desc: "Mobile applications evolve with user's needs offering new functionality.", image: "/illustration-3.png" },
-                                { color: "bg-[#5CDF95]", title: "Color Theory in UI & Graphic Design: Practical Guide", category: "Processes and Tools", desc: "We feel color before we see it. This guide explains how color theory works in UI.", image: "/illustration-4.png" },
+                                { color: "bg-[#FA2E6E]", title: "Site Hızı Satışları Ne Kadar Etkiler?", category: "E-TİCARET", desc: "Sitenizin açılma süresindeki her 1 saniyelik gecikme, dönüşüm oranınızı %20 oranında düşürür. Bunu nasıl çözeriz?", image: "/illustration-1.png" },
+                                { color: "bg-[#5EACFF]", title: "A/B Testi ile Yeni Kazanımlar", category: "Ads", desc: "Aynı bütçeyle farklı bir görsel ve metin kullanarak müşteri maliyetini %50 düşürmenin yolları.", image: "/illustration-2.png" },
+                                { color: "bg-[#FFBB54]", title: "Mobil Alışverişte UX Önemi", category: "WEB TASARIM", desc: "Ziyaretçilerin pürüzsüz bir checkout sürecinden (sepet aşamasından) geçmesi için alınması gereken önlemler.", image: "/illustration-3.png" },
+                                { color: "bg-[#5CDF95]", title: "Yerel SEO'nun Gücü", category: "SEO", desc: "Horeca sektöründe olanlar için Google My Business kullanarak günlük müşteri akışı yaratmanın sırları.", image: "/illustration-4.png" },
                             ].map((card, index) => (
                                 <motion.div
                                     key={index}
@@ -307,26 +254,26 @@ export default function BlogPage() {
                             {
                                 id: "cs-1",
                                 color: "bg-[#F4A8FF]", // Pink
-                                category: "CASE STUDY, UI/UX, ILLUSTRATION",
-                                title: "Case Study: Orakle. Modern Web Design for Medical Education",
-                                desc: "A case study on designing a modern, credible website for Orakle—a medical education platform for clinicians. Subtle 3D, modular layouts, and motion built for trust, clarity, and scale.",
-                                image: "https://tubikstudio.com/wp-content/uploads/2024/02/orakle-medical-education-platform-identity-mockup-tubik-0.jpg"
+                                category: "PERFORMANS REKLAMLARI",
+                                title: "Başarı Hikayesi: E-Ticaret Markası %350 ROAS'a Nasıl Ulaştı?",
+                                desc: "Kampanyaları sıfırdan revize edip yapay zeka destekli hedefleme ile reklam maliyetini düşürdüğümüz, ciroyu üç katına çıkardığımız vaka analizi.",
+                                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80"
                             },
                             {
                                 id: "cs-2",
                                 color: "bg-[#9D7BCE]", // Purple
-                                category: "CASE STUDY, UI/UX",
-                                title: "Case Study: ABUK—Designing Ukraine’s Leading Audiobook Platform",
-                                desc: "Designing a comprehensive audiobook platform that connects authors and listeners.",
-                                image: "https://tubikstudio.com/wp-content/uploads/2021/05/abuk-audiobook-app-design-tubik-0.png"
+                                category: "WEB & E-TİCARET",
+                                title: "Altyapı Değişimi: Shopify Göçü ile Satışların Uçuşa Geçmesi",
+                                desc: "Hantal altyapısından kurtarıp Shopify Plus ekosistemine taşıdığımız firmanın kesintisiz 1 saniyenin altında açılış hızıyla kaydettiği büyüme.",
+                                image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=800&q=80"
                             },
                             {
                                 id: "cs-3",
                                 color: "bg-[#FCDDEC]", // Light Pink
-                                category: "CASE STUDY, UI/UX, ILLUSTRATION, WEB DEVELOPMENT",
-                                title: "EternaCloud Case Study: Calm Design for Complex Systems",
-                                desc: "How we simplified complex data visualization for a cloud management platform.",
-                                image: "https://tubikstudio.com/wp-content/uploads/2023/11/eternacloud-website-design-tubik-0.jpg"
+                                category: "Garantili SEO",
+                                title: "Aylık 1M+ Organik Trafik: İçerik Otoritesi Nasıl İnşa Edildi?",
+                                desc: "Rekabetçi bir sektörde, sıfır bütçeli ancak agresif SEO makaleleri ve mimari onarım ile rakipleri geride bıraktığımız detaylı stratejik süreç.",
+                                image: "https://images.unsplash.com/photo-1504868584819-f8e8b716656f?w=800&q=80"
                             }
                         ].map((study, index) => (
                             <motion.div
@@ -422,8 +369,8 @@ export default function BlogPage() {
 
                 {filteredPosts.length === 0 && !loading && (
                     <div className="container mx-auto px-4 text-center py-20 bg-muted/30 rounded-[2rem] max-w-[95%]">
-                        <p className="text-xl font-medium text-muted-foreground">Bu kategoride henüz içerik bulunmuyor.</p>
-                        <button onClick={() => setSelectedCategory("all topics")} className="mt-4 text-primary hover:underline font-bold">
+                        <p className="text-xl font-medium text-black/60">Bu kategoride henüz içerik bulunmuyor.</p>
+                        <button onClick={() => setSelectedCategory("Tümü")} className="mt-4 text-black hover:underline font-bold">
                             Tüm yazıları gör
                         </button>
                     </div>

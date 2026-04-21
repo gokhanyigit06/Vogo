@@ -6,28 +6,23 @@ import { motion, AnimatePresence } from "framer-motion"
 const defaultServices = [
     {
         id: "01",
-        title: "Kurumsal Web Tasarım",
-        description: "Markanızı dijitalde güçlü ve güvenilir gösteriyoruz. Hızlı açılan, tüm cihazlara uyumlu ve ziyaretçiyi müşteriye dönüştürmek için tasarlanmış kurumsal web siteleri yapıyoruz.",
+        title: "Performans Reklamcılığı",
+        description: "Google, Meta, ve TikTok reklam bütçenizi en verimli şekilde kullanarak doğrudan satış, lead ve müşteri kazanımı garantisi veriyoruz. Veri odaklı analizlerle paranızın tam karşılığını alın.",
     },
     {
         id: "02",
-        title: "E-Ticaret Çözümleri",
-        description: "Satışlarınızı ve dönüşüm oranlarınızı artırın. Müşterilerinize pürüzsüz bir alışveriş deneyimi sunan, yüksek performanslı ve gelire odaklı e-ticaret altyapıları kuruyoruz.",
+        title: "Profesyonel Web & E-Ticaret Tasarımı",
+        description: "Hızlı açılan, mobil cihazlarda mükemmel görünen ve sadece ziyaretçiye değil, müşteriye dönüşen SEO uyumlu web siteleri ve yüksek cirolu e-ticaret platformları inşa ediyoruz.",
     },
     {
         id: "03",
-        title: "SEO ve Dijital Görünürlük",
-        description: "Google'da rakiplerinizin önüne geçin. Doğru anahtar kelimelerle hedef kitlenizin sizi bulmasını sağlıyor, organik trafik ve müşteri akışınızı kalıcı olarak artırıyoruz.",
+        title: "VogoPOS QR Menü Sistemleri",
+        description: "Restoranlar ve kafeler için sipariş sürecini dijitalleştiren QR menü çözümleri. Menünüzü anında güncelleyin, garson maliyetlerini düşürün ve müşteri sipariş deneyimini kusursuzlaştırın.",
     },
     {
         id: "04",
-        title: "Dijital Pazarlama ve Reklam",
-        description: "Doğru kitleye, doğru mesajla ulaşın. Reklam bütçenizi en verimli şekilde kullanarak sosyal medya ve Google reklamlarınızı somut satışa ve müşteri kazanımına dönüştürüyoruz.",
-    },
-    {
-        id: "05",
-        title: "Özel Yazılım ve Entegrasyonlar",
-        description: "İş süreçlerinizi dijitalleştiriyoruz. Markanıza özel, mevcut sisteminizle entegre çalışan yazılım çözümleriyle zaman ve maliyet tasarrufu sağlıyoruz.",
+        title: "Garantili SEO Hizmeti",
+        description: "Sektörel anahtar kelimelerinizde kalıcı olarak Google sıralamasını yükseltiyoruz. Teknik SEO, içerik optimizasyonu ve otorite inşası ile organik trafik akışınızı ücretsiz müşteri kaynağına dönüştürüyoruz.",
     }
 ]
 
@@ -40,9 +35,9 @@ export default function ServicesHoverAccordion() {
         fetch("/api/settings")
             .then(r => r.json())
             .then(data => {
-                if (data.servicesSettings && Array.isArray(data.servicesSettings) && data.servicesSettings.length > 0) {
-                    setServices(data.servicesSettings)
-                }
+                // if (data.servicesSettings && Array.isArray(data.servicesSettings) && data.servicesSettings.length > 0) {
+                //     setServices(data.servicesSettings)
+                // }
             })
             .catch(console.error)
             .finally(() => setLoading(false))

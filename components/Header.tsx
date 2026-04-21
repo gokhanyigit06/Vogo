@@ -36,6 +36,7 @@ export default function Header() {
         { name: "Anasayfa", href: "/" },
         { name: "Projeler", href: "/portfolio" },
         { name: "Hizmetler", href: "/services" },
+        { name: "Blog", href: "/blog" },
         { name: "Hakkımızda", href: "/about" },
     ]
 

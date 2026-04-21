@@ -4,48 +4,41 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const defaultCategories = [
-    { id: "headless", label: "Yeni Nesil İçerik Yönetimi" },
-    { id: "ecommerce", label: "Kesintisiz Satış Altyapıları" },
-    { id: "tech", label: "Yüksek Performanslı Mimari" },
-    { id: "hosting", label: "Güvenilir Bulut Çözümleri" },
+    { id: "headless", label: "Performans Pazarlaması" },
+    { id: "ecommerce", label: "Satış Odaklı E-Ticaret" },
+    { id: "tech", label: "SEO & Organik Büyüme" },
+    { id: "hosting", label: "QR Menü & Horeca" },
 ]
 
 const defaultTechnologies = {
     headless: [
-        { name: "Sanity", isPartner: true },
-        { name: "Storyblok", isPartner: true },
-        { name: "Payload", isPartner: true },
-        { name: "DatoCMS", isPartner: true },
-        { name: "Contentful", isPartner: true },
-        { name: "Directus", isPartner: true },
-        { name: "Hygraph", isPartner: true }
+        { name: "Google Ads", isPartner: true },
+        { name: "Meta Ads", isPartner: true },
+        { name: "TikTok Ads", isPartner: false },
+        { name: "Criteo", isPartner: false },
+        { name: "Analytics 4", isPartner: true },
+        { name: "GTM", isPartner: true }
     ],
     ecommerce: [
-        { name: "Swell", isPartner: true },
         { name: "Shopify Plus", isPartner: true },
-        { name: "Crystallize", isPartner: true },
-        { name: "Commerce Layer", isPartner: true },
-        { name: "BigCommerce", isPartner: false },
-        { name: "WooCommerce", isPartner: false },
+        { name: "WooCommerce", isPartner: true },
+        { name: "Ikas", isPartner: true },
+        { name: "Ticimax", isPartner: false },
+        { name: "Next.js", isPartner: true }
     ],
     tech: [
-        { name: "Next.js", isPartner: true },
-        { name: "Hydrogen", isPartner: true },
-        { name: "React", isPartner: false },
-        { name: "Remix", isPartner: false },
-        { name: "Node.js", isPartner: false },
-        { name: "Cloudflare", isPartner: false },
-        { name: "TypeScript", isPartner: false },
-        { name: "GraphQL", isPartner: false },
-        { name: "Serverless", isPartner: false },
-        { name: "Prisma", isPartner: false },
-        { name: "Blitz", isPartner: true }
+        { name: "Ahrefs", isPartner: false },
+        { name: "Semrush", isPartner: false },
+        { name: "Screaming Frog", isPartner: false },
+        { name: "Search Console", isPartner: true },
+        { name: "Schema.org", isPartner: false },
+        { name: "Core Web Vitals", isPartner: true }
     ],
     hosting: [
-        { name: "Vercel", isPartner: true },
-        { name: "Netlify", isPartner: true },
-        { name: "AWS", isPartner: false },
-        { name: "Google Cloud", isPartner: false }
+        { name: "VogoPOS", isPartner: true },
+        { name: "QR Modül", isPartner: true },
+        { name: "Sipariş Modülü", isPartner: true },
+        { name: "Adisyon", isPartner: false }
     ]
 }
 
@@ -59,14 +52,14 @@ export default function TechnologiesTabs() {
         fetch("/api/settings")
             .then(r => r.json())
             .then(data => {
-                if (data.technologiesSettings) {
-                    const loadedCats = data.technologiesSettings.categories || defaultCategories;
-                    setCategories(loadedCats);
-                    setTechnologies(data.technologiesSettings.technologies || defaultTechnologies);
-                    if (loadedCats.length > 0) {
-                        setActiveTab(loadedCats[0].id);
-                    }
-                }
+                // if (data.technologiesSettings) {
+                //     const loadedCats = data.technologiesSettings.categories || defaultCategories;
+                //     setCategories(loadedCats);
+                //     setTechnologies(data.technologiesSettings.technologies || defaultTechnologies);
+                //     if (loadedCats.length > 0) {
+                //         setActiveTab(loadedCats[0].id);
+                //     }
+                // }
             })
             .catch(console.error)
             .finally(() => setLoading(false));
@@ -88,7 +81,7 @@ export default function TechnologiesTabs() {
                 {/* Header */}
                 <div className="mb-12 lg:mb-20">
                     <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.9] tracking-[-0.04em] font-medium">
-                        Gücümüzü Aldığımız Teknolojiler
+                        360 Derece Büyüme Çözümleri
                     </h2>
                 </div>
 

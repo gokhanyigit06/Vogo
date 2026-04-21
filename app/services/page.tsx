@@ -35,69 +35,53 @@ interface ServicesPageSettings {
 const defaultData: ServicesPageSettings = {
     heroTitle: "DİJİTAL UZMANLIĞIMIZ",
     gridBoxes: [
-        { title: "Headless CMS Mimarisi", link: "#headless-cms", iconType: "cms" },
-        { title: "Headless E-Ticaret", link: "#headless-ecommerce", iconType: "ecommerce" },
-        { title: "Yapay Zeka Entegrasyonları", link: "#ai-integrations", iconType: "ai" },
-        { title: "UI/UX Tasarım", link: "#design", iconType: "design" }
+        { title: "Performans Pazarlaması", link: "#ads", iconType: "ai" },
+        { title: "Web Tasarım & E-Ticaret", link: "#web", iconType: "ecommerce" },
+        { title: "Arama Motoru Optimizasyonu", link: "#seo", iconType: "web" },
+        { title: "QR Menü & Horeca", link: "#qr", iconType: "cms" }
     ],
     sections: [
         {
-            id: "headless-cms",
-            title: "Yeni Nesil İçerik Yönetimi\n(Headless CMS)",
+            id: "ads",
+            title: "Performans Pazarlaması\n(Ads)",
             subsections: [
                 {
-                    subtitle: "Özgür ve Esnek İçerik Dağıtımı",
-                    description: "İçeriğinizi tek bir yerden yönetip, web'den mobile her platforma ışık hızında dağıtmanız için sektörün en iyi Headless CMS altyapılarını kuruyoruz.",
-                    items: ["Payload", "Storyblok", "Sanity", "Directus", "Contentful", "Dato CMS"]
+                    subtitle: "Ciro Odaklı Reklam Yönetimi",
+                    description: "Google, Meta ve TikTok altyapılarını kullanarak reklam bütçenizi en verimli şekilde satışa dönüştürüyoruz. Sizi arayan müşterilere anında ulaşın.",
+                    items: ["Google Ads", "Meta Business (Instagram / Facebook)", "TikTok Reklamları", "Criteo", "Analytics 4 & Yeniden Pazarlama"]
                 }
             ]
         },
         {
-            id: "headless-ecommerce",
-            title: "Headless E-Ticaret Mimarisi",
+            id: "web",
+            title: "Web Tasarım &\nE-Ticaret Mimarisi",
             subsections: [
                 {
-                    subtitle: "Sınır Tanımayan Çevrimiçi Alışveriş Deneyimi",
-                    description: "Monolitik e-ticaret altyapılarının hantallığından kurtulun. Hızlı, güvenli ve tamamen size özel tasar lanmış \"composable commerce\" çözümleriyle satışlatınızı katlayın.",
-                    items: ["Shopify Hydrogen", "Swell", "Crystallize", "Medusa", "Commerce Layer"]
+                    subtitle: "Ziyaretçiyi Müşteriye Dönüştüren Siteler",
+                    description: "Sadece görsel olarak güzel değil, aynı zamanda çok hızlı açılan, güvenli ve ciro artırmak için dizayn edilmiş kurumsal ve e-ticaret siteleri kurguluyoruz.",
+                    items: ["Kurumsal Web Sitesi", "Shopify E-Ticaret Altyapısı", "WooCommerce", "Satış Odaklı Açılış Sayfaları (Landing Pages)"]
                 }
             ]
         },
         {
-            id: "modern-web",
-            title: "Modern Web &\nJamstack Geliştirme",
+            id: "seo",
+            title: "Garantili SEO &\nOrganik Trafik",
             subsections: [
                 {
-                    subtitle: "Jamstack ve Yeni Nesil Web",
-                    description: "Güvenlik açıklarını minimuma indiren, sunucu maliyetlerini düşüren ve sayfa hızlarını uçuran modern Jamstack mimarisi ile geleceğin web uygulamalarını geliştiriyoruz.",
-                    items: ["Jamstack Mimarisi", "Next.JS Geliştirme", "Self-Hosted Next.JS", "Next.JS App Router"]
-                },
-                {
-                    subtitle: "Next.js Performans Denetimleri",
-                    description: "Mevcut Next.js projeniz yavaş mı çalışıyor? Kod kalitesinden render stratejilerine kadar derinlemesine teknik denetimler yapıyor ve darboğazları ortadan kaldırıyoruz.",
-                    items: ["Next.JS Yapay Zeka SEO Denetimi", "Next.JS Performans Denetimi"]
+                    subtitle: "Google'da İlk Sayfaya Çıkın",
+                    description: "Teknik denetim, içerik stratejisi ve otorite inşası ile rakiplerinizi geride bırakarak tamamen ücretsiz ve kalıcı müşteri trafik akışı sağlayın.",
+                    items: ["Site Performansı Hızlandırma", "Anahtar Kelime Araştırması", "İçerik Stratejisi", "Yerel ve Kurumsal SEO"]
                 }
             ]
         },
         {
-            id: "ai-integrations",
-            title: "Yapay Zeka (AI) &\nGelişmiş Entegrasyonlar",
+            id: "qr",
+            title: "VogoPOS & QR Menü\nSistemleri",
             subsections: [
                 {
-                    subtitle: "İş Süreçlerinde AI Dönüşümü",
-                    description: "Operasyonlarınızı otomatize eden özel ChatGPT entegrasyonları, e-ticaret asistanları ve işinize özel eğitilmiş yapay zeka modelleriyle rekabette bir adım öne geçin.",
-                    items: ["ChatGPT & Yapay Zeka Entegrasyonları", "Yapay Zeka KIT", "E-Ticaret için Özel ChatGPT Uygulamaları", "MedusaJS ChatGPT Uygulaması"]
-                }
-            ]
-        },
-        {
-            id: "design",
-            title: "Dijital Tasarım & Arayüz",
-            subsections: [
-                {
-                    subtitle: "Markanıza Kimlik Kazandıran Arayüzler",
-                    description: "VogoLab yaratıcı ekibiyle, kullanıcı psikolojisini temel alan, estetik ve dönüşüm odaklı UI/UX tasarımları üretiyoruz. İlk tel kafesten (wireframe) son piksele kadar sanat ve veriyi birleştiriyoruz.",
-                    items: ["UI/UX Tasarım", "Markalaşma", "Hareketli Grafikler ve Animasyonlar"]
+                    subtitle: "Yeni Nesil Restoran Deneyimi",
+                    description: "Menünüzü saniyeler içinde güncelleyin. Garson maliyetini düşüren, müşteri sipariş hızını ve ciro hacmini artıran uçtan uca akıllı menü çözümleri.",
+                    items: ["İnteraktif QR Menü", "Online Sipariş Yönetimi", "POS Entegrasyonu", "Markaya Özel Menü Arayüzü"]
                 }
             ]
         }
@@ -149,9 +133,9 @@ export default function ServicesPage() {
         fetch("/api/settings")
             .then(r => r.json())
             .then(res => {
-                if (res.servicesPageSettings) {
-                    setData(res.servicesPageSettings)
-                }
+                // if (res.servicesPageSettings) {
+                //     setData(res.servicesPageSettings)
+                // }
             })
             .catch(() => setData(defaultData))
             .finally(() => setLoading(false))

@@ -58,9 +58,9 @@ export default function HeroModern() {
             .catch(() => { })
     }, [])
 
-    const line1 = heroSettings?.titleLine1 || "DİJİTALDE"
-    const line2 = heroSettings?.titleLine2 || "REKABETİ"
-    const line3 = heroSettings?.titleLine3 || "GERİDE BIRAKIN"
+    const line1 = heroSettings?.titleLine1 || "İŞİNİZİ"
+    const line2 = heroSettings?.titleLine2 || "DİJİTALDE"
+    const line3 = heroSettings?.titleLine3 || "BÜYÜTÜYORUZ."
     const mediaUrl = heroSettings?.heroMediaUrl || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
     const mediaType = heroSettings?.heroMediaType || "image"
 
@@ -71,13 +71,13 @@ export default function HeroModern() {
 
                     {/* Left Side: Typography */}
                     <div className="lg:col-span-7 flex flex-col justify-center relative z-10 w-full">
-                        <div className="flex flex-col space-y-[-0.1em] md:space-y-[-0.12em]">
+                        <div className="flex flex-col space-y-[-0.05em] md:space-y-[-0.08em]">
                             <motion.div
                                 initial={{ opacity: 0, y: 40 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                             >
-                                <h1 className="text-[3.5rem] sm:text-[5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[8rem] 2xl:text-[9rem] leading-[0.85] tracking-[-0.04em] font-medium text-black">
+                                <h1 className="text-[3.2rem] sm:text-[4.5rem] md:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] leading-[0.95] tracking-[-0.03em] font-medium text-black">
                                     {line1}
                                 </h1>
                             </motion.div>
@@ -87,7 +87,7 @@ export default function HeroModern() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                             >
-                                <h1 className="text-[3.5rem] sm:text-[5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[8rem] 2xl:text-[9rem] leading-[0.85] tracking-[-0.04em] font-medium text-black">
+                                <h1 className="text-[3.2rem] sm:text-[4.5rem] md:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] leading-[0.95] tracking-[-0.03em] font-medium text-black">
                                     {line2}
                                 </h1>
                             </motion.div>
@@ -97,7 +97,7 @@ export default function HeroModern() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                             >
-                                <h1 className="text-[3.5rem] sm:text-[5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[8rem] 2xl:text-[9rem] leading-[0.85] tracking-[-0.04em] font-medium text-black">
+                                <h1 className="text-[3.2rem] sm:text-[4.5rem] md:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] leading-[0.95] tracking-[-0.03em] font-medium text-black break-words hyphens-auto">
                                     {line3}
                                 </h1>
                             </motion.div>
@@ -135,7 +135,7 @@ export default function HeroModern() {
                             initial={{ opacity: 0, scale: 0.98, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className="relative w-full aspect-square max-w-[700px] xl:max-w-[850px] 2xl:max-w-[950px] rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.2)] bg-gradient-to-br from-[#D7CCF5] to-[#B6A6EB]"
+                            className="relative w-full aspect-square max-w-[700px] xl:max-w-[850px] 2xl:max-w-[950px] rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.2)] bg-gradient-to-br from-[#E2EDF5] to-[#f4f4f4]"
                         >
                             {mediaType === "video" ? (
                                 <video

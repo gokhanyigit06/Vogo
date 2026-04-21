@@ -14,63 +14,19 @@ import {
     PieChart, Bell, CreditCard, Users, MapPin, Code, Languages, Palette, RefreshCw, Bot
 } from "lucide-react"
 
-// Mock Service Data
 const servicesData = [
     {
-        id: "web-cozumleri",
-        title: "Web Çözümleri",
+        id: "ads",
+        title: "Performans Pazarlaması (Ads)",
         hero: {
-            title: "Dijitaldeki Yüzünüz: Modern ve Performans Odaklı Web Çözümleri",
-            subtitle: "Sadece bir web sitesi değil; marka itibarınızı artıran, SEO uyumlu ve satış odaklı bir dijital ekosistem inşa ediyoruz.",
-            image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80",
-            gradient: "from-blue-600 via-cyan-500 to-emerald-400"
-        },
-        bentoGrid: [
-            {
-                title: "E-Ticaret Çözümleri",
-                desc: "Global pazarda (Etsy, Shopify) ve yerel mecralarda satışlarınızı artıran, yüksek performanslı e-ticaret altyapıları.",
-                icon: ShoppingBagIcon,
-                colSpan: "md:col-span-2",
-                bgImage: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=800&q=80"
-            },
-            {
-                title: "Kurumsal Portfolyo",
-                desc: "Markanızın prestijini yansıtan, modern ve özgün tasarımlı kurumsal web kimliği.",
-                icon: BuildingIcon,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1481487484168-9b930d5b7d9f?w=800&q=80"
-            }
-        ],
-        technicalGrid: [
-            { title: "Hız ve Performans", desc: "Next.js ve Vercel altyapısıyla 100/100 Lighthouse skorlu web siteleri.", icon: Zap },
-            { title: "Mobil Uyumluluk", desc: "Tüm cihazlarda (Desktop, Tablet, Mobile) kusursuz kullanıcı deneyimi.", icon: Smartphone },
-            { title: "SEO Dostu Mimari", desc: "Google botlarının sevdiği, semantik HTML ve hızlı indekslenen yapılar.", icon: Search },
-            { title: "PWA Teknolojisi", desc: "Uygulama indirmeden mobil uygulama deneyimi sunan ilerici web teknolojileri.", icon: Smartphone },
-            { title: "Güçlü Hosting", desc: "Kesintisiz ve güvenli barındırma hizmetiyle siteniz her zaman yayında.", icon: Layers }
-        ],
-        process: [
-            { step: 1, title: "Keşif ve Analiz", desc: "İşletme ihtiyaçlarını ve hedef kitleyi derinlemesine analiz ediyoruz." },
-            { step: 2, title: "UI/UX Tasarım", desc: "Kullanıcı deneyimini ön planda tutan, modern arayüzler tasarlıyoruz." },
-            { step: 3, title: "Geliştirme", desc: "En güncel teknolojilerle (Next.js, Tailwind) kodlama sürecini başlatıyoruz." },
-            { step: 4, title: "Test ve Yayın", desc: "Performans, güvenlik ve uyumluluk testlerinden sonra yayına alıyoruz." }
-        ],
-        cta: {
-            title: "Hayalinizdeki Web Sitesini \n Bugün Başlatalım.",
-            buttonText: "Ücretsiz Analiz İstiyorum"
-        }
-    },
-    {
-        id: "dijital-reklam",
-        title: "Dijital Reklam",
-        hero: {
-            title: "Bütçenizi Gidere Değil, Ölçülebilir Bir Yatırıma Dönüştürün",
-            subtitle: "Meta ve Google mecralarında, e-ticaret odaklı satış stratejilerinden kurumsal marka bilinirliğine kadar her kuruşun hesabını veren profesyonel reklam yönetimi.",
+            title: "Bütçenizi Gidere Değil, Satış Garantili Bir Yatırıma Dönüştürün",
+            subtitle: "Sadece beğeni ve tıklama değil. Google, Meta ve TikTok mecralarında, doğrudan ciro artışı ve ROI hedefli profesyonel performans reklamcılığı.",
             image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
-            gradient: "from-orange-600 via-red-500 to-pink-500"
+            gradient: "from-black via-black/80 to-transparent"
         },
         bentoGrid: [
             {
-                title: "Meta (Facebook & Instagram) Ads",
+                title: "Meta (Instagram & Facebook) Ads",
                 desc: "Görsel gücün ve hedeflemenin zirvesi. Potansiyel müşterilerinize tam da ilgi duydukları anda ulaşıyoruz.",
                 icon: AppWindow,
                 colSpan: "md:col-span-1",
@@ -78,253 +34,150 @@ const servicesData = [
             },
             {
                 title: "Google Ads (Arama & Alışveriş)",
-                desc: "Satın alma niyeti en yüksek kullanıcıları yakalıyoruz. Google Shopping ve Arama ağıyla satışlarınızı katlıyoruz.",
+                desc: "Satın alma niyeti en yüksek kullanıcıları yakalıyoruz. Arama Ağı ve PMAX kampanyalarıyla satışları katlayın.",
                 icon: Search,
                 colSpan: "md:col-span-1",
                 bgImage: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&q=80"
             }
         ],
         technicalGrid: [
-            { title: "E-Ticaret Odaklılık", desc: "ROAS ve CPA odaklı yönetimle reklam harcamalarınızın kârlılığını maksimize ediyoruz.", icon: TrendingUp },
-            { title: "Veri ve İzleme", desc: "Meta Pixel, Conversion API ve Google Analytics 4 kurulumlarıyla her adımı takip ediyoruz.", icon: Activity },
-            { title: "A/B Testleri", desc: "Sürekli kreatif ve metin testleri yaparak en iyi performans gösteren reklamı buluyoruz.", icon: SplitSquareHorizontal },
-            { title: "Ölçekleme (Scaling)", desc: "Başarılı kampanyaları bütçe ve hedef kitle bazında güvenle büyüterek işletmenizi ölçekliyoruz.", icon: Maximize2 },
-            { title: "Retargeting", desc: "Sitenizi ziyaret edip almadan çıkanları nokta atışı reklamlarla geri kazanıyoruz.", icon: Repeat },
-            { title: "360° Strateji", desc: "Tüm mecraları (TikTok, YouTube, Pinterest) entegre kullanan bütüncül kurgu.", icon: Share2 }
+            { title: "Ciro Odaklılık", desc: "ROAS (Reklam Harcaması Getirisi) odaklı yönetimle kârlılığınızı maksimize ediyoruz.", icon: TrendingUp },
+            { title: "Kusursuz Takip", desc: "Meta Pixel, CAPI ve GA4 kurulumlarıyla her tıklamayı ölçümlüyoruz.", icon: Activity },
+            { title: "Sürekli A/B Testi", desc: "Kreatif, metin ve hedef kitle kombinasyonlarını durmadan test ediyoruz.", icon: SplitSquareHorizontal },
+            { title: "Guvenli Ölçekleme", desc: "Başarılı kampanyaları bütçe bazında güvenle büyüterek işletmenizi ölçekliyoruz.", icon: Maximize2 }
         ],
         process: [
-            { step: 1, title: "Analiz", desc: "Sektör ve rakip analizi." },
-            { step: 2, title: "Kurulum", desc: "Teknik altyapı ve kampanya kurgusu." },
-            { step: 3, title: "Optimizasyon", desc: "Veri toplama ve iyileştirme." },
-            { step: 4, title: "Raporlama", desc: "Şeffaf ve anlaşılır sonuç paylaşımı." }
+            { step: 1, title: "Sektör ve Rakip Analizi", desc: "Bulunduğunuz sektördeki boşlukları ve fırsatları belirliyoruz." },
+            { step: 2, title: "Kampanya Kurgusu", desc: "Doğru kitle, doğru görsel ve ikna edici metinlerle kurulum yapıyoruz." },
+            { step: 3, title: "Optimizasyon", desc: "Akan veriyi anlık analiz ederek bütçeyi en verimli kanala kaydırıyoruz." },
+            { step: 4, title: "Şeffaf Raporlama", desc: "Ne harcadınız, ne kazandınız? Rakamlarla net rapor sunuyoruz." }
         ],
         cta: {
-            title: "Reklam Hesaplarınızın \n Ücretsiz Röntgenini Çekelim.",
+            title: "Reklam Hesaplarınızın\nRöntgenini Çekelim.",
             buttonText: "Ücretsiz Hesap Analizi Al"
         }
     },
     {
-        id: "sosyal-medya-yonetimi",
-        title: "Sosyal Medya Yönetimi",
+        id: "web",
+        title: "Web Tasarım & E-Ticaret",
         hero: {
-            title: "Markanızın Sesi, Milyonların Yankısı Olsun",
-            subtitle: "Sıradan paylaşımlar değil, etkileşim rekorları kıran stratejiler. İçerik üretiminden topluluk yönetimine, markanızı sosyal medyanın yıldızı yapıyoruz.",
-            image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=1200&q=80",
-            gradient: "from-pink-600 via-rose-500 to-orange-400"
+            title: "Tasarımı Kusursuz, Altyapısı Hızlı: Satış Getiren Siteler",
+            subtitle: "Sadece güzel görünen bir vitrin değil; mobil cihazlarda kusursuz çalışan, 1 saniyenin altında açılan satış ve dönüşüm odaklı dijital mağazalar.",
+            image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80",
+            gradient: "from-black via-black/80 to-transparent"
         },
         bentoGrid: [
             {
-                title: "Kreatif İçerik Üretimi",
-                desc: "Reels, TikTok ve Story formatlarında, izleyiciyi ilk 3 saniyede yakalayan, algoritma dostu video ve görsel içerikler.",
-                icon: Video,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80"
+                title: "Satış Odaklı E-Ticaret",
+                desc: "Shopify ve özel yazılım çözümleriyle global düzeyde satış yapabileceğiniz, ödeme altyapısı hazır platformlar.",
+                icon: ShoppingBagIcon,
+                colSpan: "md:col-span-2",
+                bgImage: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=800&q=80"
             },
             {
-                title: "Influencer Pazarlama",
-                desc: "Markanızla en uyumlu fenomenleri buluyor, yüksek dönüşümlü ve güven odaklı işbirlikleri kurguluyoruz.",
-                icon: Users,
+                title: "Kurumsal Portfolyo / Landing Page",
+                desc: "Markanızı elit bir şekilde konumlandıran yüksek dönüşümlü tanıtım siteleri.",
+                icon: BuildingIcon,
                 colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=800&q=80"
-            },
-            {
-                title: "Topluluk Yönetimi",
-                desc: "Takipçilerinizle DM ve yorumlarda kurduğumuz samimi iletişimle sadık bir müşteri kitlesi yaratıyoruz.",
-                icon: MessageCircle,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80"
-            },
-            {
-                title: "Viral Stratejiler",
-                desc: "Gündemi ve trendleri anlık takip ederek markanızı konuşulanlar arasına sokacak 'Real-Time Marketing' çalışmaları.",
-                icon: TrendingUp,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80"
+                bgImage: "https://images.unsplash.com/photo-1481487484168-9b930d5b7d9f?w=800&q=80"
             }
         ],
         technicalGrid: [
-            { title: "Video Prodüksiyon", desc: "Profesyonel ekipmanlarla çekilen, kurgusu ve efektleriyle büyüleyen tanıtım filmleri.", icon: Film },
-            { title: "Profesyonel Çekim", desc: "Ürün ve mekan çekimleriyle markanızın görsel kalitesini ve algısını zirveye taşıyoruz.", icon: Camera },
-            { title: "Kriz Yönetimi", desc: "Olası linç veya negatif durumlarda markanızı koruyan, soğukkanlı ve profesyonel iletişim yönetimi.", icon: AlertTriangle },
-            { title: "İleri Seviye Analitik", desc: "Hangi içeriğin neden tuttuğunu analiz eden, veriye dayalı büyüme raporları.", icon: BarChart },
-            { title: "Canlı Yayın Yönetimi", desc: "Etkinlik ve lansmanlarınız için profesyonel reji ve canlı yayın kurgusu.", icon: Radio },
-            { title: "Rakip Analizi", desc: "Rakiplerinizin stratejilerini deşifre edip sizi bir adım öne taşıyan raporlar.", icon: Eye }
+            { title: "Core Web Vitals", desc: "Sayfa yüklenme hızını minimize ederek müşterinin kaçmasını engelliyoruz.", icon: Zap },
+            { title: "Kusursuz Mobil UI/UX", desc: "Trafiğin %80'inin geldiği mobil cihazlarda kesintisiz alışveriş deneyimi.", icon: Smartphone },
+            { title: "SEO Uyumlu Mimari", desc: "Arama motorlarının ilk günden okuyabildiği teknik optimizasyona sahip kod yapısı.", icon: Search },
+            { title: "Ciro Odaklı Sepet Akışı", desc: "Karmaşık checkout süreçlerini iptal edip, tek sayfada hızlı ödeme pratikleri.", icon: Layers }
         ],
         process: [
-            { step: 1, title: "Persona & Strateji", desc: "Hedef kitlenizi tanıyor ve onlara hitap eden marka dilini oluşturuyoruz." },
-            { step: 2, title: "İçerik Takvimi", desc: "Bir aylık paylaşımları önceden planlayarak tutarlı bir akış sağlıyoruz." },
-            { step: 3, title: "Prodüksiyon", desc: "Senaryo, çekim ve kurgu aşamalarıyla içerikleri hayata geçiriyoruz." },
-            { step: 4, title: "Yayılım & Etkileşim", desc: "Doğru saatte paylaşım ve aktif etkileşimle erişimi maksimize ediyoruz." }
+            { step: 1, title: "Proje Tanımlama & UI UX", desc: "Marka kimliği ve müşteri profiline uygun prototip hazırlığı." },
+            { step: 2, title: "Modern Teknolojilerle Geliştirme", desc: "Sektör standardı araçlarla frontend ve backend yazılım sürecinin inşası." },
+            { step: 3, title: "Performans & QA Testi", desc: "Entegrasyonlar ve hız testleri ile kusursuz teslimat." }
         ],
         cta: {
-            title: "Markanız Sosyal Medyada \n Konuşulmaya Başlasın.",
-            buttonText: "Sosyal Medya Analizi Al"
+            title: "Ziyaretçileri Müşteriye\nDönüştürmeye Başlayın.",
+            buttonText: "Projeni Fiyatlandır"
         }
     },
     {
-        id: "seo-optimizasyonu",
-        title: "SEO Optimizasyonu",
+        id: "seo",
+        title: "Garantili SEO",
         hero: {
-            title: "Arama Motorlarında Zirveye Çıkın, Trafiğinizi Katlayın",
-            subtitle: "Google algoritmalarına tam uyumlu, teknik altyapısı sağlam ve içerik stratejisiyle fark yaratan profesyonel SEO hizmeti.",
+            title: "Arama Motorunda Çıkmıyorsanız Rakibiniz Satış Yapıyor Demektir",
+            subtitle: "Google ve diğer arama motorlarında kalıcı hakimiyet kurmak için teknik kusursuzluk, otorite inşası ve sektörel rakip analizinizi bir araya getiriyoruz.",
             image: "https://images.unsplash.com/photo-1572410979265-56253e2b9f4a?w=1200&q=80",
-            gradient: "from-indigo-600 via-purple-500 to-pink-500"
+            gradient: "from-black via-black/80 to-transparent"
         },
         bentoGrid: [
             {
-                title: "Teknik SEO",
-                desc: "Site hızı, mobil uyumluluk ve tarama hatalarını düzelterek sağlam bir temel atıyoruz.",
+                title: "Kapsamlı Teknik Denetim",
+                desc: "Site içi bozuk linkler, yönlendirme hataları ve indekslenme problemlerinin kalıcı çözümü.",
                 icon: Settings,
                 colSpan: "md:col-span-1",
                 bgImage: "https://images.unsplash.com/photo-1504868584819-f8e8b716656f?w=800&q=80"
             },
             {
-                title: "İçerik Stratejisi",
-                desc: "Kullanıcı niyetini yakalayan, özgün ve katma değerli içeriklerle otoritenizi artırıyoruz.",
+                title: "Semantik İçerik Ağı",
+                desc: "Arama amacına uygun, değer yaratan ve otoriteyi destekleyen organik içerik planlaması.",
                 icon: FileTextIcon,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80"
-            },
-            {
-                title: "Backlink Otoritesi",
-                desc: "Kaliteli ve güvenilir kaynaklardan alınan referanslarla site puanınızı yükseltiyoruz.",
-                icon: LinkIcon,
                 colSpan: "md:col-span-2",
-                bgImage: "https://images.unsplash.com/photo-1524178232363-1fb2b075b955?w=800&q=80"
+                bgImage: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80"
             }
         ],
         technicalGrid: [
-            { title: "Site Hızı (Core Web Vitals)", desc: "Google'ın en önem verdiği metriklerde yeşil ışığı yakıyoruz.", icon: Zap },
-            { title: "Mobil Öncelikli İndeksleme", desc: "Mobil uyumluluk sorunlarını gidererek sıralama kaybını önlüyoruz.", icon: Smartphone },
-            { title: "Schema Yapılandırması", desc: "Arama sonuçlarında zengin snippet'lerle (yıldız, fiyat vb.) dikkat çekin.", icon: Code },
-            { title: "Kapsamlı Rakip Analizi", desc: "Rakiplerinizin trafik kaynaklarını ve iyi yaptıkları işleri analiz ediyoruz.", icon: BarChart },
-            { title: "Yerel (Local) SEO", desc: "Haritalarda ve bölgesel aramalarda işletmenizi zirveye taşıyoruz.", icon: MapPin },
-            { title: "Görsel SEO", desc: "Görsel aramalarda ve YouTube'da görünürlüğünüzü artıracak optimizasyonlar.", icon: LinkIcon } // Reusing LinkIcon as placeholder for ImageIcon if needed
+            { title: "Kelime Araştırması", desc: "Ciro getirecek ticari niyetli kelimeleri belirliyoruz.", icon: Search },
+            { title: "Site Hızı Optimizasyonu", desc: "Sıralama faktörü olan organik hız puanlarını artırıyoruz.", icon: Zap },
+            { title: "Harita & Yerel SEO", desc: "Sizi arayan civardaki müşteriyi kapınıza getiriyoruz.", icon: MapPin },
+            { title: "Kaliteli Backlink", desc: "Sektörel otorite sitelerinden güven verici bağlantılar alıyoruz.", icon: Layers }
         ],
         process: [
-            { step: 1, title: "Audit (Denetim)", desc: "Mevcut durumunuzu ve potansiyel hataları raporluyoruz." },
-            { step: 2, title: "Anahtar Kelime", desc: "Sektörünüzde en çok aranan ve dönüşüm getiren kelimeleri belirliyoruz." },
-            { step: 3, title: "On-Page Optimizasyon", desc: "Başlıklar, meta açıklamalar ve içerik düzenlemelerini yapıyoruz." },
-            { step: 4, title: "Off-Page Çalışma", desc: "Tanıtım yazıları ve sosyal sinyallerle dışarıdan güçlendiriyoruz." }
+            { step: 1, title: "Detaylı Check-up", desc: "Sitenizin neden trafik almadığının teknik raporunun çıkarılması." },
+            { step: 2, title: "Sıralama Stratejisi", desc: "Kolay kelimelerden zorlara doğru ilerleyen hızlı kazanım (Quick Win) stratejisi." },
+            { step: 3, title: "Düzenli Uygulama & Rapor", desc: "Otorite artışı ve sıralama takiplerinin aylık olarak markaya sunulması." }
         ],
         cta: {
-            title: "Google'da 1. Sayfaya \n Çıkmaya Hazır mısınız?",
-            buttonText: "Ücretsiz SEO Analizi"
+            title: "Ücretsiz Organik\nTrafik Akışı Başlasın.",
+            buttonText: "SEO Analizi Al"
         }
     },
     {
-        id: "qr-menu-sistemleri",
-        title: "QR Menü Sistemleri",
+        id: "qr",
+        title: "VogoPOS & QR Menü",
         hero: {
-            title: "Restoran ve Oteller İçin Yeni Nesil Dijital Deneyim: AI Destekli QR Menü",
-            subtitle: "Basılı menülerin maliyetinden ve hantallığından kurtulun. Yapay zeka destekli, her dile anında çevrilen ve markanıza özel tasarlanan interaktif menü çözümlerimizle tanışın.",
+            title: "İşletmenizin Kazancını QR Menü ile Yeniden Tanımlayın",
+            subtitle: "Horeca sektörü için tasarlandı. Sipariş süreçlerini dijitalleştirin, garson maliyetini düşürün ve ürünlerinizi daha çarpıcı sergileyin.",
             image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=80",
-            gradient: "from-emerald-600 via-teal-500 to-cyan-400"
+            gradient: "from-black via-black/80 to-transparent"
         },
         bentoGrid: [
             {
-                title: "Yapay Zeka (AI) Desteği",
-                desc: "Müşterilerin tercihlerine göre akıllı ürün önerileri sunan ve sipariş sürecini hızlandıran AI entegrasyonu.",
-                icon: Bot,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80"
-            },
-            {
-                title: "Anında Güncelleme",
-                desc: "Fiyatları ve ürünleri saniyeler içinde güncelleyin; baskı maliyetlerini ve zaman kaybını sıfıra indirin.",
+                title: "Anında Menü Düzenle",
+                desc: "Tükenen ürünü gizleyin, fiyatı değiştirin ve baskı maliyetine girmeden saniyesinde güncelleyin.",
                 icon: RefreshCw,
                 colSpan: "md:col-span-1",
                 bgImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
             },
             {
-                title: "Çoklu Dil Desteği",
-                desc: "Turistler için otomatik dil çevirisi özelliğiyle sınırları ortadan kaldırın ve müşteri memnuniyetini artırın.",
-                icon: Languages,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&q=80"
-            },
-            {
-                title: "Özel Tasarım",
-                desc: "Hazır şablonlar değil, restoranınızın veya otelinizin kurumsal kimliğine %100 uyumlu, premium arayüz tasarımı.",
+                title: "Markanıza Özel UI Tasarım",
+                desc: "Sıkıcı siyah beyaz liste menülerini unutun. Ziyaretçilerin iştahını açacak elit mekan arayüzleri.",
                 icon: Palette,
                 colSpan: "md:col-span-1",
                 bgImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"
             }
         ],
         technicalGrid: [
-            { title: "Yüksek Hız", desc: "En zayıf internette bile saniyeler içinde açılan optimize edilmiş altyapı.", icon: Zap },
-            { title: "Yönetim Paneli", desc: "İşletme sahipleri için ürün ve stok yönetimini kolaylaştıran basit arayüz.", icon: LayoutDashboard },
-            { title: "Analiz ve Raporlama", desc: "Hangi ürünün ne kadar görüntülendiğini takip eden veri analitiği.", icon: PieChart },
-            { title: "Garson Çağırma", desc: "Tek tıkla garson çağırma ve hesap isteme özelliği.", icon: Bell },
-            { title: "Online Ödeme", desc: "Masadan kalkmadan güvenli ve hızlı ödeme altyapısı.", icon: CreditCard },
-            { title: "CRM Entegrasyonu", desc: "Müşteri verilerini toplayıp sadakat programları oluşturun.", icon: Users }
+            { title: "Dil Seçenekleri", desc: "Turizm odaklı mekanlar için menüyü anında farklı dillere çevirin.", icon: Languages },
+            { title: "Hızlı Yüklenme", desc: "PDF menülerin yavaş indirme derdine son. Anında açılır.", icon: Zap },
+            { title: "Sipariş Uyarıları", desc: "Mutfak veya bar noktasına düşen saniyelik bildirimler.", icon: Bell },
+            { title: "Garson Destekli", desc: "Müşterinin uygulamadan sadece tıklamayla masa servisi istemesi.", icon: LayoutDashboard }
         ],
         process: [
-            { step: 1, title: "Tarama", desc: "Müşteri masadaki QR kodu telefon kamerasıyla saniyeler içinde tarar." },
-            { step: 2, title: "Keşif", desc: "AI destekli, kategorize edilmiş menüyü iştah açıcı görsellerle inceler." },
-            { step: 3, title: "Etkileşim", desc: "Garson çağırma veya hızlı sipariş özelliklerini kullanarak servisi başlatır." }
+            { step: 1, title: "Menü Aktarımı", desc: "Basılı menünüzün taranıp dijital sisteme fotoğraflı geçirilmesi." },
+            { step: 2, title: "Kategori Düzeni", desc: "Çapraz satış stratejisi uygulayarak yan ürün satışlarının artırılması." },
+            { step: 3, title: "Masa Kodlarının Basımı", desc: "Mekanın tasarımına uygun fiziksel QR plaketlerin teslimatı." }
         ],
         cta: {
-            title: "İşletmenizi Dijital Çağa \n Taşımaya Hazır mısınız?",
-            buttonText: "Canlı Demoyu İncele"
-        }
-    },
-    {
-        id: "ozel-yazilim",
-        title: "Özel Yazılım",
-        hero: {
-            title: "Standart Çözümler Sizi Sınırlandırmasın: Sınırsız Özelleştirme",
-            subtitle: "İşletmenizin benzersiz ihtiyaçlarına, hazır paketlerin yetmediği yerde kodun gücüyle cevap veriyoruz. Ölçeklenebilir, güvenli ve size özel yazılım mimarileri.",
-            image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80",
-            gradient: "from-yellow-600 via-amber-500 to-orange-500"
-        },
-        bentoGrid: [
-            {
-                title: "Full-Stack Mimari",
-                desc: "Frontend'den Backend'e, veritabanından kullanıcı arayüzüne kadar bütüncül bir yaklaşımla sisteminizi inşa ediyoruz.",
-                icon: Layers,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1629904853716-6c29f46b4202?w=800&q=80"
-            },
-            {
-                title: "API & Entegrasyon",
-                desc: "Mevcut sistemlerinizle (CRM, ERP, Ödeme Sistemleri) kusursuz haberleşen entegrasyonlar geliştiriyoruz.",
-                icon: Webhook,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
-            },
-            {
-                title: "Bulut (Cloud) Altyapı",
-                desc: "AWS, Azure veya Google Cloud üzerinde, milyonlarca kullanıcıyı kaldırabilecek ölçeklenebilir sunucu yapıları.",
-                icon: Cloud,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
-            },
-            {
-                title: "Kurumsal Güvenlik",
-                desc: "Verilerinizi en güncel şifreleme standartlarıyla koruyor, sızma testleriyle (Pentest) sisteminizi güçlendiriyoruz.",
-                icon: ShieldCheck,
-                colSpan: "md:col-span-1",
-                bgImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80"
-            }
-        ],
-        technicalGrid: [
-            { title: "Mikroservisler", desc: "Karmaşık sistemleri yönetilebilir küçük parçalara bölerek geliştiren modern mimari.", icon: Layers }, // Swapped Server for Layers/Generic
-            { title: "DevOps Süreçleri", desc: "CI/CD hatlarıyla otomatik test ve hızlı yayınlama (deployment) süreçleri.", icon: GitGraph },
-            { title: "Yüksek Performans", desc: "Milisaniyelerle yarışan, optimize edilmiş kod yapıları ve veritabanı sorguları.", icon: Zap },
-            { title: "Veri Tabanı Yönetimi", desc: "SQL ve NoSQL veritabanlarıyla büyük veriyi (Big Data) anlamlı ve hızlı işleme.", icon: Database },
-            { title: "Yapay Zeka (AI) Entegrasyonu", desc: "GPT, Claude gibi LLM modellerini veya özel ML algoritmalarını süreçlerinize entegre ediyoruz.", icon: BrainCircuit },
-            { title: "Gerçek Zamanlı Sistemler", desc: "WebSocket teknolojisiyle anlık veri akışı sağlayan, canlı ve dinamik uygulamalar.", icon: Radio }
-        ],
-        process: [
-            { step: 1, title: "Mimari Tasarım", desc: "Projenin teknik iskeletini ve veritabanı şemasını kurguluyoruz." },
-            { step: 2, title: "Kodlama", desc: "Agile metodolojisiyle, sprintler halinde kodlama sürecini yürütüyoruz." },
-            { step: 3, title: "Test & QA", desc: "Birim testleri ve kullanıcı testleriyle hatasız bir ürün ortaya çıkarıyoruz." },
-            { step: 4, title: "Deployment", desc: "Sistemi canlı sunuculara taşıyor ve 7/24 izlemeye (monitoring) alıyoruz." }
-        ],
-        cta: {
-            title: "Fikriniz Profesyonel Bir \n Yazılıma Dönüşsün.",
-            buttonText: "Projenizi Kodlayalım"
+            title: "Mekanınızı \n Dijitalleştirerek Hızlanın.",
+            buttonText: "Sistemi Hemen İncele"
         }
     }
 ];
